@@ -1,0 +1,86 @@
+{
+  "appTitle": "ASMR Drawing Studio",
+  "headline": "Trace satisfying outlines, tap to fill shapes, and unlock a calm reward loop.",
+  "dailyGoalText": "Finish one artwork today to keep your calming streak alive.",
+  "categories": [
+    {
+      "id": "sports",
+      "title": "Sports",
+      "subtitle": "Draw your favorite sports gear.",
+      "accentColor": "#FF8A65",
+      "levels": [
+        {
+          "id": "tennis",
+          "title": "Tennis",
+          "subtitle": "Serve it up!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/centa.png",
+          "palette": [
+            { "id": "blue", "label": "Blue", "hex": "#4287f5" },
+            { "id": "green", "label": "Green", "hex": "#a4e858" },
+            { "id": "orange", "label": "Orange", "hex": "#ff8c00" }
+          ],
+          "regions": [
+            { "id": "racket_head", "label": "Head", "type": "path", "svgPath": "M 50,5 C 75,5 95,25 95,50 C 95,75 75,95 50,95 C 25,95 5,75 5,50 C 5,25 25,5 50,5 Z" },
+            { "id": "racket_handle", "label": "Handle", "type": "path", "svgPath": "M 45,95 L 55,95 L 55,140 L 45,140 Z" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "animals",
+      "title": "Animals",
+      "subtitle": "Cute animal friends to color.",
+      "accentColor": "#81C784",
+      "levels": [
+        {
+          "id": "fox",
+          "title": "Fox",
+          "subtitle": "Clever fox.",
+          "difficulty": "Medium",
+          "rewardCoins": 60,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "palette": [
+            { "id": "brown", "label": "Brown", "hex": "#c45c16" },
+            { "id": "orange", "label": "Orange", "hex": "#f59042" },
+            { "id": "cream", "label": "Cream", "hex": "#faebd7" }
+          ],
+          "regions": [
+            { "id": "face", "label": "Face", "type": "path", "svgPath": "M 50,80 L 10,40 C 10,10 40,10 50,25 C 60,10 90,10 90,40 Z" },
+            { "id": "leftEar", "label": "Left Ear", "type": "path", "svgPath": "M 10,40 L 0,0 L 30,20 Z" },
+            { "id": "rightEar", "label": "Right Ear", "type": "path", "svgPath": "M 90,40 L 100,0 L 70,20 Z" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fruits",
+      "title": "Fruits",
+      "subtitle": "Sweet fruit shapes to color.",
+      "accentColor": "#FF8A65",
+      "levels": [
+        {
+          "id": "apple",
+          "title": "Apple",
+          "subtitle": "Can you do?",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "palette": [
+            { "id": "red", "label": "Red", "hex": "#FF4B4B" },
+            { "id": "brown", "label": "Brown", "hex": "#B56435" },
+            { "id": "green", "label": "Green", "hex": "#6BCC5E" }
+          ],
+          "regions": [
+            { "id": "main", "label": "Apple Body", "type": "path", "svgPath": "M 50,85 C 30,85 10,65 10,45 C 10,25 30,15 50,20 C 70,15 90,25 90,45 C 90,65 70,85 50,85 Z" },
+            { "id": "leaf", "label": "Leaf", "type": "path", "svgPath": "M 50,20 C 40,10 50,0 60,0 C 70,0 60,10 50,20 Z" }
+          ]
+        }
+      ]
+    }
+  ]
+}
