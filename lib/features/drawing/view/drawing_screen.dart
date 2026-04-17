@@ -362,25 +362,31 @@ class _ColorPaletteRow extends StatelessWidget {
             onTap: () => onSelect(colorOption),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              width: 80,
-              height: 80,
+              width: isSelected ? 86 : 76,
+              height: isSelected ? 86 : 76,
               decoration: BoxDecoration(
                 color: colorOption.color,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color:
-                      isSelected ? const Color(0xFF111111) : Colors.transparent,
-                  width: 4.0,
+                  color: isSelected
+                      ? const Color(0xFF111111)
+                      : Colors.white.withOpacity(0.6),
+                  width: isSelected ? 4.0 : 2.5,
                 ),
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: colorOption.color.withOpacity(0.4),
-                          blurRadius: 12,
-                          offset: const Offset(0, 6),
-                        )
-                      ]
-                    : [],
+                boxShadow: [
+                  BoxShadow(
+                    color: colorOption.color.withOpacity(isSelected ? 0.7 : 0.35),
+                    blurRadius: isSelected ? 18 : 8,
+                    spreadRadius: isSelected ? 2 : 0,
+                    offset: const Offset(0, 5),
+                  ),
+                  if (isSelected)
+                    const BoxShadow(
+                      color: Color(0x33000000),
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
+                    ),
+                ],
               ),
             ),
           ),

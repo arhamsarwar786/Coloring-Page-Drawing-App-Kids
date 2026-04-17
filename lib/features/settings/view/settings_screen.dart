@@ -36,10 +36,8 @@ class SettingsScreen extends StatelessWidget {
                       Consumer<SettingsViewModel>(
                         builder: (context, viewModel, _) {
                           return Container(
-                            constraints:
-                                const BoxConstraints(maxWidth: 340),
-                            padding: const EdgeInsets.fromLTRB(
-                                24, 26, 24, 24),
+                            constraints: const BoxConstraints(maxWidth: 340),
+                            padding: const EdgeInsets.fromLTRB(24, 26, 24, 24),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(34),
@@ -66,24 +64,21 @@ class SettingsScreen extends StatelessWidget {
                                   children: <Widget>[
                                     _SettingIconTile(
                                       icon: Icons.music_note_rounded,
-                                      assetName:
-                                          'assets/images/music.png',
+                                      assetName: 'assets/images/music.png',
                                       label: AppStrings.musicLabel,
                                       active: viewModel.musicEnabled,
                                       onTap: viewModel.toggleMusic,
                                     ),
                                     _SettingIconTile(
                                       icon: Icons.vibration_rounded,
-                                      assetName:
-                                          'assets/images/phone.png',
+                                      assetName: 'assets/images/phone.png',
                                       label: AppStrings.hapticsLabel,
                                       active: viewModel.hapticsEnabled,
                                       onTap: viewModel.toggleHaptics,
                                     ),
                                     _SettingIconTile(
                                       icon: Icons.volume_up_rounded,
-                                      assetName:
-                                          'assets/images/sound.png',
+                                      assetName: 'assets/images/sound.png',
                                       label: AppStrings.soundsLabel,
                                       active: viewModel.soundEnabled,
                                       onTap: viewModel.toggleSound,
@@ -99,16 +94,14 @@ class SettingsScreen extends StatelessWidget {
                                           context, AppRoutes.privacy);
                                     },
                                     style: FilledButton.styleFrom(
-                                      backgroundColor:
-                                          const Color(0xFF2DF200),
+                                      backgroundColor: const Color(0xFF2DF200),
                                       foregroundColor: Colors.white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(24),
                                       ),
-                                      padding:
-                                          const EdgeInsets.symmetric(
-                                              vertical: 18),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 18),
                                     ),
                                     child: const Text(
                                       AppStrings.privacyPolicy,
@@ -169,59 +162,72 @@ class _SettingIconTile extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: 82,
-            height: 82,
-            decoration: BoxDecoration(
-              color: active
-                  ? const Color(0xFFE8FFF0)
-                  : const Color(0xFFF6F6F6),
-              borderRadius: BorderRadius.circular(26),
-              border: Border.all(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+        child: Column(
+          children: <Widget>[
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 82,
+              height: 82,
+              decoration: BoxDecoration(
                 color: active
-                    ? const Color(0xFF33E61F)
-                    : const Color(0xFF222222),
-                width: 2.5,
+                    ? const Color(0xFFE8FFF0)
+                    : const Color(0xFFF6F6F6),
+                borderRadius: BorderRadius.circular(26),
+                border: Border.all(
+                  color: active
+                      ? const Color(0xFF33E61F)
+                      : const Color(0xFF222222),
+                  width: 2.5,
+                ),
+                boxShadow: active
+                    ? const [
+                        BoxShadow(
+                          color: Color(0x4433E61F),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ]
+                    : const [],
+              ),
+              child: assetName != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Image.asset(
+                        assetName!,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          icon,
+                          size: 44,
+                          color: const Color(0xFF111111),
+                        ),
+                      ),
+                    )
+                  : Icon(icon, size: 44, color: const Color(0xFF111111)),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF111111),
               ),
             ),
-            child: assetName != null
-                ? Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Image.asset(
-                      assetName!,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Icon(icon,
-                              size: 44,
-                              color: const Color(0xFF111111)),
-                    ),
-                  )
-                : Icon(icon,
-                    size: 44, color: const Color(0xFF111111)),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF111111),
+            const SizedBox(height: 4),
+            Text(
+              active ? 'ON' : 'OFF',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w900,
+                color: active
+                    ? const Color(0xFF27A800)
+                    : const Color(0xFF777777),
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            active ? 'ON' : 'OFF',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w900,
-              color: active
-                  ? const Color(0xFF27A800)
-                  : const Color(0xFF777777),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
