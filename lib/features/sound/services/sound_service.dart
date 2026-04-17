@@ -37,13 +37,12 @@ class SoundService {
       await _player.setReleaseMode(ReleaseMode.loop);
       await _player.setVolume(0.55);
       
-      // Try wav first, then mp3
+      // Try mp3 first
       try {
-        await _player.play(AssetSource('sounds/background.wav'));
+        await _player.play(AssetSource('sounds/splash_music.mp3'));
         _backgroundStarted = true;
       } catch (_) {
-        await _player.play(AssetSource('sounds/background.mp3'));
-        _backgroundStarted = true;
+        // Fallback or ignore
       }
     } catch (_) {
       // ignore errors if audio cannot be played
