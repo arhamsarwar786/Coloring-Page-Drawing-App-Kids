@@ -26,8 +26,29 @@ class _DrawingScreenState extends State<DrawingScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      context.read<DrawingViewModel>().loadLevel(widget.levelId);
+      final viewModel = context.read<DrawingViewModel>();
+      viewModel.loadLevel(widget.levelId);
+      viewModel.addListener(_onViewModelChange);
     });
+  }
+
+  void _onViewModelChange() {
+    if (!mounted) return;
+    final viewModel = context.read<DrawingViewModel>();
+    final level = viewModel.level;
+    
+    if (level != null && viewModel.isCompleted && _handledCompletionLevelId != level.id) {
+      _handledCompletionLevelId = level.id;
+      _handleLevelComplete(viewModel);
+    }
+  }
+
+  @override
+  void dispose() {
+    try {
+      context.read<DrawingViewModel>().removeListener(_onViewModelChange);
+    } catch (_) {}
+    super.dispose();
   }
 
   @override
@@ -61,14 +82,6 @@ class _DrawingScreenState extends State<DrawingScreen> {
 
             final level = viewModel.level!;
 
-            if (viewModel.isCompleted &&
-                _handledCompletionLevelId != level.id) {
-              _handledCompletionLevelId = level.id;
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _handleLevelComplete(viewModel);
-              });
-            }
-
             return Center(
               child: Container(
                 // constraints: const BoxConstraints(maxWidth: 520),
@@ -98,7 +111,12 @@ class _DrawingScreenState extends State<DrawingScreen> {
                             letterSpacing: 2.0,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
+                          style: const TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                        const SizedBox(height: 8),
                         _LevelBadge(
                           title: level.title,
                           levelNumber: viewModel.levelNumber ?? 1,
@@ -127,6 +145,63 @@ class _DrawingScreenState extends State<DrawingScreen> {
                         const SizedBox(height: 32),
                       ],
                     ),
+
+                    // Manual "Next Level" Button Overlay when completed
+                    if (viewModel.isCompleted)
+                      Positioned(
+                        bottom: 140,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              if (viewModel.nextLevelId != null) {
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  AppRoutes.drawing,
+                                  arguments: DrawingRouteArgs(
+                                      levelId: viewModel.nextLevelId!),
+                                );
+                              } else {
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 48, vertical: 20),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFD700),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                    color: Colors.white, width: 4),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.2),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'NEXT LEVEL',
+                                    style: GoogleFonts.fredoka(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xFF222222),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Icon(Icons.arrow_forward_rounded,
+                                      size: 32, color: Color(0xFF222222)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
 
                     // Left Column Icons
                     Positioned(
@@ -167,8 +242,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
                           _SidebarIcon(
                             icon: Icons.undo_rounded,
                             assetName: 'assets/images/retry.png',
-                            onPressed:
-                                viewModel.canUndo ? viewModel.undo : null,
+                            onPressed: viewModel.undo,
                             opacity: viewModel.canUndo ? 1.0 : 0.5,
                           ),
                           const SizedBox(height: 16),
@@ -210,7 +284,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
   }
 
   Future<void> _handleLevelComplete(DrawingViewModel viewModel) async {
-    await Future.delayed(const Duration(milliseconds: 1200));
+    await Future.delayed(const Duration(milliseconds: 400));
     if (!mounted) return;
 
     final nextLevelId = viewModel.nextLevelId;
@@ -366,28 +440,7 @@ class _ReferencePreviewPainter extends CustomPainter {
     for (final region in level.regions) {
       final path = region.toPath(const Size(100, 100));
       
-      Color regionColor = Colors.grey.shade300;
-      final regionName = region.id.toLowerCase();
-      
-      // Heuristic color mapping for the preview based on region/level names
-      for (final p in level.palette) {
-        final pId = p.id.toLowerCase();
-        if (regionName.contains(pId) || 
-           (pId == 'red' && regionName.contains('body') && level.id == 'apple') ||
-           (pId == 'green' && regionName.contains('leaf')) ||
-           (pId == 'brown' && regionName.contains('stem')) ||
-           (pId == 'yellow' && regionName.contains('body') && level.id == 'banana') ||
-           (pId == 'orange' && regionName.contains('face') && level.id == 'cat') ||
-           (pId == 'white' && regionName.contains('ear') && level.id == 'cat') ||
-           (pId == 'blue' && level.id == 'fish') ||
-           (pId == 'yellow' && level.id == 'sunflower') ||
-           (pId == 'red' && level.id == 'car') ||
-           (pId == 'white' && level.id == 'football') ||
-           (pId == 'blue' && level.id == 'tennis')) {
-          regionColor = p.color;
-          break;
-        }
-      }
+      Color regionColor = level.getTargetColorForRegion(region.id);
 
       final paint = Paint()
         ..style = PaintingStyle.fill
@@ -447,20 +500,6 @@ class _ColorPaletteRow extends StatelessWidget {
                       : Colors.white.withValues(alpha: 0.6),
                   width: isSelected ? 4.0 : 2.5,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorOption.color.withValues(alpha: isSelected ? 0.7 : 0.35),
-                    blurRadius: isSelected ? 18 : 8,
-                    spreadRadius: isSelected ? 2 : 0,
-                    offset: const Offset(0, 5),
-                  ),
-                  if (isSelected)
-                    const BoxShadow(
-                      color: Color(0x33000000),
-                      blurRadius: 6,
-                      offset: Offset(0, 2),
-                    ),
-                ],
               ),
             ),
           ),

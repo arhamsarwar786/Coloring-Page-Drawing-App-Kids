@@ -190,5 +190,60 @@ class LevelModel {
     );
   }
 
-  Color get accentColor => palette.first.color;
+  Color get accentColor => palette.isNotEmpty ? palette.first.color : Colors.grey;
+
+  String? getTargetColorIdForRegion(String regionId) {
+    final regionName = regionId.toLowerCase();
+    
+    // Explicit color mapping based on region/level names to enforce strict coloring
+    if (id == 'apple') {
+      if (regionName.contains('body') || regionName.contains('shine')) return 'red';
+      if (regionName.contains('leaf')) return 'green';
+      if (regionName.contains('stem')) return 'brown';
+    } else if (id == 'banana') {
+      if (regionName.contains('body')) return 'yellow';
+      if (regionName.contains('tip')) return 'brown';
+    } else if (id == 'cat') {
+      if (regionName.contains('face') || regionName.contains('ear_left') || regionName.contains('ear_right')) return 'orange';
+      if (regionName.contains('inner') || regionName.contains('nose')) return 'pink';
+      if (regionName.contains('muzzle')) return 'white';
+    } else if (id == 'fish') {
+      if (regionName.contains('body') || regionName.contains('tail')) return 'blue';
+      if (regionName.contains('fin')) return 'orange';
+      if (regionName.contains('eye')) return 'yellow';
+    } else if (id == 'football') {
+      if (regionName.contains('body')) return 'white';
+      if (regionName.contains('patch')) return 'black';
+    } else if (id == 'tennis') {
+      if (regionName.contains('head') || regionName.contains('throat')) return 'blue';
+      if (regionName.contains('handle') || regionName.contains('grip')) return 'gray';
+    } else if (id == 'car') {
+      if (regionName.contains('body') || regionName.contains('roof') || regionName.contains('taillight')) return 'red';
+      if (regionName.contains('window')) return 'blue';
+      if (regionName.contains('wheel')) return 'black';
+      if (regionName.contains('headlight')) return 'gray';
+    } else if (id == 'sunflower') {
+      if (regionName.contains('petal')) return 'yellow';
+      if (regionName.contains('center')) return 'brown';
+      if (regionName.contains('stem')) return 'green';
+    }
+
+    // Fallback heuristic like before
+    for (final p in palette) {
+      if (regionName.contains(p.id.toLowerCase())) {
+        return p.id;
+      }
+    }
+    return null;
+  }
+
+  Color getTargetColorForRegion(String regionId) {
+    final targetId = getTargetColorIdForRegion(regionId);
+    if (targetId != null) {
+      try {
+        return palette.firstWhere((p) => p.id == targetId).color;
+      } catch (_) {}
+    }
+    return Colors.grey.shade300;
+  }
 }

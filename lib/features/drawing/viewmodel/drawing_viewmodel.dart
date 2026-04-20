@@ -42,7 +42,11 @@ class DrawingViewModel extends BaseViewModel {
   bool get canRedo => _redoStack.isNotEmpty;
   int? get rewardCoins => _rewardCoins;
   int? get rewardStars => _rewardStars;
-  bool get isCompleted => _rewardCoins != null && _rewardStars != null;
+  bool get isCompleted {
+    if (_level == null) return false;
+    if (_level!.isCompleted) return true;
+    return _filledRegions.length >= _level!.regions.length && _level!.regions.isNotEmpty;
+  }
   UnmodifiableMapView<String, Color> get filledRegions =>
       UnmodifiableMapView<String, Color>(_filledRegions);
 
@@ -178,8 +182,10 @@ class DrawingViewModel extends BaseViewModel {
   Future<void> _evaluateCompletion() async {
     if (_level == null || isCompleted) return;
 
-    final requiredRegions = _level!.regions.length;
-    if (requiredRegions == 0 || _filledRegions.length < requiredRegions) {
+    final filledCount = _filledRegions.length;
+    final requiredCount = _level!.regions.length;
+    
+    if (requiredCount == 0 || filledCount < requiredCount) {
       return;
     }
 
@@ -192,6 +198,8 @@ class DrawingViewModel extends BaseViewModel {
     _rewardCoins = _level!.rewardCoins;
     _rewardStars = stars;
     _level = _level!.copyWith(isCompleted: true, stars: stars);
+    
+    // Explicitly set this to ensure UI sees it
     notifyListeners();
 
     await _repository.markLevelCompleted(

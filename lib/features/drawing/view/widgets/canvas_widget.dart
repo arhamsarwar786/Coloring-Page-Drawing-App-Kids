@@ -50,24 +50,37 @@ class _CanvasWidgetState extends State<CanvasWidget>
   final Map<String, double> _fillProgress = {};
   // Cheap deduplication — gridded visited cells per region
   final Map<String, Set<String>> _visitedCells = {};
+  // Pre-sampled outline points cache — computed once per region per level
+  final Map<String, List<Offset>> _outlinePointsCache = {};
 
   // Grid cell size for tracing deduplication (logical pixels)
   static const double _cellSize = 14.0;
 
+  // BUG FIX: Use actual path metric length, not bounding box perimeter.
+  // Old code used 2*(w+h) which is wrong for complex SVG paths.
   int _getOutlineCellsNeeded(Path path) {
-    final bounds = path.getBounds();
-    final perimeter = 2 * (bounds.width + bounds.height);
-    final cells = (perimeter * 0.6) / _cellSize;
-    return cells.clamp(8.0, 100.0).toInt();
+    double totalLen = 0;
+    for (final m in path.computeMetrics()) {
+      totalLen += m.length;
+    }
+    final cells = (totalLen * 0.55) / _cellSize;
+    return cells.clamp(12.0, 200.0).toInt();
   }
 
+  // BUG FIX: Sample actual interior grid instead of using bounding box area.
+  // Old code used boundingBox*0.45 which is inaccurate for concave shapes.
   int _getFillCellsNeeded(Path path) {
     final bounds = path.getBounds();
-    final area = bounds.width * bounds.height;
-    // Require roughly 45% of the bounding box area to be covered
-    // (Safe margin for complex/concave SVGs where bounding box is much larger than actual area)
-    final cells = (area * 0.45) / (_cellSize * _cellSize);
-    return cells.clamp(15.0, 300.0).toInt();
+    int insideCount = 0;
+    for (double x = bounds.left; x < bounds.right; x += _cellSize) {
+      for (double y = bounds.top; y < bounds.bottom; y += _cellSize) {
+        if (path.contains(Offset(x + _cellSize / 2, y + _cellSize / 2))) {
+          insideCount++;
+        }
+      }
+    }
+    // Lowered to 0.50 to make it very easy to complete.
+    return (insideCount * 0.50).clamp(10.0, 300.0).toInt();
   }
 
   // Track the actual path the user is drawing during the fill phase
@@ -125,6 +138,17 @@ class _CanvasWidgetState extends State<CanvasWidget>
   @override
   void didUpdateWidget(CanvasWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+
+    // BUG FIX: Invalidate all tracing caches when the level changes.
+    if (oldWidget.level.id != widget.level.id) {
+      _outlinePointsCache.clear();
+      _outlineProgress.clear();
+      _outlineUnlocked.clear();
+      _fillProgress.clear();
+      _visitedCells.clear();
+      _scribblePaths.clear();
+    }
+
     if (oldWidget.filledRegions != widget.filledRegions) {
       for (final entry in widget.filledRegions.entries) {
         if (oldWidget.filledRegions[entry.key] != entry.value) {
@@ -161,25 +185,42 @@ class _CanvasWidgetState extends State<CanvasWidget>
     return '$gx,$gy';
   }
 
-  // ── Path-proximity check (outline tracing) ────────────────
-  bool _isNearOutline(Path path, Offset point,
-      {double threshold = 18.0}) {
-    for (final metric in path.computeMetrics()) {
-      for (double t = 0; t < metric.length; t += 4.0) {
-        final tangent = metric.getTangentForOffset(t);
-        if (tangent == null) continue;
-        if ((tangent.position - point).distance <= threshold) return true;
+  // ── Pre-sample outline points (called once per region, cached) ─
+  List<Offset> _getOutlinePoints(String regionId, Path path) {
+    return _outlinePointsCache.putIfAbsent(regionId, () {
+      final pts = <Offset>[];
+      for (final m in path.computeMetrics()) {
+        for (double t = 0; t < m.length; t += 3.0) {
+          final tan = m.getTangentForOffset(t);
+          if (tan != null) pts.add(tan.position);
+        }
       }
+      return pts;
+    });
+  }
+
+  // BUG FIX: Use cached points instead of re-sampling every frame (O(n) → O(1) lookup).
+  bool _isNearOutline(String regionId, Path path, Offset point,
+      {double threshold = 18.0}) {
+    final pts = _getOutlinePoints(regionId, path);
+    for (final p in pts) {
+      if ((p - point).distance <= threshold) return true;
     }
     return false;
   }
 
   // ── Main tracing logic ────────────────────────────────────
-  void _handleTrace(Offset local, Size canvasSize, Color selectedColor) {
+  void _handleTrace(Offset local, Size canvasSize, Color selectedColor, String? selectedColorId) {
     bool changed = false;
 
     for (final region in widget.level.regions) {
       if (widget.filledRegions.containsKey(region.id)) continue;
+
+      // STRICT COLOR MATCH RULE: Only allow tracing if the selected color matches the region's target color
+      final targetColorId = widget.level.getTargetColorIdForRegion(region.id);
+      if (targetColorId != null && selectedColorId != targetColorId) {
+        continue;
+      }
 
       final path = region.toPath(canvasSize);
       final cell = _cellKey(local);
@@ -187,7 +228,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
       if (!_outlineUnlocked.contains(region.id)) {
         // ── Step 1: Trace the outline ─────────────────────
-        if (_isNearOutline(path, local)) {
+        // BUG FIX: Pass region.id so cached points are used.
+        if (_isNearOutline(region.id, path, local)) {
           if (_visitedCells[region.id]!.add(cell)) {
             final visited = _visitedCells[region.id]!.length;
             final needed = _getOutlineCellsNeeded(path);
@@ -260,7 +302,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
   // ── Gesture handlers ──────────────────────────────────────
   void _onPanStart(
-      Offset local, Size canvasSize, Color selectedColor) {
+      Offset local, Size canvasSize, Color selectedColor, String? selectedColorId) {
     _dragPosition = local;
     _hasInteracted = true;
     _tapScaleController.forward().then((_) => _tapScaleController.reverse());
@@ -275,14 +317,14 @@ class _CanvasWidgetState extends State<CanvasWidget>
       }
     }
     
-    _handleTrace(local, canvasSize, selectedColor);
+    _handleTrace(local, canvasSize, selectedColor, selectedColorId);
     setState(() {});
   }
 
   void _onPanUpdate(
-      Offset local, Size canvasSize, Color selectedColor) {
+      Offset local, Size canvasSize, Color selectedColor, String? selectedColorId) {
     _dragPosition = local;
-    _handleTrace(local, canvasSize, selectedColor);
+    _handleTrace(local, canvasSize, selectedColor, selectedColorId);
     setState(() {});
   }
 
@@ -293,6 +335,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
       builder: (context, skinsVm, drawingVm, _) {
         final selectedColor =
             drawingVm.selectedColor?.color ?? Colors.deepPurple;
+        final selectedColorId = drawingVm.selectedColor?.id;
         final skin = skinsVm.selectedSkin;
 
         return LayoutBuilder(builder: (context, constraints) {
@@ -304,11 +347,13 @@ class _CanvasWidgetState extends State<CanvasWidget>
             onPanStart: (d) => _onPanStart(
                 _toLocal(d.localPosition, canvasSize, constraints),
                 canvasSize,
-                selectedColor),
+                selectedColor,
+                selectedColorId),
             onPanUpdate: (d) => _onPanUpdate(
                 _toLocal(d.localPosition, canvasSize, constraints),
                 canvasSize,
-                selectedColor),
+                selectedColor,
+                selectedColorId),
             onPanEnd: (_) {},
             onPanCancel: () {},
             onTapDown: (d) {
@@ -365,7 +410,6 @@ class _CanvasWidgetState extends State<CanvasWidget>
                               outlineProgress: _outlineProgress,
                               fillProgress: _fillProgress,
                               scribblePaths: _scribblePaths,
-                              tracingColor: selectedColor,
                             ),
                             size: canvasSize,
                           );
@@ -539,7 +583,6 @@ class AdvancedCanvasPainter extends CustomPainter {
     required this.outlineProgress,
     required this.fillProgress,
     required this.scribblePaths,
-    required this.tracingColor,
   });
 
   final LevelModel level;
@@ -551,7 +594,6 @@ class AdvancedCanvasPainter extends CustomPainter {
   final Map<String, double> outlineProgress;
   final Map<String, double> fillProgress;
   final Map<String, Path> scribblePaths;
-  final Color tracingColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -621,7 +663,7 @@ class AdvancedCanvasPainter extends CustomPainter {
               ..strokeCap = StrokeCap.round
               ..strokeJoin = StrokeJoin.round
               ..strokeWidth = size.shortestSide * 0.12 // very thick marker
-              ..color = tracingColor
+              ..color = level.getTargetColorForRegion(region.id)
               ..isAntiAlias = true,
           );
           canvas.restore();
@@ -648,13 +690,13 @@ class AdvancedCanvasPainter extends CustomPainter {
             ..strokeWidth = size.shortestSide * 0.015
             ..strokeCap = StrokeCap.round
             ..strokeJoin = StrokeJoin.round
-            ..color = tracingColor
+            ..color = level.getTargetColorForRegion(region.id)
             ..maskFilter =
                 const MaskFilter.blur(BlurStyle.normal, 2),
         );
       } else if (progress > 0) {
         // Partially traced — show progress via colored dash
-        _drawPartialOutline(canvas, path, progress, size);
+        _drawPartialOutline(canvas, path, progress, size, level.getTargetColorForRegion(region.id));
         _drawDashedPath(canvas, path, guideOutline);
       } else {
         // Not yet touched — dashed grey
@@ -677,12 +719,12 @@ class AdvancedCanvasPainter extends CustomPainter {
 
   /// Draw only the first [progress] fraction of the path in the tracing color.
   void _drawPartialOutline(
-      Canvas canvas, Path path, double progress, Size size) {
+      Canvas canvas, Path path, double progress, Size size, Color color) {
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.shortestSide * 0.014
       ..strokeCap = StrokeCap.round
-      ..color = tracingColor
+      ..color = color
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.5);
 
     for (final metric in path.computeMetrics()) {
@@ -707,5 +749,5 @@ class AdvancedCanvasPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant AdvancedCanvasPainter old) => true;
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
