@@ -5,6 +5,7 @@ class SoundService {
   SoundService();
 
   final AudioPlayer _player = AudioPlayer();
+  final AudioPlayer _sfxPlayer = AudioPlayer();
   bool _musicEnabled = true;
   bool _soundEnabled = true;
   bool _hapticsEnabled = true;
@@ -36,7 +37,7 @@ class SoundService {
     try {
       await _player.setReleaseMode(ReleaseMode.loop);
       await _player.setVolume(0.55);
-      await _player.play(AssetSource('sounds/splash_music.mp3'));
+      await _player.play(AssetSource('audio/piano_bg.mp3'));
       _backgroundStarted = true;
     } catch (_) {
       // ignore errors if audio cannot be played
@@ -56,6 +57,11 @@ class SoundService {
 
   Future<void> playFillFeedback() async {
     if (_hapticsEnabled) await HapticFeedback.lightImpact();
+    if (_soundEnabled) {
+      try {
+        await _sfxPlayer.play(AssetSource('audio/piano_tap.mp3'));
+      } catch (_) {}
+    }
   }
 
   Future<void> playCompletionFeedback() async {

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../shared/widgets/loader.dart';
 import '../../drawing/model/color_model.dart';
+import '../../levels/model/level_model.dart';
 import '../view/widgets/canvas_widget.dart';
 import '../viewmodel/drawing_viewmodel.dart';
 
@@ -101,7 +102,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
                         _LevelBadge(
                           title: level.title,
                           levelNumber: viewModel.levelNumber ?? 1,
-                          iconAsset: level.guideAsset,
+                          level: level,
                         ),
                         const SizedBox(height: 30),
                         Expanded(
@@ -219,6 +220,9 @@ class _DrawingScreenState extends State<DrawingScreen> {
         AppRoutes.drawing,
         arguments: DrawingRouteArgs(levelId: nextLevelId),
       );
+    } else {
+      // If there's no next level, go back to the home/levels screen
+      Navigator.pop(context);
     }
   }
 }
@@ -278,12 +282,12 @@ class _LevelBadge extends StatelessWidget {
   const _LevelBadge({
     required this.title,
     required this.levelNumber,
-    this.iconAsset,
+    required this.level,
   });
 
   final String title;
   final int levelNumber;
-  final String? iconAsset;
+  final LevelModel level;
 
   @override
   Widget build(BuildContext context) {
@@ -323,20 +327,90 @@ class _LevelBadge extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 18),
-          if (iconAsset != null)
-            Image.asset(
-              iconAsset!,
-              width: 48,
-              height: 48,
-              fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => const SizedBox(width: 48),
-            )
-          else
-            const SizedBox(width: 48),
+          // Small preview of the completed level
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.black12, width: 1),
+            ),
+            child: CustomPaint(
+              painter: _ReferencePreviewPainter(level: level),
+              size: const Size(48, 48),
+            ),
+          ),
         ],
       ),
     );
   }
+}
+
+class _ReferencePreviewPainter extends CustomPainter {
+  final LevelModel level;
+
+  _ReferencePreviewPainter({required this.level});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // We assume levels are designed for 100x100.
+    // Scale it down to fit the 48x48 box with some padding.
+    canvas.save();
+    canvas.scale(size.width / 100, size.height / 100);
+    
+    // Slight padding inside the 100x100 space
+    canvas.translate(10, 10);
+    canvas.scale(0.8, 0.8);
+
+    for (final region in level.regions) {
+      final path = region.toPath(const Size(100, 100));
+      
+      Color regionColor = Colors.grey.shade300;
+      final regionName = region.id.toLowerCase();
+      
+      // Heuristic color mapping for the preview based on region/level names
+      for (final p in level.palette) {
+        final pId = p.id.toLowerCase();
+        if (regionName.contains(pId) || 
+           (pId == 'red' && regionName.contains('body') && level.id == 'apple') ||
+           (pId == 'green' && regionName.contains('leaf')) ||
+           (pId == 'brown' && regionName.contains('stem')) ||
+           (pId == 'yellow' && regionName.contains('body') && level.id == 'banana') ||
+           (pId == 'orange' && regionName.contains('face') && level.id == 'cat') ||
+           (pId == 'white' && regionName.contains('ear') && level.id == 'cat') ||
+           (pId == 'blue' && level.id == 'fish') ||
+           (pId == 'yellow' && level.id == 'sunflower') ||
+           (pId == 'red' && level.id == 'car') ||
+           (pId == 'white' && level.id == 'football') ||
+           (pId == 'blue' && level.id == 'tennis')) {
+          regionColor = p.color;
+          break;
+        }
+      }
+
+      final paint = Paint()
+        ..style = PaintingStyle.fill
+        ..color = regionColor
+        ..isAntiAlias = true;
+
+      canvas.drawPath(path, paint);
+
+      final strokePaint = Paint()
+        ..style = PaintingStyle.stroke
+        ..color = Colors.black.withValues(alpha: 0.3)
+        ..strokeWidth = 2
+        ..isAntiAlias = true;
+      
+      canvas.drawPath(path, strokePaint);
+    }
+    
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _ReferencePreviewPainter oldDelegate) =>
+      oldDelegate.level != level;
 }
 
 class _ColorPaletteRow extends StatelessWidget {
@@ -370,12 +444,12 @@ class _ColorPaletteRow extends StatelessWidget {
                 border: Border.all(
                   color: isSelected
                       ? const Color(0xFF111111)
-                      : Colors.white.withOpacity(0.6),
+                      : Colors.white.withValues(alpha: 0.6),
                   width: isSelected ? 4.0 : 2.5,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: colorOption.color.withOpacity(isSelected ? 0.7 : 0.35),
+                    color: colorOption.color.withValues(alpha: isSelected ? 0.7 : 0.35),
                     blurRadius: isSelected ? 18 : 8,
                     spreadRadius: isSelected ? 2 : 0,
                     offset: const Offset(0, 5),

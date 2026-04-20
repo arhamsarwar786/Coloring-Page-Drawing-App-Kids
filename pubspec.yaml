@@ -34,3 +34,4 @@ flutter:
     - assets/images/
     - assets/json/
     - assets/sounds/
+    - assets/audio/

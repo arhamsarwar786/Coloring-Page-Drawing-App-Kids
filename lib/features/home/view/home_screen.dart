@@ -108,7 +108,7 @@ class HomeScreen extends StatelessWidget {
                               onSelected: (_) =>
                                   viewModel.selectCategory(category.id),
                               selectedColor:
-                                  category.accentColor.withOpacity(0.25),
+                                  category.accentColor.withValues(alpha: 0.25),
                             ),
                           );
                         }).toList(),
@@ -200,8 +200,8 @@ class _HeaderPanel extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: <Color>[
             AppColors.ink,
-            AppColors.ink.withOpacity(0.82),
-            AppColors.rose.withOpacity(0.72),
+            AppColors.ink.withValues(alpha: 0.82),
+            AppColors.rose.withValues(alpha: 0.72),
           ],
         ),
       ),
@@ -212,7 +212,7 @@ class _HeaderPanel extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.18),
+              color: Colors.white.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
@@ -230,7 +230,7 @@ class _HeaderPanel extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           Text(subtitle,
               style: textTheme.bodyLarge
-                  ?.copyWith(color: Colors.white.withOpacity(0.88))),
+                  ?.copyWith(color: Colors.white.withValues(alpha: 0.88))),
         ],
       ),
     );
@@ -297,7 +297,7 @@ class _StatCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.18),
+              color: color.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(icon, color: AppColors.ink),
@@ -349,7 +349,7 @@ class _FeaturePanel extends StatelessWidget {
             height: 58,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
-              color: accent.withOpacity(0.16),
+              color: accent.withValues(alpha: 0.16),
             ),
             child: Icon(icon, color: accent),
           ),
@@ -438,21 +438,42 @@ class _LevelCard extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: <Color>[
-                      level.accentColor.withOpacity(0.9),
-                      level.accentColor.withOpacity(0.45),
+                      level.accentColor.withValues(alpha: 0.9),
+                      level.accentColor.withValues(alpha: 0.45),
                     ],
                   ),
                 ),
-                child: Center(
-                  child: Icon(
-                    isLocked
-                        ? Icons.lock_rounded
-                        : level.isCompleted
-                            ? Icons.check_circle_rounded
-                            : Icons.brush_rounded,
-                    color: Colors.white,
-                    size: 34,
-                  ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Text(
+                      _levelEmoji(level.id),
+                      style: const TextStyle(fontSize: 40),
+                    ),
+                    if (isLocked)
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.45),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Icon(Icons.lock_rounded,
+                            color: Colors.white, size: 30),
+                      ),
+                    if (!isLocked && level.isCompleted)
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: const BoxDecoration(
+                            color: Colors.green,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.check,
+                              color: Colors.white, size: 14),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
@@ -484,5 +505,31 @@ class _LevelCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Returns a relevant emoji for each level based on its ID.
+  String _levelEmoji(String id) {
+    const map = <String, String>{
+      'apple':      '🍎',
+      'banana':     '🍌',
+      'mango':      '🥭',
+      'orange':     '🍊',
+      'cat':        '🐱',
+      'dog':        '🐶',
+      'fish':       '🐟',
+      'lion':       '🦁',
+      'fox':        '🦊',
+      'rabbit':     '🐰',
+      'football':   '⚽',
+      'tennis':     '🎾',
+      'basketball': '🏀',
+      'car':        '🚗',
+      'truck':      '🚛',
+      'bicycle':    '🚲',
+      'sunflower':  '🌻',
+      'tree':       '🌳',
+      'flower':     '🌸',
+    };
+    return map[id] ?? '🎨';
   }
 }

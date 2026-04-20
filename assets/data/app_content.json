@@ -4,27 +4,83 @@
   "dailyGoalText": "Finish one artwork today to keep your calming streak alive.",
   "categories": [
     {
-      "id": "sports",
-      "title": "Sports",
-      "subtitle": "Draw your favorite sports gear.",
-      "accentColor": "#FF8A65",
+      "id": "fruits",
+      "title": "Fruits",
+      "subtitle": "Sweet fruit shapes to color.",
+      "accentColor": "#FF4B4B",
       "levels": [
         {
-          "id": "tennis",
-          "title": "Tennis",
-          "subtitle": "Serve it up!",
+          "id": "apple",
+          "title": "Apple",
+          "subtitle": "A juicy red apple!",
           "difficulty": "Easy",
-          "rewardCoins": 50,
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/centa.png",
+          "guideAsset": "assets/images/girl.png",
           "palette": [
-            { "id": "blue", "label": "Blue", "hex": "#4287f5" },
-            { "id": "green", "label": "Green", "hex": "#a4e858" },
-            { "id": "orange", "label": "Orange", "hex": "#ff8c00" }
+            { "id": "red",   "label": "Red",   "hex": "#E8242A" },
+            { "id": "green", "label": "Green", "hex": "#4CAF50" },
+            { "id": "brown", "label": "Brown", "hex": "#8B4513" }
           ],
           "regions": [
-            { "id": "racket_head", "label": "Head", "type": "path", "svgPath": "M 50,5 C 75,5 95,25 95,50 C 95,75 75,95 50,95 C 25,95 5,75 5,50 C 5,25 25,5 50,5 Z" },
-            { "id": "racket_handle", "label": "Handle", "type": "path", "svgPath": "M 45,95 L 55,95 L 55,140 L 45,140 Z" }
+            {
+              "id": "apple_body",
+              "label": "Apple Body",
+              "type": "path",
+              "svgPath": "M 50,18 C 38,14 20,18 14,30 C 6,44 8,62 18,74 C 26,84 38,90 50,90 C 62,90 74,84 82,74 C 92,62 94,44 86,30 C 80,18 62,14 50,18 Z"
+            },
+            {
+              "id": "apple_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "svgPath": "M 50,16 C 50,16 42,6 52,2 C 64,-2 66,12 56,16 C 56,16 52,10 50,16 Z"
+            },
+            {
+              "id": "apple_stem",
+              "label": "Stem",
+              "type": "path",
+              "svgPath": "M 48,16 C 48,10 52,4 52,4 L 54,4 C 54,4 52,10 52,16 Z"
+            },
+            {
+              "id": "apple_shine",
+              "label": "Shine",
+              "type": "path",
+              "svgPath": "M 30,28 C 26,32 24,38 26,42 C 28,46 32,44 34,40 C 36,34 34,28 30,28 Z"
+            }
+          ]
+        },
+        {
+          "id": "banana",
+          "title": "Banana",
+          "subtitle": "A sweet yellow banana!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "palette": [
+            { "id": "yellow",      "label": "Yellow",      "hex": "#FFE135" },
+            { "id": "dark_yellow", "label": "Dark Yellow", "hex": "#C8A400" },
+            { "id": "brown",       "label": "Brown",       "hex": "#8B4513" }
+          ],
+          "regions": [
+            {
+              "id": "banana_body",
+              "label": "Banana",
+              "type": "path",
+              "svgPath": "M 20,75 C 15,60 18,38 30,22 C 42,8 60,4 72,10 C 84,16 88,32 82,48 C 76,62 64,72 52,78 C 40,84 26,84 20,75 Z"
+            },
+            {
+              "id": "banana_tip_top",
+              "label": "Top Tip",
+              "type": "path",
+              "svgPath": "M 68,8 C 72,4 80,2 82,8 C 84,12 76,14 72,10 Z"
+            },
+            {
+              "id": "banana_tip_bottom",
+              "label": "Bottom Tip",
+              "type": "path",
+              "svgPath": "M 18,76 C 14,80 12,88 18,90 C 22,92 24,84 20,78 Z"
+            }
           ]
         }
       ]
@@ -36,48 +92,341 @@
       "accentColor": "#81C784",
       "levels": [
         {
-          "id": "fox",
-          "title": "Fox",
-          "subtitle": "Clever fox.",
+          "id": "cat",
+          "title": "Cat",
+          "subtitle": "A cute kitty face!",
           "difficulty": "Medium",
           "rewardCoins": 60,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
+          "guideAsset": "assets/images/girl.png",
           "palette": [
-            { "id": "brown", "label": "Brown", "hex": "#c45c16" },
-            { "id": "orange", "label": "Orange", "hex": "#f59042" },
-            { "id": "cream", "label": "Cream", "hex": "#faebd7" }
+            { "id": "orange", "label": "Orange", "hex": "#FF8C00" },
+            { "id": "pink",   "label": "Pink",   "hex": "#FFB6C1" },
+            { "id": "white",  "label": "White",  "hex": "#F5F5F5" }
           ],
           "regions": [
-            { "id": "face", "label": "Face", "type": "path", "svgPath": "M 50,80 L 10,40 C 10,10 40,10 50,25 C 60,10 90,10 90,40 Z" },
-            { "id": "leftEar", "label": "Left Ear", "type": "path", "svgPath": "M 10,40 L 0,0 L 30,20 Z" },
-            { "id": "rightEar", "label": "Right Ear", "type": "path", "svgPath": "M 90,40 L 100,0 L 70,20 Z" }
+            {
+              "id": "cat_face",
+              "label": "Cat Face",
+              "type": "path",
+              "svgPath": "M 50,85 C 28,85 10,70 10,52 C 10,34 28,22 50,22 C 72,22 90,34 90,52 C 90,70 72,85 50,85 Z"
+            },
+            {
+              "id": "cat_ear_left",
+              "label": "Left Ear",
+              "type": "path",
+              "svgPath": "M 18,36 L 10,10 L 36,26 Z"
+            },
+            {
+              "id": "cat_ear_right",
+              "label": "Right Ear",
+              "type": "path",
+              "svgPath": "M 82,36 L 90,10 L 64,26 Z"
+            },
+            {
+              "id": "cat_inner_ear_left",
+              "label": "Inner Ear Left",
+              "type": "path",
+              "svgPath": "M 20,34 L 14,16 L 32,28 Z"
+            },
+            {
+              "id": "cat_inner_ear_right",
+              "label": "Inner Ear Right",
+              "type": "path",
+              "svgPath": "M 80,34 L 86,16 L 68,28 Z"
+            },
+            {
+              "id": "cat_nose",
+              "label": "Nose",
+              "type": "path",
+              "svgPath": "M 50,54 C 46,52 44,56 46,58 C 48,60 52,60 54,58 C 56,56 54,52 50,54 Z"
+            },
+            {
+              "id": "cat_muzzle",
+              "label": "Muzzle",
+              "type": "path",
+              "svgPath": "M 36,58 C 36,66 42,72 50,72 C 58,72 64,66 64,58 C 58,56 42,56 36,58 Z"
+            }
+          ]
+        },
+        {
+          "id": "fish",
+          "title": "Fish",
+          "subtitle": "A happy little fish!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "palette": [
+            { "id": "blue",   "label": "Blue",   "hex": "#2196F3" },
+            { "id": "yellow", "label": "Yellow", "hex": "#FFC107" },
+            { "id": "orange", "label": "Orange", "hex": "#FF5722" }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M 80,50 C 80,30 65,14 48,14 C 28,14 12,30 12,50 C 12,70 28,86 48,86 C 65,86 80,70 80,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M 80,50 L 96,30 L 100,50 L 96,70 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M 42,14 C 44,4 56,4 58,14 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M 40,86 C 42,96 56,96 58,86 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.32,
+              "cy": 0.44,
+              "radius": 0.06
+            }
           ]
         }
       ]
     },
     {
-      "id": "fruits",
-      "title": "Fruits",
-      "subtitle": "Sweet fruit shapes to color.",
+      "id": "sports",
+      "title": "Sports",
+      "subtitle": "Color your favorite sports gear!",
       "accentColor": "#FF8A65",
       "levels": [
         {
-          "id": "apple",
-          "title": "Apple",
-          "subtitle": "Can you do?",
+          "id": "football",
+          "title": "Football",
+          "subtitle": "Kick it!",
+          "difficulty": "Medium",
+          "rewardCoins": 60,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "palette": [
+            { "id": "white", "label": "White", "hex": "#F5F5F5" },
+            { "id": "black", "label": "Black", "hex": "#212121" }
+          ],
+          "regions": [
+            {
+              "id": "ball_body",
+              "label": "Ball",
+              "type": "circle",
+              "cx": 0.50,
+              "cy": 0.50,
+              "radius": 0.44
+            },
+            {
+              "id": "patch_center",
+              "label": "Center Patch",
+              "type": "polygon",
+              "points": [[0.50,0.24],[0.58,0.38],[0.54,0.52],[0.46,0.52],[0.42,0.38]]
+            },
+            {
+              "id": "patch_top_left",
+              "label": "Top Left Patch",
+              "type": "polygon",
+              "points": [[0.24,0.30],[0.34,0.24],[0.42,0.36],[0.36,0.44],[0.24,0.40]]
+            },
+            {
+              "id": "patch_top_right",
+              "label": "Top Right Patch",
+              "type": "polygon",
+              "points": [[0.76,0.30],[0.66,0.24],[0.58,0.36],[0.64,0.44],[0.76,0.40]]
+            },
+            {
+              "id": "patch_bottom_left",
+              "label": "Bottom Left Patch",
+              "type": "polygon",
+              "points": [[0.24,0.66],[0.34,0.76],[0.44,0.68],[0.40,0.56],[0.26,0.56]]
+            },
+            {
+              "id": "patch_bottom_right",
+              "label": "Bottom Right Patch",
+              "type": "polygon",
+              "points": [[0.76,0.66],[0.66,0.76],[0.56,0.68],[0.60,0.56],[0.74,0.56]]
+            }
+          ]
+        },
+        {
+          "id": "tennis",
+          "title": "Tennis Racket",
+          "subtitle": "Serve it up!",
           "difficulty": "Easy",
-          "rewardCoins": 40,
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/centa.png",
+          "palette": [
+            { "id": "blue",   "label": "Blue",   "hex": "#4287f5" },
+            { "id": "yellow", "label": "Yellow", "hex": "#FFE135" },
+            { "id": "gray",   "label": "Gray",   "hex": "#9E9E9E" }
+          ],
+          "regions": [
+            {
+              "id": "racket_head",
+              "label": "Racket Head",
+              "type": "path",
+              "svgPath": "M 50,6 C 66,6 82,18 84,36 C 86,54 72,72 56,76 C 52,77 48,77 44,76 C 28,72 14,54 16,36 C 18,18 34,6 50,6 Z"
+            },
+            {
+              "id": "racket_throat",
+              "label": "Throat",
+              "type": "path",
+              "svgPath": "M 38,76 C 36,80 38,86 44,88 C 48,89 52,89 56,88 C 62,86 64,80 62,76 C 58,78 42,78 38,76 Z"
+            },
+            {
+              "id": "racket_handle",
+              "label": "Handle",
+              "type": "path",
+              "svgPath": "M 44,88 L 42,98 C 42,98 44,100 50,100 C 56,100 58,98 58,98 L 56,88 Z"
+            },
+            {
+              "id": "racket_grip",
+              "label": "Grip Tape",
+              "type": "path",
+              "svgPath": "M 43,97 L 42,98 C 42,98 44,100 50,100 C 56,100 58,98 57,97 Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vehicles",
+      "title": "Vehicles",
+      "subtitle": "Vroom vroom! Color your ride.",
+      "accentColor": "#64B5F6",
+      "levels": [
+        {
+          "id": "car",
+          "title": "Car",
+          "subtitle": "A fast red car!",
+          "difficulty": "Medium",
+          "rewardCoins": 70,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "palette": [
+            { "id": "red",   "label": "Red",   "hex": "#E53935" },
+            { "id": "blue",  "label": "Blue",  "hex": "#1E88E5" },
+            { "id": "gray",  "label": "Gray",  "hex": "#757575" },
+            { "id": "black", "label": "Black", "hex": "#212121" }
+          ],
+          "regions": [
+            {
+              "id": "car_body",
+              "label": "Car Body",
+              "type": "path",
+              "svgPath": "M 8,68 L 8,52 L 22,34 L 44,26 L 64,26 L 80,34 L 92,52 L 92,68 Z"
+            },
+            {
+              "id": "car_roof",
+              "label": "Car Roof",
+              "type": "path",
+              "svgPath": "M 26,52 L 34,36 L 52,30 L 66,30 L 76,40 L 76,52 Z"
+            },
+            {
+              "id": "car_window_left",
+              "label": "Left Window",
+              "type": "path",
+              "svgPath": "M 28,50 L 36,38 L 50,34 L 50,50 Z"
+            },
+            {
+              "id": "car_window_right",
+              "label": "Right Window",
+              "type": "path",
+              "svgPath": "M 52,34 L 70,38 L 74,50 L 52,50 Z"
+            },
+            {
+              "id": "car_wheel_left",
+              "label": "Left Wheel",
+              "type": "circle",
+              "cx": 0.26,
+              "cy": 0.74,
+              "radius": 0.10
+            },
+            {
+              "id": "car_wheel_right",
+              "label": "Right Wheel",
+              "type": "circle",
+              "cx": 0.74,
+              "cy": 0.74,
+              "radius": 0.10
+            },
+            {
+              "id": "car_headlight",
+              "label": "Headlight",
+              "type": "path",
+              "svgPath": "M 84,52 C 86,50 90,50 92,52 L 92,60 C 90,62 86,62 84,60 Z"
+            },
+            {
+              "id": "car_taillight",
+              "label": "Taillight",
+              "type": "path",
+              "svgPath": "M 8,52 C 10,50 12,50 14,52 L 14,60 C 12,62 10,62 8,60 Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nature",
+      "title": "Nature",
+      "subtitle": "Beautiful flowers and trees.",
+      "accentColor": "#A5D6A7",
+      "levels": [
+        {
+          "id": "sunflower",
+          "title": "Sunflower",
+          "subtitle": "Bright and sunny!",
+          "difficulty": "Medium",
+          "rewardCoins": 65,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
           "palette": [
-            { "id": "red", "label": "Red", "hex": "#FF4B4B" },
-            { "id": "brown", "label": "Brown", "hex": "#B56435" },
-            { "id": "green", "label": "Green", "hex": "#6BCC5E" }
+            { "id": "yellow", "label": "Yellow", "hex": "#FFD600" },
+            { "id": "brown",  "label": "Brown",  "hex": "#6D4C41" },
+            { "id": "green",  "label": "Green",  "hex": "#388E3C" }
           ],
           "regions": [
-            { "id": "main", "label": "Apple Body", "type": "path", "svgPath": "M 50,85 C 30,85 10,65 10,45 C 10,25 30,15 50,20 C 70,15 90,25 90,45 C 90,65 70,85 50,85 Z" },
-            { "id": "leaf", "label": "Leaf", "type": "path", "svgPath": "M 50,20 C 40,10 50,0 60,0 C 70,0 60,10 50,20 Z" }
+            {
+              "id": "petal_1",  "label": "Petal 1",  "type": "path", "svgPath": "M 50,50 C 46,44 44,36 44,28 C 44,20 48,16 50,16 C 52,16 56,20 56,28 C 56,36 54,44 50,50 Z"
+            },
+            {
+              "id": "petal_2",  "label": "Petal 2",  "type": "path", "svgPath": "M 50,50 C 56,46 63,44 70,44 C 77,44 81,48 81,50 C 81,52 77,56 70,56 C 63,56 56,54 50,50 Z"
+            },
+            {
+              "id": "petal_3",  "label": "Petal 3",  "type": "path", "svgPath": "M 50,50 C 54,56 56,64 56,72 C 56,80 52,84 50,84 C 48,84 44,80 44,72 C 44,64 46,56 50,50 Z"
+            },
+            {
+              "id": "petal_4",  "label": "Petal 4",  "type": "path", "svgPath": "M 50,50 C 44,54 37,56 30,56 C 23,56 19,52 19,50 C 19,48 23,44 30,44 C 37,44 44,46 50,50 Z"
+            },
+            {
+              "id": "petal_5",  "label": "Petal 5",  "type": "path", "svgPath": "M 50,50 C 56,44 62,39 68,35 C 74,31 80,31 82,33 C 84,35 82,41 76,45 C 70,49 62,50 50,50 Z"
+            },
+            {
+              "id": "petal_6",  "label": "Petal 6",  "type": "path", "svgPath": "M 50,50 C 54,56 55,64 51,70 C 47,76 42,78 40,76 C 38,74 39,68 43,62 C 47,56 50,54 50,50 Z"
+            },
+            {
+              "id": "petal_7",  "label": "Petal 7",  "type": "path", "svgPath": "M 50,50 C 44,56 38,59 32,63 C 26,67 20,67 18,65 C 16,63 18,57 24,53 C 30,49 40,50 50,50 Z"
+            },
+            {
+              "id": "petal_8",  "label": "Petal 8",  "type": "path", "svgPath": "M 50,50 C 56,46 63,43 69,39 C 60,37 56,44 50,50 Z"
+            },
+            {
+              "id": "flower_center", "label": "Center", "type": "circle", "cx": 0.50, "cy": 0.50, "radius": 0.14
+            },
+            {
+              "id": "flower_stem",   "label": "Stem",   "type": "path", "svgPath": "M 46,84 C 46,92 54,100 54,84 Z"
+            }
           ]
         }
       ]

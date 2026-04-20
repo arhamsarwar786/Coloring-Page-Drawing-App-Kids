@@ -42,7 +42,7 @@ class ColorPicker extends StatelessWidget {
                   ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: colorOption.color.withOpacity(0.28),
+                      color: colorOption.color.withValues(alpha: 0.28),
                       blurRadius: 10,
                       offset: const Offset(0, 6),
                     ),

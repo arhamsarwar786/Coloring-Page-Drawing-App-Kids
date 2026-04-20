@@ -9,20 +9,16 @@ import '../../sound/services/sound_service.dart';
 import '../model/color_model.dart';
 import '../model/drawing_action.dart';
 import '../repository/drawing_repository.dart';
-import '../services/fill_algorithm.dart';
 
 class DrawingViewModel extends BaseViewModel {
   DrawingViewModel({
     required DrawingRepository repository,
     required SoundService soundService,
-    FillAlgorithm? fillAlgorithm,
   })  : _repository = repository,
-        _soundService = soundService,
-        _fillAlgorithm = fillAlgorithm ?? const FillAlgorithm();
+        _soundService = soundService;
 
   final DrawingRepository _repository;
   final SoundService _soundService;
-  final FillAlgorithm _fillAlgorithm;
 
   LevelModel? _level;
   DrawingColorModel? _selectedColor;
@@ -96,27 +92,20 @@ class DrawingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> fillRegionAt(Offset point, Size canvasSize) async {
+  Future<void> fillRegionAt(String regionId) async {
     if (_selectedColor == null || _level == null) return;
 
-    final region = _fillAlgorithm.locateRegion(
-      point: point,
-      canvasSize: canvasSize,
-      regions: _level!.regions,
-    );
-    if (region == null) return;
-
-    final previousColor = _filledRegions[region.id];
+    final previousColor = _filledRegions[regionId];
     final nextColor = _selectedColor!.color;
     if (previousColor == nextColor) return;
 
     _filledRegions = <String, Color>{
       ..._filledRegions,
-      region.id: nextColor,
+      regionId: nextColor,
     };
     _undoStack.add(
       DrawingAction.fill(
-        regionId: region.id,
+        regionId: regionId,
         previousColor: previousColor,
         nextColor: nextColor,
       ),
