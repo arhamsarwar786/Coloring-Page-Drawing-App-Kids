@@ -534,7 +534,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                   height: canvasDimension,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(26),
+                    borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: Colors.black.withValues(alpha: 0.08),
                       width: 2,
@@ -542,7 +542,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                     boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.12),
-                        blurRadius: 24,
+                        blurRadius: 20,
                         offset: const Offset(0, 12),
                       ),
                       BoxShadow(
@@ -556,7 +556,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                     clipBehavior: Clip.none,
                     children: <Widget>[
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(26),
+                        borderRadius: BorderRadius.circular(20),
                         child: RepaintBoundary(
                           child: CustomPaint(
                             painter: AdvancedCanvasPainter(

@@ -121,7 +121,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
                           Text(
                             'LEVEL ${viewModel.levelNumber ?? 1}',
                             style: GoogleFonts.fredoka(
-                              fontSize: 34,
+                              fontSize: 30,
                               fontWeight: FontWeight.w700,
                               color: const Color(0xFF222222),
                               letterSpacing: 2.0,
@@ -384,15 +384,12 @@ class _SidebarIcon extends StatelessWidget {
       child: GestureDetector(
         onTap: onPressed,
         child: SizedBox(
-          width: 56,
-          height: 56,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: assetName != null
-                ? Image.asset(assetName!, fit: BoxFit.contain)
-                : Icon(icon,
-                    color: iconColor ?? const Color(0xFF666666), size: 28),
-          ),
+          width: 42,
+          height: 42,
+          child: assetName != null
+              ? Image.asset(assetName!, fit: BoxFit.contain)
+              : Icon(icon,
+                  color: iconColor ?? const Color(0xFF666666), size: 28),
         ),
       ),
     );
@@ -413,7 +410,8 @@ class _LevelBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      width: 200,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(6),
@@ -428,9 +426,10 @@ class _LevelBadge extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CircleAvatar(
-            radius: 24,
+            radius: 20,
             backgroundColor: const Color(0xFFFFE082),
             child: ClipOval(
               child: Image.asset(
@@ -446,12 +445,14 @@ class _LevelBadge extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Text(
-            title,
-            style: GoogleFonts.fredoka(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: const Color(0xFF222222),
+          Expanded(
+            child: Text(overflow: TextOverflow.ellipsis,
+              title,
+              style: GoogleFonts.fredoka(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF222222),
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -528,32 +529,35 @@ class _ColorPaletteRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: palette.map((colorOption) {
-        final isSelected = selectedColorId == colorOption.id;
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: GestureDetector(
-            onTap: () => onSelect(colorOption),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: isSelected ? 86 : 76,
-              height: isSelected ? 86 : 76,
-              decoration: BoxDecoration(
-                color: colorOption.color,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: isSelected
-                      ? const Color(0xFF111111)
-                      : Colors.white.withValues(alpha: 0.6),
-                  width: isSelected ? 4.0 : 2.5,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: palette.map((colorOption) {
+          final isSelected = selectedColorId == colorOption.id;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: GestureDetector(
+              onTap: () => onSelect(colorOption),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: isSelected ? 86 : 76,
+                height: isSelected ? 86 : 76,
+                decoration: BoxDecoration(
+                  color: colorOption.color,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: isSelected
+                        ? const Color(0xFF111111)
+                        : Colors.white.withValues(alpha: 0.6),
+                    width: isSelected ? 4.0 : 2.5,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
 }
