@@ -36,6 +36,7 @@ class LevelRegionModel {
     this.rx,
     this.ry,
     this.svgPath,
+    this.viewBoxSize,
     this.points = const <Offset>[],
   });
 
@@ -48,6 +49,7 @@ class LevelRegionModel {
   final double? rx;
   final double? ry;
   final String? svgPath;
+  final double? viewBoxSize;
   final List<Offset> points;
 
   factory LevelRegionModel.fromJson(Map<String, dynamic> json) {
@@ -71,6 +73,7 @@ class LevelRegionModel {
       rx: (json['rx'] as num?)?.toDouble(),
       ry: (json['ry'] as num?)?.toDouble(),
       svgPath: json['svgPath'] as String?,
+      viewBoxSize: (json['viewBoxSize'] as num?)?.toDouble(),
       points: rawPoints,
     );
   }
@@ -111,9 +114,11 @@ class LevelRegionModel {
       case RegionShapeType.path:
         if (svgPath == null) return Path();
         final rawPath = parseSvgPathData(svgPath!);
-        // Assuming SVG coordinates are in 0-100 range
+        final sourceSize = viewBoxSize == null || viewBoxSize == 0
+            ? 100.0
+            : viewBoxSize!;
         final matrix = Matrix4.identity()
-          ..scale(size.width / 100, size.height / 100);
+          ..scale(size.width / sourceSize, size.height / sourceSize);
         return rawPath.transform(matrix.storage);
     }
   }

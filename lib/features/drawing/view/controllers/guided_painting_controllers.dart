@@ -643,7 +643,18 @@ class ColoringStepController extends ChangeNotifier {
 
   bool _isRegionCovered(String regionId) {
     final progress = _fillProgress[regionId] ?? 0.0;
-    return progress >= completionThreshold;
+    final coverableCellCount = _coverableCells[regionId]?.length ?? 0;
+    final requiredThreshold =
+        _completionThresholdForCellCount(coverableCellCount);
+    return progress >= requiredThreshold;
+  }
+
+  double _completionThresholdForCellCount(int cellCount) {
+    if (cellCount <= 4) return 0.55;
+    if (cellCount <= 8) return 0.68;
+    if (cellCount <= 16) return 0.78;
+    if (cellCount <= 28) return 0.86;
+    return completionThreshold;
   }
 
   Set<String> _buildCoverableCells(Path path) {

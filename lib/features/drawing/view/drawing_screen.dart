@@ -184,7 +184,11 @@ class _DrawingScreenState extends State<DrawingScreen> {
                                     ),
                                   );
                                 } else {
-                                  Navigator.pop(context);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    AppRoutes.home,
+                                    (_) => false,
+                                  );
                                 }
                               },
                               child: Container(
@@ -347,8 +351,11 @@ class _DrawingScreenState extends State<DrawingScreen> {
         arguments: DrawingRouteArgs(levelId: nextLevelId),
       );
     } else {
-      // If there's no next level, go back to the home/levels screen
-      Navigator.pop(context);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.home,
+        (_) => false,
+      );
     }
   }
 }

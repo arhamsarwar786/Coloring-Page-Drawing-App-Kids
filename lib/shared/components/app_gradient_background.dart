@@ -26,20 +26,17 @@ class AppGradientBackground extends StatelessWidget {
           Positioned(
             top: -80,
             right: -40,
-            child: _GlowOrb(
-                color: AppColors.sky.withOpacity(0.24), size: 220),
+            child: _GlowOrb(color: AppColors.sky.withOpacity(0.24), size: 220),
           ),
           Positioned(
             left: -60,
             top: 120,
-            child: _GlowOrb(
-                color: AppColors.rose.withOpacity(0.16), size: 180),
+            child: _GlowOrb(color: AppColors.rose.withOpacity(0.16), size: 180),
           ),
           Positioned(
             bottom: -50,
             right: 40,
-            child: _GlowOrb(
-                color: AppColors.mint.withOpacity(0.2), size: 160),
+            child: _GlowOrb(color: AppColors.mint.withOpacity(0.2), size: 160),
           ),
           child,
         ],

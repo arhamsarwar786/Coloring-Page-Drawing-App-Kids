@@ -29,6 +29,7 @@ class LocalContentService {
     final content = await loadHomeContent();
     return content.categories
         .expand((category) => category.levels)
+        .where((level) => level.id != 'custom_svg')
         .toList();
   }
 
@@ -141,7 +142,7 @@ class LocalContentService {
           isCompleted: progress?.isCompleted ?? false,
           stars: progress?.stars ?? 0,
         );
-      }).toList();
+      }).where((level) => level.id != 'custom_svg').toList();
       return category.copyWith(levels: levels);
     }).toList();
     return content.copyWith(categories: categories);

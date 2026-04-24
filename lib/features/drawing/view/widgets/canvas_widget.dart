@@ -170,6 +170,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
       orderedRegionIds: _drawingStepController.orderedRegionIds,
       filledRegions: widget.filledRegions,
     );
+    _paintPathCache.clear();
   }
 
   void _syncFilledRegions(Map<String, Color> oldFilledRegions) {
@@ -184,6 +185,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
     }
 
     _coloringStepController.syncFilledRegions(widget.filledRegions);
+    _paintPathCache.clear();
   }
 
   Offset _toLocal(
@@ -224,20 +226,88 @@ class _CanvasWidgetState extends State<CanvasWidget>
     }
 
     return _paintPathCache.putIfAbsent(regionId, () {
-      var exclusivePath = Path.from(_pathFor(regionId, canvasSize));
+      var paintPath = Path.from(_pathFor(regionId, canvasSize));
+      final activeRegionId = _coloringStepController.activeRegionId;
 
-      for (final region in widget.level.regions) {
-        if (region.id == regionId) continue;
-        final overlapPath = _pathFor(region.id, canvasSize);
-        exclusivePath = Path.combine(
-          PathOperation.difference,
-          exclusivePath,
-          overlapPath,
-        );
+      if (regionId != activeRegionId) {
+        return paintPath;
       }
 
-      return exclusivePath;
+      final orderedRegionIds = _drawingStepController.orderedRegionIds;
+      final activeIndex = orderedRegionIds.indexOf(regionId);
+      if (activeIndex == -1) {
+        return paintPath;
+      }
+
+      for (final candidateId in orderedRegionIds.skip(activeIndex + 1)) {
+        if (_coloringStepController.filledRegionIds.contains(candidateId)) {
+          continue;
+        }
+
+        final candidatePath = _pathFor(candidateId, canvasSize);
+        if (!_shouldReserveNestedRegion(
+          parentPath: paintPath,
+          candidatePath: candidatePath,
+        )) {
+          continue;
+        }
+
+        final separatedPath = Path.combine(
+          PathOperation.difference,
+          paintPath,
+          candidatePath,
+        );
+        if (!separatedPath.getBounds().isEmpty) {
+          paintPath = separatedPath;
+        }
+      }
+
+      return paintPath;
     });
+  }
+
+  bool _shouldReserveNestedRegion({
+    required Path parentPath,
+    required Path candidatePath,
+  }) {
+    final parentBounds = parentPath.getBounds();
+    final candidateBounds = candidatePath.getBounds();
+    if (parentBounds.isEmpty || candidateBounds.isEmpty) {
+      return false;
+    }
+
+    if (!parentBounds.overlaps(candidateBounds)) {
+      return false;
+    }
+
+    final samplePoints = <Offset>[
+      candidateBounds.center,
+      Offset(
+        candidateBounds.left + (candidateBounds.width * 0.25),
+        candidateBounds.top + (candidateBounds.height * 0.25),
+      ),
+      Offset(
+        candidateBounds.right - (candidateBounds.width * 0.25),
+        candidateBounds.top + (candidateBounds.height * 0.25),
+      ),
+      Offset(
+        candidateBounds.left + (candidateBounds.width * 0.25),
+        candidateBounds.bottom - (candidateBounds.height * 0.25),
+      ),
+      Offset(
+        candidateBounds.right - (candidateBounds.width * 0.25),
+        candidateBounds.bottom - (candidateBounds.height * 0.25),
+      ),
+    ];
+
+    var nestedSampleCount = 0;
+    for (final point in samplePoints) {
+      if (candidatePath.contains(point) && parentPath.contains(point)) {
+        nestedSampleCount += 1;
+      }
+    }
+
+    return nestedSampleCount >= 2;
   }
 
   Map<String, double> _outlineSharesForPart(
@@ -397,6 +467,10 @@ class _CanvasWidgetState extends State<CanvasWidget>
       builder: (context, skinsVm, drawingVm, _) {
         final selectedColor =
             drawingVm.selectedColor?.color ?? const Color(0xFF5C6BC0);
+        final markerTipColor =
+            _gestureCoordinator.resolvePhase() == GuidedCanvasPhase.outline
+                ? Colors.black
+                : selectedColor;
         final repaintListenable = Listenable.merge(<Listenable>[
           _drawingStepController,
           _coloringStepController,
@@ -557,7 +631,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                         markerPosition: _markerPosition,
                         tapScaleController: _tapScaleController,
                         skin: skin,
-                        selectedColor: selectedColor,
+                        tipColor: markerTipColor,
                         canvasDimension: canvasDimension,
                       ),
                     ],
@@ -577,14 +651,14 @@ class _MarkerOverlay extends StatelessWidget {
     required this.markerPosition,
     required this.tapScaleController,
     required this.skin,
-    required this.selectedColor,
+    required this.tipColor,
     required this.canvasDimension,
   });
 
   final ValueNotifier<Offset?> markerPosition;
   final AnimationController tapScaleController;
   final SkinModel skin;
-  final Color selectedColor;
+  final Color tipColor;
   final double canvasDimension;
 
   static const double _tipX = 28;
@@ -614,11 +688,11 @@ class _MarkerOverlay extends StatelessWidget {
                   errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                 ),
               Positioned(
-                left: _tipX - 9,
-                top: _tipY - 20,
+                left: _tipX - 10,
+                top: _tipY - 29,
                 child: CustomPaint(
-                  painter: _NibPainter(color: selectedColor),
-                  size: const Size(18, 20),
+                  painter: _NibPainter(color: Colors.transparent),
+                  size: const Size(20, 22),
                 ),
               ),
             ],
@@ -628,10 +702,8 @@ class _MarkerOverlay extends StatelessWidget {
       builder: (context, child) {
         final position = markerPosition.value;
         final left = position != null ? position.dx - _tipX : -_tipX;
-
         final top =
             position != null ? position.dy - _tipY : canvasDimension - _tipY;
-
         return IgnorePointer(
           child: Transform.translate(
             offset: Offset(left, top),
@@ -654,27 +726,54 @@ class _NibPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
+    final fillPaint = Paint()
       ..color = color
       ..style = PaintingStyle.fill
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.5);
+      ..isAntiAlias = true;
+    final outlinePaint = Paint()
+      ..color = Colors.transparent
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2
+      ..isAntiAlias = true;
 
     final path = Path()
-      ..moveTo(size.width / 2, size.height)
-      ..cubicTo(0, size.height * 0.6, 0, 0, size.width / 2, 0)
-      ..cubicTo(size.width, 0, size.width, size.height * 0.6, size.width / 2,
-          size.height)
+      ..moveTo(size.width * 0.5, size.height)
+      ..lineTo(size.width * 0.18, size.height * 0.42)
+      ..quadraticBezierTo(
+        size.width * 0.1,
+        size.height * 0.16,
+        size.width * 0.36,
+        size.height * 0.06,
+      )
+      ..lineTo(size.width * 0.64, size.height * 0.06)
+      ..quadraticBezierTo(
+        size.width * 0.9,
+        size.height * 0.16,
+        size.width * 0.82,
+        size.height * 0.42,
+      )
       ..close();
 
-    canvas.drawPath(path, paint);
+    canvas.drawShadow(path, Colors.black.withValues(alpha: 0.22), 2, false);
+    canvas.drawPath(path, fillPaint);
+    canvas.drawPath(path, outlinePaint);
+
+    canvas.drawLine(
+      Offset(size.width * 0.5, size.height * 0.16),
+      Offset(size.width * 0.5, size.height * 0.86),
+      Paint()
+        ..color = Colors.transparent
+        ..strokeWidth = 1.1
+        ..strokeCap = StrokeCap.round,
+    );
     canvas.drawOval(
       Rect.fromCenter(
-        center: Offset(size.width * 0.35, size.height * 0.22),
-        width: 3,
-        height: 4,
+        center: Offset(size.width * 0.5, size.height * 0.32),
+        width: size.width * 0.18,
+        height: size.height * 0.14,
       ),
       Paint()
-        ..color = Colors.white.withValues(alpha: 0.5)
+        ..color = Colors.transparent
         ..style = PaintingStyle.fill,
     );
   }
