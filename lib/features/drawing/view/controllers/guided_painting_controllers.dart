@@ -760,7 +760,6 @@ class ActivePartHighlighter {
   const ActivePartHighlighter();
 
   void paintOutlineHighlight(Canvas canvas, Path path, Size size) {
-    final bounds = path.getBounds();
     canvas.drawPath(
       path,
       Paint()
@@ -768,14 +767,6 @@ class ActivePartHighlighter {
         ..strokeWidth = size.shortestSide * 0.018
         ..color = const Color(0x66FFB74D)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6),
-    );
-
-    canvas.drawRect(
-      bounds.inflate(size.shortestSide * 0.01),
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = size.shortestSide * 0.004
-        ..color = const Color(0x1A000000),
     );
   }
 

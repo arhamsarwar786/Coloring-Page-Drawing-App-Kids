@@ -124,7 +124,7 @@ class RewardScreen extends StatelessWidget {
                             Expanded(
                               child: _RewardButton(
                                 label: 'Replay',
-                                icon: Icons.refresh_rounded,
+                                // icon: Icons.refresh_rounded,
                                 color: const Color(0xFF42A5F5),
                                 onTap: () => _openReplay(context),
                               ),
@@ -134,7 +134,7 @@ class RewardScreen extends StatelessWidget {
                               child: _RewardButton(
                                 label:
                                     args.nextLevelId != null ? 'Next Level' : 'Home',
-                                icon: Icons.arrow_forward_rounded,
+                                // icon: Icons.arrow_forward_rounded,
                                 color: const Color(0xFF31B24C),
                                 onTap: () => _openNext(context),
                               ),
@@ -157,13 +157,13 @@ class RewardScreen extends StatelessWidget {
 class _RewardButton extends StatelessWidget {
   const _RewardButton({
     required this.label,
-    required this.icon,
+    // required this.icon,
     required this.color,
     required this.onTap,
   });
 
   final String label;
-  final IconData icon;
+  // final IconData icon;
   final Color color;
   final VoidCallback onTap;
 
@@ -187,7 +187,7 @@ class _RewardButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(icon, color: Colors.white, size: 22),
+            // Icon(icon, color: Colors.white, size: 22),
             const SizedBox(width: 8),
             Text(
               label,

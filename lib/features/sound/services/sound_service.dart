@@ -50,6 +50,7 @@ class SoundService with WidgetsBindingObserver {
 
   Future<void> stopBackgroundMusic() async {
     try {
+      await _player.pause();
       await _player.stop();
     } catch (_) {}
     _backgroundStarted = false;
@@ -62,11 +63,7 @@ class SoundService with WidgetsBindingObserver {
       return;
     }
 
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      stopBackgroundMusic();
-    }
+    stopBackgroundMusic();
   }
 
   Future<void> playBrushFeedback() async {
