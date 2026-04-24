@@ -19,12 +19,18 @@ class CanvasWidget extends StatefulWidget {
     this.guideAsset,
     required this.filledRegions,
     required this.onFill,
+    this.enableColoring = true,
+    this.onPhaseChanged,
+    this.onRegionFilled,
   });
 
   final LevelModel level;
   final String? guideAsset;
   final Map<String, Color> filledRegions;
   final Future<void> Function(String regionId) onFill;
+  final bool enableColoring;
+  final ValueChanged<GuidedCanvasPhase>? onPhaseChanged;
+  final ValueChanged<String>? onRegionFilled;
 
   @override
   State<CanvasWidget> createState() => _CanvasWidgetState();
@@ -32,8 +38,6 @@ class CanvasWidget extends StatefulWidget {
 
 class _CanvasWidgetState extends State<CanvasWidget>
     with TickerProviderStateMixin {
-  static const Offset _pencilTipOffset = Offset(28, 150);
-
   final DrawingStepController _drawingStepController = DrawingStepController();
   final ColoringStepController _coloringStepController =
       ColoringStepController();
@@ -57,6 +61,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
   Size? _cachedCanvasSize;
   String? _activeRegionId;
   Color? _activeRegionOriginalColor;
+  GuidedCanvasPhase? _lastReportedPhase;
 
   static const List<String> _appreciationMessages = <String>[
     'Great Job!',
@@ -74,6 +79,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
       drawingController: _drawingStepController,
       coloringController: _coloringStepController,
     );
+    _drawingStepController.addListener(_notifyPhaseIfChanged);
+    _coloringStepController.addListener(_notifyPhaseIfChanged);
     _outlineAnimationController = AnimationController(vsync: this)
       ..addListener(() {
         _drawingStepController.updateProgress(
@@ -153,6 +160,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
   @override
   void dispose() {
+    _drawingStepController.removeListener(_notifyPhaseIfChanged);
+    _coloringStepController.removeListener(_notifyPhaseIfChanged);
     _appreciationMessage.dispose();
     _markerPosition.dispose();
     _outlineAnimationController.dispose();
@@ -171,6 +180,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
       filledRegions: widget.filledRegions,
     );
     _paintPathCache.clear();
+    _notifyPhaseIfChanged();
   }
 
   void _syncFilledRegions(Map<String, Color> oldFilledRegions) {
@@ -186,6 +196,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
     _coloringStepController.syncFilledRegions(widget.filledRegions);
     _paintPathCache.clear();
+    _notifyPhaseIfChanged();
   }
 
   Offset _toLocal(
@@ -202,6 +213,13 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
   void _syncMarkerToDrawingPoint(Offset drawingPoint) {
     _updateMarkerPosition(drawingPoint);
+  }
+
+  void _notifyPhaseIfChanged() {
+    final phase = _gestureCoordinator.resolvePhase();
+    if (_lastReportedPhase == phase) return;
+    _lastReportedPhase = phase;
+    widget.onPhaseChanged?.call(phase);
   }
 
   Path _pathFor(String regionId, Size canvasSize) {
@@ -350,6 +368,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
       String regionId, Color selectedColor) async {
     await widget.onFill(regionId);
     _triggerAppreciation(selectedColor);
+    widget.onRegionFilled?.call(regionId);
   }
 
   void _triggerAppreciation(Color color) {
@@ -429,6 +448,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
     required Color selectedColor,
     required bool startStroke,
   }) {
+    if (!widget.enableColoring) return;
     if (!_gestureCoordinator.acceptsColorGestures) return;
 
     final regionId = _coloringStepController.activeRegionId;
@@ -455,6 +475,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
   }
 
   Future<void> _onColorGestureEnd(Color selectedColor) async {
+    if (!widget.enableColoring) return;
     final completedRegionId = _coloringStepController.handlePaintEnd();
     if (completedRegionId != null) {
       await _handleFillCompletion(completedRegionId, selectedColor);
@@ -467,10 +488,11 @@ class _CanvasWidgetState extends State<CanvasWidget>
       builder: (context, skinsVm, drawingVm, _) {
         final selectedColor =
             drawingVm.selectedColor?.color ?? const Color(0xFF5C6BC0);
+        final phase = _gestureCoordinator.resolvePhase();
+        final isColoringActive =
+            phase == GuidedCanvasPhase.coloring && widget.enableColoring;
         final markerTipColor =
-            _gestureCoordinator.resolvePhase() == GuidedCanvasPhase.outline
-                ? Colors.black
-                : selectedColor;
+            isColoringActive ? selectedColor : Colors.black;
         final repaintListenable = Listenable.merge(<Listenable>[
           _drawingStepController,
           _coloringStepController,
@@ -585,8 +607,10 @@ class _CanvasWidgetState extends State<CanvasWidget>
                             return const SizedBox.shrink();
                           }
 
-                          return Align(
-                            alignment: Alignment.bottomCenter,
+                          return Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: -74,
                             child: SlideTransition(
                               position: _appreciationOffset,
                               child: ScaleTransition(

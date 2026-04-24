@@ -1,8 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 
-class SoundService {
-  SoundService();
+class SoundService with WidgetsBindingObserver {
+  SoundService() {
+    WidgetsBinding.instance.addObserver(this);
+  }
 
   final AudioPlayer _player = AudioPlayer();
   final AudioPlayer _sfxPlayer = AudioPlayer();
@@ -34,6 +37,7 @@ class SoundService {
 
   Future<void> startBackgroundMusic() async {
     if (!_musicEnabled) return;
+    if (_backgroundStarted) return;
     try {
       await _player.setReleaseMode(ReleaseMode.loop);
       await _player.setVolume(0.55);
@@ -51,6 +55,20 @@ class SoundService {
     _backgroundStarted = false;
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      startBackgroundMusic();
+      return;
+    }
+
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      stopBackgroundMusic();
+    }
+  }
+
   Future<void> playBrushFeedback() async {
     if (_hapticsEnabled) await HapticFeedback.selectionClick();
   }
@@ -66,5 +84,12 @@ class SoundService {
 
   Future<void> playCompletionFeedback() async {
     if (_hapticsEnabled) await HapticFeedback.mediumImpact();
+  }
+
+  Future<void> dispose() async {
+    WidgetsBinding.instance.removeObserver(this);
+    await stopBackgroundMusic();
+    await _player.dispose();
+    await _sfxPlayer.dispose();
   }
 }

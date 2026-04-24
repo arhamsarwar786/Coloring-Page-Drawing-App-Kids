@@ -8,7 +8,8 @@ import '../../../app/routes/app_routes.dart';
 import '../../../shared/widgets/loader.dart';
 import '../../drawing/model/color_model.dart';
 import '../../levels/model/level_model.dart';
-import '../view/widgets/canvas_widget.dart';
+import 'controllers/guided_painting_controllers.dart';
+import 'widgets/canvas_widget.dart';
 import '../viewmodel/drawing_viewmodel.dart';
 
 class DrawingScreen extends StatefulWidget {
@@ -22,6 +23,9 @@ class DrawingScreen extends StatefulWidget {
 
 class _DrawingScreenState extends State<DrawingScreen> {
   String? _handledCompletionLevelId;
+  GuidedCanvasPhase _canvasPhase = GuidedCanvasPhase.outline;
+  bool _coloringEnabled = false;
+  bool _awaitingPartTick = false;
 
   @override
   void initState() {
@@ -42,9 +46,10 @@ class _DrawingScreenState extends State<DrawingScreen> {
     if (level != null &&
         level.id == widget.levelId &&
         viewModel.isCompleted &&
+        viewModel.rewardStars != null &&
         _handledCompletionLevelId != level.id) {
       _handledCompletionLevelId = level.id;
-      _handleLevelComplete(viewModel);
+      _openRewardScreen(viewModel, level);
     }
   }
 
@@ -61,6 +66,9 @@ class _DrawingScreenState extends State<DrawingScreen> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.levelId != widget.levelId) {
       _handledCompletionLevelId = null;
+      _canvasPhase = GuidedCanvasPhase.outline;
+      _coloringEnabled = false;
+      _awaitingPartTick = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         context.read<DrawingViewModel>().loadLevel(widget.levelId);
@@ -152,89 +160,19 @@ class _DrawingScreenState extends State<DrawingScreen> {
                                   guideAsset: null, // we use paths n
                                   filledRegions: viewModel.filledRegions,
                                   onFill: viewModel.fillRegionAt,
+                                  enableColoring:
+                                      _coloringEnabled && !_awaitingPartTick,
+                                  onPhaseChanged: _onCanvasPhaseChanged,
+                                  onRegionFilled: _onRegionFilled,
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 20),
-                          _ColorPaletteRow(
-                            palette: level.palette,
-                            selectedColorId: viewModel.selectedColor?.id,
-                            onSelect: viewModel.selectColor,
-                          ),
+                          _buildBottomAction(level, viewModel),
                           const SizedBox(height: 32),
                         ],
                       ),
-
-                      // Manual "Next Level" Button Overlay when completed
-                      if (viewModel.isCompleted)
-                        Positioned(
-                          bottom: 140,
-                          left: 0,
-                          right: 0,
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                if (viewModel.nextLevelId != null) {
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    AppRoutes.drawing,
-                                    arguments: DrawingRouteArgs(
-                                      levelId: viewModel.nextLevelId!,
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    AppRoutes.home,
-                                    (_) => false,
-                                  );
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 48,
-                                  vertical: 20,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFD700),
-                                  borderRadius: BorderRadius.circular(999),
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 4,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color:
-                                          Colors.black.withValues(alpha: 0.2),
-                                      blurRadius: 20,
-                                      offset: const Offset(0, 10),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'NEXT LEVEL',
-                                      style: GoogleFonts.fredoka(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.w700,
-                                        color: const Color(0xFF222222),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    const Icon(
-                                      Icons.arrow_forward_rounded,
-                                      size: 32,
-                                      color: Color(0xFF222222),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
 
                       // Left Column Icons
                       Positioned(
@@ -311,19 +249,23 @@ class _DrawingScreenState extends State<DrawingScreen> {
                             _SidebarIcon(
                               icon: Icons.fast_forward_rounded,
                               assetName: 'assets/images/forward.png',
-                              onPressed: () {
-                                if (viewModel.nextLevelId != null) {
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    AppRoutes.drawing,
-                                    arguments: DrawingRouteArgs(
-                                      levelId: viewModel.nextLevelId!,
-                                    ),
-                                  );
-                                }
-                              },
-                              opacity:
-                                  viewModel.nextLevelId != null ? 1.0 : 0.5,
+                              onPressed: viewModel.isCompleted
+                                  ? null
+                                  : () {
+                                      if (viewModel.nextLevelId != null) {
+                                        Navigator.pushReplacementNamed(
+                                          context,
+                                          AppRoutes.drawing,
+                                          arguments: DrawingRouteArgs(
+                                            levelId: viewModel.nextLevelId!,
+                                          ),
+                                        );
+                                      }
+                                    },
+                              opacity: viewModel.nextLevelId != null &&
+                                      !viewModel.isCompleted
+                                  ? 1.0
+                                  : 0.5,
                             ),
                           ],
                         ),
@@ -339,24 +281,118 @@ class _DrawingScreenState extends State<DrawingScreen> {
     );
   }
 
-  Future<void> _handleLevelComplete(DrawingViewModel viewModel) async {
-    await Future.delayed(const Duration(milliseconds: 2200));
-    if (!mounted) return;
+  Widget _buildBottomAction(LevelModel level, DrawingViewModel viewModel) {
+    final isColorPhase = _canvasPhase == GuidedCanvasPhase.coloring;
 
-    final nextLevelId = viewModel.nextLevelId;
-    if (nextLevelId != null) {
-      Navigator.pushReplacementNamed(
-        context,
-        AppRoutes.drawing,
-        arguments: DrawingRouteArgs(levelId: nextLevelId),
-      );
-    } else {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.home,
-        (_) => false,
+    if (_awaitingPartTick && isColorPhase) {
+      return _TickActionButton(
+        onPressed: _unlockNextColorPart,
       );
     }
+
+    if (isColorPhase && !_coloringEnabled) {
+      return _TickActionButton(
+        onPressed: _startColoringPhase,
+      );
+    }
+
+    if (isColorPhase && _coloringEnabled) {
+      return _ColorPaletteRow(
+        palette: level.palette,
+        selectedColorId: viewModel.selectedColor?.id,
+        onSelect: viewModel.selectColor,
+      );
+    }
+
+    return const SizedBox(height: 86);
+  }
+
+  void _onCanvasPhaseChanged(GuidedCanvasPhase phase) {
+    if (!mounted) return;
+    if (_canvasPhase == phase) return;
+
+    setState(() {
+      _canvasPhase = phase;
+      if (phase == GuidedCanvasPhase.outline) {
+        _coloringEnabled = false;
+        _awaitingPartTick = false;
+      }
+    });
+  }
+
+  void _startColoringPhase() {
+    if (_canvasPhase != GuidedCanvasPhase.coloring) return;
+    setState(() {
+      _coloringEnabled = true;
+      _awaitingPartTick = false;
+    });
+  }
+
+  void _onRegionFilled(String _) {
+    if (!mounted) return;
+    final viewModel = context.read<DrawingViewModel>();
+    if (viewModel.isCompleted) return;
+    if (_canvasPhase != GuidedCanvasPhase.coloring) return;
+
+    setState(() {
+      _awaitingPartTick = true;
+    });
+  }
+
+  void _unlockNextColorPart() {
+    if (!mounted) return;
+    setState(() {
+      _awaitingPartTick = false;
+    });
+  }
+
+  void _openRewardScreen(DrawingViewModel viewModel, LevelModel level) {
+    Navigator.pushReplacementNamed(
+      context,
+      AppRoutes.reward,
+      arguments: RewardRouteArgs(
+        levelId: level.id,
+        levelTitle: level.title,
+        levelNumber: viewModel.levelNumber ?? 1,
+        coins: viewModel.rewardCoins ?? level.rewardCoins,
+        stars: viewModel.rewardStars ?? level.stars,
+        nextLevelId: viewModel.nextLevelId,
+      ),
+    );
+  }
+}
+
+class _TickActionButton extends StatelessWidget {
+  const _TickActionButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 92,
+        height: 92,
+        decoration: BoxDecoration(
+          color: const Color(0xFF31B24C),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 5),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.18),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.check_rounded,
+          size: 54,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 }
 
@@ -446,8 +482,9 @@ class _LevelBadge extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(overflow: TextOverflow.ellipsis,
+            child: Text(
               title,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.fredoka(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,

@@ -57,7 +57,11 @@ class DrawingViewModel extends BaseViewModel {
   }
 
   Future<void> loadLevel(String levelId) async {
-    if (_loadedLevelId == levelId && _level != null) return;
+    if (_loadedLevelId == levelId && _level != null) {
+      _startFreshSessionForCurrentLevel();
+      notifyListeners();
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -74,7 +78,7 @@ class DrawingViewModel extends BaseViewModel {
       _launchLevelId = await _repository.getLaunchLevelId();
       _nextLevelId = await _repository.getNextLevelId(levelId);
       _levelNumber = await _repository.getLevelNumber(levelId);
-      _level = loadedLevel;
+      _level = loadedLevel.copyWith(isCompleted: false);
       _selectedColor =
           loadedLevel.palette.isNotEmpty ? loadedLevel.palette.first : null;
       _filledRegions = <String, Color>{};
@@ -89,6 +93,18 @@ class DrawingViewModel extends BaseViewModel {
     }
 
     setLoading(false);
+  }
+
+  void _startFreshSessionForCurrentLevel() {
+    if (_level == null) return;
+    _level = _level!.copyWith(isCompleted: false);
+    _selectedColor = _level!.palette.isNotEmpty ? _level!.palette.first : null;
+    _filledRegions = <String, Color>{};
+    _undoStack.clear();
+    _redoStack.clear();
+    _rewardCoins = null;
+    _rewardStars = null;
+    _undoCount = 0;
   }
 
   void selectColor(DrawingColorModel color) {

@@ -34,7 +34,12 @@ List<SingleChildWidget> buildAppProviders() {
         storage: context.read<LocalStorageService>(),
       ),
     ),
-    Provider<SoundService>(create: (_) => SoundService()),
+    Provider<SoundService>(
+      create: (_) => SoundService(),
+      dispose: (_, service) {
+        service.dispose();
+      },
+    ),
     Provider<AdMobService>(create: (_) => const AdMobService()),
     Provider<HomeRepository>(
       create: (context) => HomeRepositoryImpl(
