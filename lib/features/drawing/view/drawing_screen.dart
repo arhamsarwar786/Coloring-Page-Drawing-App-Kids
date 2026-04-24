@@ -1,4 +1,6 @@
+import 'package:asmr_coloring_app/features/settings/view/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -36,8 +38,11 @@ class _DrawingScreenState extends State<DrawingScreen> {
     if (!mounted) return;
     final viewModel = context.read<DrawingViewModel>();
     final level = viewModel.level;
-    
-    if (level != null && viewModel.isCompleted && _handledCompletionLevelId != level.id) {
+
+    if (level != null &&
+        level.id == widget.levelId &&
+        viewModel.isCompleted &&
+        _handledCompletionLevelId != level.id) {
       _handledCompletionLevelId = level.id;
       _handleLevelComplete(viewModel);
     }
@@ -65,226 +70,273 @@ class _DrawingScreenState extends State<DrawingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemStatusBarContrastEnforced: false,
+        systemNavigationBarContrastEnforced: false,
+      ),
       child: Scaffold(
-        // backgroundColor: const Color(0xFFF0F4F8),
-        body: Consumer<DrawingViewModel>(
-          builder: (context, viewModel, _) {
-            final isReady =
-                !viewModel.isLoading && viewModel.level?.id == widget.levelId;
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Consumer<DrawingViewModel>(
+            builder: (context, viewModel, _) {
+              final isReady =
+                  !viewModel.isLoading && viewModel.level?.id == widget.levelId;
 
-            if (!isReady) {
-              if (viewModel.errorMessage != null) {
-                return Center(child: Text(viewModel.errorMessage!));
+              if (!isReady) {
+                if (viewModel.errorMessage != null) {
+                  return Center(child: Text(viewModel.errorMessage!));
+                }
+                return const Loader();
               }
-              return const Loader();
-            }
 
-            final level = viewModel.level!;
+              final level = viewModel.level!;
 
-            return Center(
-              child: Container(
-                // constraints: const BoxConstraints(maxWidth: 520),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  // borderRadius: BorderRadius.circular(32),
-                  // boxShadow: const [
-                  //   BoxShadow(
-                  //     color: Color(0x33000000),
-                  //     blurRadius: 35,
-                  //     offset: Offset(0, 15),
-                  //   ),
-                  // ],
-                ),
-                child: Stack(
-                  children: [
-                    // Center Content
-                    Column(
-                      children: [
-                        const SizedBox(height: 32),
-                        Text(
-                          'LEVEL ${viewModel.levelNumber ?? 1}',
-                          style: GoogleFonts.fredoka(
-                            fontSize: 34,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF222222),
-                            letterSpacing: 2.0,
+              return Center(
+                child: Container(
+                  // constraints: const BoxConstraints(maxWidth: 520),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    // borderRadius: BorderRadius.circular(32),
+                    // boxShadow: const [
+                    //   BoxShadow(
+                    //     color: Color(0x33000000),
+                    //     blurRadius: 35,
+                    //     offset: Offset(0, 15),
+                    //   ),
+                    // ],
+                  ),
+                  child: Stack(
+                    children: [
+                      // Center Content
+                      Column(
+                        children: [
+                          const SizedBox(height: 32),
+                          Text(
+                            'LEVEL ${viewModel.levelNumber ?? 1}',
+                            style: GoogleFonts.fredoka(
+                              fontSize: 34,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF222222),
+                              letterSpacing: 2.0,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
-                          style: const TextStyle(color: Colors.grey, fontSize: 12),
-                        ),
-                        const SizedBox(height: 8),
-                        _LevelBadge(
-                          title: level.title,
-                          levelNumber: viewModel.levelNumber ?? 1,
-                          level: level,
-                        ),
-                        const SizedBox(height: 30),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40),
-                            child: Center(
-                              child: CanvasWidget(
-                                level: level,
-                                guideAsset: null, // we use paths n
-                                filledRegions: viewModel.filledRegions,
-                                onFill: viewModel.fillRegionAt,
+                          // const SizedBox(height: 8),
+                          // Text(
+                          //   'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
+                          //   style: const TextStyle(
+                          //     color: Colors.grey,
+                          //     fontSize: 12,
+                          //   ),
+                          // ),
+                          const SizedBox(height: 8),
+                          _LevelBadge(
+                            title: level.title,
+                            levelNumber: viewModel.levelNumber ?? 1,
+                            level: level,
+                          ),
+                          const SizedBox(height: 30),
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 40),
+                              child: Center(
+                                child: CanvasWidget(
+                                  level: level,
+                                  guideAsset: null, // we use paths n
+                                  filledRegions: viewModel.filledRegions,
+                                  onFill: viewModel.fillRegionAt,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        _ColorPaletteRow(
-                          palette: level.palette,
-                          selectedColorId: viewModel.selectedColor?.id,
-                          onSelect: viewModel.selectColor,
-                        ),
-                        const SizedBox(height: 32),
-                      ],
-                    ),
+                          const SizedBox(height: 20),
+                          _ColorPaletteRow(
+                            palette: level.palette,
+                            selectedColorId: viewModel.selectedColor?.id,
+                            onSelect: viewModel.selectColor,
+                          ),
+                          const SizedBox(height: 32),
+                        ],
+                      ),
 
-                    // Manual "Next Level" Button Overlay when completed
-                    if (viewModel.isCompleted)
-                      Positioned(
-                        bottom: 140,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (viewModel.nextLevelId != null) {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  AppRoutes.drawing,
-                                  arguments: DrawingRouteArgs(
-                                      levelId: viewModel.nextLevelId!),
-                                );
-                              } else {
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 48, vertical: 20),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFD700),
-                                borderRadius: BorderRadius.circular(999),
-                                border: Border.all(
-                                    color: Colors.white, width: 4),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.2),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 10),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'NEXT LEVEL',
-                                    style: GoogleFonts.fredoka(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w700,
-                                      color: const Color(0xFF222222),
+                      // Manual "Next Level" Button Overlay when completed
+                      if (viewModel.isCompleted)
+                        Positioned(
+                          bottom: 140,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                if (viewModel.nextLevelId != null) {
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    AppRoutes.drawing,
+                                    arguments: DrawingRouteArgs(
+                                      levelId: viewModel.nextLevelId!,
                                     ),
+                                  );
+                                } else {
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 48,
+                                  vertical: 20,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFD700),
+                                  borderRadius: BorderRadius.circular(999),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 4,
                                   ),
-                                  const SizedBox(width: 12),
-                                  const Icon(Icons.arrow_forward_rounded,
-                                      size: 32, color: Color(0xFF222222)),
-                                ],
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.2),
+                                      blurRadius: 20,
+                                      offset: const Offset(0, 10),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'NEXT LEVEL',
+                                      style: GoogleFonts.fredoka(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF222222),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    const Icon(
+                                      Icons.arrow_forward_rounded,
+                                      size: 32,
+                                      color: Color(0xFF222222),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
 
-                    // Left Column Icons
-                    Positioned(
-                      left: 16,
-                      top: 16,
-                      child: Column(
-                        children: [
-                          _SidebarIcon(
-                            icon: Icons.settings_rounded,
-                            assetName: 'assets/images/setting.png',
-                            onPressed: () => Navigator.pushNamed(
-                                context, AppRoutes.settings),
-                          ),
-                          const SizedBox(height: 16),
-                          _SidebarIcon(
-                            icon: Icons.edit_rounded,
-                            assetName: 'assets/images/pen.png',
-                            onPressed: () =>
-                                Navigator.pushNamed(context, AppRoutes.skins),
-                          ),
-                          const SizedBox(height: 16),
-                          _SidebarIcon(
-                            icon: Icons.photo_library_rounded,
-                            assetName: 'assets/images/photo.png',
-                            onPressed: () =>
-                                Navigator.pushNamed(context, AppRoutes.levels),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Right Column Icons
-                    Positioned(
-                      right: 16,
-                      top: 16,
-                      child: Column(
-                        children: [
-                          _SidebarIcon(
-                            icon: Icons.undo_rounded,
-                            assetName: 'assets/images/retry.png',
-                            onPressed: viewModel.undo,
-                            opacity: viewModel.canUndo ? 1.0 : 0.5,
-                          ),
-                          const SizedBox(height: 16),
-                          _SidebarIcon(
-                            icon: Icons.fast_forward_rounded,
-                            assetName: 'assets/images/forward.png',
-                            onPressed: () {
-                              if (viewModel.nextLevelId != null) {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  AppRoutes.drawing,
-                                  arguments: DrawingRouteArgs(
-                                      levelId: viewModel.nextLevelId!),
+                      // Left Column Icons
+                      Positioned(
+                        left: 16,
+                        top: 16,
+                        child: Column(
+                          children: [
+                            _SidebarIcon(
+                              icon: Icons.settings_rounded,
+                              assetName: 'assets/images/setting.png',
+                              onPressed: () {
+                                showGeneralDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  barrierLabel: "Settings",
+                                  barrierColor: Colors.transparent,
+                                  transitionDuration:
+                                      const Duration(milliseconds: 250),
+                                  pageBuilder: (_, __, ___) =>
+                                      const SettingsDialog(),
+                                  transitionBuilder: (_, animation, __, child) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: ScaleTransition(
+                                        scale: CurvedAnimation(
+                                          parent: animation,
+                                          curve: Curves.easeOutBack,
+                                        ),
+                                        child: child,
+                                      ),
+                                    );
+                                  },
                                 );
-                              }
-                            },
-                            opacity: viewModel.nextLevelId != null ? 1.0 : 0.5,
-                          ),
-                          const SizedBox(height: 16),
-                          _SidebarIcon(
-                            icon: viewModel.level?.isFavorite ?? false
-                                ? Icons.favorite_rounded
-                                : Icons.favorite_border_rounded,
-                            iconColor: const Color(0xFFD673FF),
-                            backgroundColor: const Color(0xFFF3E5FF),
-                            onPressed: () => viewModel.toggleFavorite(),
-                          ),
-                        ],
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            _SidebarIcon(
+                              icon: Icons.edit_rounded,
+                              assetName: 'assets/images/pen.png',
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, AppRoutes.skins),
+                            ),
+                            const SizedBox(height: 16),
+                            _SidebarIcon(
+                              icon: Icons.photo_library_rounded,
+                              assetName: 'assets/images/photo.png',
+                              onPressed: () => Navigator.pushNamed(
+                                  context, AppRoutes.levels),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+
+                      // Right Column Icons
+                      Positioned(
+                        right: 16,
+                        top: 16,
+                        child: Column(
+                          children: [
+                            _SidebarIcon(
+                              icon: Icons.undo_rounded,
+                              assetName: 'assets/images/retry.png',
+                              onPressed: viewModel.undo,
+                            ),
+                            const SizedBox(height: 16),
+                            _SidebarIcon(
+                              icon: Icons.ads_click,
+                              assetName: 'assets/images/ads.png',
+                              onPressed: () {},
+                              opacity:
+                                  viewModel.nextLevelId != null ? 1.0 : 0.5,
+                            ),
+                            const SizedBox(height: 16),
+                            _SidebarIcon(
+                              icon: Icons.fast_forward_rounded,
+                              assetName: 'assets/images/forward.png',
+                              onPressed: () {
+                                if (viewModel.nextLevelId != null) {
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    AppRoutes.drawing,
+                                    arguments: DrawingRouteArgs(
+                                      levelId: viewModel.nextLevelId!,
+                                    ),
+                                  );
+                                }
+                              },
+                              opacity:
+                                  viewModel.nextLevelId != null ? 1.0 : 0.5,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
   Future<void> _handleLevelComplete(DrawingViewModel viewModel) async {
-    await Future.delayed(const Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 2200));
     if (!mounted) return;
 
     final nextLevelId = viewModel.nextLevelId;
@@ -324,21 +376,9 @@ class _SidebarIcon extends StatelessWidget {
       opacity: opacity,
       child: GestureDetector(
         onTap: onPressed,
-        child: Container(
+        child: SizedBox(
           width: 56,
           height: 56,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE0E0E0), width: 2.5),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x11000000),
-                blurRadius: 6,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: assetName != null
@@ -366,11 +406,18 @@ class _LevelBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFEAF5FF), width: 3),
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.withValues(alpha: 0.3),
+            blurRadius: 10,
+            spreadRadius: 2,
+          ),
+        ],
+        // border: Border.all(color: const Color(0xFFEAF5FF), width: 3),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -391,7 +438,7 @@ class _LevelBadge extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 18),
+          const SizedBox(width: 8),
           Text(
             title,
             style: GoogleFonts.fredoka(
@@ -400,16 +447,11 @@ class _LevelBadge extends StatelessWidget {
               color: const Color(0xFF222222),
             ),
           ),
-          const SizedBox(width: 18),
+          const SizedBox(width: 8),
           // Small preview of the completed level
-          Container(
+          SizedBox(
             width: 48,
             height: 48,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F5F5),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.black12, width: 1),
-            ),
             child: CustomPaint(
               painter: _ReferencePreviewPainter(level: level),
               size: const Size(48, 48),
@@ -432,14 +474,14 @@ class _ReferencePreviewPainter extends CustomPainter {
     // Scale it down to fit the 48x48 box with some padding.
     canvas.save();
     canvas.scale(size.width / 100, size.height / 100);
-    
+
     // Slight padding inside the 100x100 space
     canvas.translate(10, 10);
     canvas.scale(0.8, 0.8);
 
     for (final region in level.regions) {
       final path = region.toPath(const Size(100, 100));
-      
+
       Color regionColor = level.getTargetColorForRegion(region.id);
 
       final paint = Paint()
@@ -454,10 +496,10 @@ class _ReferencePreviewPainter extends CustomPainter {
         ..color = Colors.black.withValues(alpha: 0.3)
         ..strokeWidth = 2
         ..isAntiAlias = true;
-      
+
       canvas.drawPath(path, strokePaint);
     }
-    
+
     canvas.restore();
   }
 

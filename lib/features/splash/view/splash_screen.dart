@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../settings/viewmodel/settings_viewmodel.dart';
@@ -40,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     final settingsViewModel = context.read<SettingsViewModel>();
     await settingsViewModel.ensureLoaded();
-    
+
     if (!mounted) return;
 
     await Future<void>.delayed(
@@ -53,22 +54,34 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Image.asset(
-            'assets/images/splashs.png',
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 68,
-            child: _SplashLoadingAnimation(animation: _animationController),
-          ),
-        ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemStatusBarContrastEnforced: false,
+        systemNavigationBarContrastEnforced: false,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Image.asset(
+              'assets/images/splashs.png',
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 68,
+              child: _SplashLoadingAnimation(animation: _animationController),
+            ),
+          ],
+        ),
       ),
     );
   }

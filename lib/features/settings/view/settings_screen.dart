@@ -7,133 +7,113 @@ import '../../../shared/components/doodle_text.dart';
 import '../../../shared/components/sticker_icon_button.dart';
 import '../viewmodel/settings_viewmodel.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+class SettingsDialog extends StatelessWidget {
+  const SettingsDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: GestureDetector(
-        onTap: () => Navigator.pop(context),
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0x99FFFFFF), Color(0xCCDAF7FF)],
-            ),
-          ),
-          child: SafeArea(
-            child: Center(
-              child: GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      Consumer<SettingsViewModel>(
-                        builder: (context, viewModel, _) {
-                          return Container(
-                            constraints: const BoxConstraints(maxWidth: 340),
-                            padding: const EdgeInsets.fromLTRB(24, 26, 24, 24),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(34),
-                              boxShadow: const <BoxShadow>[
-                                BoxShadow(
-                                  color: Color(0x33000000),
-                                  blurRadius: 0,
-                                  offset: Offset(0, 8),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                const DoodleText(
-                                  AppStrings.settingsTitle,
-                                  fontSize: 34,
-                                  fillColor: Color(0xFF1FA8F4),
-                                ),
-                                const SizedBox(height: 28),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    _SettingIconTile(
-                                      icon: Icons.music_note_rounded,
-                                      assetName: 'assets/images/music.png',
-                                      label: AppStrings.musicLabel,
-                                      active: viewModel.musicEnabled,
-                                      onTap: viewModel.toggleMusic,
-                                    ),
-                                    _SettingIconTile(
-                                      icon: Icons.vibration_rounded,
-                                      assetName: 'assets/images/phone.png',
-                                      label: AppStrings.hapticsLabel,
-                                      active: viewModel.hapticsEnabled,
-                                      onTap: viewModel.toggleHaptics,
-                                    ),
-                                    _SettingIconTile(
-                                      icon: Icons.volume_up_rounded,
-                                      assetName: 'assets/images/sound.png',
-                                      label: AppStrings.soundsLabel,
-                                      active: viewModel.soundEnabled,
-                                      onTap: viewModel.toggleSound,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 28),
-                                SizedBox(
-                                  width: 260,
-                                  child: FilledButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, AppRoutes.privacy);
-                                    },
-                                    style: FilledButton.styleFrom(
-                                      backgroundColor: const Color(0xFF2DF200),
-                                      foregroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 18),
-                                    ),
-                                    child: const Text(
-                                      AppStrings.privacyPolicy,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+    Size size = MediaQuery.sizeOf(context);
+    return GestureDetector(
+      onTap: () => Navigator.pop(context), // Background tap to close
+      child: Material(
+        color: Colors.black.withOpacity(0.5), // Slightly darker dim for focus
+        child: Align(
+          alignment: AlignmentGeometry.xy(0, 0.25),
+          child: GestureDetector(
+            onTap: () {}, // Prevent closing when tapping the dialog itself
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Consumer<SettingsViewModel>(
+                  builder: (_, viewModel, __) {
+                    return Container(
+                      height: size.height * 0.265,
+                      width: size.width * 0.858, // Card size as per screenshot
+                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0xFFb0b0b0),
+                            blurRadius: 0,
+                            spreadRadius: 1.5,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
                       ),
-                      Positioned(
-                        top: -20,
-                        right: -12,
-                        child: StickerIconButton(
-                          icon: Icons.close_rounded,
-                          assetName: 'assets/images/close.png',
-                          size: 72,
-                          backgroundColor: const Color(0xFFFF2A2A),
-                          iconColor: Colors.white,
-                          onPressed: () => Navigator.pop(context),
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          DoodleText(
+                            AppStrings.settingsTitle.toUpperCase(),
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            fillColor: Color(0xFF3c8fde),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              _SettingIconTile(
+                                assetName: viewModel.musicEnabled
+                                    ? 'assets/images/music.png'
+                                    : 'assets/images/music-off.png',
+                                active: viewModel.musicEnabled,
+                                onTap: viewModel.toggleMusic,
+                              ),
+                              _SettingIconTile(
+                                assetName: viewModel.hapticsEnabled
+                                    ? 'assets/images/phone.png'
+                                    : 'assets/images/phone-off.png',
+                                active: viewModel.hapticsEnabled,
+                                onTap: viewModel.toggleHaptics,
+                              ),
+                              _SettingIconTile(
+                                assetName: viewModel.soundEnabled
+                                    ? 'assets/images/sound.png'
+                                    : 'assets/images/sound-off.png',
+                                active: viewModel.soundEnabled,
+                                onTap: viewModel.toggleSound,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          // Privacy Policy Button (Same as screenshot style)
+                          // Privacy Policy Button (Replaced with Asset Image)
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, AppRoutes.privacy);
+                            },
+                            child: Image.asset(
+                              'assets/images/privacy plicy botton.png',
+                              width: 230,
+                              // height: 48,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    );
+                  },
+                ),
+
+                /// FLOATING RED CLOSE BUTTON (Top Right)
+                Positioned(
+                  top: -20,
+                  right: -10,
+                  child: StickerIconButton(
+                    icon: Icons.close_rounded,
+                    assetName:
+                        'assets/images/close.png', // Ensure this exists or use Icon
+                    size: 50,
+                    iconColor: Colors.white,
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -143,90 +123,27 @@ class SettingsScreen extends StatelessWidget {
 }
 
 class _SettingIconTile extends StatelessWidget {
+  final String assetName;
+  final bool active;
+  final VoidCallback onTap;
+
   const _SettingIconTile({
-    required this.icon,
-    this.assetName,
-    required this.label,
+    required this.assetName,
     required this.active,
     required this.onTap,
   });
 
-  final IconData icon;
-  final String? assetName;
-  final String label;
-  final bool active;
-  final VoidCallback onTap;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-        child: Column(
-          children: <Widget>[
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: 82,
-              height: 82,
-              decoration: BoxDecoration(
-                color: active
-                    ? const Color(0xFFE8FFF0)
-                    : const Color(0xFFF6F6F6),
-                borderRadius: BorderRadius.circular(26),
-                border: Border.all(
-                  color: active
-                      ? const Color(0xFF33E61F)
-                      : const Color(0xFF222222),
-                  width: 2.5,
-                ),
-                boxShadow: active
-                    ? const [
-                        BoxShadow(
-                          color: Color(0x4433E61F),
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
-                        ),
-                      ]
-                    : const [],
-              ),
-              child: assetName != null
-                  ? Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Image.asset(
-                        assetName!,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          icon,
-                          size: 44,
-                          color: const Color(0xFF111111),
-                        ),
-                      ),
-                    )
-                  : Icon(icon, size: 44, color: const Color(0xFF111111)),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF111111),
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              active ? 'ON' : 'OFF',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w900,
-                color: active
-                    ? const Color(0xFF27A800)
-                    : const Color(0xFF777777),
-              ),
-            ),
-          ],
+      child: SizedBox(
+        width: 45,
+        height: 45,
+        child: Image.asset(
+          assetName,
+          fit: BoxFit.contain,
+          // Filters can be added here if you want to dim the 'off' state programmatically
         ),
       ),
     );

@@ -47,7 +47,7 @@ abstract final class AppRoutes {
         );
       case AppRoutes.settings:
         return MaterialPageRoute<void>(
-          builder: (_) => const SettingsScreen(),
+          builder: (_) => const SettingsDialog(),
         );
       case AppRoutes.privacy:
         return MaterialPageRoute<void>(

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -7,11 +8,10 @@ import 'package:provider/provider.dart';
 import '../../../levels/model/level_model.dart';
 import '../../../skins/model/skin_model.dart';
 import '../../../skins/viewmodel/skins_viewmodel.dart';
+import '../../model/drawing_point.dart';
+import '../../view/controllers/guided_painting_controllers.dart';
 import '../../viewmodel/drawing_viewmodel.dart';
 
-// ─────────────────────────────────────────────────────────────
-// CanvasWidget
-// ─────────────────────────────────────────────────────────────
 class CanvasWidget extends StatefulWidget {
   const CanvasWidget({
     super.key,
@@ -24,7 +24,7 @@ class CanvasWidget extends StatefulWidget {
   final LevelModel level;
   final String? guideAsset;
   final Map<String, Color> filledRegions;
-  final void Function(String regionId) onFill;
+  final Future<void> Function(String regionId) onFill;
 
   @override
   State<CanvasWidget> createState() => _CanvasWidgetState();
@@ -32,85 +32,79 @@ class CanvasWidget extends StatefulWidget {
 
 class _CanvasWidgetState extends State<CanvasWidget>
     with TickerProviderStateMixin {
-  // ── Marker tracking ──────────────────────────────────────
-  Offset? _dragPosition;
-  bool _hasInteracted = false;
+  static const Offset _pencilTipOffset = Offset(28, 150);
 
-  // ── Fill animation ────────────────────────────────────────
-  late AnimationController _fillAnimationController;
+  final DrawingStepController _drawingStepController = DrawingStepController();
+  final ColoringStepController _coloringStepController =
+      ColoringStepController();
+  final ActivePartHighlighter _activePartHighlighter =
+      const ActivePartHighlighter();
+  final ValueNotifier<Offset?> _markerPosition = ValueNotifier<Offset?>(null);
+  final ValueNotifier<String?> _appreciationMessage =
+      ValueNotifier<String?>(null);
+
+  late final GestureCoordinator _gestureCoordinator;
+  late final AnimationController _outlineAnimationController;
+  late final AnimationController _fillAnimationController;
+  late final AnimationController _appreciationController;
+  late final AnimationController _tapScaleController;
+  late final Animation<double> _appreciationScale;
+  late final Animation<Offset> _appreciationOffset;
+
+  final Map<String, Path> _pathCache = <String, Path>{};
+  final Map<String, Path> _paintPathCache = <String, Path>{};
+  Map<String, double> _activeOutlineRegionShares = <String, double>{};
+  Size? _cachedCanvasSize;
   String? _activeRegionId;
   Color? _activeRegionOriginalColor;
 
-  // ── Tracing state ─────────────────────────────────────────
-  // regionId → fraction of outline traced [0..1]
-  final Map<String, double> _outlineProgress = {};
-  // Regions whose outline is fully traced → fill is unlocked
-  final Set<String> _outlineUnlocked = {};
-  // regionId → fraction of interior scribbled [0..1]
-  final Map<String, double> _fillProgress = {};
-  // Cheap deduplication — gridded visited cells per region
-  final Map<String, Set<String>> _visitedCells = {};
-  // Pre-sampled outline points cache — computed once per region per level
-  final Map<String, List<Offset>> _outlinePointsCache = {};
-
-  // Grid cell size for tracing deduplication (logical pixels)
-  static const double _cellSize = 14.0;
-
-  // BUG FIX: Use actual path metric length, not bounding box perimeter.
-  // Old code used 2*(w+h) which is wrong for complex SVG paths.
-  int _getOutlineCellsNeeded(Path path) {
-    double totalLen = 0;
-    for (final m in path.computeMetrics()) {
-      totalLen += m.length;
-    }
-    final cells = (totalLen * 0.55) / _cellSize;
-    return cells.clamp(12.0, 200.0).toInt();
-  }
-
-  // BUG FIX: Sample actual interior grid instead of using bounding box area.
-  // Old code used boundingBox*0.45 which is inaccurate for concave shapes.
-  int _getFillCellsNeeded(Path path) {
-    final bounds = path.getBounds();
-    int insideCount = 0;
-    for (double x = bounds.left; x < bounds.right; x += _cellSize) {
-      for (double y = bounds.top; y < bounds.bottom; y += _cellSize) {
-        if (path.contains(Offset(x + _cellSize / 2, y + _cellSize / 2))) {
-          insideCount++;
-        }
-      }
-    }
-    // Lowered to 0.50 to make it very easy to complete.
-    return (insideCount * 0.50).clamp(10.0, 300.0).toInt();
-  }
-
-  // Track the actual path the user is drawing during the fill phase
-  final Map<String, Path> _scribblePaths = {};
-
-  // ── Appreciation overlay ──────────────────────────────────
-  bool _showAppreciation = false;
-  String _appreciationText = '🌟 Great Job!';
-  late AnimationController _appreciationController;
-  late Animation<double> _appreciationScale;
-  late Animation<Offset> _appreciationOffset;
-
-  // ── Tap scale on marker ───────────────────────────────────
-  late AnimationController _tapScaleController;
-
-  static const List<String> _appreciationMessages = [
-    '🌟 Great Job!',
-    '🎉 Awesome!',
-    '🔥 Super!',
-    '🦄 Brilliant!',
-    '👏 Well Done!',
-    '🎨 Perfect!',
+  static const List<String> _appreciationMessages = <String>[
+    'Great Job!',
+    'Awesome!',
+    'Super!',
+    'Brilliant!',
+    'Well Done!',
+    'Perfect!',
   ];
 
   @override
   void initState() {
     super.initState();
+    _gestureCoordinator = GestureCoordinator(
+      drawingController: _drawingStepController,
+      coloringController: _coloringStepController,
+    );
+    _outlineAnimationController = AnimationController(vsync: this)
+      ..addListener(() {
+        _drawingStepController.updateProgress(
+          progress: _outlineAnimationController.value,
+          regionShares: _activeOutlineRegionShares,
+        );
+        final regionId = _drawingStepController.animatingRegionId;
+        if (regionId != null && _cachedCanvasSize != null) {
+          final path = _pathCache[regionId];
+          if (path != null) {
+            final progress = _drawingStepController.progressFor(regionId);
+            for (final metric in path.computeMetrics()) {
+              final tangent =
+                  metric.getTangentForOffset(metric.length * progress);
+              if (tangent != null) {
+                _updateMarkerPosition(tangent.position);
+              }
+              break;
+            }
+          }
+        }
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _drawingStepController.finishCurrentPart();
+          HapticFeedback.selectionClick();
+        }
+      });
     _fillAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 350),
+      duration: const Duration(milliseconds: 320),
     );
     _appreciationController = AnimationController(
       vsync: this,
@@ -121,420 +115,541 @@ class _CanvasWidgetState extends State<CanvasWidget>
       curve: Curves.elasticOut,
     );
     _appreciationOffset = Tween<Offset>(
-      begin: const Offset(0.0, 1.5), // Start below the bottom edge
-      end: const Offset(0.0, 0.0),  // Stop exactly at the bottom edge
-    ).animate(CurvedAnimation(
-      parent: _appreciationController,
-      curve: Curves.easeOutBack,
-    ));
+      begin: const Offset(0.0, 1.5),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _appreciationController,
+        curve: Curves.easeOutBack,
+      ),
+    );
     _tapScaleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
       lowerBound: 1.0,
       upperBound: 1.12,
     );
+
+    _configureControllers();
   }
 
   @override
-  void didUpdateWidget(CanvasWidget oldWidget) {
+  void didUpdateWidget(covariant CanvasWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // BUG FIX: Invalidate all tracing caches when the level changes.
     if (oldWidget.level.id != widget.level.id) {
-      _outlinePointsCache.clear();
-      _outlineProgress.clear();
-      _outlineUnlocked.clear();
-      _fillProgress.clear();
-      _visitedCells.clear();
-      _scribblePaths.clear();
+      _pathCache.clear();
+      _paintPathCache.clear();
+      _activeOutlineRegionShares = <String, double>{};
+      _cachedCanvasSize = null;
+      _markerPosition.value = null;
+      _configureControllers();
     }
 
-    if (oldWidget.filledRegions != widget.filledRegions) {
-      for (final entry in widget.filledRegions.entries) {
-        if (oldWidget.filledRegions[entry.key] != entry.value) {
-          setState(() {
-            _activeRegionId = entry.key;
-            _activeRegionOriginalColor =
-                oldWidget.filledRegions[entry.key] ?? const Color(0x00FFFFFF);
-          });
-          _fillAnimationController.forward(from: 0.0);
-          break;
-        }
-      }
+    if (!mapEquals(oldWidget.filledRegions, widget.filledRegions)) {
+      _syncFilledRegions(oldWidget.filledRegions);
     }
   }
 
   @override
   void dispose() {
+    _appreciationMessage.dispose();
+    _markerPosition.dispose();
+    _outlineAnimationController.dispose();
     _fillAnimationController.dispose();
     _appreciationController.dispose();
     _tapScaleController.dispose();
+    _drawingStepController.dispose();
+    _coloringStepController.dispose();
     super.dispose();
   }
 
-  // ── Coordinate helper ─────────────────────────────────────
-  Offset _toLocal(Offset raw, Size canvasSize, BoxConstraints c) {
-    final dim = math.min(c.maxWidth, c.maxHeight);
-    return Offset(raw.dx - (c.maxWidth - dim) / 2,
-        raw.dy - (c.maxHeight - dim) / 2);
+  void _configureControllers() {
+    _drawingStepController.configure(widget.level);
+    _coloringStepController.configure(
+      orderedRegionIds: _drawingStepController.orderedRegionIds,
+      filledRegions: widget.filledRegions,
+    );
   }
 
-  String _cellKey(Offset p) {
-    final gx = (p.dx / _cellSize).floor();
-    final gy = (p.dy / _cellSize).floor();
-    return '$gx,$gy';
-  }
-
-  // ── Pre-sample outline points (called once per region, cached) ─
-  List<Offset> _getOutlinePoints(String regionId, Path path) {
-    return _outlinePointsCache.putIfAbsent(regionId, () {
-      final pts = <Offset>[];
-      for (final m in path.computeMetrics()) {
-        for (double t = 0; t < m.length; t += 3.0) {
-          final tan = m.getTangentForOffset(t);
-          if (tan != null) pts.add(tan.position);
-        }
+  void _syncFilledRegions(Map<String, Color> oldFilledRegions) {
+    for (final entry in widget.filledRegions.entries) {
+      if (oldFilledRegions[entry.key] != entry.value) {
+        _activeRegionId = entry.key;
+        _activeRegionOriginalColor =
+            oldFilledRegions[entry.key] ?? const Color(0x00FFFFFF);
+        _fillAnimationController.forward(from: 0.0);
+        break;
       }
-      return pts;
+    }
+
+    _coloringStepController.syncFilledRegions(widget.filledRegions);
+  }
+
+  Offset _toLocal(
+      Offset raw, BoxConstraints constraints, double canvasDimension) {
+    return Offset(
+      raw.dx - (constraints.maxWidth - canvasDimension) / 2,
+      raw.dy - (constraints.maxHeight - canvasDimension) / 2,
+    );
+  }
+
+  void _updateMarkerPosition(Offset localPosition) {
+    _markerPosition.value = localPosition;
+  }
+
+  void _syncMarkerToDrawingPoint(Offset drawingPoint) {
+    _updateMarkerPosition(drawingPoint);
+  }
+
+  Path _pathFor(String regionId, Size canvasSize) {
+    if (_cachedCanvasSize != canvasSize) {
+      _pathCache.clear();
+      _paintPathCache.clear();
+      _cachedCanvasSize = canvasSize;
+    }
+
+    return _pathCache.putIfAbsent(regionId, () {
+      final region =
+          widget.level.regions.firstWhere((item) => item.id == regionId);
+      return region.toPath(canvasSize);
     });
   }
 
-  // BUG FIX: Use cached points instead of re-sampling every frame (O(n) → O(1) lookup).
-  bool _isNearOutline(String regionId, Path path, Offset point,
-      {double threshold = 18.0}) {
-    final pts = _getOutlinePoints(regionId, path);
-    for (final p in pts) {
-      if ((p - point).distance <= threshold) return true;
+  Path _paintPathFor(String regionId, Size canvasSize) {
+    if (_cachedCanvasSize != canvasSize) {
+      _pathCache.clear();
+      _paintPathCache.clear();
+      _cachedCanvasSize = canvasSize;
     }
-    return false;
+
+    return _paintPathCache.putIfAbsent(regionId, () {
+      var exclusivePath = Path.from(_pathFor(regionId, canvasSize));
+
+      for (final region in widget.level.regions) {
+        if (region.id == regionId) continue;
+        final overlapPath = _pathFor(region.id, canvasSize);
+        exclusivePath = Path.combine(
+          PathOperation.difference,
+          exclusivePath,
+          overlapPath,
+        );
+      }
+
+      return exclusivePath;
+    });
   }
 
-  // ── Main tracing logic ────────────────────────────────────
-  void _handleTrace(Offset local, Size canvasSize, Color selectedColor, String? selectedColorId) {
-    bool changed = false;
-
-    for (final region in widget.level.regions) {
-      if (widget.filledRegions.containsKey(region.id)) continue;
-
-      // STRICT COLOR MATCH RULE: Only allow tracing if the selected color matches the region's target color
-      final targetColorId = widget.level.getTargetColorIdForRegion(region.id);
-      if (targetColorId != null && selectedColorId != targetColorId) {
-        continue;
+  Map<String, double> _outlineSharesForPart(
+    DrawingPartStep part,
+    Size canvasSize,
+  ) {
+    final shares = <String, double>{};
+    for (final regionId in part.regionIds) {
+      double totalLength = 0.0;
+      for (final metric in _pathFor(regionId, canvasSize).computeMetrics()) {
+        totalLength += metric.length;
       }
+      shares[regionId] = totalLength;
+    }
+    return shares;
+  }
 
-      final path = region.toPath(canvasSize);
-      final cell = _cellKey(local);
-      _visitedCells.putIfAbsent(region.id, () => {});
-
-      if (!_outlineUnlocked.contains(region.id)) {
-        // ── Step 1: Trace the outline ─────────────────────
-        // BUG FIX: Pass region.id so cached points are used.
-        if (_isNearOutline(region.id, path, local)) {
-          if (_visitedCells[region.id]!.add(cell)) {
-            final visited = _visitedCells[region.id]!.length;
-            final needed = _getOutlineCellsNeeded(path);
-            _outlineProgress[region.id] =
-                (visited / needed).clamp(0.0, 1.0);
-
-            if (visited >= needed) {
-              _outlineUnlocked.add(region.id);
-              // Reset cells for fill phase
-              _visitedCells[region.id]!.clear();
-              HapticFeedback.selectionClick();
-            }
-            changed = true;
-          }
-        }
-      } else {
-        // ── Step 2: Scribble inside to fill ──────────────
-        if (path.contains(local)) {
-          // Track the exact scribble path
-          if (!_scribblePaths.containsKey(region.id)) {
-            _scribblePaths[region.id] = Path()..moveTo(local.dx, local.dy);
-          } else {
-            _scribblePaths[region.id]!.lineTo(local.dx, local.dy);
-          }
-
-          if (_visitedCells[region.id]!.add(cell)) {
-            final visited = _visitedCells[region.id]!.length;
-            final needed = _getFillCellsNeeded(path);
-            _fillProgress[region.id] =
-                (visited / needed).clamp(0.0, 1.0);
-
-            if (visited >= needed) {
-              // Complete — trigger actual fill
-              _fillProgress.remove(region.id);
-              _visitedCells.remove(region.id);
-              _outlineUnlocked.remove(region.id);
-              _outlineProgress.remove(region.id);
-              _scribblePaths.remove(region.id); // clear scribble path
-              widget.onFill(region.id);
-              _triggerAppreciation(selectedColor);
-            }
-            changed = true;
-          } else {
-            // Even if no new cell visited, we added a point to the path, so repaint
-            changed = true;
-          }
-        }
+  Duration _durationForPart(DrawingPartStep part, Size canvasSize) {
+    double totalLength = 0.0;
+    for (final regionId in part.regionIds) {
+      for (final metric in _pathFor(regionId, canvasSize).computeMetrics()) {
+        totalLength += metric.length;
       }
     }
 
-    if (changed) setState(() {});
+    final durationMs = (totalLength * 3.5).clamp(800.0, 4500.0).toInt();
+    return Duration(milliseconds: durationMs);
+  }
+
+  Duration _remainingDurationForPart(DrawingPartStep part, Size canvasSize) {
+    final total = _durationForPart(part, canvasSize);
+    final remainingFactor =
+        (1.0 - _drawingStepController.currentPartProgress).clamp(0.0, 1.0);
+    final remainingMs =
+        (total.inMilliseconds * remainingFactor).clamp(120.0, 2200.0).toInt();
+    return Duration(milliseconds: remainingMs);
+  }
+
+  Future<void> _handleFillCompletion(
+      String regionId, Color selectedColor) async {
+    await widget.onFill(regionId);
+    _triggerAppreciation(selectedColor);
   }
 
   void _triggerAppreciation(Color color) {
-    final msg = _appreciationMessages[
-        math.Random().nextInt(_appreciationMessages.length)];
-    setState(() {
-      _showAppreciation = true;
-      _appreciationText = msg;
-    });
+    final randomIndex = math.Random().nextInt(_appreciationMessages.length);
+    _appreciationMessage.value = _appreciationMessages[randomIndex];
     _appreciationController.forward(from: 0.0);
     HapticFeedback.mediumImpact();
-    Future.delayed(const Duration(milliseconds: 1600), () {
+
+    Future<void>.delayed(const Duration(milliseconds: 1600), () {
       if (!mounted) return;
       _appreciationController.reverse().then((_) {
-        if (mounted) setState(() => _showAppreciation = false);
+        if (mounted && _appreciationController.value == 0.0) {
+          _appreciationMessage.value = null;
+        }
       });
     });
   }
 
-  // ── Gesture handlers ──────────────────────────────────────
-  void _onPanStart(
-      Offset local, Size canvasSize, Color selectedColor, String? selectedColorId) {
-    _dragPosition = local;
-    _hasInteracted = true;
-    _tapScaleController.forward().then((_) => _tapScaleController.reverse());
-    
-    // When a new pan starts, we want to reset the scribble path's starting point
-    // so it doesn't draw a straight line from the last lift point.
-    for (var region in widget.level.regions) {
-      if (_outlineUnlocked.contains(region.id) && !widget.filledRegions.containsKey(region.id)) {
-        if (_scribblePaths.containsKey(region.id)) {
-           _scribblePaths[region.id]!.moveTo(local.dx, local.dy);
-        }
+  void _animateMarkerTap() {
+    _tapScaleController.forward().then((_) {
+      if (mounted) {
+        _tapScaleController.reverse();
       }
+    });
+  }
+
+  void _onLongPressStart(
+    LongPressStartDetails details,
+    BoxConstraints constraints,
+    double canvasDimension,
+  ) {
+    if (!_gestureCoordinator.acceptsOutlineGestures) return;
+
+    final local = _toLocal(details.localPosition, constraints, canvasDimension);
+    _updateMarkerPosition(local);
+
+    if (!_drawingStepController.beginCurrentPart()) {
+      return;
     }
-    
-    _handleTrace(local, canvasSize, selectedColor, selectedColorId);
-    setState(() {});
+
+    final part = _drawingStepController.animatingPart;
+    if (part == null) return;
+
+    final canvasSize = Size.square(canvasDimension);
+    _activeOutlineRegionShares = _outlineSharesForPart(part, canvasSize);
+    _outlineAnimationController.duration =
+        _remainingDurationForPart(part, canvasSize);
+    _outlineAnimationController.forward(
+      from: _drawingStepController.currentPartProgress,
+    );
+    _animateMarkerTap();
   }
 
-  void _onPanUpdate(
-      Offset local, Size canvasSize, Color selectedColor, String? selectedColorId) {
-    _dragPosition = local;
-    _handleTrace(local, canvasSize, selectedColor, selectedColorId);
-    setState(() {});
+  void _onLongPressEnd() {
+    _outlineAnimationController.stop();
+    _drawingStepController.pauseCurrentPart();
+    _drawingStepController.handleFingerLift();
   }
 
-  // ── Build ─────────────────────────────────────────────────
+  void _onLongPressMoveUpdate(
+    LongPressMoveUpdateDetails details,
+    BoxConstraints constraints,
+    double canvasDimension,
+  ) {
+    if (!_gestureCoordinator.acceptsOutlineGestures &&
+        !_drawingStepController.isAnimating) {
+      return;
+    }
+
+    final local = _toLocal(details.localPosition, constraints, canvasDimension);
+    _updateMarkerPosition(local);
+  }
+
+  void _handleColorGesture({
+    required Offset fingerLocal,
+    required Size canvasSize,
+    required Color selectedColor,
+    required bool startStroke,
+  }) {
+    if (!_gestureCoordinator.acceptsColorGestures) return;
+
+    final regionId = _coloringStepController.activeRegionId;
+    if (regionId == null) return;
+
+    final path = _paintPathFor(regionId, canvasSize);
+    final drawingPoint = fingerLocal;
+    _syncMarkerToDrawingPoint(drawingPoint);
+    final paintedPoint = startStroke
+        ? _coloringStepController.handlePaintStart(
+            point: drawingPoint,
+            path: path,
+            color: selectedColor,
+          )
+        : _coloringStepController.handlePaintUpdate(
+            point: drawingPoint,
+            path: path,
+            color: selectedColor,
+          );
+
+    if (paintedPoint != null && paintedPoint != drawingPoint) {
+      _syncMarkerToDrawingPoint(paintedPoint);
+    }
+  }
+
+  Future<void> _onColorGestureEnd(Color selectedColor) async {
+    final completedRegionId = _coloringStepController.handlePaintEnd();
+    if (completedRegionId != null) {
+      await _handleFillCompletion(completedRegionId, selectedColor);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<SkinsViewModel, DrawingViewModel>(
       builder: (context, skinsVm, drawingVm, _) {
         final selectedColor =
-            drawingVm.selectedColor?.color ?? Colors.deepPurple;
-        final selectedColorId = drawingVm.selectedColor?.id;
-        final skin = skinsVm.selectedSkin;
+            drawingVm.selectedColor?.color ?? const Color(0xFF5C6BC0);
+        final repaintListenable = Listenable.merge(<Listenable>[
+          _drawingStepController,
+          _coloringStepController,
+          _fillAnimationController,
+        ]);
 
-        return LayoutBuilder(builder: (context, constraints) {
-          final dim = math.min(constraints.maxWidth, constraints.maxHeight);
-          final canvasSize = Size.square(dim);
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final canvasDimension =
+                math.min(constraints.maxWidth, constraints.maxHeight);
+            final canvasSize = Size.square(canvasDimension);
+            final skin = skinsVm.selectedSkin;
 
-          return GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onPanStart: (d) => _onPanStart(
-                _toLocal(d.localPosition, canvasSize, constraints),
-                canvasSize,
-                selectedColor,
-                selectedColorId),
-            onPanUpdate: (d) => _onPanUpdate(
-                _toLocal(d.localPosition, canvasSize, constraints),
-                canvasSize,
-                selectedColor,
-                selectedColorId),
-            onPanEnd: (_) {},
-            onPanCancel: () {},
-            onTapDown: (d) {
-              setState(() {
-                _dragPosition =
-                    _toLocal(d.localPosition, canvasSize, constraints);
-                _hasInteracted = true;
-              });
-            },
-            onTapUp: (d) {
-              _tapScaleController
-                  .forward()
-                  .then((_) => _tapScaleController.reverse());
-              // We removed tap-to-fill, user must trace to fill.
-            },
-            child: Center(
-              child: Container(
-                width: dim,
-                height: dim,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(26),
-                  border: Border.all(
-                      color: Colors.black.withValues(alpha: 0.08), width: 2),
-                  boxShadow: [
-                    BoxShadow(
+            for (final region in widget.level.regions) {
+              _pathFor(region.id, canvasSize);
+              _paintPathFor(region.id, canvasSize);
+            }
+
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onLongPressStart: (details) =>
+                  _onLongPressStart(details, constraints, canvasDimension),
+              onLongPressMoveUpdate: (details) => _onLongPressMoveUpdate(
+                details,
+                constraints,
+                canvasDimension,
+              ),
+              onLongPressEnd: (_) => _onLongPressEnd(),
+              onPanStart: (details) {
+                final local = _toLocal(
+                  details.localPosition,
+                  constraints,
+                  canvasDimension,
+                );
+                _animateMarkerTap();
+                _handleColorGesture(
+                  fingerLocal: local,
+                  canvasSize: canvasSize,
+                  selectedColor: selectedColor,
+                  startStroke: true,
+                );
+              },
+              onPanUpdate: (details) {
+                final local = _toLocal(
+                  details.localPosition,
+                  constraints,
+                  canvasDimension,
+                );
+                _handleColorGesture(
+                  fingerLocal: local,
+                  canvasSize: canvasSize,
+                  selectedColor: selectedColor,
+                  startStroke: false,
+                );
+              },
+              onPanEnd: (_) => _onColorGestureEnd(selectedColor),
+              onPanCancel: () => _onColorGestureEnd(selectedColor),
+              child: Center(
+                child: Container(
+                  width: canvasDimension,
+                  height: canvasDimension,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(26),
+                    border: Border.all(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      width: 2,
+                    ),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
                         color: Colors.black.withValues(alpha: 0.12),
                         blurRadius: 24,
-                        offset: const Offset(0, 12)),
-                    BoxShadow(
+                        offset: const Offset(0, 12),
+                      ),
+                      BoxShadow(
                         color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 4,
-                        offset: const Offset(0, 2)),
-                  ],
-                ),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    // ── Canvas ────────────────────────────
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(26),
-                      child: AnimatedBuilder(
-                        animation: _fillAnimationController,
-                        builder: (context, _) {
-                          return CustomPaint(
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(26),
+                        child: RepaintBoundary(
+                          child: CustomPaint(
                             painter: AdvancedCanvasPainter(
                               level: widget.level,
+                              paths: _pathCache,
+                              paintPaths: _paintPathCache,
                               filledRegions: widget.filledRegions,
-                              activeRegionId: _activeRegionId,
-                              activeRegionOriginalColor:
+                              drawingController: _drawingStepController,
+                              coloringController: _coloringStepController,
+                              activePartHighlighter: _activePartHighlighter,
+                              fillAnimationValue:
+                                  _fillAnimationController.value,
+                              activeFillRegionId: _activeRegionId,
+                              activeFillRegionOriginalColor:
                                   _activeRegionOriginalColor,
-                              animationValue: _fillAnimationController.value,
-                              outlineUnlocked: _outlineUnlocked,
-                              outlineProgress: _outlineProgress,
-                              fillProgress: _fillProgress,
-                              scribblePaths: _scribblePaths,
+                              repaint: repaintListenable,
                             ),
                             size: canvasSize,
-                          );
-                        },
-                      ),
-                    ),
-
-                    // ── Appreciation ──────────────────────
-                    if (_showAppreciation)
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: SlideTransition(
-                          position: _appreciationOffset,
-                          child: ScaleTransition(
-                            scale: _appreciationScale,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 14),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: selectedColor.withValues(alpha: 0.4),
-                                    blurRadius: 28,
-                                    spreadRadius: 2,
-                                  ),
-                                ],
-                                border: Border.all(
-                                    color: selectedColor.withValues(alpha: 0.7),
-                                    width: 2.5),
-                              ),
-                              child: Text(
-                                _appreciationText,
-                                style: const TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF333333),
-                                ),
-                              ),
-                            ),
                           ),
                         ),
                       ),
+                      ValueListenableBuilder<String?>(
+                        valueListenable: _appreciationMessage,
+                        builder: (context, message, _) {
+                          if (message == null) {
+                            return const SizedBox.shrink();
+                          }
 
-                    // ── Marker (body + colored nib) ───────
-                    _buildMarker(skin, selectedColor, dim),
-                  ],
+                          return Align(
+                            alignment: Alignment.bottomCenter,
+                            child: SlideTransition(
+                              position: _appreciationOffset,
+                              child: ScaleTransition(
+                                scale: _appreciationScale,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 14,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                        color: selectedColor.withValues(
+                                            alpha: 0.4),
+                                        blurRadius: 28,
+                                        spreadRadius: 2,
+                                      ),
+                                    ],
+                                    border: Border.all(
+                                      color:
+                                          selectedColor.withValues(alpha: 0.7),
+                                      width: 2.5,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    message,
+                                    style: const TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF333333),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      _MarkerOverlay(
+                        markerPosition: _markerPosition,
+                        tapScaleController: _tapScaleController,
+                        skin: skin,
+                        selectedColor: selectedColor,
+                        canvasDimension: canvasDimension,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       },
-    );
-  }
-
-  Widget _buildMarker(SkinModel skin, Color selectedColor, double dim) {
-    final double defaultLeft = dim - 120;
-    final double defaultTop = dim - 120;
-
-    final double left = _hasInteracted && _dragPosition != null
-        ? _dragPosition!.dx - 10
-        : defaultLeft;
-    final double top = _hasInteracted && _dragPosition != null
-        ? _dragPosition!.dy - 120
-        : defaultTop;
-
-    return AnimatedPositioned(
-      duration: const Duration(milliseconds: 60),
-      curve: Curves.easeOutQuad,
-      left: left,
-      top: top,
-      child: IgnorePointer(
-        child: AnimatedBuilder(
-          animation: _tapScaleController,
-          builder: (context, child) => Transform.scale(
-            scale: _tapScaleController.value,
-            alignment: Alignment.bottomCenter,
-            child: child,
-          ),
-          child: SizedBox(
-            width: 180,
-            height: 180,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // ── Marker body (original PNG) ─────────
-                if (skin.image != null)
-                  Image.asset(
-                    skin.image!,
-                    width: 180,
-                    height: 180,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                  ),
-
-                // ── Nib color overlay ──────────────────
-                // The nib is at the bottom-tip of the marker image.
-                // We paint a small colored circle at nib position.
-                Positioned(
-                  bottom: 2,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: CustomPaint(
-                      painter: _NibPainter(color: selectedColor),
-                      size: const Size(18, 20),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Nib Painter — small teardrop shaped nib at marker tip
-// ─────────────────────────────────────────────────────────────
+class _MarkerOverlay extends StatelessWidget {
+  const _MarkerOverlay({
+    required this.markerPosition,
+    required this.tapScaleController,
+    required this.skin,
+    required this.selectedColor,
+    required this.canvasDimension,
+  });
+
+  final ValueNotifier<Offset?> markerPosition;
+  final AnimationController tapScaleController;
+  final SkinModel skin;
+  final Color selectedColor;
+  final double canvasDimension;
+
+  static const double _tipX = 28;
+  static const double _tipY = 150;
+  static const double _markerSize = 180;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation:
+          Listenable.merge(<Listenable>[markerPosition, tapScaleController]),
+      child: RepaintBoundary(
+        child: SizedBox(
+          width: _markerSize,
+          height: _markerSize,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              if (skin.image != null)
+                Image.asset(
+                  skin.image!,
+                  width: _markerSize,
+                  height: _markerSize,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.low,
+                  gaplessPlayback: true,
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                ),
+              Positioned(
+                left: _tipX - 9,
+                top: _tipY - 20,
+                child: CustomPaint(
+                  painter: _NibPainter(color: selectedColor),
+                  size: const Size(18, 20),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      builder: (context, child) {
+        final position = markerPosition.value;
+        final left = position != null ? position.dx - _tipX : -_tipX;
+
+        final top =
+            position != null ? position.dy - _tipY : canvasDimension - _tipY;
+
+        return IgnorePointer(
+          child: Transform.translate(
+            offset: Offset(left, top),
+            child: Transform.scale(
+              scale: tapScaleController.value,
+              alignment: Alignment.bottomLeft,
+              child: child,
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class _NibPainter extends CustomPainter {
-  _NibPainter({required this.color});
+  const _NibPainter({required this.color});
+
   final Color color;
 
   @override
@@ -547,66 +662,68 @@ class _NibPainter extends CustomPainter {
     final path = Path()
       ..moveTo(size.width / 2, size.height)
       ..cubicTo(0, size.height * 0.6, 0, 0, size.width / 2, 0)
-      ..cubicTo(size.width, 0, size.width, size.height * 0.6,
-          size.width / 2, size.height)
+      ..cubicTo(size.width, 0, size.width, size.height * 0.6, size.width / 2,
+          size.height)
       ..close();
 
     canvas.drawPath(path, paint);
-
-    // Tiny glint
-    final glint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.5)
-      ..style = PaintingStyle.fill;
     canvas.drawOval(
-        Rect.fromCenter(
-            center: Offset(size.width * 0.35, size.height * 0.22),
-            width: 3,
-            height: 4),
-        glint);
+      Rect.fromCenter(
+        center: Offset(size.width * 0.35, size.height * 0.22),
+        width: 3,
+        height: 4,
+      ),
+      Paint()
+        ..color = Colors.white.withValues(alpha: 0.5)
+        ..style = PaintingStyle.fill,
+    );
   }
 
   @override
-  bool shouldRepaint(_NibPainter old) => old.color != color;
+  bool shouldRepaint(covariant _NibPainter oldDelegate) {
+    return oldDelegate.color != color;
+  }
 }
 
-// ─────────────────────────────────────────────────────────────
-// AdvancedCanvasPainter
-// ─────────────────────────────────────────────────────────────
 class AdvancedCanvasPainter extends CustomPainter {
   AdvancedCanvasPainter({
     required this.level,
+    required this.paths,
+    required this.paintPaths,
     required this.filledRegions,
-    this.activeRegionId,
-    this.activeRegionOriginalColor,
-    this.animationValue = 1.0,
-    required this.outlineUnlocked,
-    required this.outlineProgress,
-    required this.fillProgress,
-    required this.scribblePaths,
-  });
+    required this.drawingController,
+    required this.coloringController,
+    required this.activePartHighlighter,
+    required this.fillAnimationValue,
+    required this.activeFillRegionId,
+    required this.activeFillRegionOriginalColor,
+    required Listenable repaint,
+  }) : super(repaint: repaint);
 
   final LevelModel level;
+  final Map<String, Path> paths;
+  final Map<String, Path> paintPaths;
   final Map<String, Color> filledRegions;
-  final String? activeRegionId;
-  final Color? activeRegionOriginalColor;
-  final double animationValue;
-  final Set<String> outlineUnlocked;
-  final Map<String, double> outlineProgress;
-  final Map<String, double> fillProgress;
-  final Map<String, Path> scribblePaths;
+  final DrawingStepController drawingController;
+  final ColoringStepController coloringController;
+  final ActivePartHighlighter activePartHighlighter;
+  final double fillAnimationValue;
+  final String? activeFillRegionId;
+  final Color? activeFillRegionOriginalColor;
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Background
     canvas.drawRect(
-        Offset.zero & size, Paint()..color = const Color(0xFFFFFEFB));
+      Offset.zero & size,
+      Paint()..color = const Color(0xFFFFFEFB),
+    );
 
     final guideOutline = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.shortestSide * 0.01
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
-      ..color = const Color(0xFFCCCCCC);
+      ..color = const Color(0xFFD1D1D1);
 
     final solidOutline = Paint()
       ..style = PaintingStyle.stroke
@@ -616,116 +733,144 @@ class AdvancedCanvasPainter extends CustomPainter {
       ..color = Colors.black26;
 
     for (final region in level.regions) {
-      final path = region.toPath(size);
-      final fillColor = filledRegions[region.id];
-      final isFilled = fillColor != null;
-      final progress = outlineProgress[region.id] ?? 0.0;
-      final isUnlocked = outlineUnlocked.contains(region.id);
-      final scribbleProgress = fillProgress[region.id] ?? 0.0;
+      final path = paths[region.id] ?? region.toPath(size);
+      final paintPath = paintPaths[region.id] ?? path;
+      final filledColor = filledRegions[region.id];
+      final outlineProgress = drawingController.progressFor(region.id);
+      final isOutlineCompleted = drawingController.isRegionCompleted(region.id);
+      final isCurrentOutlineRegion =
+          drawingController.isRegionCurrent(region.id);
+      final isActiveColorRegion =
+          coloringController.activeRegionId == region.id;
+      final coloredStrokes = coloringController.strokesFor(region.id);
 
-      // ── Shadow for filled regions ─────────────────────────
-      if (isFilled) {
-        canvas.drawShadow(path, Colors.black, 3, true);
+      if (filledColor != null) {
+        _paintFilledRegion(canvas, paintPath, region.id, filledColor);
+      } else if (coloredStrokes.isNotEmpty) {
+        _paintRegionStrokes(canvas, paintPath, coloredStrokes);
       }
 
-      // ── Fill layer ────────────────────────────────────────
-      if (isFilled) {
-        final p = Paint()
-          ..style = PaintingStyle.fill
-          ..isAntiAlias = true;
-
-        if (region.id == activeRegionId) {
-          final from = activeRegionOriginalColor ?? const Color(0x00FFFFFF);
-          p.color = Color.lerp(from, fillColor, animationValue)!;
-        } else {
-          p.color = fillColor;
-        }
-
-        p.shader = LinearGradient(
-          colors: [p.color.withValues(alpha: 0.82), p.color],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ).createShader(path.getBounds());
-
-        canvas.drawPath(path, p);
-      } else if (isUnlocked && scribbleProgress > 0) {
-        // Scribble fill in progress
-        final scribblePath = scribblePaths[region.id];
-        if (scribblePath != null) {
-          canvas.save();
-          // Clip the drawing to the exact bounds of the region
-          canvas.clipPath(path);
-          
-          canvas.drawPath(
-            scribblePath,
-            Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeCap = StrokeCap.round
-              ..strokeJoin = StrokeJoin.round
-              ..strokeWidth = size.shortestSide * 0.12 // very thick marker
-              ..color = level.getTargetColorForRegion(region.id)
-              ..isAntiAlias = true,
-          );
-          canvas.restore();
-        }
+      if (isOutlineCompleted) {
+        canvas.drawPath(path, solidOutline);
+      } else if (outlineProgress > 0) {
+        _drawDashedPath(canvas, path, guideOutline);
+        _drawPartialOutline(
+          canvas,
+          path,
+          outlineProgress,
+          size,
+          level.getTargetColorForRegion(region.id),
+        );
       } else {
-        // Unfilled background — transparent
         canvas.drawPath(
           path,
           Paint()
             ..style = PaintingStyle.fill
             ..color = const Color(0x00FFFFFF),
         );
-      }
-
-      // ── Outline layer ─────────────────────────────────────
-      if (isFilled) {
-        canvas.drawPath(path, solidOutline);
-      } else if (isUnlocked) {
-        // Outline fully traced — draw solid selected-color outline
-        canvas.drawPath(
-          path,
-          Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = size.shortestSide * 0.015
-            ..strokeCap = StrokeCap.round
-            ..strokeJoin = StrokeJoin.round
-            ..color = level.getTargetColorForRegion(region.id)
-            ..maskFilter =
-                const MaskFilter.blur(BlurStyle.normal, 2),
-        );
-      } else if (progress > 0) {
-        // Partially traced — show progress via colored dash
-        _drawPartialOutline(canvas, path, progress, size, level.getTargetColorForRegion(region.id));
-        _drawDashedPath(canvas, path, guideOutline);
-      } else {
-        // Not yet touched — dashed grey
         _drawDashedPath(canvas, path, guideOutline);
       }
 
-      // ── Active region highlight ───────────────────────────
-      if (region.id == activeRegionId) {
-        canvas.drawPath(
-          path,
-          Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = size.shortestSide * 0.016
-            ..color = Colors.orangeAccent
-            ..isAntiAlias = true,
-        );
+      if (drawingController.phase == GuidedCanvasPhase.outline &&
+          isCurrentOutlineRegion &&
+          !isOutlineCompleted) {
+        activePartHighlighter.paintOutlineHighlight(canvas, path, size);
+      }
+
+      if (drawingController.isOutlineComplete && isActiveColorRegion) {
+        activePartHighlighter.paintColoringHighlight(canvas, path, size);
       }
     }
   }
 
-  /// Draw only the first [progress] fraction of the path in the tracing color.
+  void _paintFilledRegion(
+    Canvas canvas,
+    Path path,
+    String regionId,
+    Color color,
+  ) {
+    canvas.drawShadow(path, Colors.black, 3, true);
+
+    final paint = Paint()
+      ..style = PaintingStyle.fill
+      ..isAntiAlias = true;
+
+    if (regionId == activeFillRegionId) {
+      final from = activeFillRegionOriginalColor ?? const Color(0x00FFFFFF);
+      paint.color = Color.lerp(from, color, fillAnimationValue)!;
+    } else {
+      paint.color = color;
+    }
+
+    paint.shader = LinearGradient(
+      colors: <Color>[paint.color.withValues(alpha: 0.82), paint.color],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ).createShader(path.getBounds());
+
+    canvas.drawPath(path, paint);
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 5
+        ..color = Colors.black26,
+    );
+  }
+
+  void _paintRegionStrokes(
+    Canvas canvas,
+    Path path,
+    List<DrawingStroke> strokes,
+  ) {
+    canvas.save();
+    canvas.clipPath(path);
+
+    for (final stroke in strokes) {
+      if (stroke.points.isEmpty) continue;
+
+      final paint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..strokeWidth = stroke.strokeWidth
+        ..color = stroke.color
+        ..isAntiAlias = true;
+
+      if (stroke.points.length == 1) {
+        canvas.drawCircle(
+          stroke.points.first,
+          stroke.strokeWidth / 2,
+          paint..style = PaintingStyle.fill,
+        );
+        continue;
+      }
+
+      final strokePath = Path()
+        ..moveTo(stroke.points.first.dx, stroke.points.first.dy);
+      for (final point in stroke.points.skip(1)) {
+        strokePath.lineTo(point.dx, point.dy);
+      }
+      canvas.drawPath(strokePath, paint);
+    }
+
+    canvas.restore();
+  }
+
   void _drawPartialOutline(
-      Canvas canvas, Path path, double progress, Size size, Color color) {
+    Canvas canvas,
+    Path path,
+    double progress,
+    Size size,
+    Color color,
+  ) {
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = size.shortestSide * 0.014
+      ..strokeWidth = size.shortestSide * 0.024
       ..strokeCap = StrokeCap.round
-      ..color = color
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.5);
+      ..strokeJoin = StrokeJoin.round
+      ..color = Colors.black
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.2);
 
     for (final metric in path.computeMetrics()) {
       final end = metric.length * progress;
@@ -737,17 +882,25 @@ class AdvancedCanvasPainter extends CustomPainter {
 
   void _drawDashedPath(Canvas canvas, Path source, Paint paint) {
     for (final metric in source.computeMetrics()) {
-      double d = 0;
-      const double dash = 10;
-      const double gap = 7;
-      while (d < metric.length) {
-        final next = math.min(d + dash, metric.length);
-        canvas.drawPath(metric.extractPath(d, next), paint);
-        d += dash + gap;
+      double distance = 0;
+      const dash = 10.0;
+      const gap = 7.0;
+
+      while (distance < metric.length) {
+        final next = math.min(distance + dash, metric.length);
+        canvas.drawPath(metric.extractPath(distance, next), paint);
+        distance += dash + gap;
       }
     }
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant AdvancedCanvasPainter oldDelegate) {
+    return oldDelegate.level != level ||
+        oldDelegate.filledRegions != filledRegions ||
+        oldDelegate.fillAnimationValue != fillAnimationValue ||
+        oldDelegate.activeFillRegionId != activeFillRegionId ||
+        oldDelegate.activeFillRegionOriginalColor !=
+            activeFillRegionOriginalColor;
+  }
 }

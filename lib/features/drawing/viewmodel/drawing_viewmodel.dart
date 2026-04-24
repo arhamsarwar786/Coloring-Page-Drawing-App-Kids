@@ -180,7 +180,7 @@ class DrawingViewModel extends BaseViewModel {
   }
 
   Future<void> _evaluateCompletion() async {
-    if (_level == null || isCompleted) return;
+    if (_level == null || _level!.isCompleted) return;
 
     final filledCount = _filledRegions.length;
     final requiredCount = _level!.regions.length;
