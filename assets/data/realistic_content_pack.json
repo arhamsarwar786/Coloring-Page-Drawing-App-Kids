@@ -1,0 +1,450 @@
+﻿{
+  "categories": [
+    {
+      "id": "animals",
+      "levels": [
+        {
+          "id": "Dog_realistic",
+          "title": "Dog",
+          "subtitle": "Anatomically segmented canine facial structure.",
+          "difficulty": "Hard",
+          "rewardCoins": 120,
+          "recommendedBrushSize": 4,
+          "guideAsset": "assets/images/boy.png",
+          "palette": [
+            { "id": "fur_ginger", "label": "Ginger Fur", "hex": "#D8873A" },
+            { "id": "ear_pink", "label": "Ear Pink", "hex": "#F3A8AF" },
+            { "id": "muzzle_cream", "label": "Muzzle Cream", "hex": "#F7F1E6" },
+            { "id": "nose_pink", "label": "Nose Pink", "hex": "#E58C95" },
+            { "id": "eye_amber", "label": "Eye Amber", "hex": "#D8A926" },
+            { "id": "pupil_black", "label": "Pupil Black", "hex": "#1E1E1E" }
+          ],
+          "regions": [
+            {
+              "id": "dog_head",
+              "label": "Cranial Volume",
+              "type": "path",
+              "targetColorId": "fur_ginger",
+              "viewBoxSize": 1000,
+              "svgPath": "M500,836 C390,834 292,786 236,706 C178,622 162,502 198,398 C230,306 300,240 390,214 C426,202 462,196 500,196 C538,196 574,202 610,214 C700,240 770,306 802,398 C838,502 822,622 764,706 C708,786 610,834 500,836 Z"
+            },
+            {
+              "id": "dog_ear_left_outer",
+              "label": "Left Auricle",
+              "type": "path",
+              "targetColorId": "fur_ginger",
+              "viewBoxSize": 1000,
+              "svgPath": "M286,418 L176,208 C160,176 182,142 220,150 L388,254 Z"
+            },
+            {
+              "id": "dog_ear_right_outer",
+              "label": "Right Auricle",
+              "type": "path",
+              "targetColorId": "fur_ginger",
+              "viewBoxSize": 1000,
+              "svgPath": "M714,418 L612,254 L780,150 C818,142 840,176 824,208 Z"
+            },
+            {
+              "id": "dog_ear_left_inner",
+              "label": "Inner Left Ear",
+              "type": "path",
+              "targetColorId": "ear_pink",
+              "viewBoxSize": 1000,
+              "svgPath": "M300,380 L244,218 C236,194 252,178 274,182 L360,252 Z"
+            },
+            {
+              "id": "dog_ear_right_inner",
+              "label": "Inner Right Ear",
+              "type": "path",
+              "targetColorId": "ear_pink",
+              "viewBoxSize": 1000,
+              "svgPath": "M700,380 L640,252 L726,182 C748,178 764,194 756,218 Z"
+            },
+            {
+              "id": "dog_muzzle",
+              "label": "Muzzle Plane",
+              "type": "path",
+              "targetColorId": "muzzle_cream",
+              "viewBoxSize": 1000,
+              "svgPath": "M338,622 C338,708 406,766 500,766 C594,766 662,708 662,622 C618,594 382,594 338,622 Z"
+            },
+            {
+              "id": "dog_nose",
+              "label": "Nasal Leather",
+              "type": "path",
+              "targetColorId": "nose_pink",
+              "viewBoxSize": 1000,
+              "svgPath": "M500,550 C474,534 444,552 448,580 C452,606 476,620 500,620 C524,620 548,606 552,580 C556,552 526,534 500,550 Z"
+            },
+            {
+              "id": "dog_eye_left",
+              "label": "Left Iris",
+              "type": "path",
+              "targetColorId": "eye_amber",
+              "viewBoxSize": 1000,
+              "svgPath": "M340,484 C344,444 380,414 426,414 C472,414 508,444 512,484 C508,526 472,554 426,554 C380,554 344,526 340,484 Z"
+            },
+            {
+              "id": "dog_eye_right",
+              "label": "Right Iris",
+              "type": "path",
+              "targetColorId": "eye_amber",
+              "viewBoxSize": 1000,
+              "svgPath": "M488,484 C492,444 528,414 574,414 C620,414 656,444 660,484 C656,526 620,554 574,554 C528,554 492,526 488,484 Z"
+            },
+            {
+              "id": "dog_pupil_left",
+              "label": "Left Pupil",
+              "type": "path",
+              "targetColorId": "pupil_black",
+              "viewBoxSize": 1000,
+              "svgPath": "M420,438 C436,438 448,458 448,484 C448,510 436,530 420,530 C404,530 392,510 392,484 C392,458 404,438 420,438 Z"
+            },
+            {
+              "id": "dog_pupil_right",
+              "label": "Right Pupil",
+              "type": "path",
+              "targetColorId": "pupil_black",
+              "viewBoxSize": 1000,
+              "svgPath": "M580,438 C596,438 608,458 608,484 C608,510 596,530 580,530 C564,530 552,510 552,484 C552,458 564,438 580,438 Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sports",
+      "levels": [
+        {
+          "id": "tennis_realistic",
+          "title": "Tennis Racket (Realistic)",
+          "subtitle": "Frame, bed, throat, and grip segmented by function.",
+          "difficulty": "Hard",
+          "rewardCoins": 110,
+          "recommendedBrushSize": 4,
+          "guideAsset": "assets/images/centa.png",
+          "palette": [
+            { "id": "frame_blue", "label": "Frame Blue", "hex": "#2E5AAC" },
+            { "id": "strings_light", "label": "String Bed", "hex": "#F1F4F8" },
+            { "id": "handle_tan", "label": "Handle Tan", "hex": "#BCA17D" },
+            { "id": "grip_gray", "label": "Grip Gray", "hex": "#808080" },
+            { "id": "cap_black", "label": "Butt Cap", "hex": "#202020" }
+          ],
+          "regions": [
+            {
+              "id": "racket_frame",
+              "label": "Frame Ring",
+              "type": "path",
+              "targetColorId": "frame_blue",
+              "viewBoxSize": 1000,
+              "svgPath": "M500,74 C682,74 842,206 866,384 C890,562 776,744 596,798 C564,808 436,808 404,798 C224,744 110,562 134,384 C158,206 318,74 500,74 Z"
+            },
+            {
+              "id": "racket_string_bed",
+              "label": "String Bed",
+              "type": "path",
+              "targetColorId": "strings_light",
+              "viewBoxSize": 1000,
+              "svgPath": "M500,166 C638,166 756,270 774,412 C792,556 700,690 564,732 C542,738 458,738 436,732 C300,690 208,556 226,412 C244,270 362,166 500,166 Z"
+            },
+            {
+              "id": "racket_throat",
+              "label": "Throat Bridge",
+              "type": "path",
+              "targetColorId": "frame_blue",
+              "viewBoxSize": 1000,
+              "svgPath": "M420,732 C396,790 404,858 448,892 C478,916 522,916 552,892 C596,858 604,790 580,732 C548,740 452,740 420,732 Z"
+            },
+            {
+              "id": "racket_handle_core",
+              "label": "Handle Core",
+              "type": "path",
+              "targetColorId": "handle_tan",
+              "viewBoxSize": 1000,
+              "svgPath": "M448,892 L426,996 L574,996 L552,892 Z"
+            },
+            {
+              "id": "racket_grip",
+              "label": "Grip Wrap",
+              "type": "path",
+              "targetColorId": "grip_gray",
+              "viewBoxSize": 1000,
+              "svgPath": "M438,932 L428,984 L572,984 L562,932 Z"
+            },
+            {
+              "id": "racket_butt_cap",
+              "label": "Butt Cap",
+              "type": "path",
+              "targetColorId": "cap_black",
+              "viewBoxSize": 1000,
+              "svgPath": "M424,982 C428,1000 572,1000 576,982 C568,966 432,966 424,982 Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vehicles",
+      "levels": [
+        {
+          "id": "car_realistic",
+          "title": "Sedan (Realistic)",
+          "subtitle": "Segmented chassis, glazing, wheel systems, and lights.",
+          "difficulty": "Hard",
+          "rewardCoins": 125,
+          "recommendedBrushSize": 4,
+          "guideAsset": "assets/images/boy.png",
+          "palette": [
+            { "id": "body_red", "label": "Body Red", "hex": "#D73B34" },
+            { "id": "glass_blue", "label": "Glass Blue", "hex": "#9EC7E8" },
+            { "id": "tire_black", "label": "Tire Black", "hex": "#1F1F1F" },
+            { "id": "rim_gray", "label": "Rim Gray", "hex": "#B7BDC5" },
+            { "id": "lamp_yellow", "label": "Headlamp", "hex": "#FFD56B" },
+            { "id": "lamp_red", "label": "Taillamp", "hex": "#D94747" }
+          ],
+          "regions": [
+            {
+              "id": "car_body_chassis",
+              "label": "Chassis Body",
+              "type": "path",
+              "targetColorId": "body_red",
+              "viewBoxSize": 1000,
+              "svgPath": "M88,654 C88,604 126,564 176,564 L248,564 C266,502 318,456 382,446 L604,446 C688,446 760,502 792,564 L872,564 C916,564 952,602 952,654 L952,714 C952,748 924,776 890,776 L846,776 C842,710 790,658 726,658 C662,658 608,710 604,776 L394,776 C390,710 338,658 274,658 C210,658 156,710 152,776 L126,776 C104,776 88,760 88,736 Z"
+            },
+            {
+              "id": "car_body_roof",
+              "label": "Cabin Roof",
+              "type": "path",
+              "targetColorId": "body_red",
+              "viewBoxSize": 1000,
+              "svgPath": "M258,564 L308,470 C330,434 368,412 410,406 L602,406 C666,406 724,438 758,486 L800,564 Z"
+            },
+            {
+              "id": "car_window_front",
+              "label": "Front Glazing",
+              "type": "path",
+              "targetColorId": "glass_blue",
+              "viewBoxSize": 1000,
+              "svgPath": "M548,446 C612,446 664,468 700,510 L734,564 L548,564 Z"
+            },
+            {
+              "id": "car_window_rear",
+              "label": "Rear Glazing",
+              "type": "path",
+              "targetColorId": "glass_blue",
+              "viewBoxSize": 1000,
+              "svgPath": "M392,446 L540,446 L540,564 L328,564 L352,506 C362,474 376,454 392,446 Z"
+            },
+            {
+              "id": "car_headlight",
+              "label": "Headlamp",
+              "type": "path",
+              "targetColorId": "lamp_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M894,594 C926,594 948,614 948,640 C928,662 896,664 876,648 C876,622 880,604 894,594 Z"
+            },
+            {
+              "id": "car_taillight",
+              "label": "Taillamp",
+              "type": "path",
+              "targetColorId": "lamp_red",
+              "viewBoxSize": 1000,
+              "svgPath": "M92,600 C110,590 128,606 128,634 C116,650 98,654 90,638 Z"
+            },
+            {
+              "id": "car_wheel_front_tire",
+              "label": "Front Tire",
+              "type": "path",
+              "targetColorId": "tire_black",
+              "viewBoxSize": 1000,
+              "svgPath": "M726,672 C782,672 828,718 828,774 C828,830 782,876 726,876 C670,876 624,830 624,774 C624,718 670,672 726,672 Z"
+            },
+            {
+              "id": "car_wheel_front_rim",
+              "label": "Front Rim",
+              "type": "path",
+              "targetColorId": "rim_gray",
+              "viewBoxSize": 1000,
+              "svgPath": "M726,718 C756,718 782,744 782,774 C782,804 756,830 726,830 C696,830 670,804 670,774 C670,744 696,718 726,718 Z"
+            },
+            {
+              "id": "car_wheel_rear_tire",
+              "label": "Rear Tire",
+              "type": "path",
+              "targetColorId": "tire_black",
+              "viewBoxSize": 1000,
+              "svgPath": "M274,672 C330,672 376,718 376,774 C376,830 330,876 274,876 C218,876 172,830 172,774 C172,718 218,672 274,672 Z"
+            },
+            {
+              "id": "car_wheel_rear_rim",
+              "label": "Rear Rim",
+              "type": "path",
+              "targetColorId": "rim_gray",
+              "viewBoxSize": 1000,
+              "svgPath": "M274,718 C304,718 330,744 330,774 C330,804 304,830 274,830 C244,830 218,804 218,774 C218,744 244,718 274,718 Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nature",
+      "levels": [
+        {
+          "id": "sunflower_realistic",
+          "title": "Sunflower (Realistic)",
+          "subtitle": "Radial botanical structure with layered center and foliage.",
+          "difficulty": "Hard",
+          "rewardCoins": 115,
+          "recommendedBrushSize": 4,
+          "guideAsset": "assets/images/girl.png",
+          "palette": [
+            { "id": "petal_yellow", "label": "Petal Yellow", "hex": "#F6C537" },
+            { "id": "center_dark", "label": "Center Dark", "hex": "#5C3C22" },
+            { "id": "center_light", "label": "Center Light", "hex": "#7A532C" },
+            { "id": "stem_green", "label": "Stem Green", "hex": "#3B8E49" },
+            { "id": "leaf_green", "label": "Leaf Green", "hex": "#4AA45A" }
+          ],
+          "regions": [
+            {
+              "id": "sunflower_petal_01",
+              "label": "Petal 01",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M500,300 C474,226 476,150 500,92 C526,150 526,226 500,300 Z"
+            },
+            {
+              "id": "sunflower_petal_02",
+              "label": "Petal 02",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M560,322 C614,266 674,220 734,206 C716,264 670,320 600,356 Z"
+            },
+            {
+              "id": "sunflower_petal_03",
+              "label": "Petal 03",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M592,356 C654,318 714,286 776,276 C752,334 700,382 626,410 Z"
+            },
+            {
+              "id": "sunflower_petal_04",
+              "label": "Petal 04",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M620,408 C694,378 766,372 836,392 C776,438 700,456 620,448 Z"
+            },
+            {
+              "id": "sunflower_petal_05",
+              "label": "Petal 05",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M626,446 C700,478 752,526 776,584 C712,574 654,540 592,492 Z"
+            },
+            {
+              "id": "sunflower_petal_06",
+              "label": "Petal 06",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M590,494 C648,528 694,578 718,640 C654,626 600,586 554,530 Z"
+            },
+            {
+              "id": "sunflower_petal_07",
+              "label": "Petal 07",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M500,546 C530,612 532,692 500,766 C468,692 470,612 500,546 Z"
+            },
+            {
+              "id": "sunflower_petal_08",
+              "label": "Petal 08",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M446,530 C400,586 346,626 282,640 C306,578 352,528 410,494 Z"
+            },
+            {
+              "id": "sunflower_petal_09",
+              "label": "Petal 09",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M408,492 C346,540 288,574 224,584 C248,526 300,478 374,446 Z"
+            },
+            {
+              "id": "sunflower_petal_10",
+              "label": "Petal 10",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M380,448 C300,456 224,438 164,392 C234,372 306,378 380,408 Z"
+            },
+            {
+              "id": "sunflower_petal_11",
+              "label": "Petal 11",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M374,410 C300,382 248,334 224,276 C286,286 346,318 408,356 Z"
+            },
+            {
+              "id": "sunflower_petal_12",
+              "label": "Petal 12",
+              "type": "path",
+              "targetColorId": "petal_yellow",
+              "viewBoxSize": 1000,
+              "svgPath": "M400,356 C330,320 284,264 266,206 C326,220 386,266 440,322 Z"
+            },
+            {
+              "id": "sunflower_center_outer",
+              "label": "Seed Disc Outer",
+              "type": "path",
+              "targetColorId": "center_dark",
+              "viewBoxSize": 1000,
+              "svgPath": "M500,548 C424,548 362,488 362,412 C362,336 424,276 500,276 C576,276 638,336 638,412 C638,488 576,548 500,548 Z"
+            },
+            {
+              "id": "sunflower_center_inner",
+              "label": "Seed Disc Inner",
+              "type": "path",
+              "targetColorId": "center_light",
+              "viewBoxSize": 1000,
+              "svgPath": "M500,510 C446,510 402,466 402,412 C402,358 446,314 500,314 C554,314 598,358 598,412 C598,466 554,510 500,510 Z"
+            },
+            {
+              "id": "sunflower_stem",
+              "label": "Main Stem",
+              "type": "path",
+              "targetColorId": "stem_green",
+              "viewBoxSize": 1000,
+              "svgPath": "M468,548 C458,640 454,760 468,920 C478,952 522,952 532,920 C546,760 542,640 532,548 Z"
+            },
+            {
+              "id": "sunflower_leaf_left",
+              "label": "Left Leaf",
+              "type": "path",
+              "targetColorId": "leaf_green",
+              "viewBoxSize": 1000,
+              "svgPath": "M468,716 C392,676 314,690 238,752 C298,804 388,816 468,780 Z"
+            },
+            {
+              "id": "sunflower_leaf_right",
+              "label": "Right Leaf",
+              "type": "path",
+              "targetColorId": "leaf_green",
+              "viewBoxSize": 1000,
+              "svgPath": "M532,672 C610,632 704,644 788,716 C714,768 620,784 532,744 Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

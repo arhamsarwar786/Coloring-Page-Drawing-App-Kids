@@ -37,6 +37,7 @@ class LevelRegionModel {
     this.ry,
     this.svgPath,
     this.viewBoxSize,
+    this.targetColorId,
     this.points = const <Offset>[],
   });
 
@@ -50,6 +51,7 @@ class LevelRegionModel {
   final double? ry;
   final String? svgPath;
   final double? viewBoxSize;
+  final String? targetColorId;
   final List<Offset> points;
 
   factory LevelRegionModel.fromJson(Map<String, dynamic> json) {
@@ -74,6 +76,7 @@ class LevelRegionModel {
       ry: (json['ry'] as num?)?.toDouble(),
       svgPath: json['svgPath'] as String?,
       viewBoxSize: (json['viewBoxSize'] as num?)?.toDouble(),
+      targetColorId: json['targetColorId'] as String?,
       points: rawPoints,
     );
   }
@@ -198,9 +201,13 @@ class LevelModel {
   Color get accentColor => palette.isNotEmpty ? palette.first.color : Colors.grey;
 
   String? getTargetColorIdForRegion(String regionId) {
+    final explicitTargetColorId = _explicitTargetColorIdFor(regionId);
+    if (explicitTargetColorId != null) {
+      return explicitTargetColorId;
+    }
+
     final regionName = regionId.toLowerCase();
-    
-    // Explicit color mapping based on region/level names to enforce strict coloring
+
     if (id == 'apple') {
       if (regionName.contains('body') || regionName.contains('shine')) return 'red';
       if (regionName.contains('leaf')) return 'green';
@@ -208,6 +215,10 @@ class LevelModel {
     } else if (id == 'banana') {
       if (regionName.contains('body')) return 'yellow';
       if (regionName.contains('tip')) return 'brown';
+    } else if (id == 'mango') {
+      if (regionName.contains('body')) return 'orange';
+      if (regionName.contains('stem')) return 'brown';
+      if (regionName.contains('leaf')) return 'green';
     } else if (id == 'cat') {
       if (regionName.contains('face') || regionName.contains('ear_left') || regionName.contains('ear_right')) return 'orange';
       if (regionName.contains('inner') || regionName.contains('nose')) return 'pink';
@@ -233,12 +244,29 @@ class LevelModel {
       if (regionName.contains('stem')) return 'green';
     }
 
-    // Fallback heuristic like before
+    // Fallback: match palette ID against region name
     for (final p in palette) {
       if (regionName.contains(p.id.toLowerCase())) {
         return p.id;
       }
     }
+    return null;
+  }
+
+  String? _explicitTargetColorIdFor(String regionId) {
+    for (final region in regions) {
+      if (region.id != regionId) {
+        continue;
+      }
+
+      final targetColorId = region.targetColorId;
+      if (targetColorId == null || targetColorId.trim().isEmpty) {
+        return null;
+      }
+
+      return targetColorId;
+    }
+
     return null;
   }
 

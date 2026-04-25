@@ -30,6 +30,7 @@ flutter:
 
   assets:
     - assets/data/app_content.json
+    - assets/data/realistic_content_pack.json
     - assets/references/
     - assets/images/
     - assets/json/

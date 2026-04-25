@@ -18,8 +18,9 @@ class PrivacyScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               StickerIconButton(
+                size: 56,
                 icon: Icons.arrow_back_rounded,
-                assetName: 'assets/images/retry.png',
+                // assetName: 'assets/images/retry.png',
                 onPressed: () => Navigator.pop(context),
               ),
               const SizedBox(height: 22),
@@ -36,8 +37,7 @@ class PrivacyScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                      color: const Color(0xFF222222), width: 2),
+                  border: Border.all(color: const Color(0xFF222222), width: 2),
                   boxShadow: const <BoxShadow>[
                     BoxShadow(
                       color: Color(0x22000000),
@@ -71,8 +71,7 @@ class PrivacyScreen extends StatelessWidget {
                   ),
                   child: const Text(
                     AppStrings.back,
-                    style: TextStyle(
-                        fontSize: 22, fontWeight: FontWeight.w900),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
                   ),
                 ),
               ),

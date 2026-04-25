@@ -232,20 +232,20 @@ class _DrawingScreenState extends State<DrawingScreen> {
                         top: 16,
                         child: Column(
                           children: [
-                            _SidebarIcon(
-                              icon: Icons.undo_rounded,
-                              assetName: 'assets/images/retry.png',
-                              onPressed: viewModel.undo,
-                            ),
-                            const SizedBox(height: 16),
-                            _SidebarIcon(
-                              icon: Icons.ads_click,
-                              assetName: 'assets/images/ads.png',
-                              onPressed: () {},
-                              opacity:
-                                  viewModel.nextLevelId != null ? 1.0 : 0.5,
-                            ),
-                            const SizedBox(height: 16),
+                            // _SidebarIcon(
+                            //   icon: Icons.undo_rounded,
+                            //   assetName: 'assets/images/retry.png',
+                            //   onPressed: viewModel.undo,
+                            // ),
+                            // const SizedBox(height: 16),
+                            // _SidebarIcon(
+                            //   icon: Icons.ads_click,
+                            //   assetName: 'assets/images/ads.png',
+                            //   onPressed: () {},
+                            //   opacity:
+                            //       viewModel.nextLevelId != null ? 1.0 : 0.5,
+                            // ),
+                            const SizedBox(height: 120),
                             _SidebarIcon(
                               icon: Icons.fast_forward_rounded,
                               assetName: 'assets/images/forward.png',

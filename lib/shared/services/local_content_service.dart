@@ -96,11 +96,82 @@ class LocalContentService {
 
   Future<HomeContentModel> _ensureLoaded() async {
     if (_rawContent != null) return _rawContent!;
-    final jsonString =
-        await rootBundle.loadString(AppConfig.contentAssetPath);
+    final jsonString = await rootBundle.loadString(AppConfig.contentAssetPath);
     final jsonMap = jsonDecode(jsonString) as Map<String, dynamic>;
-    _rawContent = HomeContentModel.fromJson(jsonMap);
+    final baseContent = HomeContentModel.fromJson(jsonMap);
+    final realisticPack = await _loadRealisticLevelPack();
+    _rawContent = _mergeRealisticPack(
+      baseContent: baseContent,
+      realisticPack: realisticPack,
+    );
     return _rawContent!;
+  }
+
+  Future<Map<String, List<LevelModel>>> _loadRealisticLevelPack() async {
+    try {
+      final jsonString =
+          await rootBundle.loadString(AppConfig.realisticPackAssetPath);
+      final jsonMap = jsonDecode(jsonString) as Map<String, dynamic>;
+      final categoryList = jsonMap['categories'] as List<dynamic>? ??
+          const <dynamic>[];
+      final byCategory = <String, List<LevelModel>>{};
+
+      for (final item in categoryList) {
+        if (item is! Map) continue;
+        final categoryMap = Map<String, dynamic>.from(item);
+        final categoryId = categoryMap['id'] as String?;
+        final levels =
+            categoryMap['levels'] as List<dynamic>? ?? const <dynamic>[];
+        if (categoryId == null || levels.isEmpty) continue;
+
+        final parsedLevels = <LevelModel>[];
+        for (final level in levels) {
+          if (level is! Map) continue;
+          parsedLevels.add(LevelModel.fromJson(Map<String, dynamic>.from(level)));
+        }
+
+        if (parsedLevels.isEmpty) continue;
+
+        byCategory[categoryId] = List<LevelModel>.unmodifiable(parsedLevels);
+      }
+
+      return byCategory;
+    } catch (_) {
+      return const <String, List<LevelModel>>{};
+    }
+  }
+
+  HomeContentModel _mergeRealisticPack({
+    required HomeContentModel baseContent,
+    required Map<String, List<LevelModel>> realisticPack,
+  }) {
+    if (realisticPack.isEmpty) {
+      return baseContent;
+    }
+
+    final mergedCategories = baseContent.categories.map((category) {
+      final additions = realisticPack[category.id] ?? const <LevelModel>[];
+      if (additions.isEmpty) {
+        return category;
+      }
+
+      final existingIds = category.levels.map((level) => level.id).toSet();
+      final newLevels = additions
+          .where((level) => !existingIds.contains(level.id))
+          .toList(growable: false);
+      if (newLevels.isEmpty) {
+        return category;
+      }
+
+      return category.copyWith(
+        levels: <LevelModel>[
+          ...category.levels,
+          ...newLevels,
+        ],
+      );
+    }).toList(growable: false);
+
+    return baseContent.copyWith(categories: mergedCategories);
   }
 
   Future<void> _ensureStateLoaded() async {
