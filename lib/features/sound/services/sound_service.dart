@@ -37,12 +37,15 @@ class SoundService with WidgetsBindingObserver {
 
   Future<void> startBackgroundMusic() async {
     if (!_musicEnabled) return;
-    if (_backgroundStarted) return;
     try {
-      await _player.setReleaseMode(ReleaseMode.loop);
-      await _player.setVolume(0.55);
-      await _player.play(AssetSource('audio/piano_bg.mp3'));
-      _backgroundStarted = true;
+      if (_backgroundStarted) {
+        await _player.resume();
+      } else {
+        await _player.setReleaseMode(ReleaseMode.loop);
+        await _player.setVolume(0.55);
+        await _player.play(AssetSource('audio/piano_bg.mp3'));
+        _backgroundStarted = true;
+      }
     } catch (_) {
       // ignore errors if audio cannot be played
     }
@@ -51,19 +54,16 @@ class SoundService with WidgetsBindingObserver {
   Future<void> stopBackgroundMusic() async {
     try {
       await _player.pause();
-      await _player.stop();
     } catch (_) {}
-    _backgroundStarted = false;
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       startBackgroundMusic();
-      return;
+    } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive || state == AppLifecycleState.hidden) {
+      stopBackgroundMusic();
     }
-
-    stopBackgroundMusic();
   }
 
   Future<void> playBrushFeedback() async {

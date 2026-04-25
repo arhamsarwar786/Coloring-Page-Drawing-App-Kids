@@ -504,6 +504,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
             final canvasDimension =
                 math.min(constraints.maxWidth, constraints.maxHeight);
             final canvasSize = Size.square(canvasDimension);
+            final scaleFactor = canvasDimension / 300.0;
             final skin = skinsVm.selectedSkin;
 
             for (final region in widget.level.regions) {
@@ -610,39 +611,40 @@ class _CanvasWidgetState extends State<CanvasWidget>
                           return Positioned(
                             left: 0,
                             right: 0,
-                            bottom: -74,
+                            bottom: -74 * scaleFactor,
                             child: SlideTransition(
                               position: _appreciationOffset,
                               child: ScaleTransition(
                                 scale: _appreciationScale,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: 14,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 24 * scaleFactor,
+                                    vertical: 14 * scaleFactor,
                                   ),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(20 * scaleFactor),
                                     boxShadow: <BoxShadow>[
                                       BoxShadow(
                                         color: selectedColor.withValues(
                                             alpha: 0.4),
-                                        blurRadius: 28,
-                                        spreadRadius: 2,
+                                        blurRadius: 28 * scaleFactor,
+                                        spreadRadius: 2 * scaleFactor,
                                       ),
                                     ],
                                     border: Border.all(
                                       color:
                                           selectedColor.withValues(alpha: 0.7),
-                                      width: 2.5,
+                                      width: 2.5 * scaleFactor,
                                     ),
                                   ),
                                   child: Text(
                                     message,
-                                    style: const TextStyle(
-                                      fontSize: 28,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 28 * scaleFactor,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF333333),
+                                      color: const Color(0xFF333333),
                                     ),
                                   ),
                                 ),
@@ -657,6 +659,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                         skin: skin,
                         tipColor: markerTipColor,
                         canvasDimension: canvasDimension,
+                        scaleFactor: scaleFactor,
                       ),
                     ],
                   ),
@@ -677,6 +680,7 @@ class _MarkerOverlay extends StatelessWidget {
     required this.skin,
     required this.tipColor,
     required this.canvasDimension,
+    required this.scaleFactor,
   });
 
   final ValueNotifier<Offset?> markerPosition;
@@ -684,10 +688,11 @@ class _MarkerOverlay extends StatelessWidget {
   final SkinModel skin;
   final Color tipColor;
   final double canvasDimension;
+  final double scaleFactor;
 
-  static const double _tipX = 28;
-  static const double _tipY = 150;
-  static const double _markerSize = 180;
+  double get _tipX => 28 * scaleFactor;
+  double get _tipY => 150 * scaleFactor;
+  double get _markerSize => 180 * scaleFactor;
 
   @override
   Widget build(BuildContext context) {
@@ -712,11 +717,11 @@ class _MarkerOverlay extends StatelessWidget {
                   errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                 ),
               Positioned(
-                left: _tipX - 10,
-                top: _tipY - 29,
+                left: _tipX - (10 * scaleFactor),
+                top: _tipY - (29 * scaleFactor),
                 child: CustomPaint(
                   painter: _NibPainter(color: Colors.transparent),
-                  size: const Size(20, 22),
+                  size: Size(20 * scaleFactor, 22 * scaleFactor),
                 ),
               ),
             ],

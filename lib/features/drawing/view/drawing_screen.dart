@@ -155,15 +155,22 @@ class _DrawingScreenState extends State<DrawingScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40),
                               child: Center(
-                                child: CanvasWidget(
-                                  level: level,
-                                  guideAsset: null, // we use paths n
-                                  filledRegions: viewModel.filledRegions,
-                                  onFill: viewModel.fillRegionAt,
-                                  enableColoring:
-                                      _coloringEnabled && !_awaitingPartTick,
-                                  onPhaseChanged: _onCanvasPhaseChanged,
-                                  onRegionFilled: _onRegionFilled,
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: SizedBox(
+                                    width: 1024,
+                                    height: 1024,
+                                    child: CanvasWidget(
+                                      level: level,
+                                      guideAsset: null, // we use paths n
+                                      filledRegions: viewModel.filledRegions,
+                                      onFill: viewModel.fillRegionAt,
+                                      enableColoring: _coloringEnabled &&
+                                          !_awaitingPartTick,
+                                      onPhaseChanged: _onCanvasPhaseChanged,
+                                      onRegionFilled: _onRegionFilled,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
