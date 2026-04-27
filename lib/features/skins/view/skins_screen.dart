@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../shared/components/doodle_text.dart';
 import '../../../shared/components/marker_preview.dart';
 import '../../../shared/components/sticker_icon_button.dart';
+import '../../../shared/utils/interaction_feedback.dart';
 import '../viewmodel/skins_viewmodel.dart';
 
 class SkinsScreen extends StatelessWidget {
@@ -67,7 +68,10 @@ class SkinsScreen extends StatelessWidget {
                       final skin = viewModel.skins[index];
                       final isSelected = skin.id == viewModel.selectedSkinId;
                       return InkWell(
-                        onTap: () => viewModel.selectSkin(skin.id),
+                        onTap: tapActionCallback(
+                          context,
+                          () => viewModel.selectSkin(skin.id),
+                        ),
                         borderRadius: BorderRadius.circular(28),
                         child: Container(
                           decoration: BoxDecoration(
@@ -81,7 +85,7 @@ class SkinsScreen extends StatelessWidget {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),

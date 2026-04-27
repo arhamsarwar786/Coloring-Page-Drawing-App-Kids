@@ -28,6 +28,7 @@ class DrawingViewModel extends BaseViewModel {
   String? _loadedLevelId;
   String? _launchLevelId;
   String? _nextLevelId;
+  String? _previousLevelId;
   int? _levelNumber;
   int _undoCount = 0;
   int? _rewardCoins;
@@ -38,6 +39,7 @@ class DrawingViewModel extends BaseViewModel {
   String? get launchLevelId => _launchLevelId;
   int? get levelNumber => _levelNumber;
   String? get nextLevelId => _nextLevelId;
+  String? get previousLevelId => _previousLevelId;
   bool get canUndo => _undoStack.isNotEmpty;
   bool get canRedo => _redoStack.isNotEmpty;
   int? get rewardCoins => _rewardCoins;
@@ -77,6 +79,7 @@ class DrawingViewModel extends BaseViewModel {
       _loadedLevelId = levelId;
       _launchLevelId = await _repository.getLaunchLevelId();
       _nextLevelId = await _repository.getNextLevelId(levelId);
+      _previousLevelId = await _repository.getPreviousLevelId(levelId);
       _levelNumber = await _repository.getLevelNumber(levelId);
       _level = loadedLevel.copyWith(isCompleted: false);
       _selectedColor =

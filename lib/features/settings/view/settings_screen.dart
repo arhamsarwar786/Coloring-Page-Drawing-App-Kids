@@ -65,13 +65,6 @@ class SettingsDialog extends StatelessWidget {
                                 onTap: viewModel.toggleMusic,
                               ),
                               _SettingIconTile(
-                                assetName: viewModel.hapticsEnabled
-                                    ? 'assets/images/phone.png'
-                                    : 'assets/images/phone-off.png',
-                                active: viewModel.hapticsEnabled,
-                                onTap: viewModel.toggleHaptics,
-                              ),
-                              _SettingIconTile(
                                 assetName: viewModel.soundEnabled
                                     ? 'assets/images/sound.png'
                                     : 'assets/images/sound-off.png',

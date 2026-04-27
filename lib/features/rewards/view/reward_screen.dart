@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../app/routes/app_routes.dart';
+import '../../../shared/utils/interaction_feedback.dart';
 
 class RewardScreen extends StatelessWidget {
   const RewardScreen({super.key, required this.args});
@@ -132,8 +133,9 @@ class RewardScreen extends StatelessWidget {
                             const SizedBox(width: 12),
                             Expanded(
                               child: _RewardButton(
-                                label:
-                                    args.nextLevelId != null ? 'Next Level' : 'Home',
+                                label: args.nextLevelId != null
+                                    ? 'Next Level'
+                                    : 'Home',
                                 // icon: Icons.arrow_forward_rounded,
                                 color: const Color(0xFF31B24C),
                                 onTap: () => _openNext(context),
@@ -170,7 +172,7 @@ class _RewardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: tapActionCallback(context, onTap),
       child: Container(
         height: 58,
         decoration: BoxDecoration(

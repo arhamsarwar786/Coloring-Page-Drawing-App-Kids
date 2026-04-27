@@ -98,19 +98,12 @@ class HomeViewModel extends BaseViewModel {
   }
 
   bool isLevelLocked(LevelModel level) {
-    for (final category in categories) {
-      final index =
-          category.levels.indexWhere((item) => item.id == level.id);
-      if (index == -1) continue;
-      if (index == 0) return false;
-      return !category.levels[index - 1].isCompleted;
-    }
     return false;
   }
 
   Future<bool> prepareLevel(String levelId) async {
     final level = _findLevel(levelId);
-    if (level == null || isLevelLocked(level)) return false;
+    if (level == null) return false;
     await _repository.saveLastPlayedLevel(levelId);
     _lastPlayedLevelId = levelId;
     notifyListeners();
@@ -124,5 +117,14 @@ class HomeViewModel extends BaseViewModel {
       }
     }
     return null;
+  }
+
+  int? levelNumberFor(String levelId) {
+    final allLevels = categories.expand((category) => category.levels).toList();
+    final index = allLevels.indexWhere((level) => level.id == levelId);
+    if (index == -1) {
+      return null;
+    }
+    return index + 1;
   }
 }

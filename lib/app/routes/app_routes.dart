@@ -76,9 +76,13 @@ abstract final class AppRoutes {
 class DrawingRouteArgs {
   const DrawingRouteArgs({
     required this.levelId,
+    this.levelTitle,
+    this.levelNumber,
   });
 
   final String levelId;
+  final String? levelTitle;
+  final int? levelNumber;
 }
 
 class RewardRouteArgs {

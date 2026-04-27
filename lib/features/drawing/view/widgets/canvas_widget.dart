@@ -57,6 +57,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
   final Map<String, Path> _pathCache = <String, Path>{};
   final Map<String, Path> _paintPathCache = <String, Path>{};
+  final Set<int> _activePointerIds = <int>{};
   Map<String, double> _activeOutlineRegionShares = <String, double>{};
   Size? _cachedCanvasSize;
   String? _activeRegionId;
@@ -220,6 +221,22 @@ class _CanvasWidgetState extends State<CanvasWidget>
     if (_lastReportedPhase == phase) return;
     _lastReportedPhase = phase;
     widget.onPhaseChanged?.call(phase);
+  }
+
+  bool get _hasMultipleActivePointers => _activePointerIds.length > 1;
+
+  void _handlePointerDown(PointerDownEvent event) {
+    _activePointerIds.add(event.pointer);
+    if (_hasMultipleActivePointers) {
+      _outlineAnimationController.stop();
+      _drawingStepController.pauseCurrentPart();
+      _drawingStepController.handleFingerLift();
+      _coloringStepController.handlePaintEnd();
+    }
+  }
+
+  void _handlePointerEnd(PointerEvent event) {
+    _activePointerIds.remove(event.pointer);
   }
 
   Path _pathFor(String regionId, Size canvasSize) {
@@ -395,15 +412,13 @@ class _CanvasWidgetState extends State<CanvasWidget>
     });
   }
 
-  void _onLongPressStart(
-    LongPressStartDetails details,
-    BoxConstraints constraints,
-    double canvasDimension,
-  ) {
+  void _startOutlineSlideGesture({
+    required Offset localPosition,
+    required double canvasDimension,
+  }) {
     if (!_gestureCoordinator.acceptsOutlineGestures) return;
 
-    final local = _toLocal(details.localPosition, constraints, canvasDimension);
-    _updateMarkerPosition(local);
+    _updateMarkerPosition(localPosition);
 
     if (!_drawingStepController.beginCurrentPart()) {
       return;
@@ -422,10 +437,35 @@ class _CanvasWidgetState extends State<CanvasWidget>
     _animateMarkerTap();
   }
 
-  void _onLongPressEnd() {
+  void _updateOutlineSlideGesture(Offset localPosition) {
+    if (!_gestureCoordinator.acceptsOutlineGestures &&
+        !_drawingStepController.isAnimating) {
+      return;
+    }
+
+    _updateMarkerPosition(localPosition);
+  }
+
+  void _endOutlineSlideGesture() {
     _outlineAnimationController.stop();
     _drawingStepController.pauseCurrentPart();
     _drawingStepController.handleFingerLift();
+  }
+
+  void _onLongPressStart(
+    LongPressStartDetails details,
+    BoxConstraints constraints,
+    double canvasDimension,
+  ) {
+    final local = _toLocal(details.localPosition, constraints, canvasDimension);
+    _startOutlineSlideGesture(
+      localPosition: local,
+      canvasDimension: canvasDimension,
+    );
+  }
+
+  void _onLongPressEnd() {
+    _endOutlineSlideGesture();
   }
 
   void _onLongPressMoveUpdate(
@@ -433,13 +473,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
     BoxConstraints constraints,
     double canvasDimension,
   ) {
-    if (!_gestureCoordinator.acceptsOutlineGestures &&
-        !_drawingStepController.isAnimating) {
-      return;
-    }
-
     final local = _toLocal(details.localPosition, constraints, canvasDimension);
-    _updateMarkerPosition(local);
+    _updateOutlineSlideGesture(local);
   }
 
   void _handleColorGesture({
@@ -491,8 +526,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
         final phase = _gestureCoordinator.resolvePhase();
         final isColoringActive =
             phase == GuidedCanvasPhase.coloring && widget.enableColoring;
-        final markerTipColor =
-            isColoringActive ? selectedColor : Colors.black;
+        final markerTipColor = isColoringActive ? selectedColor : Colors.black;
         final repaintListenable = Listenable.merge(<Listenable>[
           _drawingStepController,
           _coloringStepController,
@@ -512,160 +546,212 @@ class _CanvasWidgetState extends State<CanvasWidget>
               _paintPathFor(region.id, canvasSize);
             }
 
-            return GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onLongPressStart: (details) =>
-                  _onLongPressStart(details, constraints, canvasDimension),
-              onLongPressMoveUpdate: (details) => _onLongPressMoveUpdate(
-                details,
-                constraints,
-                canvasDimension,
-              ),
-              onLongPressEnd: (_) => _onLongPressEnd(),
-              onPanStart: (details) {
-                final local = _toLocal(
-                  details.localPosition,
-                  constraints,
-                  canvasDimension,
-                );
-                _animateMarkerTap();
-                _handleColorGesture(
-                  fingerLocal: local,
-                  canvasSize: canvasSize,
-                  selectedColor: selectedColor,
-                  startStroke: true,
-                );
-              },
-              onPanUpdate: (details) {
-                final local = _toLocal(
-                  details.localPosition,
-                  constraints,
-                  canvasDimension,
-                );
-                _handleColorGesture(
-                  fingerLocal: local,
-                  canvasSize: canvasSize,
-                  selectedColor: selectedColor,
-                  startStroke: false,
-                );
-              },
-              onPanEnd: (_) => _onColorGestureEnd(selectedColor),
-              onPanCancel: () => _onColorGestureEnd(selectedColor),
-              child: Center(
-                child: Container(
-                  width: canvasDimension,
-                  height: canvasDimension,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      width: 2,
-                    ),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.12),
-                        blurRadius: 20,
-                        offset: const Offset(0, 12),
-                      ),
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: RepaintBoundary(
-                          child: CustomPaint(
-                            painter: AdvancedCanvasPainter(
-                              level: widget.level,
-                              paths: _pathCache,
-                              paintPaths: _paintPathCache,
-                              filledRegions: widget.filledRegions,
-                              drawingController: _drawingStepController,
-                              coloringController: _coloringStepController,
-                              activePartHighlighter: _activePartHighlighter,
-                              fillAnimationValue:
-                                  _fillAnimationController.value,
-                              activeFillRegionId: _activeRegionId,
-                              activeFillRegionOriginalColor:
-                                  _activeRegionOriginalColor,
-                              repaint: repaintListenable,
-                            ),
-                            size: canvasSize,
-                          ),
-                        ),
-                      ),
-                      ValueListenableBuilder<String?>(
-                        valueListenable: _appreciationMessage,
-                        builder: (context, message, _) {
-                          if (message == null) {
-                            return const SizedBox.shrink();
-                          }
+            return Listener(
+                onPointerDown: _handlePointerDown,
+                onPointerUp: _handlePointerEnd,
+                onPointerCancel: _handlePointerEnd,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
 
-                          return Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: -74 * scaleFactor,
-                            child: SlideTransition(
-                              position: _appreciationOffset,
-                              child: ScaleTransition(
-                                scale: _appreciationScale,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 24 * scaleFactor,
-                                    vertical: 14 * scaleFactor,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20 * scaleFactor),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                        color: selectedColor.withValues(
-                                            alpha: 0.4),
-                                        blurRadius: 28 * scaleFactor,
-                                        spreadRadius: 2 * scaleFactor,
+                  // ✅ NEW: TAP SUPPORT (OUTLINE DRAWING)
+                  // ✅ EXISTING (UNCHANGED)
+                  onLongPressStart: (details) {
+                    if (_hasMultipleActivePointers) return;
+                    _onLongPressStart(details, constraints, canvasDimension);
+                  },
+
+                  onLongPressMoveUpdate: (details) {
+                    if (_hasMultipleActivePointers) return;
+                    _onLongPressMoveUpdate(
+                      details,
+                      constraints,
+                      canvasDimension,
+                    );
+                  },
+
+                  onLongPressEnd: (_) {
+                    if (_hasMultipleActivePointers) return;
+                    _onLongPressEnd();
+                  },
+                  onPanStart: (details) {
+                    if (_hasMultipleActivePointers) return;
+                    final local = _toLocal(
+                      details.localPosition,
+                      constraints,
+                      canvasDimension,
+                    );
+                    if (_gestureCoordinator.acceptsOutlineGestures) {
+                      _startOutlineSlideGesture(
+                        localPosition: local,
+                        canvasDimension: canvasDimension,
+                      );
+                      return;
+                    }
+
+                    _animateMarkerTap();
+                    _handleColorGesture(
+                      fingerLocal: local,
+                      canvasSize: canvasSize,
+                      selectedColor: selectedColor,
+                      startStroke: true,
+                    );
+                  },
+                  onPanUpdate: (details) {
+                    if (_hasMultipleActivePointers) return;
+                    final local = _toLocal(
+                      details.localPosition,
+                      constraints,
+                      canvasDimension,
+                    );
+                    if (_gestureCoordinator.acceptsOutlineGestures ||
+                        _drawingStepController.isAnimating) {
+                      _updateOutlineSlideGesture(local);
+                      return;
+                    }
+
+                    _handleColorGesture(
+                      fingerLocal: local,
+                      canvasSize: canvasSize,
+                      selectedColor: selectedColor,
+                      startStroke: false,
+                    );
+                  },
+                  onPanEnd: (_) {
+                    if (_hasMultipleActivePointers) return;
+                    if (_gestureCoordinator.acceptsOutlineGestures ||
+                        _drawingStepController.isAnimating) {
+                      _endOutlineSlideGesture();
+                      return;
+                    }
+
+                    _onColorGestureEnd(selectedColor);
+                  },
+                  onPanCancel: () {
+                    if (_hasMultipleActivePointers) return;
+                    if (_gestureCoordinator.acceptsOutlineGestures ||
+                        _drawingStepController.isAnimating) {
+                      _endOutlineSlideGesture();
+                      return;
+                    }
+
+                    _onColorGestureEnd(selectedColor);
+                  },
+                  child: Center(
+                    child: Container(
+                      width: canvasDimension,
+                      height: canvasDimension,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.black.withValues(alpha: 0.08),
+                          width: 2,
+                        ),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.12),
+                            blurRadius: 20,
+                            offset: const Offset(0, 12),
+                          ),
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: <Widget>[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: RepaintBoundary(
+                              child: CustomPaint(
+                                painter: AdvancedCanvasPainter(
+                                  level: widget.level,
+                                  paths: _pathCache,
+                                  paintPaths: _paintPathCache,
+                                  filledRegions: widget.filledRegions,
+                                  drawingController: _drawingStepController,
+                                  coloringController: _coloringStepController,
+                                  activePartHighlighter: _activePartHighlighter,
+                                  fillAnimationValue:
+                                      _fillAnimationController.value,
+                                  activeFillRegionId: _activeRegionId,
+                                  activeFillRegionOriginalColor:
+                                      _activeRegionOriginalColor,
+                                  repaint: repaintListenable,
+                                ),
+                                size: canvasSize,
+                              ),
+                            ),
+                          ),
+                          ValueListenableBuilder<String?>(
+                            valueListenable: _appreciationMessage,
+                            builder: (context, message, _) {
+                              if (message == null) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return Positioned(
+                                left: 0,
+                                right: 0,
+                                bottom: -74 * scaleFactor,
+                                child: SlideTransition(
+                                  position: _appreciationOffset,
+                                  child: ScaleTransition(
+                                    scale: _appreciationScale,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 24 * scaleFactor,
+                                        vertical: 14 * scaleFactor,
                                       ),
-                                    ],
-                                    border: Border.all(
-                                      color:
-                                          selectedColor.withValues(alpha: 0.7),
-                                      width: 2.5 * scaleFactor,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    message,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 28 * scaleFactor,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF333333),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(
+                                            20 * scaleFactor),
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                            color: selectedColor.withValues(
+                                                alpha: 0.4),
+                                            blurRadius: 28 * scaleFactor,
+                                            spreadRadius: 2 * scaleFactor,
+                                          ),
+                                        ],
+                                        border: Border.all(
+                                          color: selectedColor.withValues(
+                                              alpha: 0.7),
+                                          width: 2.5 * scaleFactor,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        message,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 28 * scaleFactor,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF333333),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          );
-                        },
+                              );
+                            },
+                          ),
+                          _MarkerOverlay(
+                            markerPosition: _markerPosition,
+                            tapScaleController: _tapScaleController,
+                            skin: skin,
+                            tipColor: markerTipColor,
+                            canvasDimension: canvasDimension,
+                            scaleFactor: scaleFactor,
+                          ),
+                        ],
                       ),
-                      _MarkerOverlay(
-                        markerPosition: _markerPosition,
-                        tapScaleController: _tapScaleController,
-                        skin: skin,
-                        tipColor: markerTipColor,
-                        canvasDimension: canvasDimension,
-                        scaleFactor: scaleFactor,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            );
+                ));
           },
         );
       },
@@ -720,7 +806,7 @@ class _MarkerOverlay extends StatelessWidget {
                 left: _tipX - (10 * scaleFactor),
                 top: _tipY - (29 * scaleFactor),
                 child: CustomPaint(
-                  painter: _NibPainter(color: Colors.transparent),
+                  painter: const _NibPainter(color: Colors.transparent),
                   size: Size(20 * scaleFactor, 22 * scaleFactor),
                 ),
               ),

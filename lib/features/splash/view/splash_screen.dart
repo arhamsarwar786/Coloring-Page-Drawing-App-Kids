@@ -35,17 +35,15 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _startFlow() async {
-    final soundService = context.read<SoundService>();
-    // 🎵 Start background music loop immediately!
-    soundService.startBackgroundMusic();
-
     final settingsViewModel = context.read<SettingsViewModel>();
     await settingsViewModel.ensureLoaded();
 
     if (!mounted) return;
 
-    await Future<void>.delayed(
-        const Duration(seconds: 3)); // ⏳ Stay on splash for 3 sec
+    final soundService = context.read<SoundService>();
+    await soundService.startBackgroundMusic();
+
+    await Future<void>.delayed(const Duration(seconds: 3));
 
     if (!mounted) return;
 
@@ -112,37 +110,35 @@ class _SplashLoadingAnimation extends StatelessWidget {
                     clipBehavior: Clip.none,
                     alignment: Alignment.centerLeft,
                     children: <Widget>[
-                      // Track background
                       Container(
                         height: 14,
                         width: barWidth,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
+                          color: Colors.white.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      // Progress Fill
                       Container(
                         height: 14,
                         width: currentWidth,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFFDFFF00), // Parrot
-                              Color(0xFF90EE90), // Light Green
+                            colors: <Color>[
+                              Color(0xFFDFFF00),
+                              Color(0xFF90EE90),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
+                          boxShadow: <BoxShadow>[
                             BoxShadow(
-                              color: const Color(0xFFDFFF00).withOpacity(0.4),
+                              color: const Color(0xFFDFFF00)
+                                  .withValues(alpha: 0.4),
                               blurRadius: 10,
                               offset: const Offset(0, 0),
                             ),
                           ],
                         ),
                       ),
-                      // Moving Marker on top
                       Positioned(
                         left: currentWidth - 32,
                         top: -42,
@@ -153,8 +149,11 @@ class _SplashLoadingAnimation extends StatelessWidget {
                             'assets/images/markerp.png',
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.brush_rounded,
-                                    color: Colors.white, size: 34),
+                                const Icon(
+                              Icons.brush_rounded,
+                              color: Colors.white,
+                              size: 34,
+                            ),
                           ),
                         ),
                       ),

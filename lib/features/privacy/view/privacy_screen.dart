@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../shared/components/doodle_text.dart';
 import '../../../shared/components/sticker_icon_button.dart';
+import '../../../shared/utils/interaction_feedback.dart';
 
 class PrivacyScreen extends StatelessWidget {
   const PrivacyScreen({super.key});
@@ -60,7 +61,10 @@ class PrivacyScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: tapActionCallback(
+                    context,
+                    () => Navigator.pop(context),
+                  ),
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFF33E61F),
                     foregroundColor: Colors.white,

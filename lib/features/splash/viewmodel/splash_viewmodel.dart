@@ -18,13 +18,12 @@ class SplashViewModel extends BaseViewModel {
     _started = true;
     await Future<void>.delayed(
         const Duration(milliseconds: AppConfig.splashDelayMs));
-    final launchLevelId = await _repository.getLaunchLevelId();
-    if (!context.mounted || launchLevelId == null) return;
+    await _repository.loadHomeContent();
+    if (!context.mounted) return;
 
     Navigator.pushReplacementNamed(
       context,
-      AppRoutes.drawing,
-      arguments: DrawingRouteArgs(levelId: launchLevelId),
+      AppRoutes.home,
     );
   }
 }

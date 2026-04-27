@@ -5,6 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/routes/app_routes.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../shared/components/level_preview.dart';
+import '../../../shared/utils/interaction_feedback.dart';
 import '../../../shared/widgets/loader.dart';
 import '../../drawing/model/color_model.dart';
 import '../../levels/model/level_model.dart';
@@ -232,51 +235,6 @@ class _DrawingScreenState extends State<DrawingScreen> {
                           ],
                         ),
                       ),
-
-                      // Right Column Icons
-                      Positioned(
-                        right: 16,
-                        top: 16,
-                        child: Column(
-                          children: [
-                            // _SidebarIcon(
-                            //   icon: Icons.undo_rounded,
-                            //   assetName: 'assets/images/retry.png',
-                            //   onPressed: viewModel.undo,
-                            // ),
-                            // const SizedBox(height: 16),
-                            // _SidebarIcon(
-                            //   icon: Icons.ads_click,
-                            //   assetName: 'assets/images/ads.png',
-                            //   onPressed: () {},
-                            //   opacity:
-                            //       viewModel.nextLevelId != null ? 1.0 : 0.5,
-                            // ),
-                            const SizedBox(height: 120),
-                            _SidebarIcon(
-                              icon: Icons.fast_forward_rounded,
-                              assetName: 'assets/images/forward.png',
-                              onPressed: viewModel.isCompleted
-                                  ? null
-                                  : () {
-                                      if (viewModel.nextLevelId != null) {
-                                        Navigator.pushReplacementNamed(
-                                          context,
-                                          AppRoutes.drawing,
-                                          arguments: DrawingRouteArgs(
-                                            levelId: viewModel.nextLevelId!,
-                                          ),
-                                        );
-                                      }
-                                    },
-                              opacity: viewModel.nextLevelId != null &&
-                                      !viewModel.isCompleted
-                                  ? 1.0
-                                  : 0.5,
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -290,28 +248,39 @@ class _DrawingScreenState extends State<DrawingScreen> {
 
   Widget _buildBottomAction(LevelModel level, DrawingViewModel viewModel) {
     final isColorPhase = _canvasPhase == GuidedCanvasPhase.coloring;
+    Widget actionChild = const SizedBox(height: 86);
 
     if (_awaitingPartTick && isColorPhase) {
-      return _TickActionButton(
+      actionChild = _TickActionButton(
         onPressed: _unlockNextColorPart,
       );
-    }
-
-    if (isColorPhase && !_coloringEnabled) {
-      return _TickActionButton(
+    } else if (isColorPhase && !_coloringEnabled) {
+      actionChild = _TickActionButton(
         onPressed: _startColoringPhase,
       );
-    }
-
-    if (isColorPhase && _coloringEnabled) {
-      return _ColorPaletteRow(
+    } else if (isColorPhase && _coloringEnabled) {
+      actionChild = _ColorPaletteRow(
         palette: level.palette,
         selectedColorId: viewModel.selectedColor?.id,
         onSelect: viewModel.selectColor,
       );
     }
 
-    return const SizedBox(height: 86);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        _LevelNavigationRow(
+          onPrevious: viewModel.previousLevelId == null
+              ? null
+              : () => _openLevelById(viewModel.previousLevelId!),
+          onNext: viewModel.nextLevelId == null
+              ? null
+              : () => _openLevelById(viewModel.nextLevelId!),
+        ),
+        const SizedBox(height: 18),
+        actionChild,
+      ],
+    );
   }
 
   void _onCanvasPhaseChanged(GuidedCanvasPhase phase) {
@@ -367,6 +336,14 @@ class _DrawingScreenState extends State<DrawingScreen> {
       ),
     );
   }
+
+  void _openLevelById(String levelId) {
+    Navigator.pushReplacementNamed(
+      context,
+      AppRoutes.drawing,
+      arguments: DrawingRouteArgs(levelId: levelId),
+    );
+  }
 }
 
 class _TickActionButton extends StatelessWidget {
@@ -377,7 +354,7 @@ class _TickActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: tapActionCallback(context, () async => onPressed()),
       child: Container(
         width: 92,
         height: 92,
@@ -403,37 +380,112 @@ class _TickActionButton extends StatelessWidget {
   }
 }
 
+class _LevelNavigationRow extends StatelessWidget {
+  const _LevelNavigationRow({
+    required this.onPrevious,
+    required this.onNext,
+  });
+
+  final VoidCallback? onPrevious;
+  final VoidCallback? onNext;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        children: <Widget>[
+          _PreviousLevelButton(onPressed: onPrevious),
+          const SizedBox(width: 16),
+          Expanded(
+            child: SizedBox(
+              height: 56,
+              child: FilledButton(
+                onPressed: tapActionCallback(context, onNext),
+                style: FilledButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFD54F),
+                  foregroundColor: const Color(0xFF2A2200),
+                  disabledBackgroundColor:
+                      const Color(0xFFFFD54F).withValues(alpha: 0.45),
+                  disabledForegroundColor:
+                      const Color(0xFF2A2200).withValues(alpha: 0.45),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+                child: Text(
+                  AppStrings.nextLevel,
+                  style: GoogleFonts.fredoka(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PreviousLevelButton extends StatelessWidget {
+  const _PreviousLevelButton({required this.onPressed});
+
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 56,
+      height: 56,
+      child: FilledButton(
+        onPressed: tapActionCallback(context, onPressed),
+        style: FilledButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: const Color(0xFF222222),
+          disabledBackgroundColor: Colors.white.withValues(alpha: 0.5),
+          disabledForegroundColor:
+              const Color(0xFF222222).withValues(alpha: 0.4),
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: BorderSide(
+              color: Colors.black.withValues(alpha: 0.08),
+            ),
+          ),
+        ),
+        child: const Icon(Icons.arrow_back_rounded, size: 28),
+      ),
+    );
+  }
+}
+
 class _SidebarIcon extends StatelessWidget {
   const _SidebarIcon({
     required this.icon,
     this.assetName,
     this.onPressed,
-    this.opacity = 1.0,
-    this.backgroundColor = Colors.white,
-    this.iconColor,
   });
 
   final IconData icon;
   final String? assetName;
   final VoidCallback? onPressed;
-  final double opacity;
-  final Color backgroundColor;
-  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: opacity,
-      child: GestureDetector(
-        onTap: onPressed,
-        child: SizedBox(
-          width: 42,
-          height: 42,
-          child: assetName != null
-              ? Image.asset(assetName!, fit: BoxFit.contain)
-              : Icon(icon,
-                  color: iconColor ?? const Color(0xFF666666), size: 28),
-        ),
+    return GestureDetector(
+      onTap: tapActionCallback(context, onPressed),
+      child: SizedBox(
+        width: 42,
+        height: 42,
+        child: assetName != null
+            ? Image.asset(assetName!, fit: BoxFit.contain)
+            : Icon(
+                icon,
+                color: const Color(0xFF666666),
+                size: 28,
+              ),
       ),
     );
   }
@@ -501,63 +553,17 @@ class _LevelBadge extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           // Small preview of the completed level
-          SizedBox(
-            width: 48,
-            height: 48,
-            child: CustomPaint(
-              painter: _ReferencePreviewPainter(level: level),
-              size: const Size(48, 48),
-            ),
+          LevelPreview(
+            level: level,
+            size: 48,
+            backgroundColor: const Color(0xFFF8FBFF),
+            padding: const EdgeInsets.all(6),
+            borderRadius: BorderRadius.circular(12),
           ),
         ],
       ),
     );
   }
-}
-
-class _ReferencePreviewPainter extends CustomPainter {
-  final LevelModel level;
-
-  _ReferencePreviewPainter({required this.level});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // We assume levels are designed for 100x100.
-    // Scale it down to fit the 48x48 box with some padding.
-    canvas.save();
-    canvas.scale(size.width / 100, size.height / 100);
-
-    // Slight padding inside the 100x100 space
-    canvas.translate(10, 10);
-    canvas.scale(0.8, 0.8);
-
-    for (final region in level.regions) {
-      final path = region.toPath(const Size(100, 100));
-
-      Color regionColor = level.getTargetColorForRegion(region.id);
-
-      final paint = Paint()
-        ..style = PaintingStyle.fill
-        ..color = regionColor
-        ..isAntiAlias = true;
-
-      canvas.drawPath(path, paint);
-
-      final strokePaint = Paint()
-        ..style = PaintingStyle.stroke
-        ..color = Colors.black.withValues(alpha: 0.3)
-        ..strokeWidth = 2
-        ..isAntiAlias = true;
-
-      canvas.drawPath(path, strokePaint);
-    }
-
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(covariant _ReferencePreviewPainter oldDelegate) =>
-      oldDelegate.level != level;
 }
 
 class _ColorPaletteRow extends StatelessWidget {
@@ -573,35 +579,34 @@ class _ColorPaletteRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: palette.map((colorOption) {
-          final isSelected = selectedColorId == colorOption.id;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: GestureDetector(
-              onTap: () => onSelect(colorOption),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: isSelected ? 86 : 76,
-                height: isSelected ? 86 : 76,
-                decoration: BoxDecoration(
-                  color: colorOption.color,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: isSelected
-                        ? const Color(0xFF111111)
-                        : Colors.white.withValues(alpha: 0.6),
-                    width: isSelected ? 4.0 : 2.5,
-                  ),
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      // mainAxisAlignment: MainAxisAlignment.center,
+      children: palette.map((colorOption) {
+        final isSelected = selectedColorId == colorOption.id;
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: GestureDetector(
+            onTap: () => onSelect(colorOption),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: isSelected ? 86 : 76,
+              height: isSelected ? 86 : 76,
+              decoration: BoxDecoration(
+                color: colorOption.color,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: isSelected
+                      ? const Color(0xFF111111)
+                      : Colors.white.withValues(alpha: 0.6),
+                  width: isSelected ? 4.0 : 2.5,
                 ),
               ),
             ),
-          );
-        }).toList(),
-      ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

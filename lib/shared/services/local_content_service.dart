@@ -60,6 +60,16 @@ class LocalContentService {
     return levels[currentIndex + 1].id;
   }
 
+  Future<String?> getPreviousLevelId(String levelId) async {
+    final levels = await getAllLevels();
+    final currentIndex =
+        levels.indexWhere((level) => level.id == levelId);
+    if (currentIndex <= 0) {
+      return null;
+    }
+    return levels[currentIndex - 1].id;
+  }
+
   Future<int?> getLevelNumber(String levelId) async {
     final levels = await getAllLevels();
     final currentIndex =

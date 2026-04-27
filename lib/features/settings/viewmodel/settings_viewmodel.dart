@@ -45,18 +45,21 @@ class SettingsViewModel extends BaseViewModel {
     await _persist();
   }
 
-  void toggleSound() {
+  Future<void> toggleSound() async {
     _soundEnabled = !_soundEnabled;
     _soundService.setSoundEnabled(_soundEnabled);
     notifyListeners();
-    unawaited(_persist());
+    if (_soundEnabled) {
+      await _soundService.playTapFeedback();
+    }
+    await _persist();
   }
 
-  void toggleHaptics() {
+  Future<void> toggleHaptics() async {
     _hapticsEnabled = !_hapticsEnabled;
     _soundService.setHapticsEnabled(_hapticsEnabled);
     notifyListeners();
-    unawaited(_persist());
+    await _persist();
   }
 
   Future<void> _persist() {
