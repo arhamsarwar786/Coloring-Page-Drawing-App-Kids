@@ -5,6 +5,7 @@ import '../../../app/routes/app_routes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../shared/components/doodle_text.dart';
 import '../../../shared/components/sticker_icon_button.dart';
+import '../../../shared/utils/interaction_feedback.dart';
 import '../viewmodel/settings_viewmodel.dart';
 
 class SettingsDialog extends StatelessWidget {
@@ -28,7 +29,7 @@ class SettingsDialog extends StatelessWidget {
                 Consumer<SettingsViewModel>(
                   builder: (_, viewModel, __) {
                     return Container(
-                      height: size.height * 0.265,
+                      height: 210,
                       width: size.width * 0.858, // Card size as per screenshot
                       padding: const EdgeInsets.fromLTRB(20, 15, 20, 5),
                       decoration: BoxDecoration(
@@ -64,6 +65,7 @@ class SettingsDialog extends StatelessWidget {
                                 active: viewModel.musicEnabled,
                                 onTap: viewModel.toggleMusic,
                               ),
+
                               _SettingIconTile(
                                 assetName: viewModel.soundEnabled
                                     ? 'assets/images/sound.png'
@@ -77,9 +79,12 @@ class SettingsDialog extends StatelessWidget {
                           // Privacy Policy Button (Same as screenshot style)
                           // Privacy Policy Button (Replaced with Asset Image)
                           GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, AppRoutes.privacy);
-                            },
+                            onTap: tapActionCallback(context, () {
+                              return Navigator.pushNamed(
+                                context,
+                                AppRoutes.privacy,
+                              );
+                            }),
                             child: Image.asset(
                               'assets/images/privacy plicy botton.png',
                               width: 230,

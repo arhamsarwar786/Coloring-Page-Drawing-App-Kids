@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/routes/app_routes.dart';
@@ -85,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 final levelNumber =
                                     viewModel.levelNumberFor(level.id) ??
                                         index + 1;
-                                return _ReferenceLevelCard(
+                                return _LevelCard(
                                   level: level,
                                   levelNumber: levelNumber,
                                   palette: _paletteFor(index),
@@ -291,8 +292,8 @@ class _HomeError extends StatelessWidget {
   }
 }
 
-class _ReferenceLevelCard extends StatelessWidget {
-  const _ReferenceLevelCard({
+class _LevelCard extends StatefulWidget {
+  const _LevelCard({
     required this.level,
     required this.levelNumber,
     required this.palette,
@@ -307,122 +308,257 @@ class _ReferenceLevelCard extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_LevelCard> createState() => _LevelCardState();
+}
+
+class _LevelCardState extends State<_LevelCard> {
+  bool _isPressed = false;
+
+  void _updatePressed(bool value) {
+    if (_isPressed == value) {
+      return;
+    }
+    setState(() {
+      _isPressed = value;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
-      fontWeight: FontWeight.w900,
-      color: Colors.white,
-      letterSpacing: 0,
-      shadows: const <Shadow>[
-        Shadow(
-          color: Color(0x66000000),
-          offset: Offset(0, 2),
-          blurRadius: 0,
-        ),
-      ],
-    );
+    final borderRadius = BorderRadius.circular(30);
+    final glowColor = Color.lerp(
+      widget.palette.outerTop,
+      Colors.white,
+      0.16,
+    )!;
 
     return IgnorePointer(
-      ignoring: isBusy,
+      ignoring: widget.isBusy,
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 160),
-        opacity: isBusy ? 0.72 : 1,
-        child: Material(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(28),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(28),
-            onTap: tapActionCallback(context, onTap),
-            child: Ink(
+        opacity: widget.isBusy ? 0.72 : 1,
+        child: AnimatedScale(
+          scale: _isPressed ? 0.95 : 1,
+          duration: Duration(milliseconds: _isPressed ? 110 : 320),
+          curve: _isPressed ? Curves.easeOut : Curves.elasticOut,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTapDown: (_) => _updatePressed(true),
+            onTapUp: (_) => _updatePressed(false),
+            onTapCancel: () => _updatePressed(false),
+            onTap: tapActionCallback(context, widget.onTap),
+            child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    palette.outerTop,
-                    palette.outerBottom,
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: palette.edge, width: 2.4),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-                    color: palette.edge.withValues(alpha: 0.18),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
+                    color: Colors.black.withValues(alpha: 0.10),
+                    blurRadius: 28,
+                    offset: const Offset(0, 8),
+                  ),
+                  BoxShadow(
+                    color: widget.palette.edge.withValues(alpha: 0.12),
+                    blurRadius: 18,
+                    offset: const Offset(0, 10),
                   ),
                 ],
+                borderRadius: borderRadius,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        palette.innerTop,
-                        palette.innerBottom,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(22),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.92),
-                      width: 2,
-                    ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      widget.palette.outerTop,
+                      widget.palette.outerBottom,
+                    ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
-                    child: Column(
+                  border: Border.all(
+                    color: widget.palette.edge,
+                    width: 3.4,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(26),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          widget.palette.innerTop,
+                          widget.palette.innerBottom,
+                        ],
+                      ),
+                    ),
+                    child: Stack(
                       children: <Widget>[
-                        Flexible(
-                          flex: 2,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              'LEVEL $levelNumber',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: titleStyle,
+                        Positioned.fill(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(26),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: const <double>[0, 0.16, 0.42, 1],
+                                colors: <Color>[
+                                  Colors.white.withValues(alpha: 0.38),
+                                  Colors.white.withValues(alpha: 0.16),
+                                  Colors.white.withValues(alpha: 0.04),
+                                  Colors.transparent,
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 6),
-                        Expanded(
-                          flex: 9,
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.94),
-                              borderRadius: BorderRadius.circular(18),
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 1.5,
-                              ),
-                              boxShadow: const <BoxShadow>[
-                                BoxShadow(
-                                  color: Color(0x12000000),
-                                  blurRadius: 2,
-                                  offset: Offset(0, 1),
+                        Positioned(
+                          left: 12,
+                          right: 12,
+                          top: 10,
+                          height: 40,
+                          child: IgnorePointer(
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(22),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: <Color>[
+                                    Colors.white.withValues(alpha: 0.34),
+                                    Colors.white.withValues(alpha: 0.06),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: Center(
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  final previewSize =
-                                      constraints.biggest.shortestSide;
-                                  return LevelPreview(
-                                    level: level,
-                                    size: previewSize,
-                                    backgroundColor: Colors.transparent,
-                                    padding: EdgeInsets.zero,
-                                    borderRadius: BorderRadius.zero,
-                                    style: LevelPreviewStyle.colored,
-                                  );
-                                },
                               ),
                             ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: CustomPaint(
+                            painter: _LevelCardFramePainter(
+                              radius: 26,
+                              edgeColor: widget.palette.edge,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 34,
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'LEVEL ${widget.levelNumber}',
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.fredoka(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: 1.2,
+
+                                        // Neon text base color (important)
+                                        color: const Color(0xFFE8FFE8),
+
+                                        shadows: [
+                                          // Inner glow (sharp readable core)
+                                          Shadow(
+                                            color: const Color(0xFF7CFF7C)
+                                                .withValues(
+                                                    alpha: _isPressed
+                                                        ? 0.95
+                                                        : 0.85),
+                                            blurRadius: _isPressed ? 6 : 5,
+                                          ),
+
+                                          // Main neon glow
+                                          Shadow(
+                                            color: const Color(0xFF00FF88)
+                                                .withValues(
+                                                    alpha: _isPressed
+                                                        ? 0.85
+                                                        : 0.75),
+                                            blurRadius: _isPressed ? 14 : 12,
+                                          ),
+
+                                          // Outer soft aura (premium look)
+                                          Shadow(
+                                            color: const Color(0xFF00C853)
+                                                .withValues(
+                                                    alpha: _isPressed
+                                                        ? 0.55
+                                                        : 0.45),
+                                            blurRadius: _isPressed ? 26 : 22,
+                                          ),
+
+                                          // subtle depth shadow (keeps readability)
+                                          Shadow(
+                                            color: Colors.black
+                                                .withValues(alpha: 0.25),
+                                            offset: const Offset(0, 2),
+                                            blurRadius: 3,
+                                          ),
+                                        ],
+                                      ),
+                                   
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Expanded(
+                                child: Center(
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.26),
+                                      borderRadius: BorderRadius.circular(18),
+                                      border: Border.all(
+                                        color: Colors.white.withValues(
+                                          alpha: 0.58,
+                                        ),
+                                        width: 1.8,
+                                      ),
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                          color: Colors.white.withValues(
+                                            alpha: 0.18,
+                                          ),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, -1),
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.black.withValues(
+                                            alpha: 0.05,
+                                          ),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: LayoutBuilder(
+                                      builder: (context, constraints) {
+                                        final previewSize =
+                                            constraints.biggest.shortestSide;
+                                        return LevelPreview(
+                                          level: widget.level,
+                                          size: previewSize,
+                                          backgroundColor: Colors.transparent,
+                                          padding: EdgeInsets.zero,
+                                          borderRadius: BorderRadius.zero,
+                                          style: LevelPreviewStyle.colored,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -435,6 +571,121 @@ class _ReferenceLevelCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _LevelCardFramePainter extends CustomPainter {
+  const _LevelCardFramePainter({
+    required this.radius,
+    required this.edgeColor,
+  });
+
+  final double radius;
+  final Color edgeColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final rrect = RRect.fromRectAndRadius(rect, Radius.circular(radius));
+
+    final innerHighlightPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.3
+      ..color = Colors.white.withValues(alpha: 0.72);
+
+    final innerShadowPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.2
+      ..color = edgeColor.withValues(alpha: 0.16);
+
+    canvas.drawRRect(rrect.deflate(1.2), innerHighlightPaint);
+    canvas.drawRRect(rrect.deflate(3.0), innerShadowPaint);
+
+    final bottomShadeRect = Rect.fromLTWH(
+      6,
+      size.height * 0.56,
+      size.width - 12,
+      size.height * 0.28,
+    );
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(bottomShadeRect, Radius.circular(radius - 8)),
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Colors.transparent,
+            edgeColor.withValues(alpha: 0.08),
+          ],
+        ).createShader(bottomShadeRect),
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _LevelCardFramePainter oldDelegate) {
+    return oldDelegate.radius != radius || oldDelegate.edgeColor != edgeColor;
+  }
+}
+
+class _LevelCardIconPainter extends CustomPainter {
+  const _LevelCardIconPainter({
+    required this.level,
+    required this.fillColor,
+  });
+
+  final LevelModel level;
+  final Color fillColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const sourceSize = Size(100, 100);
+    final scale = size.shortestSide / sourceSize.shortestSide;
+    final previewWidth = sourceSize.width * scale;
+    final previewHeight = sourceSize.height * scale;
+    final dx = (size.width - previewWidth) / 2;
+    final dy = (size.height - previewHeight) / 2;
+
+    canvas.save();
+    canvas.translate(dx, dy);
+    canvas.scale(scale, scale);
+
+    final shadowPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.black.withValues(alpha: 0.10)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+    final fillPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = fillColor
+      ..isAntiAlias = true;
+
+    final outlinePaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.8
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round
+      ..color = const Color(0xFF151515)
+      ..isAntiAlias = true;
+
+    for (final region in level.regions) {
+      final path = region.toPath(sourceSize);
+
+      canvas.save();
+      canvas.translate(0, 2.4);
+      canvas.drawPath(path, shadowPaint);
+      canvas.restore();
+
+      canvas.drawPath(path, fillPaint);
+      canvas.drawPath(path, outlinePaint);
+    }
+
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant _LevelCardIconPainter oldDelegate) {
+    return oldDelegate.level != level || oldDelegate.fillColor != fillColor;
   }
 }
 
