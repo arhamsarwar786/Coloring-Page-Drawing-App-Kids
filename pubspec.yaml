@@ -1,7 +1,7 @@
 name: asmr_coloring_app
 description: ASMR Coloring Book App
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -31,8 +31,6 @@ flutter:
   assets:
     - assets/data/app_content.json
     - assets/data/realistic_content_pack.json
-    - assets/references/
     - assets/images/
-    - assets/json/
     - assets/sounds/
     - assets/audio/
