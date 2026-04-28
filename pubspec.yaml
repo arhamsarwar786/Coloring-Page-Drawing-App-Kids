@@ -18,6 +18,7 @@ dependencies:
   flutter_svg: ^2.0.9
   path_drawing: ^1.0.1
   google_fonts: ^8.0.2
+  lottie: ^3.3.3
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +32,7 @@ flutter:
   assets:
     - assets/data/app_content.json
     - assets/data/realistic_content_pack.json
+    - assets/data/celebrate.json
     - assets/references/
     - assets/images/
     - assets/json/

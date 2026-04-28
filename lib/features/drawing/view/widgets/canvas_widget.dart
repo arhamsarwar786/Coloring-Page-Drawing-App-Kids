@@ -1051,7 +1051,10 @@ class AdvancedCanvasPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round
-        ..strokeWidth = stroke.strokeWidth
+        // Paint ki Width pencil wali
+        //
+        //
+        ..strokeWidth = stroke.strokeWidth*3
         ..color = stroke.color
         ..isAntiAlias = true;
 

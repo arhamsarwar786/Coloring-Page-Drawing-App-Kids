@@ -2,6 +2,7 @@ import 'package:asmr_coloring_app/features/settings/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/routes/app_routes.dart';
@@ -32,6 +33,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
   GuidedCanvasPhase _canvasPhase = GuidedCanvasPhase.outline;
   bool _coloringEnabled = false;
   bool _awaitingPartTick = false;
+  bool _showCompletionCelebration = false;
 
   @override
   void initState() {
@@ -55,7 +57,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
         viewModel.rewardStars != null &&
         _handledCompletionLevelId != level.id) {
       _handledCompletionLevelId = level.id;
-      _openRewardScreen(viewModel, level);
+      _playCompletionCelebration(viewModel, level);
     }
   }
 
@@ -75,6 +77,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
       _canvasPhase = GuidedCanvasPhase.outline;
       _coloringEnabled = false;
       _awaitingPartTick = false;
+      _showCompletionCelebration = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         context.read<DrawingViewModel>().loadLevel(widget.levelId);
@@ -269,6 +272,12 @@ class _DrawingScreenState extends State<DrawingScreen> {
                           ],
                         ),
                       ),
+                      if (_showCompletionCelebration)
+                        const Positioned.fill(
+                          child: IgnorePointer(
+                            child: _LevelCompleteCelebration(),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -367,6 +376,26 @@ class _DrawingScreenState extends State<DrawingScreen> {
         completedImageBytes: completedImageBytes,
       ),
     );
+  }
+
+  Future<void> _playCompletionCelebration(
+    DrawingViewModel viewModel,
+    LevelModel level,
+  ) async {
+    if (mounted) {
+      setState(() {
+        _showCompletionCelebration = true;
+      });
+    }
+
+    await Future<void>.delayed(const Duration(milliseconds: 1800));
+    if (!mounted) return;
+
+    setState(() {
+      _showCompletionCelebration = false;
+    });
+
+    await _openRewardScreen(viewModel, level);
   }
 
   void _openLevelById(String levelId) {
@@ -559,6 +588,26 @@ class _ColorPaletteRow extends StatelessWidget {
           ),
         );
       }).toList(),
+    );
+  }
+}
+
+class _LevelCompleteCelebration extends StatelessWidget {
+  const _LevelCompleteCelebration();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black.withValues(alpha: 0.08),
+      alignment: Alignment.center,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420, maxHeight: 420),
+        child: Lottie.asset(
+          'assets/data/celebrate.json',
+          repeat: false,
+          fit: BoxFit.contain,
+        ),
+      ),
     );
   }
 }

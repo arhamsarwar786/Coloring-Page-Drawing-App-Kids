@@ -389,11 +389,12 @@ class DrawingStepController extends ChangeNotifier {
 class ColoringStepController extends ChangeNotifier {
   ColoringStepController({
     this.cellSize = 5.0,
-    this.brushRadius = 16.0,
+    this.brushRadius = 18.0,
     this.completionThreshold = 0.94,
   });
 
-  static const double _strokeWidthMultiplier = 2.2;
+  static const double _strokeWidthMultiplier = 2.8;
+  static const double _renderStrokeWidthScale = 3.0;
   static const double _interpolationSpacingFactor = 0.3;
   static const double _motionSmoothingFactor = 0.94;
 
@@ -418,6 +419,9 @@ class ColoringStepController extends ChangeNotifier {
   bool get hasActiveRegion => _activeRegionId != null;
   bool get isPainting => _isPainting;
   Offset? get lastPaintPoint => _lastPaintPoint;
+  double get _storedStrokeWidth => brushRadius * _strokeWidthMultiplier;
+  double get _effectiveCoverageRadius =>
+      (_storedStrokeWidth * _renderStrokeWidthScale) / 2;
   UnmodifiableSetView<String> get filledRegionIds =>
       UnmodifiableSetView<String>(_filledRegionIds);
 
@@ -491,7 +495,7 @@ class ColoringStepController extends ChangeNotifier {
       DrawingStroke(
         points: <Offset>[startPoint],
         color: color,
-        strokeWidth: brushRadius * _strokeWidthMultiplier,
+        strokeWidth: _storedStrokeWidth,
       ),
     );
 
@@ -541,7 +545,7 @@ class ColoringStepController extends ChangeNotifier {
         DrawingStroke(
           points: acceptedPoints,
           color: color,
-          strokeWidth: brushRadius * _strokeWidthMultiplier,
+          strokeWidth: _storedStrokeWidth,
         ),
       );
     } else {
@@ -609,12 +613,13 @@ class ColoringStepController extends ChangeNotifier {
       () => _buildCoverableCells(path),
     );
     final painted = _paintedCells.putIfAbsent(regionId, () => <String>{});
+    final coverageRadius = _effectiveCoverageRadius;
 
     for (final point in points) {
-      final minX = ((point.dx - brushRadius) / cellSize).floor();
-      final maxX = ((point.dx + brushRadius) / cellSize).floor();
-      final minY = ((point.dy - brushRadius) / cellSize).floor();
-      final maxY = ((point.dy + brushRadius) / cellSize).floor();
+      final minX = ((point.dx - coverageRadius) / cellSize).floor();
+      final maxX = ((point.dx + coverageRadius) / cellSize).floor();
+      final minY = ((point.dy - coverageRadius) / cellSize).floor();
+      final maxY = ((point.dy + coverageRadius) / cellSize).floor();
 
       for (int gx = minX; gx <= maxX; gx += 1) {
         for (int gy = minY; gy <= maxY; gy += 1) {
@@ -625,7 +630,7 @@ class ColoringStepController extends ChangeNotifier {
             (gx * cellSize) + cellSize / 2,
             (gy * cellSize) + cellSize / 2,
           );
-          if ((cellCenter - point).distance <= brushRadius) {
+          if ((cellCenter - point).distance <= coverageRadius) {
             painted.add(key);
           }
         }
@@ -682,7 +687,7 @@ class ColoringStepController extends ChangeNotifier {
     final distance = delta.distance;
     if (distance == 0) return <Offset>[end];
 
-    final spacing = brushRadius * _interpolationSpacingFactor;
+    final spacing = _effectiveCoverageRadius * _interpolationSpacingFactor;
     final steps = math.max(1, (distance / spacing).ceil());
     return List<Offset>.generate(
       steps,
