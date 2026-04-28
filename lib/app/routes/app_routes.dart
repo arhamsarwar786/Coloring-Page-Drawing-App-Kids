@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import '../../features/drawing/view/drawing_screen.dart';
@@ -93,6 +95,7 @@ class RewardRouteArgs {
     required this.coins,
     required this.stars,
     required this.nextLevelId,
+    this.completedImageBytes,
   });
 
   final String levelId;
@@ -101,4 +104,5 @@ class RewardRouteArgs {
   final int coins;
   final int stars;
   final String? nextLevelId;
+  final Uint8List? completedImageBytes;
 }

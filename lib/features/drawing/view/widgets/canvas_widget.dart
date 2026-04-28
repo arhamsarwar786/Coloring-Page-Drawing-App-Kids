@@ -16,6 +16,7 @@ class CanvasWidget extends StatefulWidget {
   const CanvasWidget({
     super.key,
     required this.level,
+    required this.repaintBoundaryKey,
     this.guideAsset,
     required this.filledRegions,
     required this.onFill,
@@ -25,6 +26,7 @@ class CanvasWidget extends StatefulWidget {
   });
 
   final LevelModel level;
+  final GlobalKey repaintBoundaryKey;
   final String? guideAsset;
   final Map<String, Color> filledRegions;
   final Future<void> Function(String regionId) onFill;
@@ -666,6 +668,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                           ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: RepaintBoundary(
+                              key: widget.repaintBoundaryKey,
                               child: CustomPaint(
                                 painter: AdvancedCanvasPainter(
                                   level: widget.level,

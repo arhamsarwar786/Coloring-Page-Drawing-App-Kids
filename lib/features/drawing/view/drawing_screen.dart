@@ -11,6 +11,7 @@ import '../../../shared/utils/interaction_feedback.dart';
 import '../../../shared/widgets/loader.dart';
 import '../../drawing/model/color_model.dart';
 import '../../levels/model/level_model.dart';
+import '../services/save_service.dart';
 import 'controllers/guided_painting_controllers.dart';
 import 'widgets/canvas_widget.dart';
 import '../viewmodel/drawing_viewmodel.dart';
@@ -25,6 +26,8 @@ class DrawingScreen extends StatefulWidget {
 }
 
 class _DrawingScreenState extends State<DrawingScreen> {
+  final GlobalKey _canvasRepaintKey = GlobalKey();
+  final SaveService _saveService = const SaveService();
   String? _handledCompletionLevelId;
   GuidedCanvasPhase _canvasPhase = GuidedCanvasPhase.outline;
   bool _coloringEnabled = false;
@@ -165,6 +168,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
                                     height: 1024,
                                     child: CanvasWidget(
                                       level: level,
+                                      repaintBoundaryKey: _canvasRepaintKey,
                                       guideAsset: null, // we use paths n
                                       filledRegions: viewModel.filledRegions,
                                       onFill: viewModel.fillRegionAt,
@@ -269,15 +273,6 @@ class _DrawingScreenState extends State<DrawingScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        _LevelNavigationRow(
-          onPrevious: viewModel.previousLevelId == null
-              ? null
-              : () => _openLevelById(viewModel.previousLevelId!),
-          onNext: viewModel.nextLevelId == null
-              ? null
-              : () => _openLevelById(viewModel.nextLevelId!),
-        ),
-        const SizedBox(height: 18),
         actionChild,
       ],
     );
@@ -322,7 +317,13 @@ class _DrawingScreenState extends State<DrawingScreen> {
     });
   }
 
-  void _openRewardScreen(DrawingViewModel viewModel, LevelModel level) {
+  Future<void> _openRewardScreen(
+    DrawingViewModel viewModel,
+    LevelModel level,
+  ) async {
+    final completedImageBytes = await _saveService.capture(_canvasRepaintKey);
+    if (!mounted) return;
+
     Navigator.pushReplacementNamed(
       context,
       AppRoutes.reward,
@@ -333,6 +334,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
         coins: viewModel.rewardCoins ?? level.rewardCoins,
         stars: viewModel.rewardStars ?? level.stars,
         nextLevelId: viewModel.nextLevelId,
+        completedImageBytes: completedImageBytes,
       ),
     );
   }
@@ -377,87 +379,6 @@ class _TickActionButton extends StatelessWidget {
           size: 30,
           color: Colors.white,
         ),
-      ),
-    );
-  }
-}
-
-class _LevelNavigationRow extends StatelessWidget {
-  const _LevelNavigationRow({
-    required this.onPrevious,
-    required this.onNext,
-  });
-
-  final VoidCallback? onPrevious;
-  final VoidCallback? onNext;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        children: <Widget>[
-          _PreviousLevelButton(onPressed: onPrevious),
-          const SizedBox(width: 16),
-          Expanded(
-            child: SizedBox(
-              height: 56,
-              child: FilledButton(
-                onPressed: tapActionCallback(context, onNext),
-                style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFD54F),
-                  foregroundColor: const Color(0xFF2A2200),
-                  disabledBackgroundColor:
-                      const Color(0xFFFFD54F).withValues(alpha: 0.45),
-                  disabledForegroundColor:
-                      const Color(0xFF2A2200).withValues(alpha: 0.45),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                ),
-                child: Text(
-                  AppStrings.nextLevel,
-                  style: GoogleFonts.fredoka(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PreviousLevelButton extends StatelessWidget {
-  const _PreviousLevelButton({required this.onPressed});
-
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 56,
-      height: 56,
-      child: FilledButton(
-        onPressed: tapActionCallback(context, onPressed),
-        style: FilledButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: const Color(0xFF222222),
-          disabledBackgroundColor: Colors.white.withValues(alpha: 0.5),
-          disabledForegroundColor:
-              const Color(0xFF222222).withValues(alpha: 0.4),
-          padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-            side: BorderSide(
-              color: Colors.black.withValues(alpha: 0.08),
-            ),
-          ),
-        ),
-        child: const Icon(Icons.arrow_back_rounded, size: 28),
       ),
     );
   }
