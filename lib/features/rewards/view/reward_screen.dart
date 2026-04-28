@@ -215,67 +215,64 @@ class _RewardPostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                width: isCompact ? 38 : 42,
-                height: isCompact ? 38 : 42,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: <Color>[
-                      Color(0xFFF58529),
-                      Color(0xFFFEDA77),
-                      Color(0xFFDD2A7B),
-                      Color(0xFF8134AF),
-                      Color(0xFF515BD4),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: Icon(
-                  Icons.camera_alt_rounded,
-                  color: Colors.white,
-                  size: isCompact ? 22 : 24,
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  'JOHN',
-                  style: GoogleFonts.fredoka(
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: 
-                  
- isSharing ? null : tapActionCallback(context, onShare),
 
+          // Cemra and Username Row
+          // Row(
+          //   children: <Widget>[
+          //     Container(
+          //       width: isCompact ? 38 : 42,
+          //       height: isCompact ? 38 : 42,
+          //       decoration: const BoxDecoration(
+          //         shape: BoxShape.circle,
+          //         gradient: LinearGradient(
+          //           colors: <Color>[
+          //             Color(0xFFF58529),
+          //             Color(0xFFFEDA77),
+          //             Color(0xFFDD2A7B),
+          //             Color(0xFF8134AF),
+          //             Color(0xFF515BD4),
+          //           ],
+          //           begin: Alignment.topLeft,
+          //           end: Alignment.bottomRight,
+          //         ),
+          //       ),
+          //       child: Icon(
+          //         Icons.camera_alt_rounded,
+          //         color: Colors.white,
+          //         size: isCompact ? 22 : 24,
+          //       ),
+          //     ),
+          //     const SizedBox(width: 14),
+          //     Expanded(
+          //       child: Text(
+          //         'JOHN',
+          //         style: GoogleFonts.fredoka(
+          //           fontSize: titleFontSize,
+          //           fontWeight: FontWeight.w500,
+          //           color: Colors.black,
+          //         ),
+          //       ),
+          //     ),
 
-
-
-
-               
-                icon: Icon(
-                  Icons.share_rounded,
-                  size: isCompact ? 26 : 30,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+          //     //share button
+          //     IconButton(
+          //       onPressed:
+          //           isSharing ? null : tapActionCallback(context, onShare),
+          //       icon: Icon(
+          //         Icons.share_rounded,
+          //         size: isCompact ? 26 : 30,
+          //         color: Colors.black,
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(height: 6),
           Container(
             width: double.infinity,
             height: imageSize,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(10),
               boxShadow: const <BoxShadow>[
                 BoxShadow(
                   color: Color(0x22000000),
@@ -343,8 +340,7 @@ class _RewardPostCard extends StatelessWidget {
           //     ),
           //   ],
           // ),
-          
-          
+
           const SizedBox(height: 8),
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.center,
@@ -364,24 +360,41 @@ class _RewardPostCard extends StatelessWidget {
           //   ],
           // ),
           // const SizedBox(height: 10),
-          
-          Text(
-            'EXCELLENT!',
-            style: GoogleFonts.fredoka(
-              fontSize: isCompact ? 22 : 26,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'EXCELLENT!',
+                    style: GoogleFonts.fredoka(
+                      fontSize: isCompact ? 22 : 26,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Level ${args.levelNumber} completed - +${args.coins} coins',
+                    style: GoogleFonts.fredoka(
+                      fontSize: isCompact ? 14 : 16,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF4D4D4D),
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                onPressed:
+                    isSharing ? null : tapActionCallback(context, onShare),
+                icon: Icon(
+                  Icons.share_rounded,
+                  size: isCompact ? 26 : 30,
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            'Level ${args.levelNumber} completed - +${args.coins} coins',
-            style: GoogleFonts.fredoka(
-              fontSize: isCompact ? 14 : 16,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xFF4D4D4D),
-            ),
-          ),
+
           // const SizedBox(height: 14),
 
           // SizedBox(
@@ -426,7 +439,6 @@ class _RewardPostCard extends StatelessWidget {
           //     ),
           //   ),
           // ),
-        
         ],
       ),
     );
