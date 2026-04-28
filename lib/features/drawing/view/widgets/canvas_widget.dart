@@ -66,14 +66,14 @@ class _CanvasWidgetState extends State<CanvasWidget>
   Color? _activeRegionOriginalColor;
   GuidedCanvasPhase? _lastReportedPhase;
 
-  static const List<String> _appreciationMessages = <String>[
-    'Great Job!',
-    'Awesome!',
-    'Super!',
-    'Brilliant!',
-    'Well Done!',
-    'Perfect!',
-  ];
+  // static const List<String> _appreciationMessages = <String>[
+  //   'Great Job!',
+  //   'Awesome!',
+  //   'Super!',
+  //   'Brilliant!',
+  //   'Well Done!',
+  //   'Perfect!',
+  // ];
 
   @override
   void initState() {
@@ -386,25 +386,25 @@ class _CanvasWidgetState extends State<CanvasWidget>
   Future<void> _handleFillCompletion(
       String regionId, Color selectedColor) async {
     await widget.onFill(regionId);
-    _triggerAppreciation(selectedColor);
+    // _triggerAppreciation(selectedColor);
     widget.onRegionFilled?.call(regionId);
   }
 
-  void _triggerAppreciation(Color color) {
-    final randomIndex = math.Random().nextInt(_appreciationMessages.length);
-    _appreciationMessage.value = _appreciationMessages[randomIndex];
-    _appreciationController.forward(from: 0.0);
-    HapticFeedback.mediumImpact();
+  // void _triggerAppreciation(Color color) {
+  //   final randomIndex = math.Random().nextInt(_appreciationMessages.length);
+  //   _appreciationMessage.value = _appreciationMessages[randomIndex];
+  //   _appreciationController.forward(from: 0.0);
+  //   HapticFeedback.mediumImpact();
 
-    Future<void>.delayed(const Duration(milliseconds: 1600), () {
-      if (!mounted) return;
-      _appreciationController.reverse().then((_) {
-        if (mounted && _appreciationController.value == 0.0) {
-          _appreciationMessage.value = null;
-        }
-      });
-    });
-  }
+  //   Future<void>.delayed(const Duration(milliseconds: 1600), () {
+  //     if (!mounted) return;
+  //     _appreciationController.reverse().then((_) {
+  //       if (mounted && _appreciationController.value == 0.0) {
+  //         _appreciationMessage.value = null;
+  //       }
+  //     });
+  //   });
+  // }
 
   void _animateMarkerTap() {
     _tapScaleController.forward().then((_) {

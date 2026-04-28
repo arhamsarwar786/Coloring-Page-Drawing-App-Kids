@@ -115,7 +115,7 @@ class _RewardScreenState extends State<RewardScreen> {
                       isSharing: _isSharing,
                       onShare: _shareArtwork,
                     ),
-                    SizedBox(height: isCompact ? 24 : 34),
+                    SizedBox(height: isCompact ? 20 : 30),
                     Wrap(
                       alignment: WrapAlignment.center,
                       spacing: 18,
@@ -170,6 +170,7 @@ class _RewardScreenState extends State<RewardScreen> {
   }
 }
 
+// Reward Card With Share Action and Post Details
 class _RewardPostCard extends StatelessWidget {
   const _RewardPostCard({
     required this.args,
@@ -250,10 +251,21 @@ class _RewardPostCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(
-                Icons.more_vert_rounded,
-                size: isCompact ? 26 : 30,
-                color: Colors.black,
+              IconButton(
+                onPressed: 
+                  
+ isSharing ? null : tapActionCallback(context, onShare),
+
+
+
+
+
+               
+                icon: Icon(
+                  Icons.share_rounded,
+                  size: isCompact ? 26 : 30,
+                  color: Colors.black,
+                ),
               ),
             ],
           ),
@@ -297,59 +309,62 @@ class _RewardPostCard extends StatelessWidget {
                     ),
                   ),
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: <Widget>[
-              Icon(
-                Icons.favorite,
-                color: const Color(0xFFFF2F68),
-                size: actionIconSize + 2,
-              ),
-              const SizedBox(width: 14),
-              Icon(
-                Icons.mode_comment_outlined,
-                color: Colors.black,
-                size: actionIconSize,
-              ),
-              const SizedBox(width: 14),
-              GestureDetector(
-                onTap: isSharing ? null : tapActionCallback(context, onShare),
-                child: Opacity(
-                  opacity: isSharing ? 0.55 : 1,
-                  child: Icon(
-                    Icons.send_outlined,
-                    color: Colors.black,
-                    size: actionIconSize,
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Icon(
-                Icons.bookmark,
-                color: Colors.black,
-                size: actionIconSize,
-              ),
-            ],
-          ),
+          // const SizedBox(height: 16),
+          // Row(
+          //   children: <Widget>[
+          //     Icon(
+          //       Icons.favorite,
+          //       color: const Color(0xFFFF2F68),
+          //       size: actionIconSize + 2,
+          //     ),
+          //     const SizedBox(width: 14),
+          //     Icon(
+          //       Icons.mode_comment_outlined,
+          //       color: Colors.black,
+          //       size: actionIconSize,
+          //     ),
+          //     const SizedBox(width: 14),
+          //     GestureDetector(
+          //       onTap: isSharing ? null : tapActionCallback(context, onShare),
+          //       child: Opacity(
+          //         opacity: isSharing ? 0.55 : 1,
+          //         child: Icon(
+          //           Icons.send_outlined,
+          //           color: Colors.black,
+          //           size: actionIconSize,
+          //         ),
+          //       ),
+          //     ),
+          //     const Spacer(),
+          //     Icon(
+          //       Icons.bookmark,
+          //       color: Colors.black,
+          //       size: actionIconSize,
+          //     ),
+          //   ],
+          // ),
+          
+          
           const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF1EA1FF),
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 6),
-              _dot(),
-              const SizedBox(width: 6),
-              _dot(),
-            ],
-          ),
-          const SizedBox(height: 10),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: <Widget>[
+          //     Container(
+          //       width: 8,
+          //       height: 8,
+          //       decoration: const BoxDecoration(
+          //         color: Color(0xFF1EA1FF),
+          //         shape: BoxShape.circle,
+          //       ),
+          //     ),
+          //     const SizedBox(width: 6),
+          //     _dot(),
+          //     const SizedBox(width: 6),
+          //     _dot(),
+          //   ],
+          // ),
+          // const SizedBox(height: 10),
+          
           Text(
             'EXCELLENT!',
             style: GoogleFonts.fredoka(
@@ -367,49 +382,51 @@ class _RewardPostCard extends StatelessWidget {
               color: const Color(0xFF4D4D4D),
             ),
           ),
-          const SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            child: GestureDetector(
-              onTap: isSharing ? null : tapActionCallback(context, onShare),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 180),
-                opacity: isSharing ? 0.6 : 1,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isCompact ? 14 : 16,
-                    vertical: isCompact ? 12 : 14,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F9FF),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFDDE7F4)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        isSharing
-                            ? Icons.hourglass_top_rounded
-                            : Icons.ios_share_rounded,
-                        size: isCompact ? 20 : 22,
-                        color: const Color(0xFF1A1A1A),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        isSharing ? 'Sharing...' : 'Share My Drawing',
-                        style: GoogleFonts.fredoka(
-                          fontSize: isCompact ? 16 : 18,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF1A1A1A),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // const SizedBox(height: 14),
+
+          // SizedBox(
+          //   width: double.infinity,
+          //   child: GestureDetector(
+          //     onTap: isSharing ? null : tapActionCallback(context, onShare),
+          //     child: AnimatedOpacity(
+          //       duration: const Duration(milliseconds: 180),
+          //       opacity: isSharing ? 0.6 : 1,
+          //       child: Container(
+          //         padding: EdgeInsets.symmetric(
+          //           horizontal: isCompact ? 14 : 16,
+          //           vertical: isCompact ? 12 : 14,
+          //         ),
+          //         decoration: BoxDecoration(
+          //           color: const Color(0xFFF5F9FF),
+          //           borderRadius: BorderRadius.circular(16),
+          //           border: Border.all(color: const Color(0xFFDDE7F4)),
+          //         ),
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: <Widget>[
+          //             Icon(
+          //               isSharing
+          //                   ? Icons.hourglass_top_rounded
+          //                   : Icons.ios_share_rounded,
+          //               size: isCompact ? 20 : 22,
+          //               color: const Color(0xFF1A1A1A),
+          //             ),
+          //             const SizedBox(width: 10),
+          //             Text(
+          //               isSharing ? 'Sharing...' : 'Share My Drawing',
+          //               style: GoogleFonts.fredoka(
+          //                 fontSize: isCompact ? 16 : 18,
+          //                 fontWeight: FontWeight.w600,
+          //                 color: const Color(0xFF1A1A1A),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+        
         ],
       ),
     );

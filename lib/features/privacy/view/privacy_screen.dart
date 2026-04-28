@@ -18,12 +18,13 @@ class PrivacyScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              StickerIconButton(
-                size: 56,
-                icon: Icons.arrow_back_rounded,
-                // assetName: 'assets/images/retry.png',
-                onPressed: () => Navigator.pop(context),
-              ),
+              _SidebarIcon(
+                              icon: Icons.arrow_back_rounded,
+                              assetName: 'assets/images/pop-button.png',
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
               const SizedBox(height: 22),
               const Center(
                 child: DoodleText(
@@ -82,6 +83,36 @@ class PrivacyScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _SidebarIcon extends StatelessWidget {
+  const _SidebarIcon({
+    required this.icon,
+    this.assetName,
+    this.onPressed,
+  });
+
+  final IconData icon;
+  final String? assetName;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: tapActionCallback(context, onPressed),
+      child: SizedBox(
+        width: 42,
+        height: 42,
+        child: assetName != null
+            ? Image.asset(assetName!, fit: BoxFit.contain)
+            : Icon(
+                icon,
+                color: const Color(0xFF666666),
+                size: 28,
+              ),
       ),
     );
   }

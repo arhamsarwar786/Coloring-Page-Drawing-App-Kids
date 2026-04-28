@@ -195,6 +195,36 @@ class _DrawingScreenState extends State<DrawingScreen> {
                         child: Column(
                           children: [
                             _SidebarIcon(
+                              icon: Icons.arrow_back_rounded,
+                              assetName: 'assets/images/pop-button.png',
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            _SidebarIcon(
+                              icon: Icons.edit_rounded,
+                              assetName: 'assets/images/pen.png',
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, AppRoutes.skins),
+                            ),
+                            const SizedBox(height: 16),
+                            // _SidebarIcon(
+                            //   icon: Icons.photo_library_rounded,
+                            //   assetName: 'assets/images/photo.png',
+                            //   onPressed: () => Navigator.pushNamed(
+                            //       context, AppRoutes.levels),
+                            // ),
+                          ],
+                        ),
+                      ),
+// Right Column Icons
+                      Positioned(
+                        right: 16,
+                        top: 16,
+                        child: Column(
+                          children: [
+                            _SidebarIcon(
                               icon: Icons.settings_rounded,
                               assetName: 'assets/images/setting.png',
                               onPressed: () {
@@ -222,13 +252,13 @@ class _DrawingScreenState extends State<DrawingScreen> {
                                 );
                               },
                             ),
-                            const SizedBox(height: 16),
-                            _SidebarIcon(
-                              icon: Icons.edit_rounded,
-                              assetName: 'assets/images/pen.png',
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, AppRoutes.skins),
-                            ),
+                            // const SizedBox(height: 16),
+                            // _SidebarIcon(
+                            //   icon: Icons.edit_rounded,
+                            //   assetName: 'assets/images/pen.png',
+                            //   onPressed: () =>
+                            //       Navigator.pushNamed(context, AppRoutes.skins),
+                            // ),
                             const SizedBox(height: 16),
                             _SidebarIcon(
                               icon: Icons.photo_library_rounded,
@@ -355,7 +385,6 @@ class _TickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // This is a circular button with a check **Good** icon, used for both starting the coloring phase and confirming region fills.
     return GestureDetector(
       onTap: tapActionCallback(context, () async => onPressed()),
