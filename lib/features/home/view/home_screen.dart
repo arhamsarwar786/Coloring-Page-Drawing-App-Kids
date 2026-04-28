@@ -457,53 +457,25 @@ class _LevelCardState extends State<_LevelCard> {
                                       textAlign: TextAlign.center,
                                       style: GoogleFonts.fredoka(
                                         fontSize: 22,
-                                        fontWeight: FontWeight.w800,
-                                        letterSpacing: 1.2,
-
-                                        // Neon text base color (important)
-                                        color: const Color(0xFFE8FFE8),
-
-                                        shadows: [
-                                          // Inner glow (sharp readable core)
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 1.0,
+                                        color: Colors.black,
+                                        shadows: <Shadow>[
                                           Shadow(
-                                            color: const Color(0xFF7CFF7C)
-                                                .withValues(
-                                                    alpha: _isPressed
-                                                        ? 0.95
-                                                        : 0.85),
-                                            blurRadius: _isPressed ? 6 : 5,
+                                            color: glowColor.withValues(
+                                              alpha: _isPressed ? 0.95 : 0.82,
+                                            ),
+                                            blurRadius: _isPressed ? 12 : 9,
                                           ),
-
-                                          // Main neon glow
                                           Shadow(
-                                            color: const Color(0xFF00FF88)
-                                                .withValues(
-                                                    alpha: _isPressed
-                                                        ? 0.85
-                                                        : 0.75),
-                                            blurRadius: _isPressed ? 14 : 12,
-                                          ),
-
-                                          // Outer soft aura (premium look)
-                                          Shadow(
-                                            color: const Color(0xFF00C853)
-                                                .withValues(
-                                                    alpha: _isPressed
-                                                        ? 0.55
-                                                        : 0.45),
-                                            blurRadius: _isPressed ? 26 : 22,
-                                          ),
-
-                                          // subtle depth shadow (keeps readability)
-                                          Shadow(
-                                            color: Colors.black
-                                                .withValues(alpha: 0.25),
+                                            color: Colors.black.withValues(
+                                              alpha: 0.22,
+                                            ),
                                             offset: const Offset(0, 2),
-                                            blurRadius: 3,
+                                            blurRadius: 2,
                                           ),
                                         ],
                                       ),
-                                   
                                     ),
                                   ),
                                 ),

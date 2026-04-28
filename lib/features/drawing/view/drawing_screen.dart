@@ -353,11 +353,13 @@ class _TickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // This is a circular button with a check **Good** icon, used for both starting the coloring phase and confirming region fills.
     return GestureDetector(
       onTap: tapActionCallback(context, () async => onPressed()),
       child: Container(
-        width: 92,
-        height: 92,
+        width: 60,
+        height: 60,
         decoration: BoxDecoration(
           color: const Color(0xFF31B24C),
           shape: BoxShape.circle,
@@ -372,7 +374,7 @@ class _TickActionButton extends StatelessWidget {
         ),
         child: const Icon(
           Icons.check_rounded,
-          size: 54,
+          size: 30,
           color: Colors.white,
         ),
       ),
