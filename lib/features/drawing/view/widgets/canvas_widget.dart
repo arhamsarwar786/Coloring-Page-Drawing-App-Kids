@@ -190,8 +190,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
     for (final entry in widget.filledRegions.entries) {
       if (oldFilledRegions[entry.key] != entry.value) {
         _activeRegionId = entry.key;
-        _activeRegionOriginalColor =
-            oldFilledRegions[entry.key] ?? const Color(0x00FFFFFF);
+        _activeRegionOriginalColor = oldFilledRegions[entry.key] ?? entry.value;
         _fillAnimationController.forward(from: 0.0);
         break;
       }
