@@ -643,24 +643,25 @@ class _CanvasWidgetState extends State<CanvasWidget>
                       width: canvasDimension,
                       height: canvasDimension,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Colors.black.withValues(alpha: 0.08),
+                          // color: Colors.black.withValues(alpha: 0.08),
+                          color: Colors.transparent,
                           width: 2,
                         ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.12),
-                            blurRadius: 20,
-                            offset: const Offset(0, 12),
-                          ),
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                        // boxShadow: <BoxShadow>[
+                        //   BoxShadow(
+                        //     color: Colors.black.withValues(alpha: 0.12),
+                        //     blurRadius: 20,
+                        //     offset: const Offset(0, 12),
+                        //   ),
+                        //   BoxShadow(
+                        //     color: Colors.black.withValues(alpha: 0.05),
+                        //     blurRadius: 4,
+                        //     offset: const Offset(0, 2),
+                        //   ),
+                        // ],
                       ),
                       child: Stack(
                         clipBehavior: Clip.none,

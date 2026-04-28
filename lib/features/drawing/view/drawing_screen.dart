@@ -155,17 +155,17 @@ class _DrawingScreenState extends State<DrawingScreen> {
                             levelNumber: viewModel.levelNumber ?? 1,
                             level: level,
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 10),
                           Expanded(
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 40),
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Center(
                                 child: FittedBox(
                                   fit: BoxFit.contain,
                                   child: SizedBox(
-                                    width: 1024,
-                                    height: 1024,
+                                    width: 2048,
+                                    height: 2048,
                                     child: CanvasWidget(
                                       level: level,
                                       repaintBoundaryKey: _canvasRepaintKey,
@@ -182,7 +182,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
                           _buildBottomAction(level, viewModel),
                           const SizedBox(height: 32),
                         ],
@@ -538,13 +538,13 @@ class _ColorPaletteRow extends StatelessWidget {
       children: palette.map((colorOption) {
         final isSelected = selectedColorId == colorOption.id;
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: GestureDetector(
             onTap: () => onSelect(colorOption),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              width: isSelected ? 86 : 76,
-              height: isSelected ? 86 : 76,
+              width: isSelected ? 70 : 66,
+              height: isSelected ? 70 : 66,
               decoration: BoxDecoration(
                 color: colorOption.color,
                 borderRadius: BorderRadius.circular(18),
