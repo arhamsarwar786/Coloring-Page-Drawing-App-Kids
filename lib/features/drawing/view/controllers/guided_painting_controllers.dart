@@ -776,17 +776,31 @@ class ActivePartHighlighter {
   }
 
   void paintColoringHighlight(Canvas canvas, Path path, Size size) {
-    final fillPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = const Color(0x22FFB74D);
-    canvas.drawPath(path, fillPaint);
+    final strokeWidth = size.shortestSide * 0.016;
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.fill
+        ..color = const Color(0x30FFB74D)
+        ..isAntiAlias = true,
+    );
 
     canvas.drawPath(
       path,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = size.shortestSide * 0.016
-        ..color = Colors.orangeAccent
+        ..strokeWidth = strokeWidth * 1.9
+        ..color = const Color(0x61FFC46B)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+        ..isAntiAlias = true,
+    );
+
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..color = const Color(0xF2FF9800)
         ..isAntiAlias = true,
     );
   }

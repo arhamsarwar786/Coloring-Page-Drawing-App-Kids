@@ -52,6 +52,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
   late final GestureCoordinator _gestureCoordinator;
   late final AnimationController _outlineAnimationController;
   late final AnimationController _fillAnimationController;
+  late final AnimationController _highlightPulseController;
+  late final Animation<double> _highlightPulse;
   late final AnimationController _appreciationController;
   late final AnimationController _tapScaleController;
   late final Animation<double> _appreciationScale;
@@ -117,6 +119,14 @@ class _CanvasWidgetState extends State<CanvasWidget>
       vsync: this,
       duration: const Duration(milliseconds: 320),
     );
+    _highlightPulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    )..repeat(reverse: true);
+    _highlightPulse = CurvedAnimation(
+      parent: _highlightPulseController,
+      curve: Curves.easeInOut,
+    );
     _appreciationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -171,6 +181,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
     _markerPosition.dispose();
     _outlineAnimationController.dispose();
     _fillAnimationController.dispose();
+    _highlightPulseController.dispose();
     _appreciationController.dispose();
     _tapScaleController.dispose();
     _drawingStepController.dispose();
@@ -567,6 +578,12 @@ class _CanvasWidgetState extends State<CanvasWidget>
         final isColoringActive =
             phase == GuidedCanvasPhase.coloring && widget.enableColoring;
         final markerTipColor = isColoringActive ? selectedColor : Colors.black;
+        final activeColorRegionId = _coloringStepController.activeRegionId;
+        final shouldShowColoringFade =
+            isColoringActive &&
+            activeColorRegionId != null &&
+            !_coloringStepController.isPainting &&
+            _coloringStepController.progressFor(activeColorRegionId) == 0.0;
         final repaintListenable = Listenable.merge(<Listenable>[
           _drawingStepController,
           _coloringStepController,
@@ -729,6 +746,23 @@ class _CanvasWidgetState extends State<CanvasWidget>
                               ),
                             ),
                           ),
+                          if (shouldShowColoringFade)
+                            Positioned.fill(
+                              child: IgnorePointer(
+                                child: FadeTransition(
+                                  opacity: _highlightPulse,
+                                  child: CustomPaint(
+                                    painter: _ColoringHighlightOverlayPainter(
+                                      activeRegionId: activeColorRegionId,
+                                      paths: _pathCache,
+                                      activePartHighlighter:
+                                          _activePartHighlighter,
+                                    ),
+                                    size: canvasSize,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ValueListenableBuilder<String?>(
                             valueListenable: _appreciationMessage,
                             builder: (context, message, _) {
@@ -1001,8 +1035,6 @@ class AdvancedCanvasPainter extends CustomPainter {
       final isOutlineCompleted = drawingController.isRegionCompleted(region.id);
       final isCurrentOutlineRegion =
           drawingController.isRegionCurrent(region.id);
-      final isActiveColorRegion =
-          coloringController.activeRegionId == region.id;
       final coloredStrokes = coloringController.strokesFor(region.id);
 
       if (filledColor != null) {
@@ -1036,10 +1068,6 @@ class AdvancedCanvasPainter extends CustomPainter {
           isCurrentOutlineRegion &&
           !isOutlineCompleted) {
         activePartHighlighter.paintOutlineHighlight(canvas, path, size);
-      }
-
-      if (drawingController.isOutlineComplete && isActiveColorRegion) {
-        activePartHighlighter.paintColoringHighlight(canvas, path, size);
       }
     }
   }
@@ -1166,5 +1194,35 @@ class AdvancedCanvasPainter extends CustomPainter {
         oldDelegate.activeFillRegionId != activeFillRegionId ||
         oldDelegate.activeFillRegionOriginalColor !=
             activeFillRegionOriginalColor;
+  }
+}
+
+class _ColoringHighlightOverlayPainter extends CustomPainter {
+  const _ColoringHighlightOverlayPainter({
+    required this.activeRegionId,
+    required this.paths,
+    required this.activePartHighlighter,
+  });
+
+  final String? activeRegionId;
+  final Map<String, Path> paths;
+  final ActivePartHighlighter activePartHighlighter;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final regionId = activeRegionId;
+    if (regionId == null) return;
+
+    final path = paths[regionId];
+    if (path == null) return;
+
+    activePartHighlighter.paintColoringHighlight(canvas, path, size);
+  }
+
+  @override
+  bool shouldRepaint(covariant _ColoringHighlightOverlayPainter oldDelegate) {
+    return oldDelegate.activeRegionId != activeRegionId ||
+        oldDelegate.paths != paths ||
+        oldDelegate.activePartHighlighter != activePartHighlighter;
   }
 }
