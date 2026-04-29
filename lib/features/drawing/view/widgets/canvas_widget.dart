@@ -121,6 +121,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
     );
     _highlightPulseController = AnimationController(
       vsync: this,
+    // Fade animation duration for coloring highlight (when user is about to color a region)
       duration: const Duration(milliseconds: 1100),
     )..repeat(reverse: true);
     _highlightPulse = CurvedAnimation(
