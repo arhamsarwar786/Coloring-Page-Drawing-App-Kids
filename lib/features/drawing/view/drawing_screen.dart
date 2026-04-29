@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:asmr_coloring_app/features/settings/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +32,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
   final GlobalKey _canvasRepaintKey = GlobalKey();
   final SaveService _saveService = const SaveService();
   String? _handledCompletionLevelId;
+  Future<Uint8List?>? _rewardCaptureFuture;
   GuidedCanvasPhase _canvasPhase = GuidedCanvasPhase.outline;
   bool _coloringEnabled = false;
   bool _awaitingPartTick = false;
@@ -74,6 +77,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.levelId != widget.levelId) {
       _handledCompletionLevelId = null;
+      _rewardCaptureFuture = null;
       _canvasPhase = GuidedCanvasPhase.outline;
       _coloringEnabled = false;
       _awaitingPartTick = false;
@@ -360,7 +364,8 @@ class _DrawingScreenState extends State<DrawingScreen> {
     DrawingViewModel viewModel,
     LevelModel level,
   ) async {
-    final completedImageBytes = await _saveService.capture(_canvasRepaintKey);
+    final completedImageBytes =
+        await (_rewardCaptureFuture ?? _saveService.capture(_canvasRepaintKey));
     if (!mounted) return;
 
     Navigator.pushReplacementNamed(
@@ -382,20 +387,28 @@ class _DrawingScreenState extends State<DrawingScreen> {
     DrawingViewModel viewModel,
     LevelModel level,
   ) async {
+    _rewardCaptureFuture ??= _saveService.capture(_canvasRepaintKey);
+
     if (mounted) {
       setState(() {
         _showCompletionCelebration = true;
       });
     }
 
-    await Future<void>.delayed(const Duration(milliseconds: 1800));
+    await Future<void>.delayed(const Duration(seconds: 1));
     if (!mounted) return;
 
-    setState(() {
-      _showCompletionCelebration = false;
-    });
-
-    await _openRewardScreen(viewModel, level);
+    try {
+      // Keep the celebration overlay visible while we capture the canvas
+      // and transition to the reward route, so there is no visual gap.
+      await _openRewardScreen(viewModel, level);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _showCompletionCelebration = false;
+        });
+      }
+    }
   }
 
   void _openLevelById(String levelId) {

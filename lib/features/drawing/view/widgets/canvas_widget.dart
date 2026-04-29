@@ -65,6 +65,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
   String? _activeRegionId;
   Color? _activeRegionOriginalColor;
   GuidedCanvasPhase? _lastReportedPhase;
+  String? _markerAlignedRegionId;
 
   // static const List<String> _appreciationMessages = <String>[
   //   'Great Job!',
@@ -153,6 +154,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
       _activeOutlineRegionShares = <String, double>{};
       _cachedCanvasSize = null;
       _markerPosition.value = null;
+      _markerAlignedRegionId = null;
       _configureControllers();
     }
 
@@ -183,6 +185,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
       filledRegions: widget.filledRegions,
     );
     _paintPathCache.clear();
+    _markerAlignedRegionId = null;
     _notifyPhaseIfChanged();
   }
 
@@ -215,6 +218,42 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
   void _syncMarkerToDrawingPoint(Offset drawingPoint) {
     _updateMarkerPosition(drawingPoint);
+  }
+
+  Offset? _pathStartPoint(Path path) {
+    for (final metric in path.computeMetrics()) {
+      final tangent = metric.getTangentForOffset(0.0);
+      if (tangent != null) {
+        return tangent.position;
+      }
+    }
+    return null;
+  }
+
+  void _alignMarkerToCurrentOutlineStart(Size canvasSize) {
+    if (_drawingStepController.phase != GuidedCanvasPhase.outline ||
+        _drawingStepController.isAnimating) {
+      return;
+    }
+
+    final regionId = _drawingStepController.currentRegionId;
+    if (regionId == null || _markerAlignedRegionId == regionId) {
+      return;
+    }
+
+    final startPoint = _pathStartPoint(_pathFor(regionId, canvasSize));
+    if (startPoint == null) return;
+
+    _markerAlignedRegionId = regionId;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (_drawingStepController.currentRegionId != regionId ||
+          _drawingStepController.phase != GuidedCanvasPhase.outline ||
+          _drawingStepController.isAnimating) {
+        return;
+      }
+      _syncMarkerToDrawingPoint(startPoint);
+    });
   }
 
   void _notifyPhaseIfChanged() {
@@ -546,6 +585,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
               _pathFor(region.id, canvasSize);
               _paintPathFor(region.id, canvasSize);
             }
+            _alignMarkerToCurrentOutlineStart(canvasSize);
 
             return Listener(
                 onPointerDown: _handlePointerDown,
@@ -819,9 +859,13 @@ class _MarkerOverlay extends StatelessWidget {
       ),
       builder: (context, child) {
         final position = markerPosition.value;
-        final left = position != null ? position.dx - _tipX : -_tipX;
-        final top =
-            position != null ? position.dy - _tipY : canvasDimension - _tipY;
+        final effectiveTipX = skin.face ? _tipX : _markerSize * 0.1;
+        final effectiveTipY = skin.face ? _tipY : _markerSize * 0.78;
+        final left =
+            position != null ? position.dx - effectiveTipX : -effectiveTipX;
+        final top = position != null
+            ? position.dy - effectiveTipY
+            : canvasDimension - effectiveTipY;
         return IgnorePointer(
           child: Transform.translate(
             offset: Offset(left, top),
@@ -937,17 +981,17 @@ class AdvancedCanvasPainter extends CustomPainter {
 
     final guideOutline = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = size.shortestSide * 0.01
+      ..strokeWidth = size.shortestSide * 0.009
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..color = const Color(0xFFD1D1D1);
 
     final solidOutline = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = size.shortestSide * 0.013
+      ..strokeWidth = size.shortestSide * 0.0105
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
-      ..color = Colors.black26;
+      ..color = Colors.black;
 
     for (final region in level.regions) {
       final path = paths[region.id] ?? region.toPath(size);
@@ -1086,11 +1130,11 @@ class AdvancedCanvasPainter extends CustomPainter {
   ) {
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = size.shortestSide * 0.024
+      ..strokeWidth = size.shortestSide * 0.0105
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..color = Colors.black
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.2);
+      ..isAntiAlias = true;
 
     for (final metric in path.computeMetrics()) {
       final end = metric.length * progress;
