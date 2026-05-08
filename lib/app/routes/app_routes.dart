@@ -35,7 +35,10 @@ abstract final class AppRoutes {
         final args = settings.arguments;
         if (args is DrawingRouteArgs) {
           return MaterialPageRoute<void>(
-            builder: (_) => DrawingScreen(levelId: args.levelId),
+            builder: (_) => DrawingScreen(
+              levelId: args.levelId,
+              drawingSessionId: args.drawingSessionId,
+            ),
           );
         }
         return MaterialPageRoute<void>(
@@ -80,11 +83,13 @@ class DrawingRouteArgs {
     required this.levelId,
     this.levelTitle,
     this.levelNumber,
+    this.drawingSessionId,
   });
 
   final String levelId;
   final String? levelTitle;
   final int? levelNumber;
+  final String? drawingSessionId;
 }
 
 class RewardRouteArgs {

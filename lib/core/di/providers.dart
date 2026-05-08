@@ -6,10 +6,11 @@ import '../../features/ads/services/admob_service.dart';
 import '../../features/ads/viewmodel/ads_viewmodel.dart';
 import '../../features/drawing/repository/drawing_repository.dart';
 import '../../features/drawing/viewmodel/drawing_viewmodel.dart';
+import '../../features/history/repository/history_repository.dart';
+import '../../features/history/viewmodel/history_viewmodel.dart';
 import '../../features/home/repository/home_repository.dart';
 import '../../features/home/viewmodel/home_viewmodel.dart';
 import '../../features/levels/repository/level_repository.dart';
-import '../../features/levels/viewmodel/level_viewmodel.dart';
 import '../../features/rewards/viewmodel/reward_viewmodel.dart';
 import '../../features/settings/viewmodel/settings_viewmodel.dart';
 import '../../features/skins/viewmodel/skins_viewmodel.dart';
@@ -56,6 +57,11 @@ List<SingleChildWidget> buildAppProviders() {
         contentService: context.read<LocalContentService>(),
       ),
     ),
+    Provider<HistoryRepository>(
+      create: (context) => HistoryRepositoryImpl(
+        storage: context.read<LocalStorageService>(),
+      ),
+    ),
     ChangeNotifierProvider(
       create: (context) => SettingsViewModel(
         preferencesService: context.read<AppPreferencesService>(),
@@ -75,12 +81,13 @@ List<SingleChildWidget> buildAppProviders() {
     ChangeNotifierProvider(
       create: (context) => DrawingViewModel(
         repository: context.read<DrawingRepository>(),
+        historyRepository: context.read<HistoryRepository>(),
         soundService: context.read<SoundService>(),
       ),
     ),
     ChangeNotifierProvider(
-      create: (context) => LevelViewModel(
-        repository: context.read<LevelRepository>(),
+      create: (context) => HistoryViewModel(
+        repository: context.read<HistoryRepository>(),
       ),
     ),
     ChangeNotifierProvider(

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:asmr_coloring_app/features/settings/view/settings_screen.dart';
@@ -12,7 +13,9 @@ import '../../../core/constants/app_strings.dart';
 import '../../../shared/components/level_preview.dart';
 import '../../../shared/utils/interaction_feedback.dart';
 import '../../../shared/widgets/loader.dart';
+import '../model/drawing_brush_size.dart';
 import '../../drawing/model/color_model.dart';
+import '../../drawing/model/drawing_session_snapshot.dart';
 import '../../levels/model/level_model.dart';
 import '../services/save_service.dart';
 import 'controllers/guided_painting_controllers.dart';
@@ -20,15 +23,21 @@ import 'widgets/canvas_widget.dart';
 import '../viewmodel/drawing_viewmodel.dart';
 
 class DrawingScreen extends StatefulWidget {
-  const DrawingScreen({super.key, required this.levelId});
+  const DrawingScreen({
+    super.key,
+    required this.levelId,
+    this.drawingSessionId,
+  });
 
   final String levelId;
+  final String? drawingSessionId;
 
   @override
   State<DrawingScreen> createState() => _DrawingScreenState();
 }
 
-class _DrawingScreenState extends State<DrawingScreen> {
+class _DrawingScreenState extends State<DrawingScreen>
+    with WidgetsBindingObserver {
   final GlobalKey _canvasRepaintKey = GlobalKey();
   final SaveService _saveService = const SaveService();
   String? _handledCompletionLevelId;
@@ -37,14 +46,23 @@ class _DrawingScreenState extends State<DrawingScreen> {
   bool _coloringEnabled = false;
   bool _awaitingPartTick = false;
   bool _showCompletionCelebration = false;
+  bool _showColorPalette = false;
+  DrawingSessionSnapshot? _latestSnapshot;
+  Timer? _historySaveDebounce;
+  bool _isSavingHistory = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final viewModel = context.read<DrawingViewModel>();
-      viewModel.loadLevel(widget.levelId);
+      viewModel.markActive(true);
+      viewModel.loadLevel(
+        widget.levelId,
+        drawingSessionId: widget.drawingSessionId,
+      );
       viewModel.addListener(_onViewModelChange);
     });
   }
@@ -66,8 +84,13 @@ class _DrawingScreenState extends State<DrawingScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _historySaveDebounce?.cancel();
+    _persistHistorySnapshot(captureThumbnail: true);
     try {
-      context.read<DrawingViewModel>().removeListener(_onViewModelChange);
+      final viewModel = context.read<DrawingViewModel>();
+      viewModel.removeListener(_onViewModelChange);
+      viewModel.markActive(false);
     } catch (_) {}
     super.dispose();
   }
@@ -75,17 +98,33 @@ class _DrawingScreenState extends State<DrawingScreen> {
   @override
   void didUpdateWidget(covariant DrawingScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.levelId != widget.levelId) {
+    if (oldWidget.levelId != widget.levelId ||
+        oldWidget.drawingSessionId != widget.drawingSessionId) {
       _handledCompletionLevelId = null;
       _rewardCaptureFuture = null;
       _canvasPhase = GuidedCanvasPhase.outline;
       _coloringEnabled = false;
       _awaitingPartTick = false;
       _showCompletionCelebration = false;
+      _showColorPalette = false;
+      _latestSnapshot = null;
+      _historySaveDebounce?.cancel();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        context.read<DrawingViewModel>().loadLevel(widget.levelId);
+        context.read<DrawingViewModel>().loadLevel(
+              widget.levelId,
+              drawingSessionId: widget.drawingSessionId,
+            );
       });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      _persistHistorySnapshot(captureThumbnail: true);
     }
   }
 
@@ -163,6 +202,8 @@ class _DrawingScreenState extends State<DrawingScreen> {
                             level: level,
                           ),
                           const SizedBox(height: 10),
+                          _BrushSizeSelector(viewModel: viewModel),
+                          const SizedBox(height: 10),
                           Expanded(
                             child: Padding(
                               padding:
@@ -183,6 +224,10 @@ class _DrawingScreenState extends State<DrawingScreen> {
                                           !_awaitingPartTick,
                                       onPhaseChanged: _onCanvasPhaseChanged,
                                       onRegionFilled: _onRegionFilled,
+                                      initialSnapshot:
+                                          viewModel.initialSessionSnapshot,
+                                      onSnapshotChanged:
+                                          _handleCanvasSnapshotChanged,
                                     ),
                                   ),
                                 ),
@@ -305,11 +350,11 @@ class _DrawingScreenState extends State<DrawingScreen> {
       actionChild = _TickActionButton(
         onPressed: _startColoringPhase,
       );
-    } else if (isColorPhase && _coloringEnabled) {
+    } else if (isColorPhase && _coloringEnabled && _showColorPalette) {
       actionChild = _ColorPaletteRow(
         palette: level.palette,
         selectedColorId: viewModel.selectedColor?.id,
-        onSelect: viewModel.selectColor,
+        onSelect: _handleColorSelected,
       );
     }
 
@@ -325,12 +370,23 @@ class _DrawingScreenState extends State<DrawingScreen> {
     if (!mounted) return;
     if (_canvasPhase == phase) return;
 
-    setState(() {
-      _canvasPhase = phase;
-      if (phase == GuidedCanvasPhase.outline) {
-        _coloringEnabled = false;
-        _awaitingPartTick = false;
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() {
+        _canvasPhase = phase;
+        if (phase == GuidedCanvasPhase.outline) {
+          _coloringEnabled = false;
+          _awaitingPartTick = false;
+          _showColorPalette = false;
+        } else if (phase == GuidedCanvasPhase.coloring) {
+          final viewModel = context.read<DrawingViewModel>();
+          if (viewModel.activeDrawingSessionId != null) {
+            _coloringEnabled = true;
+            _awaitingPartTick = false;
+            _showColorPalette = true;
+          }
+        }
+      });
     });
   }
 
@@ -339,6 +395,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
     setState(() {
       _coloringEnabled = true;
       _awaitingPartTick = false;
+      _showColorPalette = true;
     });
   }
 
@@ -357,7 +414,55 @@ class _DrawingScreenState extends State<DrawingScreen> {
     if (!mounted) return;
     setState(() {
       _awaitingPartTick = false;
+      _showColorPalette = true;
     });
+  }
+
+  void _handleColorSelected(DrawingColorModel color) {
+    final viewModel = context.read<DrawingViewModel>();
+    viewModel.selectColor(color);
+    if (!mounted) return;
+    setState(() {
+      _showColorPalette = false;
+    });
+  }
+
+  void _handleCanvasSnapshotChanged(DrawingSessionSnapshot snapshot) {
+    _latestSnapshot = snapshot;
+    _historySaveDebounce?.cancel();
+    _historySaveDebounce = Timer(
+      const Duration(milliseconds: 900),
+      () => _persistHistorySnapshot(captureThumbnail: true),
+    );
+  }
+
+  Future<void> _persistHistorySnapshot({
+    required bool captureThumbnail,
+  }) async {
+    if (_isSavingHistory) return;
+    final snapshot = _latestSnapshot;
+    if (snapshot == null || !snapshot.hasVisibleProgress || !mounted) {
+      return;
+    }
+
+    _isSavingHistory = true;
+    try {
+      Uint8List? thumbnailBytes;
+      if (captureThumbnail) {
+        thumbnailBytes = await _saveService.capture(
+          _canvasRepaintKey,
+          pixelRatioOverride: 0.45,
+        );
+      }
+
+      if (!mounted) return;
+      await context.read<DrawingViewModel>().saveHistorySnapshot(
+            snapshot: snapshot,
+            thumbnailBytes: thumbnailBytes,
+          );
+    } finally {
+      _isSavingHistory = false;
+    }
   }
 
   Future<void> _openRewardScreen(
@@ -601,6 +706,108 @@ class _ColorPaletteRow extends StatelessWidget {
           ),
         );
       }).toList(),
+    );
+  }
+}
+
+class _BrushSizeSelector extends StatelessWidget {
+  const _BrushSizeSelector({required this.viewModel});
+
+  final DrawingViewModel viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<DrawingBrushSize>(
+      valueListenable: viewModel.brushSizeListenable,
+      builder: (context, selectedSize, _) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: DrawingBrushSize.values.map((size) {
+              final isSelected = size == selectedSize;
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: _BrushSizeButton(
+                  size: size,
+                  isSelected: isSelected,
+                  onTap: () => viewModel.selectBrushSize(size),
+                ),
+              );
+            }).toList(growable: false),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _BrushSizeButton extends StatelessWidget {
+  const _BrushSizeButton({
+    required this.size,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final DrawingBrushSize size;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  double get _previewDiameter {
+    switch (size) {
+      case DrawingBrushSize.thin:
+        return 8;
+      case DrawingBrushSize.standard:
+        return 13;
+      case DrawingBrushSize.thick:
+        return 18;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: tapActionCallback(context, onTap),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        curve: Curves.easeOut,
+        width: 48,
+        height: 48,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected
+              ? const Color(0xFFFFF2D7)
+              : const Color(0xFFF7F7F7),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected
+                ? const Color(0xFFFF9800)
+                : const Color(0xFFE1E1E1),
+            width: isSelected ? 2.2 : 1.4,
+          ),
+        ),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          width: _previewDiameter,
+          height: _previewDiameter,
+          decoration: BoxDecoration(
+            color:
+                isSelected ? const Color(0xFF111111) : const Color(0xFF666666),
+            shape: BoxShape.circle,
+          ),
+        ),
+      ),
     );
   }
 }

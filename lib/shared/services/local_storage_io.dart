@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
+
 import 'local_storage_base.dart';
 
 class IoLocalStorageService implements LocalStorageService {
@@ -18,9 +20,8 @@ class IoLocalStorageService implements LocalStorageService {
   }
 
   Future<File> _resolve(String fileName) async {
-    final baseDir = Directory.systemTemp;
-    return File(
-        '${baseDir.path}${Platform.pathSeparator}$fileName');
+    final baseDir = await getApplicationDocumentsDirectory();
+    return File('${baseDir.path}${Platform.pathSeparator}$fileName');
   }
 }
 

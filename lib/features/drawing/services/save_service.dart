@@ -7,7 +7,10 @@ import 'package:flutter/widgets.dart';
 class SaveService {
   const SaveService();
 
-  Future<Uint8List?> capture(GlobalKey repaintKey) async {
+  Future<Uint8List?> capture(
+    GlobalKey repaintKey, {
+    double? pixelRatioOverride,
+  }) async {
     final context = repaintKey.currentContext;
     if (context == null) {
       return null;
@@ -22,7 +25,7 @@ class SaveService {
     final pixelRatio = renderView?.devicePixelRatio ?? 1.0;
     // Keep captures crisp enough for the reward/share flow without generating
     // a very large bitmap that delays navigation.
-    final capturePixelRatio = pixelRatio.clamp(1.0, 1.25);
+    final capturePixelRatio = pixelRatioOverride ?? pixelRatio.clamp(1.0, 1.25);
 
     final image = await boundary.toImage(pixelRatio: capturePixelRatio);
     final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
