@@ -20,6 +20,16 @@ class LevelScreen extends StatefulWidget {
 
 class _LevelScreenState extends State<LevelScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<HistoryViewModel>().load();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: AppGradientBackground(
@@ -66,8 +76,21 @@ class _LevelScreenState extends State<LevelScreen> {
                                   const SizedBox(height: 14),
                               itemBuilder: (context, index) {
                                 final entry = viewModel.entries[index];
+                                int? completionCount;
+                                if (entry.isCompleted) {
+                                  final sameLevelCompleted = viewModel.entries
+                                      .where((e) => e.levelId == entry.levelId && e.isCompleted)
+                                      .toList();
+                                  sameLevelCompleted.sort((a, b) => a.lastEditedAt.compareTo(b.lastEditedAt));
+                                  final order = sameLevelCompleted.indexWhere((e) => e.id == entry.id) + 1;
+                                  if (order > 1) {
+                                    completionCount = order;
+                                  }
+                                }
+
                                 return _HistoryCard(
                                   entry: entry,
+                                  completionCount: completionCount,
                                   onTap: () =>
                                       _openHistoryEntry(context, entry),
                                 );
@@ -179,11 +202,23 @@ class _EmptyHistoryState extends StatelessWidget {
 class _HistoryCard extends StatelessWidget {
   const _HistoryCard({
     required this.entry,
+    this.completionCount,
     required this.onTap,
   });
 
   final DrawingHistoryEntry entry;
+  final int? completionCount;
   final VoidCallback onTap;
+
+  String _ordinal(int n) {
+    if (n >= 11 && n <= 13) return '${n}th';
+    switch (n % 10) {
+      case 1: return '${n}st';
+      case 2: return '${n}nd';
+      case 3: return '${n}rd';
+      default: return '${n}th';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -240,8 +275,8 @@ class _HistoryCard extends StatelessWidget {
                         const SizedBox(width: 10),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 7,
+                            horizontal: 8,
+                            vertical: 4,
                           ),
                           decoration: BoxDecoration(
                             color: badgeColor.withValues(alpha: 0.14),
@@ -250,7 +285,7 @@ class _HistoryCard extends StatelessWidget {
                           child: Text(
                             entry.status.label,
                             style: GoogleFonts.fredoka(
-                              fontSize: 13,
+                              fontSize: 11,
                               fontWeight: FontWeight.w700,
                               color: badgeColor,
                             ),
@@ -259,15 +294,39 @@ class _HistoryCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      entry.levelNumber == null
-                          ? 'Saved drawing'
-                          : 'Level ${entry.levelNumber}',
-                      style: GoogleFonts.fredoka(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF6A768E),
-                      ),
+                    Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            entry.levelNumber == null
+                                ? 'Saved drawing'
+                                : 'Level ${entry.levelNumber}',
+                            style: GoogleFonts.fredoka(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF6A768E),
+                            ),
+                          ),
+                        ),
+                        if (completionCount != null && completionCount! > 1) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE5E9F0),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              '${_ordinal(completionCount!)} Time',
+                              style: GoogleFonts.fredoka(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF5A667E),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 14),
                     Row(

@@ -317,7 +317,20 @@ class DrawingViewModel extends BaseViewModel {
     String levelId,
     String drawingSessionId,
   ) async {
-    final entry = await _historyRepository.getHistoryEntry(drawingSessionId);
+    DrawingHistoryEntry? entry;
+
+    if (drawingSessionId == levelId) {
+      final entries = await _historyRepository.getHistoryEntries();
+      for (final e in entries) {
+        if (e.levelId == levelId && e.status == DrawingHistoryStatus.inProgress) {
+          entry = e;
+          break;
+        }
+      }
+    } else {
+      entry = await _historyRepository.getHistoryEntry(drawingSessionId);
+    }
+
     if (entry == null || entry.levelId != levelId) {
       return;
     }
@@ -373,7 +386,7 @@ class DrawingViewModel extends BaseViewModel {
   }
 
   String _buildDrawingSessionId(String levelId) {
-    return levelId;
+    return '${levelId}_${DateTime.now().millisecondsSinceEpoch}';
   }
 
   @override

@@ -45,7 +45,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
     }
 
     final entries = await _readEntries();
-    final index = entries.indexWhere((item) => item.levelId == entry.levelId);
+    final index = entries.indexWhere((item) => item.id == entry.id);
     if (index == -1) {
       entries.add(entry);
     } else {
