@@ -50,20 +50,22 @@ class _DrawingScreenState extends State<DrawingScreen>
   DrawingSessionSnapshot? _latestSnapshot;
   Timer? _historySaveDebounce;
   bool _isSavingHistory = false;
+  Future<void>? _pendingSaveTask;
+  late final DrawingViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _viewModel = context.read<DrawingViewModel>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final viewModel = context.read<DrawingViewModel>();
-      viewModel.markActive(true);
-      viewModel.loadLevel(
+      _viewModel.markActive(true);
+      _viewModel.loadLevel(
         widget.levelId,
         drawingSessionId: widget.drawingSessionId,
       );
-      viewModel.addListener(_onViewModelChange);
+      _viewModel.addListener(_onViewModelChange);
     });
   }
 
@@ -88,9 +90,8 @@ class _DrawingScreenState extends State<DrawingScreen>
     _historySaveDebounce?.cancel();
     _persistHistorySnapshot(captureThumbnail: true);
     try {
-      final viewModel = context.read<DrawingViewModel>();
-      viewModel.removeListener(_onViewModelChange);
-      viewModel.markActive(false);
+      _viewModel.removeListener(_onViewModelChange);
+      _viewModel.markActive(false);
     } catch (_) {}
     super.dispose();
   }
@@ -111,7 +112,7 @@ class _DrawingScreenState extends State<DrawingScreen>
       _historySaveDebounce?.cancel();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        context.read<DrawingViewModel>().loadLevel(
+        _viewModel.loadLevel(
               widget.levelId,
               drawingSessionId: widget.drawingSessionId,
             );
@@ -143,10 +144,17 @@ class _DrawingScreenState extends State<DrawingScreen>
         ),
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: WillPopScope(
-            onWillPop: () async {
+          body: PopScope(
+            canPop: false,
+            onPopInvoked: (didPop) async {
+              if (didPop) return;
+              
+              // Capture final state before exiting
               await _persistHistorySnapshot(captureThumbnail: true);
-              return true;
+              
+              if (context.mounted) {
+                Navigator.pop(context);
+              }
             },
             child: SafeArea(
               child: Consumer<DrawingViewModel>(
@@ -255,20 +263,21 @@ class _DrawingScreenState extends State<DrawingScreen>
                                 _SidebarIcon(
                                   icon: Icons.arrow_back_rounded,
                                   assetName: 'assets/images/pop-button.png',
-                                  onPressed: () async {
-                                    await _persistHistorySnapshot(
-                                        captureThumbnail: true);
-                                    if (context.mounted) {
-                                      Navigator.pop(context);
-                                    }
+                                  onPressed: () {
+                                    // PopScope handles the final capture
+                                    Navigator.pop(context);
                                   },
                                 ),
                                 const SizedBox(height: 16),
                                 _SidebarIcon(
                                   icon: Icons.edit_rounded,
                                   assetName: 'assets/images/pen.png',
-                                  onPressed: () => Navigator.pushNamed(
-                                      context, AppRoutes.skins),
+                                  onPressed: () async {
+                                    await _persistHistorySnapshot(captureThumbnail: true);
+                                    if (context.mounted) {
+                                      Navigator.pushNamed(context, AppRoutes.skins);
+                                    }
+                                  },
                                 ),
                                 const SizedBox(height: 16),
                                 // _SidebarIcon(
@@ -326,8 +335,12 @@ class _DrawingScreenState extends State<DrawingScreen>
                                 _SidebarIcon(
                                   icon: Icons.photo_library_rounded,
                                   assetName: 'assets/images/photo.png',
-                                  onPressed: () => Navigator.pushNamed(
-                                      context, AppRoutes.levels),
+                                  onPressed: () async {
+                                    await _persistHistorySnapshot(captureThumbnail: true);
+                                    if (context.mounted) {
+                                      Navigator.pushNamed(context, AppRoutes.levels);
+                                    }
+                                  },
                                 ),
                               ],
                             ),
@@ -450,29 +463,40 @@ class _DrawingScreenState extends State<DrawingScreen>
   Future<void> _persistHistorySnapshot({
     required bool captureThumbnail,
   }) async {
-    if (_isSavingHistory) return;
+    if (_isSavingHistory) {
+      if (!captureThumbnail) return;
+      if (_pendingSaveTask != null) {
+        await _pendingSaveTask;
+      }
+    }
+
     final snapshot = _latestSnapshot;
-    if (snapshot == null || !snapshot.hasVisibleProgress || !mounted) {
+    if (snapshot == null || !snapshot.hasVisibleProgress || (!mounted && !captureThumbnail)) {
       return;
     }
 
     _isSavingHistory = true;
+    final completer = Completer<void>();
+    _pendingSaveTask = completer.future;
+
     try {
       Uint8List? thumbnailBytes;
       if (captureThumbnail) {
         thumbnailBytes = await _saveService.capture(
           _canvasRepaintKey,
-          pixelRatioOverride: 0.45,
+          pixelRatioOverride: 0.5,
         );
       }
 
-      if (!mounted) return;
-      await context.read<DrawingViewModel>().saveHistorySnapshot(
-            snapshot: snapshot,
-            thumbnailBytes: thumbnailBytes,
-          );
+      await _viewModel.saveHistorySnapshot(
+        snapshot: snapshot,
+        thumbnailBytes: thumbnailBytes,
+      );
+    } catch (_) {
+      // ignore silently to prevent ui crashes
     } finally {
       _isSavingHistory = false;
+      completer.complete();
     }
   }
 

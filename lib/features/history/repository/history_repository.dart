@@ -49,7 +49,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
   final LocalStorageService _storage;
   List<DrawingHistoryEntry>? _cachedEntries;
   bool _isSaving = false;
-  bool _isDecoding = false;
+  DrawingHistoryEntry? _pendingSaveEntry;
   Future<List<DrawingHistoryEntry>>? _decodeFuture;
 
   @override
@@ -79,24 +79,37 @@ class HistoryRepositoryImpl implements HistoryRepository {
       return;
     }
 
-    final entries = await _readEntries();
-    final index = entries.indexWhere((item) => item.id == entry.id);
-    if (index == -1) {
-      entries.add(entry);
-    } else {
-      entries[index] = entry;
+    if (_isSaving) {
+      _pendingSaveEntry = entry;
+      return;
     }
-    _cachedEntries = entries;
-
-    if (_isSaving) return;
     _isSaving = true;
 
-    try {
-      // Offload heavy JSON stringification to another thread
-      final encodedString = await compute(_encodeHistoryIsolate, entries);
-      await _storage.write(_fileName, encodedString);
-    } finally {
-      _isSaving = false;
+    DrawingHistoryEntry currentEntry = entry;
+
+    while (true) {
+      final entries = await _readEntries();
+      final index = entries.indexWhere((item) => item.id == currentEntry.id);
+      if (index == -1) {
+        entries.add(currentEntry);
+      } else {
+        entries[index] = currentEntry;
+      }
+      _cachedEntries = entries;
+
+      try {
+        // Offload heavy JSON stringification to another thread
+        final encodedString = await compute(_encodeHistoryIsolate, entries);
+        await _storage.write(_fileName, encodedString);
+      } finally {
+        if (_pendingSaveEntry != null) {
+          currentEntry = _pendingSaveEntry!;
+          _pendingSaveEntry = null;
+        } else {
+          _isSaving = false;
+          break;
+        }
+      }
     }
   }
 

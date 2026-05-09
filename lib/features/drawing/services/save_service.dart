@@ -31,9 +31,18 @@ class SaveService {
     try {
       image = await boundary.toImage(pixelRatio: capturePixelRatio);
     } catch (_) {
-      // If the boundary is dirty (!debugNeedsPaint), wait for a frame and retry
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-      return capture(repaintKey, pixelRatioOverride: pixelRatioOverride);
+      // If the boundary is dirty or detached, wait a bit and retry once
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      try {
+        final newContext = repaintKey.currentContext;
+        if (newContext == null) return null;
+        final newBoundary = newContext.findRenderObject() as RenderRepaintBoundary?;
+        if (newBoundary == null) return null;
+        image = await newBoundary.toImage(pixelRatio: capturePixelRatio);
+      } catch (innerError) {
+        debugPrint('SaveService: Final capture retry failed: $innerError');
+        return null;
+      }
     }
 
     final bytes = await image.toByteData(format: ui.ImageByteFormat.png);

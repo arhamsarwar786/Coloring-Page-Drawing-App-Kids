@@ -83,8 +83,9 @@ class DrawingViewModel extends BaseViewModel {
   }
 
   Future<void> loadLevel(String levelId, {String? drawingSessionId}) async {
-    if (_loadedLevelId == levelId && _level != null && drawingSessionId == null) {
+    if (_loadedLevelId == levelId && _level != null) {
       _startFreshSessionForCurrentLevel();
+      await _restoreHistorySession(levelId, drawingSessionId ?? levelId);
       notifyListeners();
       return;
     }

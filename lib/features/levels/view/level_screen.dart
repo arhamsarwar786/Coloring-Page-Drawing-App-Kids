@@ -233,28 +233,27 @@ class _HistoryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(28),
         onTap: onTap,
         child: Ink(
-          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.96),
-            borderRadius: BorderRadius.circular(28),
+            color: Colors.white.withValues(alpha: 0.98),
+            borderRadius: BorderRadius.circular(32),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: const Color(0x160F2A50),
-                blurRadius: 24,
-                offset: const Offset(0, 14),
+                color: const Color(0x120F2A50),
+                blurRadius: 30,
+                offset: const Offset(0, 16),
               ),
             ],
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               _HistoryThumbnail(
                 bytes: thumbnailBytes == null
                     ? null
                     : Uint8List.fromList(thumbnailBytes),
               ),
-              const SizedBox(width: 16),
-              Expanded(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -266,26 +265,26 @@ class _HistoryCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.fredoka(
-                              fontSize: 20,
+                              fontSize: 22,
                               fontWeight: FontWeight.w700,
                               color: const Color(0xFF1E2742),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 12),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
+                            horizontal: 10,
+                            vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: badgeColor.withValues(alpha: 0.14),
+                            color: badgeColor.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Text(
                             entry.status.label,
                             style: GoogleFonts.fredoka(
-                              fontSize: 11,
+                              fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: badgeColor,
                             ),
@@ -293,7 +292,7 @@ class _HistoryCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     Row(
                       children: <Widget>[
                         Flexible(
@@ -302,24 +301,25 @@ class _HistoryCard extends StatelessWidget {
                                 ? 'Saved drawing'
                                 : 'Level ${entry.levelNumber}',
                             style: GoogleFonts.fredoka(
-                              fontSize: 15,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: const Color(0xFF6A768E),
                             ),
                           ),
                         ),
                         if (completionCount != null && completionCount! > 1) ...[
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFE5E9F0),
-                              borderRadius: BorderRadius.circular(4),
+                              color: const Color(0xFFF0F4F8),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
                               '${_ordinal(completionCount!)} Time',
                               style: GoogleFonts.fredoka(
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: const Color(0xFF5A667E),
                               ),
@@ -328,7 +328,7 @@ class _HistoryCard extends StatelessWidget {
                         ],
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 20),
                     Row(
                       children: <Widget>[
                         Expanded(
@@ -336,33 +336,43 @@ class _HistoryCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(999),
                             child: LinearProgressIndicator(
                               value: entry.progress.clamp(0.0, 1.0),
-                              minHeight: 10,
-                              backgroundColor: const Color(0xFFF0F3F8),
+                              minHeight: 12,
+                              backgroundColor: const Color(0xFFF2F5FA),
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 badgeColor,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 14),
                         Text(
                           progressLabel,
                           style: GoogleFonts.fredoka(
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.w700,
                             color: const Color(0xFF22304B),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
-                    Text(
-                      _formatLastEdited(entry.lastEditedAt),
-                      style: GoogleFonts.fredoka(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF7D879C),
-                      ),
+                    const SizedBox(height: 18),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatLastEdited(entry.lastEditedAt),
+                          style: GoogleFonts.fredoka(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xFF7D879C),
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 14,
+                          color: const Color(0xFFBDC5D1),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -398,24 +408,24 @@ class _HistoryThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 104,
-      height: 104,
+      width: double.infinity,
+      height: 200,
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F9FC),
-        borderRadius: BorderRadius.circular(22),
+        color: const Color(0xFFFFFEFB),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
       ),
       clipBehavior: Clip.antiAlias,
       child: bytes == null || bytes!.isEmpty
           ? const Center(
               child: Icon(
                 Icons.brush_outlined,
-                size: 34,
-                color: Color(0xFF9AA8BC),
+                size: 48,
+                color: Color(0xFFBDC5D1),
               ),
             )
           : Image.memory(
               bytes!,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               gaplessPlayback: true,
             ),
     );
