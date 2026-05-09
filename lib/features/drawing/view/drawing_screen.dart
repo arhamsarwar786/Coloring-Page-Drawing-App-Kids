@@ -131,211 +131,222 @@ class _DrawingScreenState extends State<DrawingScreen>
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light,
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarDividerColor: Colors.transparent,
-        systemStatusBarContrastEnforced: false,
-        systemNavigationBarContrastEnforced: false,
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Consumer<DrawingViewModel>(
-            builder: (context, viewModel, _) {
-              final isReady =
-                  !viewModel.isLoading && viewModel.level?.id == widget.levelId;
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarDividerColor: Colors.transparent,
+          systemStatusBarContrastEnforced: false,
+          systemNavigationBarContrastEnforced: false,
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: WillPopScope(
+            onWillPop: () async {
+              await _persistHistorySnapshot(captureThumbnail: true);
+              return true;
+            },
+            child: SafeArea(
+              child: Consumer<DrawingViewModel>(
+                builder: (context, viewModel, _) {
+                  final isReady = !viewModel.isLoading &&
+                      viewModel.level?.id == widget.levelId;
 
-              if (!isReady) {
-                if (viewModel.errorMessage != null) {
-                  return Center(child: Text(viewModel.errorMessage!));
-                }
-                return const Loader();
-              }
+                  if (!isReady) {
+                    if (viewModel.errorMessage != null) {
+                      return Center(child: Text(viewModel.errorMessage!));
+                    }
+                    return const Loader();
+                  }
 
-              final level = viewModel.level!;
+                  final level = viewModel.level!;
 
-              return Center(
-                child: Container(
-                  // constraints: const BoxConstraints(maxWidth: 520),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    // borderRadius: BorderRadius.circular(32),
-                    // boxShadow: const [
-                    //   BoxShadow(
-                    //     color: Color(0x33000000),
-                    //     blurRadius: 35,
-                    //     offset: Offset(0, 15),
-                    //   ),
-                    // ],
-                  ),
-                  child: Stack(
-                    children: [
-                      // Center Content
-                      Column(
+                  return Center(
+                    child: Container(
+                      // constraints: const BoxConstraints(maxWidth: 520),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        // borderRadius: BorderRadius.circular(32),
+                        // boxShadow: const [
+                        //   BoxShadow(
+                        //     color: Color(0x33000000),
+                        //     blurRadius: 35,
+                        //     offset: Offset(0, 15),
+                        //   ),
+                        // ],
+                      ),
+                      child: Stack(
                         children: [
-                          const SizedBox(height: 32),
-                          Text(
-                            'LEVEL ${viewModel.levelNumber ?? 1}',
-                            style: GoogleFonts.fredoka(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF222222),
-                              letterSpacing: 2.0,
-                            ),
-                          ),
-                          // const SizedBox(height: 8),
-                          // Text(
-                          //   'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
-                          //   style: const TextStyle(
-                          //     color: Colors.grey,
-                          //     fontSize: 12,
-                          //   ),
-                          // ),
-                          const SizedBox(height: 8),
-                          _LevelBadge(
-                            title: level.title,
-                            levelNumber: viewModel.levelNumber ?? 1,
-                            level: level,
-                          ),
-                          const SizedBox(height: 10),
-                          _BrushSizeSelector(viewModel: viewModel),
-                          const SizedBox(height: 10),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Center(
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: SizedBox(
-                                    width: 2048,
-                                    height: 2048,
-                                    child: CanvasWidget(
-                                      level: level,
-                                      repaintBoundaryKey: _canvasRepaintKey,
-                                      guideAsset: null, // we use paths n
-                                      filledRegions: viewModel.filledRegions,
-                                      onFill: viewModel.fillRegionAt,
-                                      enableColoring: _coloringEnabled &&
-                                          !_awaitingPartTick,
-                                      onPhaseChanged: _onCanvasPhaseChanged,
-                                      onRegionFilled: _onRegionFilled,
-                                      initialSnapshot:
-                                          viewModel.initialSessionSnapshot,
-                                      onSnapshotChanged:
-                                          _handleCanvasSnapshotChanged,
+                          // Center Content
+                          Column(
+                            children: [
+                              const SizedBox(height: 32),
+                              Text(
+                                'LEVEL ${viewModel.levelNumber ?? 1}',
+                                style: GoogleFonts.fredoka(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF222222),
+                                  letterSpacing: 2.0,
+                                ),
+                              ),
+                              // const SizedBox(height: 8),
+                              // Text(
+                              //   'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
+                              //   style: const TextStyle(
+                              //     color: Colors.grey,
+                              //     fontSize: 12,
+                              //   ),
+                              // ),
+                              const SizedBox(height: 8),
+                              _LevelBadge(
+                                title: level.title,
+                                levelNumber: viewModel.levelNumber ?? 1,
+                                level: level,
+                              ),
+                              const SizedBox(height: 10),
+                              _BrushSizeSelector(viewModel: viewModel),
+                              const SizedBox(height: 10),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Center(
+                                    child: FittedBox(
+                                      fit: BoxFit.contain,
+                                      child: SizedBox(
+                                        width: 2048,
+                                        height: 2048,
+                                        child: CanvasWidget(
+                                          level: level,
+                                          repaintBoundaryKey: _canvasRepaintKey,
+                                          guideAsset: null, // we use paths n
+                                          filledRegions:
+                                              viewModel.filledRegions,
+                                          onFill: viewModel.fillRegionAt,
+                                          enableColoring: _coloringEnabled &&
+                                              !_awaitingPartTick,
+                                          onPhaseChanged: _onCanvasPhaseChanged,
+                                          onRegionFilled: _onRegionFilled,
+                                          initialSnapshot:
+                                              viewModel.initialSessionSnapshot,
+                                          onSnapshotChanged:
+                                              _handleCanvasSnapshotChanged,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
+                              const SizedBox(height: 10),
+                              _buildBottomAction(level, viewModel),
+                              const SizedBox(height: 32),
+                            ],
+                          ),
+
+                          // Left Column Icons
+                          Positioned(
+                            left: 16,
+                            top: 16,
+                            child: Column(
+                              children: [
+                                _SidebarIcon(
+                                  icon: Icons.arrow_back_rounded,
+                                  assetName: 'assets/images/pop-button.png',
+                                  onPressed: () async {
+                                    await _persistHistorySnapshot(
+                                        captureThumbnail: true);
+                                    if (context.mounted) {
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                ),
+                                const SizedBox(height: 16),
+                                _SidebarIcon(
+                                  icon: Icons.edit_rounded,
+                                  assetName: 'assets/images/pen.png',
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, AppRoutes.skins),
+                                ),
+                                const SizedBox(height: 16),
+                                // _SidebarIcon(
+                                //   icon: Icons.photo_library_rounded,
+                                //   assetName: 'assets/images/photo.png',
+                                //   onPressed: () => Navigator.pushNamed(
+                                //       context, AppRoutes.levels),
+                                // ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          _buildBottomAction(level, viewModel),
-                          const SizedBox(height: 32),
-                        ],
-                      ),
-
-                      // Left Column Icons
-                      Positioned(
-                        left: 16,
-                        top: 16,
-                        child: Column(
-                          children: [
-                            _SidebarIcon(
-                              icon: Icons.arrow_back_rounded,
-                              assetName: 'assets/images/pop-button.png',
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            _SidebarIcon(
-                              icon: Icons.edit_rounded,
-                              assetName: 'assets/images/pen.png',
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, AppRoutes.skins),
-                            ),
-                            const SizedBox(height: 16),
-                            // _SidebarIcon(
-                            //   icon: Icons.photo_library_rounded,
-                            //   assetName: 'assets/images/photo.png',
-                            //   onPressed: () => Navigator.pushNamed(
-                            //       context, AppRoutes.levels),
-                            // ),
-                          ],
-                        ),
-                      ),
 // Right Column Icons
-                      Positioned(
-                        right: 16,
-                        top: 16,
-                        child: Column(
-                          children: [
-                            _SidebarIcon(
-                              icon: Icons.settings_rounded,
-                              assetName: 'assets/images/setting.png',
-                              onPressed: () {
-                                showGeneralDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  barrierLabel: "Settings",
-                                  barrierColor: Colors.transparent,
-                                  transitionDuration:
-                                      const Duration(milliseconds: 250),
-                                  pageBuilder: (_, __, ___) =>
-                                      const SettingsDialog(),
-                                  transitionBuilder: (_, animation, __, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: ScaleTransition(
-                                        scale: CurvedAnimation(
-                                          parent: animation,
-                                          curve: Curves.easeOutBack,
-                                        ),
-                                        child: child,
-                                      ),
+                          Positioned(
+                            right: 16,
+                            top: 16,
+                            child: Column(
+                              children: [
+                                _SidebarIcon(
+                                  icon: Icons.settings_rounded,
+                                  assetName: 'assets/images/setting.png',
+                                  onPressed: () {
+                                    showGeneralDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      barrierLabel: "Settings",
+                                      barrierColor: Colors.transparent,
+                                      transitionDuration:
+                                          const Duration(milliseconds: 250),
+                                      pageBuilder: (_, __, ___) =>
+                                          const SettingsDialog(),
+                                      transitionBuilder:
+                                          (_, animation, __, child) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: ScaleTransition(
+                                            scale: CurvedAnimation(
+                                              parent: animation,
+                                              curve: Curves.easeOutBack,
+                                            ),
+                                            child: child,
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
+                                ),
+                                // const SizedBox(height: 16),
+                                // _SidebarIcon(
+                                //   icon: Icons.edit_rounded,
+                                //   assetName: 'assets/images/pen.png',
+                                //   onPressed: () =>
+                                //       Navigator.pushNamed(context, AppRoutes.skins),
+                                // ),
+                                const SizedBox(height: 16),
+                                _SidebarIcon(
+                                  icon: Icons.photo_library_rounded,
+                                  assetName: 'assets/images/photo.png',
+                                  onPressed: () => Navigator.pushNamed(
+                                      context, AppRoutes.levels),
+                                ),
+                              ],
                             ),
-                            // const SizedBox(height: 16),
-                            // _SidebarIcon(
-                            //   icon: Icons.edit_rounded,
-                            //   assetName: 'assets/images/pen.png',
-                            //   onPressed: () =>
-                            //       Navigator.pushNamed(context, AppRoutes.skins),
-                            // ),
-                            const SizedBox(height: 16),
-                            _SidebarIcon(
-                              icon: Icons.photo_library_rounded,
-                              assetName: 'assets/images/photo.png',
-                              onPressed: () => Navigator.pushNamed(
-                                  context, AppRoutes.levels),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (_showCompletionCelebration)
-                        const Positioned.fill(
-                          child: IgnorePointer(
-                            child: _LevelCompleteCelebration(),
                           ),
-                        ),
-                    ],
-                  ),
-                ),
-              );
-            },
+                          if (_showCompletionCelebration)
+                            const Positioned.fill(
+                              child: IgnorePointer(
+                                child: _LevelCompleteCelebration(),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _buildBottomAction(LevelModel level, DrawingViewModel viewModel) {
@@ -432,7 +443,7 @@ class _DrawingScreenState extends State<DrawingScreen>
     _historySaveDebounce?.cancel();
     _historySaveDebounce = Timer(
       const Duration(milliseconds: 900),
-      () => _persistHistorySnapshot(captureThumbnail: true),
+      () => _persistHistorySnapshot(captureThumbnail: false),
     );
   }
 
@@ -786,14 +797,11 @@ class _BrushSizeButton extends StatelessWidget {
         height: 48,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected
-              ? const Color(0xFFFFF2D7)
-              : const Color(0xFFF7F7F7),
+          color: isSelected ? const Color(0xFFFFF2D7) : const Color(0xFFF7F7F7),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xFFFF9800)
-                : const Color(0xFFE1E1E1),
+            color:
+                isSelected ? const Color(0xFFFF9800) : const Color(0xFFE1E1E1),
             width: isSelected ? 2.2 : 1.4,
           ),
         ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
   final Map<String, Path> _pathCache = <String, Path>{};
   final Map<String, Path> _paintPathCache = <String, Path>{};
+  final Map<String, Path> _dashedPathCache = <String, Path>{};
+  final Map<String, List<ui.PathMetric>> _metricsCache = <String, List<ui.PathMetric>>{};
   final Set<int> _activePointerIds = <int>{};
   Map<String, double> _activeOutlineRegionShares = <String, double>{};
   Size? _cachedCanvasSize;
@@ -96,10 +99,10 @@ class _CanvasWidgetState extends State<CanvasWidget>
         );
         final regionId = _drawingStepController.animatingRegionId;
         if (regionId != null && _cachedCanvasSize != null) {
-          final path = _pathCache[regionId];
-          if (path != null) {
+          final metrics = _metricsCache[regionId];
+          if (metrics != null) {
             final progress = _drawingStepController.progressFor(regionId);
-            for (final metric in path.computeMetrics()) {
+            for (final metric in metrics) {
               final tangent =
                   metric.getTangentForOffset(metric.length * progress);
               if (tangent != null) {
@@ -165,6 +168,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
     if (oldWidget.level.id != widget.level.id) {
       _pathCache.clear();
       _paintPathCache.clear();
+      _dashedPathCache.clear();
+      _metricsCache.clear();
       _activeOutlineRegionShares = <String, double>{};
       _cachedCanvasSize = null;
       _markerPosition.value = null;
@@ -280,12 +285,10 @@ class _CanvasWidgetState extends State<CanvasWidget>
     _updateMarkerPosition(drawingPoint);
   }
 
-  Offset? _pathStartPoint(Path path) {
-    for (final metric in path.computeMetrics()) {
-      final tangent = metric.getTangentForOffset(0.0);
-      if (tangent != null) {
-        return tangent.position;
-      }
+  Offset? _pathStartPoint(String regionId) {
+    final metrics = _metricsCache[regionId];
+    if (metrics != null && metrics.isNotEmpty) {
+      return metrics.first.getTangentForOffset(0.0)?.position;
     }
     return null;
   }
@@ -301,7 +304,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
       return;
     }
 
-    final startPoint = _pathStartPoint(_pathFor(regionId, canvasSize));
+    final startPoint = _pathStartPoint(regionId);
     if (startPoint == null) return;
 
     _markerAlignedRegionId = regionId;
@@ -365,13 +368,33 @@ class _CanvasWidgetState extends State<CanvasWidget>
     if (_cachedCanvasSize != canvasSize) {
       _pathCache.clear();
       _paintPathCache.clear();
+      _dashedPathCache.clear();
+      _metricsCache.clear();
       _cachedCanvasSize = canvasSize;
     }
 
     return _pathCache.putIfAbsent(regionId, () {
       final region =
           widget.level.regions.firstWhere((item) => item.id == regionId);
-      return region.toPath(canvasSize);
+      final path = region.toPath(canvasSize);
+
+      final metrics = path.computeMetrics().toList();
+      _metricsCache[regionId] = metrics;
+
+      final dashedPath = Path();
+      const dash = 10.0;
+      const gap = 7.0;
+      for (final metric in metrics) {
+        double distance = 0;
+        while (distance < metric.length) {
+          final next = math.min(distance + dash, metric.length);
+          dashedPath.addPath(metric.extractPath(distance, next), Offset.zero);
+          distance += dash + gap;
+        }
+      }
+      _dashedPathCache[regionId] = dashedPath;
+
+      return path;
     });
   }
 
@@ -474,7 +497,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
     final shares = <String, double>{};
     for (final regionId in part.regionIds) {
       double totalLength = 0.0;
-      for (final metric in _pathFor(regionId, canvasSize).computeMetrics()) {
+      final metrics = _metricsCache[regionId] ?? _pathFor(regionId, canvasSize).computeMetrics().toList();
+      for (final metric in metrics) {
         totalLength += metric.length;
       }
       shares[regionId] = totalLength;
@@ -485,7 +509,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
   Duration _durationForPart(DrawingPartStep part, Size canvasSize) {
     double totalLength = 0.0;
     for (final regionId in part.regionIds) {
-      for (final metric in _pathFor(regionId, canvasSize).computeMetrics()) {
+      final metrics = _metricsCache[regionId] ?? _pathFor(regionId, canvasSize).computeMetrics().toList();
+      for (final metric in metrics) {
         totalLength += metric.length;
       }
     }
@@ -768,6 +793,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
                                 level: widget.level,
                                 paths: _pathCache,
                                 paintPaths: _paintPathCache,
+                                dashedPaths: _dashedPathCache,
+                                metricsCache: _metricsCache,
                                 filledRegions: widget.filledRegions,
                                 drawingController: _drawingStepController,
                                 coloringController: _coloringStepController,
@@ -1023,6 +1050,8 @@ class AdvancedCanvasPainter extends CustomPainter {
     required this.level,
     required this.paths,
     required this.paintPaths,
+    required this.dashedPaths,
+    required this.metricsCache,
     required this.filledRegions,
     required this.drawingController,
     required this.coloringController,
@@ -1036,6 +1065,8 @@ class AdvancedCanvasPainter extends CustomPainter {
   final LevelModel level;
   final Map<String, Path> paths;
   final Map<String, Path> paintPaths;
+  final Map<String, Path> dashedPaths;
+  final Map<String, List<ui.PathMetric>> metricsCache;
   final Map<String, Color> filledRegions;
   final DrawingStepController drawingController;
   final ColoringStepController coloringController;
@@ -1084,10 +1115,11 @@ class AdvancedCanvasPainter extends CustomPainter {
       if (isOutlineCompleted) {
         canvas.drawPath(path, solidOutline);
       } else if (outlineProgress > 0) {
-        _drawDashedPath(canvas, path, guideOutline);
+        final dashedPath = dashedPaths[region.id];
+        if (dashedPath != null) canvas.drawPath(dashedPath, guideOutline);
         _drawPartialOutline(
           canvas,
-          path,
+          metricsCache[region.id] ?? path.computeMetrics().toList(),
           outlineProgress,
           size,
           level.getTargetColorForRegion(region.id),
@@ -1099,7 +1131,8 @@ class AdvancedCanvasPainter extends CustomPainter {
             ..style = PaintingStyle.fill
             ..color = const Color(0x00FFFFFF),
         );
-        _drawDashedPath(canvas, path, guideOutline);
+        final dashedPath = dashedPaths[region.id];
+        if (dashedPath != null) canvas.drawPath(dashedPath, guideOutline);
       }
 
       if (drawingController.phase == GuidedCanvasPhase.outline &&
@@ -1173,12 +1206,7 @@ class AdvancedCanvasPainter extends CustomPainter {
         continue;
       }
 
-      final strokePath = Path()
-        ..moveTo(stroke.points.first.dx, stroke.points.first.dy);
-      for (final point in stroke.points.skip(1)) {
-        strokePath.lineTo(point.dx, point.dy);
-      }
-      canvas.drawPath(strokePath, paint);
+      canvas.drawPoints(ui.PointMode.polygon, stroke.points, paint);
     }
 
     canvas.restore();
@@ -1186,7 +1214,7 @@ class AdvancedCanvasPainter extends CustomPainter {
 
   void _drawPartialOutline(
     Canvas canvas,
-    Path path,
+    List<ui.PathMetric> metrics,
     double progress,
     Size size,
     Color color,
@@ -1199,24 +1227,10 @@ class AdvancedCanvasPainter extends CustomPainter {
       ..color = Colors.black
       ..isAntiAlias = true;
 
-    for (final metric in path.computeMetrics()) {
+    for (final metric in metrics) {
       final end = metric.length * progress;
       if (end > 0) {
         canvas.drawPath(metric.extractPath(0, end), paint);
-      }
-    }
-  }
-
-  void _drawDashedPath(Canvas canvas, Path source, Paint paint) {
-    for (final metric in source.computeMetrics()) {
-      double distance = 0;
-      const dash = 10.0;
-      const gap = 7.0;
-
-      while (distance < metric.length) {
-        final next = math.min(distance + dash, metric.length);
-        canvas.drawPath(metric.extractPath(distance, next), paint);
-        distance += dash + gap;
       }
     }
   }

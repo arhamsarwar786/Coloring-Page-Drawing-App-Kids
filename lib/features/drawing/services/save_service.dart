@@ -26,8 +26,16 @@ class SaveService {
     // Keep captures crisp enough for the reward/share flow without generating
     // a very large bitmap that delays navigation.
     final capturePixelRatio = pixelRatioOverride ?? pixelRatio.clamp(1.0, 1.25);
+    
+    ui.Image? image;
+    try {
+      image = await boundary.toImage(pixelRatio: capturePixelRatio);
+    } catch (_) {
+      // If the boundary is dirty (!debugNeedsPaint), wait for a frame and retry
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      return capture(repaintKey, pixelRatioOverride: pixelRatioOverride);
+    }
 
-    final image = await boundary.toImage(pixelRatio: capturePixelRatio);
     final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
     return bytes?.buffer.asUint8List();
   }
