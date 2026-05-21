@@ -23,7 +23,7 @@ class SplashViewModel extends BaseViewModel {
 
     Navigator.pushReplacementNamed(
       context,
-      AppRoutes.home,
+      AppRoutes.mainHome,
     );
   }
 }

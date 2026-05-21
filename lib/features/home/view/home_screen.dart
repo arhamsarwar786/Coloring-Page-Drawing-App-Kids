@@ -71,16 +71,36 @@ class _HomeScreenState extends State<HomeScreen> {
                             AppSpacing.lg,
                             10,
                           ),
-                          child: Text(
-                            viewModel.content?.appTitle ?? AppStrings.appTitle,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                    color: const Color(0xFF1E293B),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: const Color.fromARGB(255, 4, 52, 92),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                  onTap: () => Navigator.pop(context),
+                                  //  Navigator.push(context, MaterialPageRoute(builder: (context) => const MainHomeScreen())),
+                                  child: Icon(Icons.arrow_back_ios_new_rounded,
+                                      color: const Color.fromARGB(
+                                          255, 222, 226, 233)),
+                                ),
+                                Text(
+                                  viewModel.content?.appTitle ??
+                                      AppStrings.appTitle,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                          color: const Color.fromARGB(
+                                              255, 222, 226, 233),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -39,7 +39,7 @@ flutter:
     - assets/sounds/
     - assets/audio/
 
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/poppins.ttf
+  # fonts:
+  #   - family: Poppins
+  #     fonts:
+  #       - asset: assets/fonts/poppins.ttf

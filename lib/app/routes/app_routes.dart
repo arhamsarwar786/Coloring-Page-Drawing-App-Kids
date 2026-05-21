@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:asmr_coloring_app/features/home/view/main_home_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/drawing/view/drawing_screen.dart';
@@ -14,6 +15,7 @@ import '../../features/splash/view/splash_screen.dart';
 abstract final class AppRoutes {
   static const String splash = '/';
   static const String home = '/home';
+  static const String mainHome = '/main-home';
   static const String drawing = '/drawing';
   static const String levels = '/levels';
   static const String skins = '/skins';
@@ -30,6 +32,10 @@ abstract final class AppRoutes {
       case home:
         return MaterialPageRoute<void>(
           builder: (_) => const HomeScreen(),
+        );
+      case mainHome:
+        return MaterialPageRoute<void>(
+          builder: (_) => const MainHomeScreen(),
         );
       case drawing:
         final args = settings.arguments;
