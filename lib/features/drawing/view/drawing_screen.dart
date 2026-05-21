@@ -194,13 +194,18 @@ class _DrawingScreenState extends State<DrawingScreen>
                           Column(
                             children: [
                               const SizedBox(height: 32),
-                              Text(
-                                'LEVEL ${viewModel.levelNumber ?? 1}',
-                                style: GoogleFonts.fredoka(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF222222),
-                                  letterSpacing: 2.0,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                color: Colors.white,
+                                child: Text(
+                                  'LEVEL ${viewModel.levelNumber ?? 1}',
+                                  style: GoogleFonts.fredoka(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xFF222222),
+                                    letterSpacing: 2.0,
+                                  ),
                                 ),
                               ),
                               // const SizedBox(height: 8),
@@ -636,10 +641,13 @@ class _SidebarIcon extends StatelessWidget {
     return GestureDetector(
       onTap: tapActionCallback(context, onPressed),
       child: SizedBox(
-        width: 42,
-        height: 42,
+        width: 50,
+        height: 50,
         child: assetName != null
-            ? Image.asset(assetName!, fit: BoxFit.contain)
+            ? Image.asset(
+                assetName!,
+                fit: BoxFit.contain,
+              )
             : Icon(
                 icon,
                 color: const Color(0xFF666666),

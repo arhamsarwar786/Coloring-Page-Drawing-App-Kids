@@ -51,10 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
-                final allLevels = viewModel.categories
-                    .expand((category) => category.levels)
-                    .toList(growable: false);
-                if (allLevels.isEmpty) {
+                // Only show levels for the selected category
+                final selectedLevels = viewModel.levelsForSelectedCategory;
+                if (selectedLevels.isEmpty) {
                   return const SizedBox.shrink();
                 }
 
@@ -72,12 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             10,
                           ),
                           child: Container(
+                            padding: EdgeInsets.only(left: 15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
-                              color: const Color.fromARGB(255, 4, 52, 92),
+                              color: Colors.pink.shade300,
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              // mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 InkWell(
                                   onTap: () => Navigator.pop(context),
@@ -86,18 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: const Color.fromARGB(
                                           255, 222, 226, 233)),
                                 ),
-                                Text(
-                                  viewModel.content?.appTitle ??
-                                      AppStrings.appTitle,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall
-                                      ?.copyWith(
-                                          color: const Color.fromARGB(
-                                              255, 222, 226, 233),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 30),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Center(
+                                  child: Text(
+                                    viewModel.content?.appTitle ??
+                                        AppStrings.appTitle,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                            color: const Color.fromARGB(
+                                                255, 222, 226, 233),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 30),
+                                  ),
                                 ),
                               ],
                             ),
@@ -113,10 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             return SliverGrid(
                               delegate: SliverChildBuilderDelegate(
                                 (context, index) {
-                                  final level = allLevels[index];
-                                  final levelNumber =
-                                      viewModel.levelNumberFor(level.id) ??
-                                          index + 1;
+                                  final level = selectedLevels[index];
+                                  final levelNumber = index + 1;
                                   return _LevelCard(
                                     level: level,
                                     levelNumber: levelNumber,
@@ -126,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         _openLevel(context, viewModel, level),
                                   );
                                 },
-                                childCount: allLevels.length,
+                                childCount: selectedLevels.length,
                               ),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
