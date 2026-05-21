@@ -29,7 +29,7 @@ class CanvasWidget extends StatefulWidget {
     this.initialSnapshot,
     this.onSnapshotChanged,
   });
-
+// final String? guideAsset;
   final LevelModel level;
   final GlobalKey repaintBoundaryKey;
   final String? guideAsset;
@@ -71,7 +71,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
   final Map<String, Path> _pathCache = <String, Path>{};
   final Map<String, Path> _paintPathCache = <String, Path>{};
   final Map<String, Path> _dashedPathCache = <String, Path>{};
-  final Map<String, List<ui.PathMetric>> _metricsCache = <String, List<ui.PathMetric>>{};
+  final Map<String, List<ui.PathMetric>> _metricsCache =
+      <String, List<ui.PathMetric>>{};
   final Set<int> _activePointerIds = <int>{};
   Map<String, double> _activeOutlineRegionShares = <String, double>{};
   Size? _cachedCanvasSize;
@@ -497,7 +498,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
     final shares = <String, double>{};
     for (final regionId in part.regionIds) {
       double totalLength = 0.0;
-      final metrics = _metricsCache[regionId] ?? _pathFor(regionId, canvasSize).computeMetrics().toList();
+      final metrics = _metricsCache[regionId] ??
+          _pathFor(regionId, canvasSize).computeMetrics().toList();
       for (final metric in metrics) {
         totalLength += metric.length;
       }
@@ -509,7 +511,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
   Duration _durationForPart(DrawingPartStep part, Size canvasSize) {
     double totalLength = 0.0;
     for (final regionId in part.regionIds) {
-      final metrics = _metricsCache[regionId] ?? _pathFor(regionId, canvasSize).computeMetrics().toList();
+      final metrics = _metricsCache[regionId] ??
+          _pathFor(regionId, canvasSize).computeMetrics().toList();
       for (final metric in metrics) {
         totalLength += metric.length;
       }
@@ -658,8 +661,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
             phase == GuidedCanvasPhase.coloring && widget.enableColoring;
         final markerTipColor = isColoringActive ? selectedColor : Colors.black;
         final activeColorRegionId = _coloringStepController.activeRegionId;
-        final shouldShowColoringFade =
-            isColoringActive &&
+        final shouldShowColoringFade = isColoringActive &&
             activeColorRegionId != null &&
             !_coloringStepController.isPainting &&
             _coloringStepController.progressFor(activeColorRegionId) == 0.0;
@@ -784,6 +786,16 @@ class _CanvasWidgetState extends State<CanvasWidget>
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: <Widget>[
+                        // if (widget.guideAsset != null)
+                        //   Positioned.fill(
+                        //     child: Opacity(
+                        //       opacity: 0.2,
+                        //       child: Image.asset(
+                        //         widget.guideAsset!,
+                        //         fit: BoxFit.contain,
+                        //       ),
+                        //     ),
+                        //   ),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: RepaintBoundary(

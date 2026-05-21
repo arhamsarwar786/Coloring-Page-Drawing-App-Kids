@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:asmr_coloring_app/features/skins/viewmodel/skins_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart' show ReadContext;
 import 'package:share_plus/share_plus.dart';
 
 import '../../../app/routes/app_routes.dart';
@@ -32,6 +34,9 @@ class _RewardScreenState extends State<RewardScreen> {
   }
 
   void _openNext(BuildContext context) {
+    // 🔥 ADD THIS LINE FIRST
+    context.read<SkinsViewModel>().unlockByLevel(args.levelNumber);
+
     final nextLevelId = args.nextLevelId;
     if (nextLevelId != null) {
       Navigator.pushReplacementNamed(
@@ -48,6 +53,24 @@ class _RewardScreenState extends State<RewardScreen> {
       (_) => false,
     );
   }
+
+  // void _openNext(BuildContext context) {
+  //   final nextLevelId = args.nextLevelId;
+  //   if (nextLevelId != null) {
+  //     Navigator.pushReplacementNamed(
+  //       context,
+  //       AppRoutes.drawing,
+  //       arguments: DrawingRouteArgs(levelId: nextLevelId),
+  //     );
+  //     return;
+  //   }
+
+  //   Navigator.pushNamedAndRemoveUntil(
+  //     context,
+  //     AppRoutes.home,
+  //     (_) => false,
+  //   );
+  // }
 
   Future<void> _shareArtwork() async {
     final bytes = args.completedImageBytes;
@@ -83,7 +106,7 @@ class _RewardScreenState extends State<RewardScreen> {
 
   @override
   Widget build(BuildContext context) {
-       return AnnotatedRegion<SystemUiOverlayStyle>(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
@@ -95,89 +118,90 @@ class _RewardScreenState extends State<RewardScreen> {
         systemNavigationBarContrastEnforced: false,
       ),
       child: Scaffold(
-      backgroundColor: const Color(0xFFD7EFFB),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final horizontalPadding = constraints.maxWidth < 380 ? 12.0 : 20.0;
-            final verticalPadding = constraints.maxHeight < 760 ? 16.0 : 28.0;
-            final cardWidth = (constraints.maxWidth - (horizontalPadding * 2))
-                .clamp(280.0, 420.0)
-                .toDouble();
-            final isCompact = constraints.maxWidth < 390;
+        backgroundColor: const Color(0xFFD7EFFB),
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final horizontalPadding =
+                  constraints.maxWidth < 380 ? 12.0 : 20.0;
+              final verticalPadding = constraints.maxHeight < 760 ? 16.0 : 28.0;
+              final cardWidth = (constraints.maxWidth - (horizontalPadding * 2))
+                  .clamp(280.0, 420.0)
+                  .toDouble();
+              final isCompact = constraints.maxWidth < 390;
 
-            return SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(
-                horizontalPadding,
-                verticalPadding,
-                horizontalPadding,
-                24,
-              ),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight - verticalPadding - 24,
+              return SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  horizontalPadding,
+                  verticalPadding,
+                  horizontalPadding,
+                  24,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _RewardPostCard(
-                      args: args,
-                      width: cardWidth,
-                      isCompact: isCompact,
-                      isSharing: _isSharing,
-                      onShare: _shareArtwork,
-                    ),
-                    SizedBox(height: isCompact ? 20 : 30),
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 18,
-                      runSpacing: 16,
-                      children: <Widget>[
-                        _ActionTileButton(
-                          width: isCompact ? 124 : 140,
-                          height: isCompact ? 82 : 92,
-                          backgroundColor: const Color(0xFF5AA6FF),
-                          borderColor: const Color(0xFF2D64C8),
-                          shadowColor: const Color(0x332D64C8),
-                          onTap: () => _openReplay(context),
-                          child: Icon(
-                            Icons.replay_rounded,
-                            size: isCompact ? 42 : 50,
-                            color: Colors.white,
-                          ),
-                        ),
-                        _ActionTileButton(
-                          width: isCompact ? 176 : 220,
-                          height: isCompact ? 82 : 92,
-                          backgroundColor: const Color(0xFF7DE952),
-                          borderColor: const Color(0xFF45A92B),
-                          shadowColor: const Color(0x3345A92B),
-                          onTap: () => _openNext(context),
-                          child: Text(
-                            args.nextLevelId != null ? 'NEXT' : 'HOME',
-                            style: GoogleFonts.fredoka(
-                              fontSize: isCompact ? 30 : 34,
-                              fontWeight: FontWeight.w700,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight - verticalPadding - 24,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _RewardPostCard(
+                        args: args,
+                        width: cardWidth,
+                        isCompact: isCompact,
+                        isSharing: _isSharing,
+                        onShare: _shareArtwork,
+                      ),
+                      SizedBox(height: isCompact ? 20 : 30),
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 18,
+                        runSpacing: 16,
+                        children: <Widget>[
+                          _ActionTileButton(
+                            width: isCompact ? 124 : 140,
+                            height: isCompact ? 82 : 92,
+                            backgroundColor: const Color(0xFF5AA6FF),
+                            borderColor: const Color(0xFF2D64C8),
+                            shadowColor: const Color(0x332D64C8),
+                            onTap: () => _openReplay(context),
+                            child: Icon(
+                              Icons.replay_rounded,
+                              size: isCompact ? 42 : 50,
                               color: Colors.white,
-                              shadows: const <Shadow>[
-                                Shadow(
-                                  color: Color(0x55000000),
-                                  offset: Offset(0, 2),
-                                  blurRadius: 1,
-                                ),
-                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          _ActionTileButton(
+                            width: isCompact ? 176 : 220,
+                            height: isCompact ? 82 : 92,
+                            backgroundColor: const Color(0xFF7DE952),
+                            borderColor: const Color(0xFF45A92B),
+                            shadowColor: const Color(0x3345A92B),
+                            onTap: () => _openNext(context),
+                            child: Text(
+                              args.nextLevelId != null ? 'NEXT' : 'HOME',
+                              style: GoogleFonts.fredoka(
+                                fontSize: isCompact ? 30 : 34,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                shadows: const <Shadow>[
+                                  Shadow(
+                                    color: Color(0x55000000),
+                                    offset: Offset(0, 2),
+                                    blurRadius: 1,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
       ),
     );
   }
@@ -228,7 +252,6 @@ class _RewardPostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-
           // Cemra and Username Row
           // Row(
           //   children: <Widget>[
@@ -373,9 +396,11 @@ class _RewardPostCard extends StatelessWidget {
           //   ],
           // ),
           // const SizedBox(height: 10),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'EXCELLENT!',

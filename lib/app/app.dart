@@ -29,6 +29,7 @@ class AsmrDrawingApp extends StatelessWidget {
     return MultiProvider(
       providers: buildAppProviders(),
       child: MaterialApp(
+        // fontFamily: 'Poppins',
         debugShowCheckedModeBanner: false,
         title: AppConfig.appTitle,
         theme: AppTheme.light(),

@@ -113,9 +113,9 @@ class _DrawingScreenState extends State<DrawingScreen>
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         _viewModel.loadLevel(
-              widget.levelId,
-              drawingSessionId: widget.drawingSessionId,
-            );
+          widget.levelId,
+          drawingSessionId: widget.drawingSessionId,
+        );
       });
     }
   }
@@ -148,10 +148,10 @@ class _DrawingScreenState extends State<DrawingScreen>
             canPop: false,
             onPopInvoked: (didPop) async {
               if (didPop) return;
-              
+
               // Capture final state before exiting
               await _persistHistorySnapshot(captureThumbnail: true);
-              
+
               if (context.mounted) {
                 Navigator.pop(context);
               }
@@ -174,17 +174,20 @@ class _DrawingScreenState extends State<DrawingScreen>
                   return Center(
                     child: Container(
                       // constraints: const BoxConstraints(maxWidth: 520),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        // borderRadius: BorderRadius.circular(32),
-                        // boxShadow: const [
-                        //   BoxShadow(
-                        //     color: Color(0x33000000),
-                        //     blurRadius: 35,
-                        //     offset: Offset(0, 15),
-                        //   ),
-                        // ],
-                      ),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/images/bg.png"),
+                              fit: BoxFit.cover)
+                          // color: Colors.white,
+                          // borderRadius: BorderRadius.circular(32),
+                          // boxShadow: const [
+                          //   BoxShadow(
+                          //     color: Color(0x33000000),
+                          //     blurRadius: 35,
+                          //     offset: Offset(0, 15),
+                          //   ),
+                          // ],
+                          ),
                       child: Stack(
                         children: [
                           // Center Content
@@ -269,16 +272,34 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   },
                                 ),
                                 const SizedBox(height: 16),
+                                // _SidebarIcon(
+                                //   icon: Icons.edit_rounded,
+                                //   assetName: 'assets/images/pen.png',
+                                //   onPressed: () async {
+                                //     await _persistHistorySnapshot(
+                                //         captureThumbnail: true);
+                                //     if (context.mounted) {
+                                //       Navigator.pushNamed(
+                                //           context, AppRoutes.skins);
+                                //     }
+                                //   },
+                                // ),
                                 _SidebarIcon(
                                   icon: Icons.edit_rounded,
                                   assetName: 'assets/images/pen.png',
-                                  onPressed: () async {
-                                    await _persistHistorySnapshot(captureThumbnail: true);
+                                  onPressed: () {
+                                    // un-awaited: Yeh background mein chalta rahega
+                                    _persistHistorySnapshot(
+                                        captureThumbnail: true);
+
+                                    // Fauran next screen par bhej dein
                                     if (context.mounted) {
-                                      Navigator.pushNamed(context, AppRoutes.skins);
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.skins);
                                     }
                                   },
                                 ),
+
                                 const SizedBox(height: 16),
                                 // _SidebarIcon(
                                 //   icon: Icons.photo_library_rounded,
@@ -336,9 +357,11 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   icon: Icons.photo_library_rounded,
                                   assetName: 'assets/images/photo.png',
                                   onPressed: () async {
-                                    await _persistHistorySnapshot(captureThumbnail: true);
+                                    await _persistHistorySnapshot(
+                                        captureThumbnail: true);
                                     if (context.mounted) {
-                                      Navigator.pushNamed(context, AppRoutes.levels);
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.levels);
                                     }
                                   },
                                 ),
@@ -471,7 +494,9 @@ class _DrawingScreenState extends State<DrawingScreen>
     }
 
     final snapshot = _latestSnapshot;
-    if (snapshot == null || !snapshot.hasVisibleProgress || (!mounted && !captureThumbnail)) {
+    if (snapshot == null ||
+        !snapshot.hasVisibleProgress ||
+        (!mounted && !captureThumbnail)) {
       return;
     }
 

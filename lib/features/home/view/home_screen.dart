@@ -25,96 +25,108 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AppGradientBackground(
-        child: SafeArea(
-          child: Consumer<HomeViewModel>(
-            builder: (context, viewModel, _) {
-              if (viewModel.isLoading && viewModel.content == null) {
-                return const Loader();
-              }
-              if (viewModel.errorMessage != null && viewModel.content == null) {
-                return _HomeError(
-                  message: viewModel.errorMessage!,
-                  onRetry: viewModel.load,
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(
+                "assets/images/bg.png",
+              ),
+              fit: BoxFit.cover)),
+      height: double.infinity,
+      width: double.infinity,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: AppGradientBackground(
+          child: SafeArea(
+            child: Consumer<HomeViewModel>(
+              builder: (context, viewModel, _) {
+                if (viewModel.isLoading && viewModel.content == null) {
+                  return const Loader();
+                }
+                if (viewModel.errorMessage != null &&
+                    viewModel.content == null) {
+                  return _HomeError(
+                    message: viewModel.errorMessage!,
+                    onRetry: viewModel.load,
+                  );
+                }
+
+                final allLevels = viewModel.categories
+                    .expand((category) => category.levels)
+                    .toList(growable: false);
+                if (allLevels.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+
+                return RefreshIndicator(
+                  onRefresh: _isOpeningLevel ? () async {} : viewModel.load,
+                  child: CustomScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: <Widget>[
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.lg,
+                            14,
+                            AppSpacing.lg,
+                            10,
+                          ),
+                          child: Text(
+                            viewModel.content?.appTitle ?? AppStrings.appTitle,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                    color: const Color(0xFF1E293B),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30),
+                          ),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                        sliver: SliverLayoutBuilder(
+                          builder: (context, constraints) {
+                            final columns = _columnCountForWidth(
+                                constraints.crossAxisExtent);
+                            return SliverGrid(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  final level = allLevels[index];
+                                  final levelNumber =
+                                      viewModel.levelNumberFor(level.id) ??
+                                          index + 1;
+                                  return _LevelCard(
+                                    level: level,
+                                    levelNumber: levelNumber,
+                                    palette: _paletteFor(index),
+                                    isBusy: _isOpeningLevel,
+                                    onTap: () =>
+                                        _openLevel(context, viewModel, level),
+                                  );
+                                },
+                                childCount: allLevels.length,
+                              ),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: columns,
+                                mainAxisSpacing: 12,
+                                crossAxisSpacing: 12,
+                                childAspectRatio: _aspectRatioForWidth(
+                                  constraints.crossAxisExtent,
+                                  columns,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 );
-              }
-
-              final allLevels = viewModel.categories
-                  .expand((category) => category.levels)
-                  .toList(growable: false);
-              if (allLevels.isEmpty) {
-                return const SizedBox.shrink();
-              }
-
-              return RefreshIndicator(
-                onRefresh: _isOpeningLevel ? () async {} : viewModel.load,
-                child: CustomScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: <Widget>[
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.lg,
-                          14,
-                          AppSpacing.lg,
-                          10,
-                        ),
-                        child: Text(
-                          viewModel.content?.appTitle ?? AppStrings.appTitle,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(
-                                color: const Color(0xFF1E293B),
-                                fontWeight: FontWeight.w900,
-                              ),
-                        ),
-                      ),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
-                      sliver: SliverLayoutBuilder(
-                        builder: (context, constraints) {
-                          final columns =
-                              _columnCountForWidth(constraints.crossAxisExtent);
-                          return SliverGrid(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                final level = allLevels[index];
-                                final levelNumber =
-                                    viewModel.levelNumberFor(level.id) ??
-                                        index + 1;
-                                return _LevelCard(
-                                  level: level,
-                                  levelNumber: levelNumber,
-                                  palette: _paletteFor(index),
-                                  isBusy: _isOpeningLevel,
-                                  onTap: () =>
-                                      _openLevel(context, viewModel, level),
-                                );
-                              },
-                              childCount: allLevels.length,
-                            ),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: columns,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 12,
-                              childAspectRatio: _aspectRatioForWidth(
-                                constraints.crossAxisExtent,
-                                columns,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+              },
+            ),
           ),
         ),
       ),

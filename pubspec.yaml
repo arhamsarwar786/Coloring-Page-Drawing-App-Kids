@@ -1,10 +1,10 @@
 name: asmr_coloring_app
 description: ASMR Coloring Book App
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -33,8 +33,13 @@ flutter:
     - assets/data/app_content.json
     - assets/data/realistic_content_pack.json
     - assets/data/celebrate.json
-    - assets/references/
+    # - assets/references/
     - assets/images/
-    - assets/json/
+    # - assets/json/
     - assets/sounds/
     - assets/audio/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/poppins.ttf
