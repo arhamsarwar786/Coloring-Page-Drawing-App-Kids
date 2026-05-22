@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/base/base_viewmodel.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../history/repository/history_repository.dart';
 import '../../levels/model/level_model.dart';
 import '../model/category_model.dart';
 import '../repository/home_repository.dart';
@@ -10,15 +11,20 @@ import '../repository/home_repository.dart';
 class HomeViewModel extends BaseViewModel {
   HomeViewModel({
     required HomeRepository repository,
-  }) : _repository = repository {
+    required HistoryRepository historyRepository,
+  })  : _repository = repository,
+        _historyRepository = historyRepository {
     load();
   }
 
   final HomeRepository _repository;
+  final HistoryRepository _historyRepository;
+  static const double unlockProgressThreshold = 0.8;
 
   HomeContentModel? _content;
   String? _selectedCategoryId;
   String? _lastPlayedLevelId;
+  Map<String, double> _levelProgress = const <String, double>{};
 
   HomeContentModel? get content => _content;
   List<CategoryModel> get categories =>
@@ -83,6 +89,7 @@ class HomeViewModel extends BaseViewModel {
     try {
       _content = await _repository.loadHomeContent();
       _lastPlayedLevelId = await _repository.getLastPlayedLevelId();
+      _levelProgress = await _loadLevelProgress();
       if (_content!.categories.isNotEmpty) {
         final hasCurrentSelection = _content!.categories
             .any((category) => category.id == _selectedCategoryId);
@@ -103,12 +110,32 @@ class HomeViewModel extends BaseViewModel {
   }
 
   bool isLevelLocked(LevelModel level) {
+    final category = _categoryForLevel(level.id) ?? selectedCategory;
+    if (category == null || category.levels.isEmpty) return false;
+
+    final levelIndex = category.levels.indexWhere(
+      (item) => item.id == level.id,
+    );
+    return isLevelLockedAt(levelIndex, category.levels);
+  }
+
+  bool isLevelLockedAt(int levelIndex, List<LevelModel> levels) {
+    if (levelIndex <= 0) return false;
+    if (levelIndex >= levels.length) return true;
+
+    for (var index = 0; index < levelIndex; index++) {
+      if (levelProgressFor(levels[index].id) < unlockProgressThreshold) {
+        return true;
+      }
+    }
+
     return false;
   }
 
   Future<bool> prepareLevel(String levelId) async {
     final level = _findLevel(levelId);
     if (level == null) return false;
+    if (isLevelLocked(level)) return false;
     await _repository.saveLastPlayedLevel(levelId);
     _lastPlayedLevelId = levelId;
     notifyListeners();
@@ -122,6 +149,37 @@ class HomeViewModel extends BaseViewModel {
       }
     }
     return null;
+  }
+
+  CategoryModel? _categoryForLevel(String levelId) {
+    for (final category in categories) {
+      for (final level in category.levels) {
+        if (level.id == levelId) return category;
+      }
+    }
+    return null;
+  }
+
+  double levelProgressFor(String levelId) {
+    return _levelProgress[levelId] ?? 0.0;
+  }
+
+  Future<Map<String, double>> _loadLevelProgress() async {
+    final progressByLevel = <String, double>{};
+    try {
+      final entries = await _historyRepository.getHistoryEntries();
+      for (final entry in entries) {
+        final current = progressByLevel[entry.levelId] ?? 0.0;
+        final entryProgress = entry.isCompleted ? 1.0 : entry.progress;
+        if (entryProgress > current) {
+          progressByLevel[entry.levelId] =
+              entryProgress.clamp(0.0, 1.0).toDouble();
+        }
+      }
+    } catch (_) {
+      return const <String, double>{};
+    }
+    return progressByLevel;
   }
 
   int? levelNumberFor(String levelId) {

@@ -289,39 +289,38 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   ),
                                 ),
                               // Show Again button (appears after 10 seconds, only once)
-                              // if (_showAgainButton && !_showPreviewOverlay)
-                              //   Padding(
-                              //     padding: const EdgeInsets.symmetric(
-                              //         horizontal: 16, vertical: 8),
-                              //     child: ElevatedButton(
-                              //       onPressed: () {
-                              //         // Call Show Again handler in CanvasWidget
-                              //         final canvasState = _canvasWidgetKey
-                              //             .currentState as dynamic;
-                              //         try {
-                              //           canvasState?.showPreviewAgain();
-                              //         } catch (_) {}
-                              //       },
-                              //       style: ElevatedButton.styleFrom(
-                              //         backgroundColor: Colors.blue.shade600,
-                              //         foregroundColor: Colors.white,
-                              //         shape: RoundedRectangleBorder(
-                              //           borderRadius: BorderRadius.circular(24),
-                              //         ),
-                              //         padding: const EdgeInsets.symmetric(
-                              //             horizontal: 40, vertical: 16),
-                              //         elevation: 8,
-                              //       ),
-                              //       child: Text(
-                              //         'Show Again',
-                              //         style: GoogleFonts.fredoka(
-                              //           fontSize: 18,
-                              //           fontWeight: FontWeight.w600,
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ),
-
+                              if (_showAgainButton && !_showPreviewOverlay)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // Call Show Again handler in CanvasWidget
+                                      final canvasState = _canvasWidgetKey
+                                          .currentState as dynamic;
+                                      try {
+                                        canvasState?.showPreviewAgain();
+                                      } catch (_) {}
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue.shade600,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 40, vertical: 16),
+                                      elevation: 8,
+                                    ),
+                                    child: Text(
+                                      'Show Again',
+                                      style: GoogleFonts.fredoka(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               if (!_showPreviewOverlay) ...[
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -397,7 +396,9 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   ),
                                 ),
                               ),
-                              _buildFooterControls(level, viewModel),
+                              const SizedBox(height: 10),
+                              _buildBottomAction(level, viewModel),
+                              const SizedBox(height: 32),
                             ],
                           ),
 
@@ -531,7 +532,7 @@ class _DrawingScreenState extends State<DrawingScreen>
 
   Widget _buildBottomAction(LevelModel level, DrawingViewModel viewModel) {
     final isColorPhase = _canvasPhase == GuidedCanvasPhase.coloring;
-    Widget actionChild = const SizedBox.shrink();
+    Widget actionChild = const SizedBox(height: 86);
 
     if (_awaitingPartTick && isColorPhase) {
       actionChild = _TickActionButton(
@@ -549,57 +550,11 @@ class _DrawingScreenState extends State<DrawingScreen>
       );
     }
 
-    return SizedBox(
-      height: 86,
-      child: Center(child: actionChild),
-    );
-  }
-
-  Widget _buildFooterControls(LevelModel level, DrawingViewModel viewModel) {
-    return SizedBox(
-      height: 166,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const SizedBox(height: 10),
-          _buildBottomAction(level, viewModel),
-          const SizedBox(height: 12),
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 180),
-            opacity: _showAgainButton && !_showPreviewOverlay ? 1 : 0,
-            child: IgnorePointer(
-              ignoring: !_showAgainButton || _showPreviewOverlay,
-              child: ElevatedButton(
-                onPressed: () {
-                  final canvasState = _canvasWidgetKey.currentState as dynamic;
-                  try {
-                    canvasState?.showPreviewAgain();
-                  } catch (_) {}
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade600,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 16,
-                  ),
-                  elevation: 8,
-                ),
-                child: Text(
-                  'Show Again',
-                  style: GoogleFonts.fredoka(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        actionChild,
+      ],
     );
   }
 

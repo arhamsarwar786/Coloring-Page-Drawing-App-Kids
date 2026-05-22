@@ -88,6 +88,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
   bool _showAgainButton = false;
   bool _showAgainUsed = false;
   String? _show3DMessage;
+  bool _hasShownPenTutorial = false;
+  bool _isPenTutorialOpening = false;
   Timer? _previewTimer;
   Timer? _message3DTimer;
 
@@ -149,6 +151,48 @@ class _CanvasWidgetState extends State<CanvasWidget>
         });
       }
     });
+  }
+
+  Future<void> _showPenTutorialDialogOnce({
+    required String? markerAsset,
+    required Color selectedColor,
+  }) async {
+    if (_hasShownPenTutorial || _isPenTutorialOpening) return;
+
+    _hasShownPenTutorial = true;
+    _isPenTutorialOpening = true;
+
+    await showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Pen tutorial',
+      barrierColor: Colors.black.withValues(alpha: 0.62),
+      transitionDuration: const Duration(milliseconds: 240),
+      pageBuilder: (dialogContext, animation, secondaryAnimation) {
+        return _PenTutorialFullScreenDialog(
+          level: widget.level,
+          markerAsset: markerAsset ?? 'assets/images/marker.png',
+          selectedColor: selectedColor,
+          onClose: () => Navigator.of(dialogContext).maybePop(),
+        );
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+          reverseCurve: Curves.easeInCubic,
+        );
+        return FadeTransition(
+          opacity: curved,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.96, end: 1).animate(curved),
+            child: child,
+          ),
+        );
+      },
+    );
+
+    _isPenTutorialOpening = false;
   }
 
   @override
@@ -239,6 +283,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.level.id != widget.level.id) {
+      _hasShownPenTutorial = false;
+      _isPenTutorialOpening = false;
       _pathCache.clear();
       _paintPathCache.clear();
       _dashedPathCache.clear();
@@ -606,7 +652,9 @@ class _CanvasWidgetState extends State<CanvasWidget>
   }
 
   Future<void> _handleFillCompletion(
-      String regionId, Color selectedColor) async {
+    String regionId,
+    Color selectedColor,
+  ) async {
     await widget.onFill(regionId);
     widget.onRegionFilled?.call(regionId);
 
@@ -762,370 +810,757 @@ class _CanvasWidgetState extends State<CanvasWidget>
           _fillAnimationController,
         ]);
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final canvasDimension =
-                math.min(constraints.maxWidth, constraints.maxHeight);
-            final canvasSize = Size.square(canvasDimension);
-            final scaleFactor = canvasDimension / 300.0;
-            final skin = skinsVm.selectedSkin;
+// return Container();
 
-            for (final region in widget.level.regions) {
-              _pathFor(region.id, canvasSize);
-              _paintPathFor(region.id, canvasSize);
-            }
-            _alignMarkerToCurrentOutlineStart(canvasSize);
-            _alignMarkerToCurrentColoringStart(canvasSize);
+        return Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final canvasDimension =
+                  math.min(constraints.maxWidth, constraints.maxHeight);
+              final canvasSize = Size.square(canvasDimension);
+              final scaleFactor = canvasDimension / 300.0;
+              final skin = skinsVm.selectedSkin;
 
-            return Listener(
-              onPointerDown: _handlePointerDown,
-              onPointerUp: _handlePointerEnd,
-              onPointerCancel: _handlePointerEnd,
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onLongPressStart: (details) {
-                  if (_hasMultipleActivePointers) return;
-                  _onLongPressStart(details, constraints, canvasDimension);
-                },
-                onLongPressMoveUpdate: (details) {
-                  if (_hasMultipleActivePointers) return;
-                  _onLongPressMoveUpdate(
-                    details,
-                    constraints,
-                    canvasDimension,
+              if (isColoringActive &&
+                  !_hasShownPenTutorial &&
+                  !_isPenTutorialOpening) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!mounted) return;
+                  _showPenTutorialDialogOnce(
+                    markerAsset: skin.image,
+                    selectedColor: selectedColor,
                   );
-                },
-                onLongPressEnd: (_) {
-                  if (_hasMultipleActivePointers) return;
-                  _onLongPressEnd();
-                },
-                onPanStart: (details) {
-                  if (_hasMultipleActivePointers) return;
-                  final local = _toLocal(
-                    details.localPosition,
-                    constraints,
-                    canvasDimension,
-                  );
-                  if (_gestureCoordinator.acceptsOutlineGestures) {
-                    _startOutlineSlideGesture(
-                      localPosition: local,
-                      canvasDimension: canvasDimension,
+                });
+              }
+
+              for (final region in widget.level.regions) {
+                _pathFor(region.id, canvasSize);
+                _paintPathFor(region.id, canvasSize);
+              }
+              _alignMarkerToCurrentOutlineStart(canvasSize);
+              _alignMarkerToCurrentColoringStart(canvasSize);
+
+              return Listener(
+                onPointerDown: _handlePointerDown,
+                onPointerUp: _handlePointerEnd,
+                onPointerCancel: _handlePointerEnd,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onLongPressStart: (details) {
+                    if (_hasMultipleActivePointers) return;
+                    _onLongPressStart(details, constraints, canvasDimension);
+                  },
+                  onLongPressMoveUpdate: (details) {
+                    if (_hasMultipleActivePointers) return;
+                    _onLongPressMoveUpdate(
+                      details,
+                      constraints,
+                      canvasDimension,
                     );
-                    return;
-                  }
+                  },
+                  onLongPressEnd: (_) {
+                    if (_hasMultipleActivePointers) return;
+                    _onLongPressEnd();
+                  },
+                  onPanStart: (details) {
+                    if (_hasMultipleActivePointers) return;
+                    final local = _toLocal(
+                      details.localPosition,
+                      constraints,
+                      canvasDimension,
+                    );
+                    if (_gestureCoordinator.acceptsOutlineGestures) {
+                      _startOutlineSlideGesture(
+                        localPosition: local,
+                        canvasDimension: canvasDimension,
+                      );
+                      return;
+                    }
 
-                  _animateMarkerTap();
-                  _handleColorGesture(
-                    fingerLocal: local,
-                    canvasSize: canvasSize,
-                    selectedColor: selectedColor,
-                    startStroke: true,
-                  );
-                },
-                onPanUpdate: (details) {
-                  if (_hasMultipleActivePointers) return;
-                  final local = _toLocal(
-                    details.localPosition,
-                    constraints,
-                    canvasDimension,
-                  );
-                  if (_gestureCoordinator.acceptsOutlineGestures ||
-                      _drawingStepController.isAnimating) {
-                    _updateOutlineSlideGesture(local);
-                    return;
-                  }
+                    _animateMarkerTap();
+                    _handleColorGesture(
+                      fingerLocal: local,
+                      canvasSize: canvasSize,
+                      selectedColor: selectedColor,
+                      startStroke: true,
+                    );
+                  },
+                  onPanUpdate: (details) {
+                    if (_hasMultipleActivePointers) return;
+                    final local = _toLocal(
+                      details.localPosition,
+                      constraints,
+                      canvasDimension,
+                    );
+                    if (_gestureCoordinator.acceptsOutlineGestures ||
+                        _drawingStepController.isAnimating) {
+                      _updateOutlineSlideGesture(local);
+                      return;
+                    }
 
-                  _handleColorGesture(
-                    fingerLocal: local,
-                    canvasSize: canvasSize,
-                    selectedColor: selectedColor,
-                    startStroke: false,
-                  );
-                },
-                onPanEnd: (_) {
-                  if (_hasMultipleActivePointers) return;
-                  if (_gestureCoordinator.acceptsOutlineGestures ||
-                      _drawingStepController.isAnimating) {
-                    _endOutlineSlideGesture();
-                    return;
-                  }
+                    _handleColorGesture(
+                      fingerLocal: local,
+                      canvasSize: canvasSize,
+                      selectedColor: selectedColor,
+                      startStroke: false,
+                    );
+                  },
+                  onPanEnd: (_) {
+                    if (_hasMultipleActivePointers) return;
+                    if (_gestureCoordinator.acceptsOutlineGestures ||
+                        _drawingStepController.isAnimating) {
+                      _endOutlineSlideGesture();
+                      return;
+                    }
 
-                  _onColorGestureEnd(selectedColor);
-                },
-                onPanCancel: () {
-                  if (_hasMultipleActivePointers) return;
-                  if (_gestureCoordinator.acceptsOutlineGestures ||
-                      _drawingStepController.isAnimating) {
-                    _endOutlineSlideGesture();
-                    return;
-                  }
+                    _onColorGestureEnd(selectedColor);
+                  },
+                  onPanCancel: () {
+                    if (_hasMultipleActivePointers) return;
+                    if (_gestureCoordinator.acceptsOutlineGestures ||
+                        _drawingStepController.isAnimating) {
+                      _endOutlineSlideGesture();
+                      return;
+                    }
 
-                  _onColorGestureEnd(selectedColor);
-                },
-                child: Center(
-                  child: Container(
-                    width: canvasDimension,
-                    height: canvasDimension,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFFEFB),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 3,
+                    _onColorGestureEnd(selectedColor);
+                  },
+                  child: Center(
+                    child: Container(
+                      width: canvasDimension,
+                      height: canvasDimension,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.transparent,
+                          width: 2,
+                        ),
                       ),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.16),
-                          blurRadius: 22,
-                          offset: const Offset(0, 10),
-                        ),
-                        BoxShadow(
-                          color: Colors.blue.withValues(alpha: 0.10),
-                          blurRadius: 16,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: <Widget>[
-                        // if (widget.guideAsset != null)
-                        //   Positioned.fill(
-                        //     child: Opacity(
-                        //       opacity: 0.2,
-                        //       child: Image.asset(
-                        //         widget.guideAsset!,
-                        //         fit: BoxFit.contain,
-                        //       ),
-                        //     ),
-                        //   ),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: <Widget>[
+                          // if (widget.guideAsset != null)
+                          //   Positioned.fill(
+                          //     child: Opacity(
+                          //       opacity: 0.2,
+                          //       child: Image.asset(
+                          //         widget.guideAsset!,
+                          //         fit: BoxFit.contain,
+                          //       ),
+                          //     ),
+                          //   ),
 
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: RepaintBoundary(
-                            key: widget.repaintBoundaryKey,
-                            child: CustomPaint(
-                              painter: AdvancedCanvasPainter(
-                                level: widget.level,
-                                paths: _pathCache,
-                                paintPaths: _paintPathCache,
-                                dashedPaths: _dashedPathCache,
-                                metricsCache: _metricsCache,
-                                filledRegions: widget.filledRegions,
-                                drawingController: _drawingStepController,
-                                coloringController: _coloringStepController,
-                                activePartHighlighter: _activePartHighlighter,
-                                fillAnimationValue:
-                                    _fillAnimationController.value,
-                                activeFillRegionId: _activeRegionId,
-                                activeFillRegionOriginalColor:
-                                    _activeRegionOriginalColor,
-                                repaint: repaintListenable,
-                              ),
-                              size: canvasSize,
-                            ),
-                          ),
-                        ),
-
-                        if (_showPreview && widget.guideAsset != null)
-                          Positioned.fill(
-                            child: IgnorePointer(
-                              child: Opacity(
-                                opacity: 0.25,
-                                child: Image.asset(
-                                  widget.guideAsset!,
-                                  fit: BoxFit.contain,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: RepaintBoundary(
+                              key: widget.repaintBoundaryKey,
+                              child: CustomPaint(
+                                painter: AdvancedCanvasPainter(
+                                  level: widget.level,
+                                  paths: _pathCache,
+                                  paintPaths: _paintPathCache,
+                                  dashedPaths: _dashedPathCache,
+                                  metricsCache: _metricsCache,
+                                  filledRegions: widget.filledRegions,
+                                  drawingController: _drawingStepController,
+                                  coloringController: _coloringStepController,
+                                  activePartHighlighter: _activePartHighlighter,
+                                  fillAnimationValue:
+                                      _fillAnimationController.value,
+                                  activeFillRegionId: _activeRegionId,
+                                  activeFillRegionOriginalColor:
+                                      _activeRegionOriginalColor,
+                                  repaint: repaintListenable,
                                 ),
+                                size: canvasSize,
                               ),
                             ),
                           ),
 
-                        if (shouldShowColoringFade)
-                          Positioned.fill(
-                            child: IgnorePointer(
-                              child: FadeTransition(
-                                opacity: _highlightPulse,
-                                child: CustomPaint(
-                                  painter: _ColoringHighlightOverlayPainter(
-                                    activeRegionId: activeColorRegionId,
-                                    paths: _pathCache,
-                                    activePartHighlighter:
-                                        _activePartHighlighter,
+                          if (_showPreview && widget.guideAsset != null)
+                            Positioned.fill(
+                              child: IgnorePointer(
+                                child: Opacity(
+                                  opacity: 0.25,
+                                  child: Image.asset(
+                                    widget.guideAsset!,
+                                    fit: BoxFit.contain,
                                   ),
-                                  size: canvasSize,
                                 ),
                               ),
                             ),
-                          ),
-                        ValueListenableBuilder<String?>(
-                          valueListenable: _appreciationMessage,
-                          builder: (context, message, _) {
-                            if (message == null) {
-                              return const SizedBox.shrink();
-                            }
 
-                            return Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: -74 * scaleFactor,
-                              child: SlideTransition(
-                                position: _appreciationOffset,
-                                child: ScaleTransition(
-                                  scale: _appreciationScale,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 24 * scaleFactor,
-                                      vertical: 14 * scaleFactor,
+                          if (shouldShowColoringFade)
+                            Positioned.fill(
+                              child: IgnorePointer(
+                                child: FadeTransition(
+                                  opacity: _highlightPulse,
+                                  child: CustomPaint(
+                                    painter: _ColoringHighlightOverlayPainter(
+                                      activeRegionId: activeColorRegionId,
+                                      paths: _pathCache,
+                                      activePartHighlighter:
+                                          _activePartHighlighter,
                                     ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(
-                                          20 * scaleFactor),
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
+                                    size: canvasSize,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ValueListenableBuilder<String?>(
+                            valueListenable: _appreciationMessage,
+                            builder: (context, message, _) {
+                              if (message == null) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return Positioned(
+                                left: 0,
+                                right: 0,
+                                bottom: -74 * scaleFactor,
+                                child: SlideTransition(
+                                  position: _appreciationOffset,
+                                  child: ScaleTransition(
+                                    scale: _appreciationScale,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 24 * scaleFactor,
+                                        vertical: 14 * scaleFactor,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(
+                                            20 * scaleFactor),
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                            color: selectedColor.withValues(
+                                                alpha: 0.4),
+                                            blurRadius: 28 * scaleFactor,
+                                            spreadRadius: 2 * scaleFactor,
+                                          ),
+                                        ],
+                                        border: Border.all(
                                           color: selectedColor.withValues(
-                                              alpha: 0.4),
-                                          blurRadius: 28 * scaleFactor,
-                                          spreadRadius: 2 * scaleFactor,
+                                              alpha: 0.7),
+                                          width: 2.5 * scaleFactor,
                                         ),
-                                      ],
-                                      border: Border.all(
-                                        color: selectedColor.withValues(
-                                            alpha: 0.7),
-                                        width: 2.5 * scaleFactor,
                                       ),
-                                    ),
-                                    child: Text(
-                                      message,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 28 * scaleFactor,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFF333333),
+                                      child: Text(
+                                        message,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 28 * scaleFactor,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF333333),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                        // 3D Appreciation message (Excellence / Good as Different)
-                        if (_show3DMessage != null)
-                          Positioned.fill(
-                            child: Center(
-                              child: AnimatedBuilder(
-                                animation: _appreciationController,
-                                builder: (context, child) {
-                                  final scale =
-                                      0.5 + 0.5 * _appreciationController.value;
-                                  final opacity = _appreciationController.value;
-                                  return Transform(
-                                    alignment: Alignment.center,
-                                    transform: Matrix4.identity()
-                                      ..scale(scale, scale, 1.0)
-                                      ..setEntry(3, 2, 0.001)
-                                      ..rotateX(0.2 * (1 - opacity)),
-                                    child: Opacity(
-                                      opacity: opacity,
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 48 * scaleFactor,
-                                          vertical: 28 * scaleFactor,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black
-                                                  .withOpacity(0.25),
-                                              blurRadius: 32,
-                                              spreadRadius: 4,
-                                            ),
-                                          ],
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              _show3DMessage!.split('!')[0] +
-                                                  '!',
-                                              style: TextStyle(
-                                                fontSize: 50 * scaleFactor,
-                                                fontWeight: FontWeight.bold,
-                                                color: _show3DMessage!
-                                                        .contains('Excellence')
-                                                    ? Colors.amber.shade700
-                                                    : Colors.blue.shade600,
-                                                shadows: [
-                                                  Shadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.2),
-                                                    blurRadius: 8,
-                                                    offset: Offset(2, 2),
-                                                  ),
-                                                ],
+                              );
+                            },
+                          ),
+                          // 3D Appreciation message (Excellence / Good as Different)
+                          if (_show3DMessage != null)
+                            Positioned.fill(
+                              child: Center(
+                                child: AnimatedBuilder(
+                                  animation: _appreciationController,
+                                  builder: (context, child) {
+                                    final scale = 0.5 +
+                                        0.5 * _appreciationController.value;
+                                    final opacity =
+                                        _appreciationController.value;
+                                    return Transform(
+                                      alignment: Alignment.center,
+                                      transform: Matrix4.identity()
+                                        ..scale(scale, scale, 1.0)
+                                        ..setEntry(3, 2, 0.001)
+                                        ..rotateX(0.2 * (1 - opacity)),
+                                      child: Opacity(
+                                        opacity: opacity,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 48 * scaleFactor,
+                                            vertical: 28 * scaleFactor,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(40),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.25),
+                                                blurRadius: 32,
+                                                spreadRadius: 4,
                                               ),
-                                            ),
-                                            if (_show3DMessage!
-                                                .contains('Excellence'))
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: 12 * scaleFactor),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Icon(Icons.monetization_on,
-                                                        color: Colors
-                                                            .amber.shade700,
-                                                        size: 32 * scaleFactor),
-                                                    SizedBox(
-                                                        width: 8 * scaleFactor),
-                                                    Text(
-                                                      '+100',
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            36 * scaleFactor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors
-                                                            .amber.shade700,
-                                                      ),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                _show3DMessage!.split('!')[0] +
+                                                    '!',
+                                                style: TextStyle(
+                                                  fontSize: 52 * scaleFactor,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: _show3DMessage!
+                                                          .contains(
+                                                              'Excellence')
+                                                      ? Colors.amber.shade700
+                                                      : Colors.blue.shade600,
+                                                  shadows: [
+                                                    Shadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 8,
+                                                      offset: Offset(2, 2),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                          ],
+                                              if (_show3DMessage!
+                                                  .contains('Excellence'))
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 12 * scaleFactor),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Icon(
+                                                          Icons.monetization_on,
+                                                          color: Colors
+                                                              .amber.shade700,
+                                                          size:
+                                                              32 * scaleFactor),
+                                                      SizedBox(
+                                                          width:
+                                                              8 * scaleFactor),
+                                                      Text(
+                                                        '+100',
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              36 * scaleFactor,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors
+                                                              .amber.shade700,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
+                          _MarkerOverlay(
+                            markerPosition: _markerPosition,
+                            tapScaleController: _tapScaleController,
+                            skin: skin,
+                            tipColor: markerTipColor,
+                            canvasDimension: canvasDimension,
+                            scaleFactor: scaleFactor,
                           ),
-
-                        _MarkerOverlay(
-                          markerPosition: _markerPosition,
-                          tapScaleController: _tapScaleController,
-                          skin: skin,
-                          tipColor: markerTipColor,
-                          canvasDimension: canvasDimension,
-                          scaleFactor: scaleFactor,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
       },
     );
+  }
+}
+
+class _PenTutorialFullScreenDialog extends StatefulWidget {
+  const _PenTutorialFullScreenDialog({
+    required this.level,
+    required this.markerAsset,
+    required this.selectedColor,
+    required this.onClose,
+  });
+
+  final LevelModel level;
+  final String markerAsset;
+  final Color selectedColor;
+  final VoidCallback onClose;
+
+  @override
+  State<_PenTutorialFullScreenDialog> createState() =>
+      _PenTutorialFullScreenDialogState();
+}
+
+class _PenTutorialFullScreenDialogState
+    extends State<_PenTutorialFullScreenDialog>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3400),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: <Color>[
+              Colors.black.withValues(alpha: 0.48),
+              const Color(0xFF16213A).withValues(alpha: 0.50),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton.filled(
+                    onPressed: widget.onClose,
+                    icon: const Icon(Icons.close_rounded),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF242424),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 460),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.26),
+                              blurRadius: 32,
+                              offset: const Offset(0, 18),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              widget.level.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Color(0xFF242424),
+                                fontSize: 25,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Flexible(
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: _PenTutorialStage(
+                                  level: widget.level,
+                                  markerAsset: widget.markerAsset,
+                                  selectedColor: widget.selectedColor,
+                                  animation: _controller,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 54,
+                              child: FilledButton.icon(
+                                onPressed: widget.onClose,
+                                icon: const Icon(Icons.play_arrow_rounded),
+                                label: const Text(
+                                  'Start',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2BBF5B),
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PenTutorialStage extends StatelessWidget {
+  const _PenTutorialStage({
+    required this.level,
+    required this.markerAsset,
+    required this.selectedColor,
+    required this.animation,
+  });
+
+  final LevelModel level;
+  final String markerAsset;
+  final Color selectedColor;
+  final Animation<double> animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final dimension = math.min(constraints.maxWidth, constraints.maxHeight);
+        final canvasSize = Size.square(dimension);
+        final markerSize = dimension * 0.42;
+
+        return Center(
+          child: SizedBox(
+            width: dimension,
+            height: dimension,
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                final progress = Curves.easeInOut.transform(animation.value);
+                final markerPosition = _markerPositionFor(canvasSize, progress);
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: <Widget>[
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFEFB),
+                          borderRadius: BorderRadius.circular(22),
+                          border: Border.all(
+                            color: const Color(0xFFE7EDF5),
+                            width: 2,
+                          ),
+                        ),
+                        child: CustomPaint(
+                          painter: _PenTutorialPainter(
+                            level: level,
+                            selectedColor: selectedColor,
+                            progress: progress,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: markerPosition.dx - (markerSize * 0.18),
+                      top: markerPosition.dy - (markerSize * 0.78),
+                      child: Transform.rotate(
+                        angle: -0.72,
+                        child: Image.asset(
+                          markerAsset,
+                          width: markerSize,
+                          height: markerSize,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.low,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            'assets/images/marker.png',
+                            width: markerSize,
+                            height: markerSize,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Offset _markerPositionFor(Size size, double progress) {
+    if (level.regions.isEmpty) {
+      return Offset(size.width * 0.55, size.height * 0.56);
+    }
+
+    final objectSize = size.shortestSide * 0.82;
+    final objectOffset = Offset(
+      (size.width - objectSize) / 2,
+      (size.height - objectSize) / 2,
+    );
+    final regionCount = level.regions.length;
+    final rawIndex =
+        (progress * regionCount).clamp(0.0, regionCount - 0.001).toDouble();
+    final activeIndex = rawIndex.floor().clamp(0, regionCount - 1).toInt();
+    final localProgress = rawIndex - activeIndex;
+    final path = level.regions[activeIndex]
+        .toPath(Size.square(objectSize))
+        .shift(objectOffset);
+    final bounds = path.getBounds();
+
+    if (bounds.isEmpty) {
+      return Offset(size.width * 0.55, size.height * 0.56);
+    }
+
+    final x = bounds.left + (bounds.width * (0.20 + (0.58 * localProgress)));
+    final wave = math.sin(localProgress * math.pi * 2);
+    final y = bounds.center.dy + (wave * bounds.height * 0.18);
+    return Offset(x, y);
+  }
+}
+
+class _PenTutorialPainter extends CustomPainter {
+  const _PenTutorialPainter({
+    required this.level,
+    required this.selectedColor,
+    required this.progress,
+  });
+
+  final LevelModel level;
+  final Color selectedColor;
+  final double progress;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final backgroundPaint = Paint()
+      ..color = const Color(0xFFFFFEFB)
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(Offset.zero & size, backgroundPaint);
+
+    if (level.regions.isEmpty) return;
+
+    final objectSize = size.shortestSide * 0.82;
+    final objectOffset = Offset(
+      (size.width - objectSize) / 2,
+      (size.height - objectSize) / 2,
+    );
+    final scaledSize = Size.square(objectSize);
+    final regionCount = level.regions.length;
+    final fillCursor = progress * regionCount;
+
+    for (var index = 0; index < regionCount; index++) {
+      final region = level.regions[index];
+      final path = region.toPath(scaledSize).shift(objectOffset);
+      final bounds = path.getBounds();
+      if (bounds.isEmpty) continue;
+
+      final targetColor = _targetColorFor(region.id);
+      final regionProgress = (fillCursor - index).clamp(0.0, 1.0).toDouble();
+
+      if (regionProgress > 0) {
+        canvas.save();
+        canvas.clipPath(path);
+
+        final fillPaint = Paint()
+          ..style = PaintingStyle.fill
+          ..isAntiAlias = true
+          ..shader = LinearGradient(
+            colors: <Color>[
+              targetColor.withValues(alpha: 0.74),
+              targetColor,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ).createShader(bounds);
+
+        final fillRect = Rect.fromLTWH(
+          bounds.left - (bounds.width * 0.08),
+          bounds.top - (bounds.height * 0.12),
+          (bounds.width * 1.18) * regionProgress,
+          bounds.height * 1.24,
+        );
+        canvas.drawRect(fillRect, fillPaint);
+
+        final strokePaint = Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round
+          ..strokeWidth = size.shortestSide * 0.035
+          ..color = targetColor.withValues(alpha: 0.88)
+          ..isAntiAlias = true;
+        final strokeEnd =
+            bounds.left + ((bounds.width * 1.05) * regionProgress);
+        for (var stroke = 0; stroke < 5; stroke++) {
+          final y = bounds.top + (bounds.height * (0.22 + (stroke * 0.14)));
+          canvas.drawLine(
+            Offset(bounds.left + (bounds.width * 0.06), y),
+            Offset(strokeEnd, y - (bounds.height * 0.06)),
+            strokePaint,
+          );
+        }
+
+        canvas.restore();
+      }
+
+      canvas.drawPath(
+        path,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.shortestSide * 0.0105
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round
+          ..color = Colors.black
+          ..isAntiAlias = true,
+      );
+    }
+  }
+
+  Color _targetColorFor(String regionId) {
+    final targetColor = level.getTargetColorForRegion(regionId);
+    if (targetColor == Colors.grey.shade300) {
+      return selectedColor;
+    }
+    return targetColor;
+  }
+
+  @override
+  bool shouldRepaint(covariant _PenTutorialPainter oldDelegate) {
+    return oldDelegate.level != level ||
+        oldDelegate.selectedColor != selectedColor ||
+        oldDelegate.progress != progress;
   }
 }
 

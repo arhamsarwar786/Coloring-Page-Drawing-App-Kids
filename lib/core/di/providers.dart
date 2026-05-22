@@ -76,6 +76,7 @@ List<SingleChildWidget> buildAppProviders() {
     ChangeNotifierProvider(
       create: (context) => HomeViewModel(
         repository: context.read<HomeRepository>(),
+        historyRepository: context.read<HistoryRepository>(),
       ),
     ),
     ChangeNotifierProvider(

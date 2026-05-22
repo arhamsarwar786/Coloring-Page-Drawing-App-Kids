@@ -120,10 +120,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 (context, index) {
                                   final level = selectedLevels[index];
                                   final levelNumber = index + 1;
-                                  return _LevelCard(
+                                  final isLocked = viewModel.isLevelLockedAt(
+                                    index,
+                                    selectedLevels,
+                                  );
+                                  return LevelCard(
                                     level: level,
                                     levelNumber: levelNumber,
                                     palette: _paletteFor(index),
+                                    isLocked: isLocked,
                                     isBusy: _isOpeningLevel,
                                     onTap: () =>
                                         _openLevel(context, viewModel, level),
@@ -176,6 +181,13 @@ class _HomeScreenState extends State<HomeScreen> {
     LevelModel level,
   ) async {
     if (_isOpeningLevel) return;
+
+    if (viewModel.isLevelLocked(level)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text(AppStrings.lockedLevelMessage)),
+      );
+      return;
+    }
 
     setState(() {
       _isOpeningLevel = true;
@@ -327,11 +339,12 @@ class _HomeError extends StatelessWidget {
   }
 }
 
-class _LevelCard extends StatefulWidget {
-  const _LevelCard({
+class LevelCard extends StatefulWidget {
+  const LevelCard({
     required this.level,
     required this.levelNumber,
     required this.palette,
+    required this.isLocked,
     required this.isBusy,
     required this.onTap,
   });
@@ -339,14 +352,15 @@ class _LevelCard extends StatefulWidget {
   final LevelModel level;
   final int levelNumber;
   final _CardPalette palette;
+  final bool isLocked;
   final bool isBusy;
   final VoidCallback onTap;
 
   @override
-  State<_LevelCard> createState() => _LevelCardState();
+  State<LevelCard> createState() => LevelCardState();
 }
 
-class _LevelCardState extends State<_LevelCard> {
+class LevelCardState extends State<LevelCard> {
   bool _isPressed = false;
 
   void _updatePressed(bool value) {
@@ -568,6 +582,62 @@ class _LevelCardState extends State<_LevelCard> {
                             ],
                           ),
                         ),
+                        if (widget.isLocked)
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(26),
+                                  color: Colors.black.withValues(alpha: 0.58),
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 18,
+                                      vertical: 15,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.96),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 2,
+                                      ),
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                          color: Colors.black.withValues(
+                                            alpha: 0.24,
+                                          ),
+                                          blurRadius: 20,
+                                          offset: const Offset(0, 10),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons.lock_rounded,
+                                          color: Color(0xFF222222),
+                                          size: 42,
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          AppStrings.lockedBadge,
+                                          style: GoogleFonts.fredoka(
+                                            color: const Color(0xFF222222),
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

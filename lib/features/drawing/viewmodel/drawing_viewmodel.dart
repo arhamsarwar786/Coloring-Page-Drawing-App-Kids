@@ -232,13 +232,13 @@ class DrawingViewModel extends BaseViewModel {
       _isExcellence = false;
       return;
     }
-    
+
     // Check if all regions are filled
     if (_filledRegions.length != _level!.regions.length) {
       _isExcellence = false;
       return;
     }
-    
+
     // Check if all colors match target colors exactly
     for (final region in _level!.regions) {
       final targetColorId = _level!.getTargetColorIdForRegion(region.id);
@@ -246,7 +246,7 @@ class DrawingViewModel extends BaseViewModel {
         _isExcellence = false;
         return;
       }
-      
+
       // Find target color
       Color? targetColor;
       for (final paletteColor in _level!.palette) {
@@ -255,19 +255,19 @@ class DrawingViewModel extends BaseViewModel {
           break;
         }
       }
-      
+
       if (targetColor == null) {
         _isExcellence = false;
         return;
       }
-      
+
       final userColor = _filledRegions[region.id];
       if (userColor == null || userColor.value != targetColor.value) {
         _isExcellence = false;
         return;
       }
     }
-    
+
     // All regions match target colors
     _isExcellence = true;
     _rewardCoins = 100;
@@ -372,7 +372,8 @@ class DrawingViewModel extends BaseViewModel {
     if (drawingSessionId == levelId) {
       final entries = await _historyRepository.getHistoryEntries();
       for (final e in entries) {
-        if (e.levelId == levelId && e.status == DrawingHistoryStatus.inProgress) {
+        if (e.levelId == levelId &&
+            e.status == DrawingHistoryStatus.inProgress) {
           entry = e;
           break;
         }
