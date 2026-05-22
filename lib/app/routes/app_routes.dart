@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:asmr_coloring_app/features/home/view/main_home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/features/home/view/main_home_screen.dart';
 
 import '../../features/drawing/view/drawing_screen.dart';
 import '../../features/home/view/home_screen.dart';

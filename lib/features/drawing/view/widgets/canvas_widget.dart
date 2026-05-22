@@ -169,7 +169,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
       barrierColor: Colors.black.withValues(alpha: 0.62),
       transitionDuration: const Duration(milliseconds: 240),
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
-        return _PenTutorialFullScreenDialog(
+        return _MultiStepTutorialDialog(
           level: widget.level,
           markerAsset: markerAsset ?? 'assets/images/marker.png',
           selectedColor: selectedColor,
@@ -822,7 +822,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
               final scaleFactor = canvasDimension / 300.0;
               final skin = skinsVm.selectedSkin;
 
-              if (isColoringActive &&
+              final isOutlinePhase = phase == GuidedCanvasPhase.outline;
+              if (isOutlinePhase &&
                   !_hasShownPenTutorial &&
                   !_isPenTutorialOpening) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1183,6 +1184,428 @@ class _CanvasWidgetState extends State<CanvasWidget>
         );
       },
     );
+  }
+}
+
+class _MultiStepTutorialDialog extends StatefulWidget {
+  const _MultiStepTutorialDialog({
+    required this.level,
+    required this.markerAsset,
+    required this.selectedColor,
+    required this.onClose,
+  });
+
+  final LevelModel level;
+  final String markerAsset;
+  final Color selectedColor;
+  final VoidCallback onClose;
+
+  @override
+  State<_MultiStepTutorialDialog> createState() =>
+      _MultiStepTutorialDialogState();
+}
+
+class _MultiStepTutorialDialogState extends State<_MultiStepTutorialDialog>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  int _currentStep = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3400),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _nextStep() {
+    if (_currentStep < 1) {
+      setState(() {
+        _currentStep++;
+      });
+    } else {
+      widget.onClose();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: <Color>[
+              Colors.black.withValues(alpha: 0.48),
+              const Color(0xFF16213A).withValues(alpha: 0.50),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton.filled(
+                    onPressed: widget.onClose,
+                    icon: const Icon(Icons.close_rounded),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF242424),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 460),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.26),
+                              blurRadius: 32,
+                              offset: const Offset(0, 18),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              widget.level.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Color(0xFF242424),
+                                fontSize: 25,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Flexible(
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: _TutorialStage(
+                                  level: widget.level,
+                                  markerAsset: widget.markerAsset,
+                                  selectedColor: widget.selectedColor,
+                                  animation: _controller,
+                                  step: _currentStep,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              _currentStep == 0
+                                  ? 'Trace the outline first'
+                                  : 'Now color the image',
+                              style: const TextStyle(
+                                color: Color(0xFF242424),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 54,
+                              child: FilledButton.icon(
+                                onPressed: _nextStep,
+                                icon: Icon(
+                                  _currentStep == 0
+                                      ? Icons.arrow_forward_rounded
+                                      : Icons.play_arrow_rounded,
+                                ),
+                                label: Text(
+                                  _currentStep == 0 ? 'Next' : 'Start',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2BBF5B),
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TutorialStage extends StatelessWidget {
+  const _TutorialStage({
+    required this.level,
+    required this.markerAsset,
+    required this.selectedColor,
+    required this.animation,
+    required this.step,
+  });
+
+  final LevelModel level;
+  final String markerAsset;
+  final Color selectedColor;
+  final Animation<double> animation;
+  final int step;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final dimension = math.min(constraints.maxWidth, constraints.maxHeight);
+        final canvasSize = Size.square(dimension);
+        final markerSize = dimension * 0.42;
+
+        return Center(
+          child: SizedBox(
+            width: dimension,
+            height: dimension,
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                final progress = Curves.easeInOut.transform(animation.value);
+                final markerPosition = _markerPositionFor(canvasSize, progress, step);
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: <Widget>[
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFEFB),
+                          borderRadius: BorderRadius.circular(22),
+                          border: Border.all(
+                            color: const Color(0xFFE7EDF5),
+                            width: 2,
+                          ),
+                        ),
+                        child: CustomPaint(
+                          painter: _TutorialPainter(
+                            level: level,
+                            selectedColor: selectedColor,
+                            progress: progress,
+                            step: step,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: markerPosition.dx - (markerSize * 0.18),
+                      top: markerPosition.dy - (markerSize * 0.78),
+                      child: Transform.rotate(
+                        angle: step == 0 ? 0 : -0.72,
+                        child: Image.asset(
+                          markerAsset,
+                          width: markerSize,
+                          height: markerSize,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.low,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            'assets/images/marker.png',
+                            width: markerSize,
+                            height: markerSize,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Offset _markerPositionFor(Size size, double progress, int step) {
+    if (level.regions.isEmpty) {
+      return Offset(size.width * 0.55, size.height * 0.56);
+    }
+
+    final objectSize = size.shortestSide * 0.82;
+    final objectOffset = Offset(
+      (size.width - objectSize) / 2,
+      (size.height - objectSize) / 2,
+    );
+    final regionCount = level.regions.length;
+    final rawIndex =
+        (progress * regionCount).clamp(0.0, regionCount - 0.001).toDouble();
+    final activeIndex = rawIndex.floor().clamp(0, regionCount - 1).toInt();
+    final localProgress = rawIndex - activeIndex;
+    final path = level.regions[activeIndex]
+        .toPath(Size.square(objectSize))
+        .shift(objectOffset);
+    final bounds = path.getBounds();
+
+    if (bounds.isEmpty) {
+      return Offset(size.width * 0.55, size.height * 0.56);
+    }
+
+    if (step == 0) {
+      // Outlining step: marker follows the outline path
+      final x = bounds.left + (bounds.width * (0.20 + (0.58 * localProgress)));
+      final wave = math.sin(localProgress * math.pi * 2);
+      final y = bounds.center.dy + (wave * bounds.height * 0.18);
+      return Offset(x, y);
+    } else {
+      // Coloring step: marker appears to color inside
+      final x = bounds.center.dx;
+      final y = bounds.center.dy;
+      return Offset(x, y);
+    }
+  }
+}
+
+class _TutorialPainter extends CustomPainter {
+  const _TutorialPainter({
+    required this.level,
+    required this.selectedColor,
+    required this.progress,
+    required this.step,
+  });
+
+  final LevelModel level;
+  final Color selectedColor;
+  final double progress;
+  final int step;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final backgroundPaint = Paint()
+      ..color = const Color(0xFFFFFEFB)
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(Offset.zero & size, backgroundPaint);
+
+    if (level.regions.isEmpty) return;
+
+    final objectSize = size.shortestSide * 0.82;
+    final objectOffset = Offset(
+      (size.width - objectSize) / 2,
+      (size.height - objectSize) / 2,
+    );
+    final scaledSize = Size.square(objectSize);
+    final regionCount = level.regions.length;
+    final cursor = progress * regionCount;
+
+    for (var index = 0; index < regionCount; index++) {
+      final region = level.regions[index];
+      final path = region.toPath(scaledSize).shift(objectOffset);
+      final bounds = path.getBounds();
+      if (bounds.isEmpty) continue;
+
+      final targetColor = _targetColorFor(region.id);
+      final regionProgress = (cursor - index).clamp(0.0, 1.0).toDouble();
+
+      if (regionProgress > 0) {
+        if (step == 1) {
+          // Coloring step: show fill
+          canvas.save();
+          canvas.clipPath(path);
+
+          final fillPaint = Paint()
+            ..style = PaintingStyle.fill
+            ..isAntiAlias = true
+            ..shader = LinearGradient(
+              colors: <Color>[
+                targetColor.withValues(alpha: 0.74),
+                targetColor,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ).createShader(bounds);
+
+          final fillRect = Rect.fromLTWH(
+            bounds.left - (bounds.width * 0.08),
+            bounds.top - (bounds.height * 0.12),
+            (bounds.width * 1.18) * regionProgress,
+            bounds.height * 1.24,
+          );
+          canvas.drawRect(fillRect, fillPaint);
+          canvas.restore();
+        }
+
+        if (step == 0) {
+          // Outlining step: show outline progress
+          final dashedPaint = Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = size.shortestSide * 0.0105
+            ..strokeCap = StrokeCap.round
+            ..strokeJoin = StrokeJoin.round
+            ..color = Colors.black
+            ..isAntiAlias = true;
+
+          final metrics = path.computeMetrics();
+          for (final metric in metrics) {
+            final end = metric.length * regionProgress;
+            if (end > 0) {
+              canvas.drawPath(metric.extractPath(0, end), dashedPaint);
+            }
+          }
+        }
+      }
+
+      // Draw the outline
+      canvas.drawPath(
+        path,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = size.shortestSide * 0.0105
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round
+          ..color = Colors.black
+          ..isAntiAlias = true,
+      );
+    }
+  }
+
+  Color _targetColorFor(String regionId) {
+    final targetColor = level.getTargetColorForRegion(regionId);
+    if (targetColor == Colors.grey.shade300) {
+      return selectedColor;
+    }
+    return targetColor;
+  }
+
+  @override
+  bool shouldRepaint(covariant _TutorialPainter oldDelegate) {
+    return oldDelegate.level != level ||
+        oldDelegate.selectedColor != selectedColor ||
+        oldDelegate.progress != progress ||
+        oldDelegate.step != step;
   }
 }
 

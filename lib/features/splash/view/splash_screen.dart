@@ -69,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
           fit: StackFit.expand,
           children: <Widget>[
             Image.asset(
-              'assets/images/splashs.png',
+              'assets/images/splash.png',
               fit: BoxFit.cover,
             ),
             Positioned(

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:asmr_coloring_app/features/settings/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/routes/app_routes.dart';

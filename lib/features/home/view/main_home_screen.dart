@@ -1,6 +1,6 @@
-import 'package:asmr_coloring_app/core/constants/app_strings.dart';
-import 'package:asmr_coloring_app/features/home/view/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/core/constants/app_strings.dart';
+import 'package:play_craft_kids/features/home/view/home_screen.dart';
 import 'package:provider/provider.dart';
 
 // Apne actual project paths ke mutabik in imports ko adjust kar lena:
@@ -90,7 +90,7 @@ class MainHomeScreen extends StatelessWidget {
                                     crossAxisSpacing: 16,
                                     mainAxisSpacing: 16,
                                     childAspectRatio:
-                                        0.76, // Level card ratio follow kiya ha
+                                        0.70, // Level card ratio follow kiya ha
                                   ),
                                   itemCount: allCategories.length,
                                   itemBuilder: (context, index) {
@@ -717,27 +717,28 @@ class LevelCardState extends State<LevelCard> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      left: 12,
-                      right: 12,
-                      top: 10,
-                      height: 40,
-                      child: IgnorePointer(
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(22),
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.white.withOpacity(0.34),
-                                Colors.white.withOpacity(0.06),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Positioned(
+                    //   left: 12,
+                    //   right: 12,
+                    //   top: 10,
+                    //   height: 40,
+                    //   child: IgnorePointer(
+                    //     child: DecoratedBox(
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(22),
+                    //         gradient: LinearGradient(
+                    //           begin: Alignment.topCenter,
+                    //           end: Alignment.bottomCenter,
+                    //           colors: [
+                    //             Colors.white.withOpacity(0.34),
+                    //             Colors.white.withOpacity(0.06),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+
                     Positioned.fill(
                       child: CustomPaint(
                         painter: _MainHomeCardFramePainter(

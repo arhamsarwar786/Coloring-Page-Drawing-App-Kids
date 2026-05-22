@@ -1,9 +1,9 @@
-import 'package:asmr_coloring_app/app/config/app_config.dart';
-import 'package:asmr_coloring_app/app/routes/app_routes.dart';
-import 'package:asmr_coloring_app/app/theme/app_theme.dart';
-import 'package:asmr_coloring_app/core/di/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:play_craft_kids/app/config/app_config.dart';
+import 'package:play_craft_kids/app/routes/app_routes.dart';
+import 'package:play_craft_kids/app/theme/app_theme.dart';
+import 'package:play_craft_kids/core/di/providers.dart';
 import 'package:provider/provider.dart';
 
 class AsmrDrawingApp extends StatelessWidget {
