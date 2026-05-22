@@ -28,6 +28,8 @@ class CanvasWidget extends StatefulWidget {
     this.onRegionFilled,
     this.initialSnapshot,
     this.onSnapshotChanged,
+    this.onPreviewStateChanged,
+    this.onShowAgainButtonStateChanged,
   });
 // final String? guideAsset;
   final LevelModel level;
@@ -40,6 +42,8 @@ class CanvasWidget extends StatefulWidget {
   final ValueChanged<String>? onRegionFilled;
   final DrawingSessionSnapshot? initialSnapshot;
   final ValueChanged<DrawingSessionSnapshot>? onSnapshotChanged;
+  final ValueChanged<bool>? onPreviewStateChanged;
+  final ValueChanged<bool>? onShowAgainButtonStateChanged;
 
   @override
   State<CanvasWidget> createState() => _CanvasWidgetState();
@@ -80,6 +84,72 @@ class _CanvasWidgetState extends State<CanvasWidget>
   Color? _activeRegionOriginalColor;
   GuidedCanvasPhase? _lastReportedPhase;
   String? _markerAlignedRegionId;
+  bool _showPreview = true;
+  bool _showAgainButton = false;
+  bool _showAgainUsed = false;
+  String? _show3DMessage;
+  Timer? _previewTimer;
+  Timer? _message3DTimer;
+
+  void _startPreviewTimer() {
+    _previewTimer?.cancel();
+    setState(() {
+      _showPreview = true;
+      _showAgainButton = false;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      widget.onPreviewStateChanged?.call(true);
+      widget.onShowAgainButtonStateChanged?.call(false);
+    });
+    _previewTimer = Timer(const Duration(seconds: 10), () {
+      if (!mounted) return;
+      setState(() {
+        _showPreview = false;
+        if (!_showAgainUsed) {
+          _showAgainButton = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            widget.onShowAgainButtonStateChanged?.call(true);
+          });
+        }
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        widget.onPreviewStateChanged?.call(false);
+      });
+    });
+  }
+
+  void _handleShowAgain() {
+    if (_showAgainUsed) return;
+    setState(() {
+      _showAgainUsed = true;
+      _showAgainButton = false;
+    });
+    _startPreviewTimer();
+  }
+
+  // Public method to trigger show-again from parent widgets
+  void showPreviewAgain() {
+    _handleShowAgain();
+  }
+
+  void _show3DAppreciationMessage(String message) {
+    _message3DTimer?.cancel();
+    setState(() {
+      _show3DMessage = message;
+    });
+    _appreciationController.reset();
+    _appreciationController.forward();
+    _message3DTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          _show3DMessage = null;
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -88,6 +158,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
       drawingController: _drawingStepController,
       coloringController: _coloringStepController,
     );
+
+    _startPreviewTimer();
     _drawingStepController.addListener(_notifyPhaseIfChanged);
     _coloringStepController.addListener(_notifyPhaseIfChanged);
     _drawingStepController.addListener(_scheduleSnapshotEmit);
@@ -190,6 +262,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
     _drawingStepController.removeListener(_scheduleSnapshotEmit);
     _coloringStepController.removeListener(_scheduleSnapshotEmit);
     _snapshotDebounce?.cancel();
+    _previewTimer?.cancel();
+    _message3DTimer?.cancel();
     _appreciationMessage.dispose();
     _markerPosition.dispose();
     _outlineAnimationController.dispose();
@@ -535,6 +609,23 @@ class _CanvasWidgetState extends State<CanvasWidget>
       String regionId, Color selectedColor) async {
     await widget.onFill(regionId);
     widget.onRegionFilled?.call(regionId);
+
+    // Check for excellence/good-as-different message
+    final drawingVm = _drawingViewModel;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      drawingVm.checkExcellence();
+
+      final allFilled =
+          drawingVm.filledRegions.length == widget.level.regions.length;
+      if (allFilled && _show3DMessage == null) {
+        if (drawingVm.isExcellence) {
+          _show3DAppreciationMessage('Excellence! +100');
+        } else {
+          _show3DAppreciationMessage('Good as Different');
+        }
+      }
+    });
   }
 
   void _animateMarkerTap() {
@@ -776,12 +867,24 @@ class _CanvasWidgetState extends State<CanvasWidget>
                     width: canvasDimension,
                     height: canvasDimension,
                     decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(20),
+                      color: const Color(0xFFFFFEFB),
+                      borderRadius: BorderRadius.circular(18),
                       border: Border.all(
-                        color: Colors.transparent,
-                        width: 2,
+                        color: Colors.white,
+                        width: 3,
                       ),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.16),
+                          blurRadius: 22,
+                          offset: const Offset(0, 10),
+                        ),
+                        BoxShadow(
+                          color: Colors.blue.withValues(alpha: 0.10),
+                          blurRadius: 16,
+                          spreadRadius: 1,
+                        ),
+                      ],
                     ),
                     child: Stack(
                       clipBehavior: Clip.none,
@@ -796,8 +899,9 @@ class _CanvasWidgetState extends State<CanvasWidget>
                         //       ),
                         //     ),
                         //   ),
+
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(15),
                           child: RepaintBoundary(
                             key: widget.repaintBoundaryKey,
                             child: CustomPaint(
@@ -822,6 +926,20 @@ class _CanvasWidgetState extends State<CanvasWidget>
                             ),
                           ),
                         ),
+
+                        if (_showPreview && widget.guideAsset != null)
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              child: Opacity(
+                                opacity: 0.25,
+                                child: Image.asset(
+                                  widget.guideAsset!,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ),
+
                         if (shouldShowColoringFade)
                           Positioned.fill(
                             child: IgnorePointer(
@@ -892,6 +1010,104 @@ class _CanvasWidgetState extends State<CanvasWidget>
                             );
                           },
                         ),
+                        // 3D Appreciation message (Excellence / Good as Different)
+                        if (_show3DMessage != null)
+                          Positioned.fill(
+                            child: Center(
+                              child: AnimatedBuilder(
+                                animation: _appreciationController,
+                                builder: (context, child) {
+                                  final scale =
+                                      0.5 + 0.5 * _appreciationController.value;
+                                  final opacity = _appreciationController.value;
+                                  return Transform(
+                                    alignment: Alignment.center,
+                                    transform: Matrix4.identity()
+                                      ..scale(scale, scale, 1.0)
+                                      ..setEntry(3, 2, 0.001)
+                                      ..rotateX(0.2 * (1 - opacity)),
+                                    child: Opacity(
+                                      opacity: opacity,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 48 * scaleFactor,
+                                          vertical: 28 * scaleFactor,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black
+                                                  .withOpacity(0.25),
+                                              blurRadius: 32,
+                                              spreadRadius: 4,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              _show3DMessage!.split('!')[0] +
+                                                  '!',
+                                              style: TextStyle(
+                                                fontSize: 50 * scaleFactor,
+                                                fontWeight: FontWeight.bold,
+                                                color: _show3DMessage!
+                                                        .contains('Excellence')
+                                                    ? Colors.amber.shade700
+                                                    : Colors.blue.shade600,
+                                                shadows: [
+                                                  Shadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.2),
+                                                    blurRadius: 8,
+                                                    offset: Offset(2, 2),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            if (_show3DMessage!
+                                                .contains('Excellence'))
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 12 * scaleFactor),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Icon(Icons.monetization_on,
+                                                        color: Colors
+                                                            .amber.shade700,
+                                                        size: 32 * scaleFactor),
+                                                    SizedBox(
+                                                        width: 8 * scaleFactor),
+                                                    Text(
+                                                      '+100',
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            36 * scaleFactor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors
+                                                            .amber.shade700,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+
                         _MarkerOverlay(
                           markerPosition: _markerPosition,
                           tapScaleController: _tapScaleController,

@@ -39,6 +39,7 @@ class DrawingScreen extends StatefulWidget {
 class _DrawingScreenState extends State<DrawingScreen>
     with WidgetsBindingObserver {
   final GlobalKey _canvasRepaintKey = GlobalKey();
+  final GlobalKey _canvasWidgetKey = GlobalKey();
   final SaveService _saveService = const SaveService();
   String? _handledCompletionLevelId;
   Future<Uint8List?>? _rewardCaptureFuture;
@@ -47,17 +48,26 @@ class _DrawingScreenState extends State<DrawingScreen>
   bool _awaitingPartTick = false;
   bool _showCompletionCelebration = false;
   bool _showColorPalette = false;
+  bool _showPreviewOverlay = false;
+  bool _showAgainButton = false;
+  bool _showAgainUsed = false;
   DrawingSessionSnapshot? _latestSnapshot;
   Timer? _historySaveDebounce;
   bool _isSavingHistory = false;
   Future<void>? _pendingSaveTask;
   late final DrawingViewModel _viewModel;
+  late final DrawingStepController _previewDrawingController;
+  late final ColoringStepController _previewColoringController;
+  final ActivePartHighlighter _previewHighlighter =
+      const ActivePartHighlighter();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _viewModel = context.read<DrawingViewModel>();
+    _previewDrawingController = DrawingStepController();
+    _previewColoringController = ColoringStepController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _viewModel.markActive(true);
@@ -88,6 +98,8 @@ class _DrawingScreenState extends State<DrawingScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _historySaveDebounce?.cancel();
+    _previewDrawingController.dispose();
+    _previewColoringController.dispose();
     _persistHistorySnapshot(captureThumbnail: true);
     try {
       _viewModel.removeListener(_onViewModelChange);
@@ -194,37 +206,154 @@ class _DrawingScreenState extends State<DrawingScreen>
                           Column(
                             children: [
                               const SizedBox(height: 32),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                color: Colors.white,
-                                child: Text(
-                                  'LEVEL ${viewModel.levelNumber ?? 1}',
-                                  style: GoogleFonts.fredoka(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF222222),
-                                    letterSpacing: 2.0,
+                              // Preview Overlay - shows at top when active
+                              if (_showPreviewOverlay)
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Color like this:',
+                                        style: GoogleFonts.fredoka(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Container(
+                                        width: 160,
+                                        height: 160,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          border: Border.all(
+                                              color: Colors.grey.shade300,
+                                              width: 2),
+                                        ),
+                                        child: CustomPaint(
+                                          painter: AdvancedCanvasPainter(
+                                            level: level,
+                                            paths: Map.fromEntries(
+                                              level.regions.map((r) {
+                                                return MapEntry(
+                                                    r.id,
+                                                    r.toPath(
+                                                        const Size(160, 160)));
+                                              }),
+                                            ),
+                                            paintPaths: {},
+                                            dashedPaths: {},
+                                            metricsCache: {},
+                                            filledRegions: Map.fromEntries(
+                                              level.regions.map((r) {
+                                                final targetColorId = level
+                                                    .getTargetColorIdForRegion(
+                                                        r.id);
+                                                if (targetColorId != null) {
+                                                  for (final color
+                                                      in level.palette) {
+                                                    if (color.id ==
+                                                        targetColorId) {
+                                                      return MapEntry(
+                                                          r.id, color.color);
+                                                    }
+                                                  }
+                                                }
+                                                return MapEntry(
+                                                    r.id, Colors.white);
+                                              }),
+                                            ),
+                                            drawingController:
+                                                _previewDrawingController,
+                                            coloringController:
+                                                _previewColoringController,
+                                            activePartHighlighter:
+                                                _previewHighlighter,
+                                            fillAnimationValue: 0,
+                                            activeFillRegionId: null,
+                                            activeFillRegionOriginalColor: null,
+                                            repaint: Listenable.merge([]),
+                                          ),
+                                          size: const Size(160, 160),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              // const SizedBox(height: 8),
-                              // Text(
-                              //   'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
-                              //   style: const TextStyle(
-                              //     color: Colors.grey,
-                              //     fontSize: 12,
+                              // Show Again button (appears after 10 seconds, only once)
+                              // if (_showAgainButton && !_showPreviewOverlay)
+                              //   Padding(
+                              //     padding: const EdgeInsets.symmetric(
+                              //         horizontal: 16, vertical: 8),
+                              //     child: ElevatedButton(
+                              //       onPressed: () {
+                              //         // Call Show Again handler in CanvasWidget
+                              //         final canvasState = _canvasWidgetKey
+                              //             .currentState as dynamic;
+                              //         try {
+                              //           canvasState?.showPreviewAgain();
+                              //         } catch (_) {}
+                              //       },
+                              //       style: ElevatedButton.styleFrom(
+                              //         backgroundColor: Colors.blue.shade600,
+                              //         foregroundColor: Colors.white,
+                              //         shape: RoundedRectangleBorder(
+                              //           borderRadius: BorderRadius.circular(24),
+                              //         ),
+                              //         padding: const EdgeInsets.symmetric(
+                              //             horizontal: 40, vertical: 16),
+                              //         elevation: 8,
+                              //       ),
+                              //       child: Text(
+                              //         'Show Again',
+                              //         style: GoogleFonts.fredoka(
+                              //           fontSize: 18,
+                              //           fontWeight: FontWeight.w600,
+                              //         ),
+                              //       ),
+                              //     ),
                               //   ),
-                              // ),
-                              const SizedBox(height: 8),
-                              _LevelBadge(
-                                title: level.title,
-                                levelNumber: viewModel.levelNumber ?? 1,
-                                level: level,
-                              ),
-                              const SizedBox(height: 10),
-                              _BrushSizeSelector(viewModel: viewModel),
-                              const SizedBox(height: 10),
+
+                              if (!_showPreviewOverlay) ...[
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  color: Colors.white,
+                                  child: Text(
+                                    'LEVEL ${viewModel.levelNumber ?? 1}',
+                                    style: GoogleFonts.fredoka(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xFF222222),
+                                      letterSpacing: 2.0,
+                                    ),
+                                  ),
+                                ),
+                                // const SizedBox(height: 8),
+                                // Text(
+                                //   'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
+                                //   style: const TextStyle(
+                                //     color: Colors.grey,
+                                //     fontSize: 12,
+                                //   ),
+                                // ),
+                                const SizedBox(height: 8),
+                                _LevelBadge(
+                                  title: level.title,
+                                  levelNumber: viewModel.levelNumber ?? 1,
+                                  level: level,
+                                ),
+                                const SizedBox(height: 10),
+                                _BrushSizeSelector(viewModel: viewModel),
+                              ],
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -236,6 +365,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                                         width: 2048,
                                         height: 2048,
                                         child: CanvasWidget(
+                                          key: _canvasWidgetKey,
                                           level: level,
                                           repaintBoundaryKey: _canvasRepaintKey,
                                           guideAsset: null, // we use paths n
@@ -250,15 +380,24 @@ class _DrawingScreenState extends State<DrawingScreen>
                                               viewModel.initialSessionSnapshot,
                                           onSnapshotChanged:
                                               _handleCanvasSnapshotChanged,
+                                          onPreviewStateChanged: (isShowing) {
+                                            setState(() {
+                                              _showPreviewOverlay = isShowing;
+                                            });
+                                          },
+                                          onShowAgainButtonStateChanged:
+                                              (isShowing) {
+                                            setState(() {
+                                              _showAgainButton = isShowing;
+                                            });
+                                          },
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 10),
-                              _buildBottomAction(level, viewModel),
-                              const SizedBox(height: 32),
+                              _buildFooterControls(level, viewModel),
                             ],
                           ),
 
@@ -392,7 +531,7 @@ class _DrawingScreenState extends State<DrawingScreen>
 
   Widget _buildBottomAction(LevelModel level, DrawingViewModel viewModel) {
     final isColorPhase = _canvasPhase == GuidedCanvasPhase.coloring;
-    Widget actionChild = const SizedBox(height: 86);
+    Widget actionChild = const SizedBox.shrink();
 
     if (_awaitingPartTick && isColorPhase) {
       actionChild = _TickActionButton(
@@ -410,11 +549,57 @@ class _DrawingScreenState extends State<DrawingScreen>
       );
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        actionChild,
-      ],
+    return SizedBox(
+      height: 86,
+      child: Center(child: actionChild),
+    );
+  }
+
+  Widget _buildFooterControls(LevelModel level, DrawingViewModel viewModel) {
+    return SizedBox(
+      height: 166,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const SizedBox(height: 10),
+          _buildBottomAction(level, viewModel),
+          const SizedBox(height: 12),
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 180),
+            opacity: _showAgainButton && !_showPreviewOverlay ? 1 : 0,
+            child: IgnorePointer(
+              ignoring: !_showAgainButton || _showPreviewOverlay,
+              child: ElevatedButton(
+                onPressed: () {
+                  final canvasState = _canvasWidgetKey.currentState as dynamic;
+                  try {
+                    canvasState?.showPreviewAgain();
+                  } catch (_) {}
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue.shade600,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 16,
+                  ),
+                  elevation: 8,
+                ),
+                child: Text(
+                  'Show Again',
+                  style: GoogleFonts.fredoka(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

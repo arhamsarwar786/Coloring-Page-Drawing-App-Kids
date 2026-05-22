@@ -46,6 +46,7 @@ class DrawingViewModel extends BaseViewModel {
   int _undoCount = 0;
   int? _rewardCoins;
   int? _rewardStars;
+  bool _isExcellence = false;
   String? _activeDrawingSessionId;
   DrawingSessionSnapshot? _initialSessionSnapshot;
   String? _thumbnailBase64;
@@ -66,6 +67,7 @@ class DrawingViewModel extends BaseViewModel {
   bool get canRedo => _redoStack.isNotEmpty;
   int? get rewardCoins => _rewardCoins;
   int? get rewardStars => _rewardStars;
+  bool get isExcellence => _isExcellence;
   bool get isCompleted {
     if (_level == null) return false;
     if (_level!.isCompleted) return true;
@@ -222,6 +224,53 @@ class DrawingViewModel extends BaseViewModel {
     notifyListeners();
     await _soundService.playFillFeedback();
     await _evaluateCompletion();
+    checkExcellence();
+  }
+
+  void checkExcellence() {
+    if (_level == null) {
+      _isExcellence = false;
+      return;
+    }
+    
+    // Check if all regions are filled
+    if (_filledRegions.length != _level!.regions.length) {
+      _isExcellence = false;
+      return;
+    }
+    
+    // Check if all colors match target colors exactly
+    for (final region in _level!.regions) {
+      final targetColorId = _level!.getTargetColorIdForRegion(region.id);
+      if (targetColorId == null) {
+        _isExcellence = false;
+        return;
+      }
+      
+      // Find target color
+      Color? targetColor;
+      for (final paletteColor in _level!.palette) {
+        if (paletteColor.id == targetColorId) {
+          targetColor = paletteColor.color;
+          break;
+        }
+      }
+      
+      if (targetColor == null) {
+        _isExcellence = false;
+        return;
+      }
+      
+      final userColor = _filledRegions[region.id];
+      if (userColor == null || userColor.value != targetColor.value) {
+        _isExcellence = false;
+        return;
+      }
+    }
+    
+    // All regions match target colors
+    _isExcellence = true;
+    _rewardCoins = 100;
   }
 
   void undo() {
