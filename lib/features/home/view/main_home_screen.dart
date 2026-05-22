@@ -157,7 +157,7 @@ class MainHomeScreen extends StatelessWidget {
                                     Color currentInnerColor = innerBoxColors[
                                         index % innerBoxColors.length];
 
-                                    return _MainHomeLevelCard(
+                                    return LevelCard(
                                       title: category.title,
                                       imageAsset: myCustomImage,
                                       mainColor: currentMainColor,
@@ -165,6 +165,7 @@ class MainHomeScreen extends StatelessWidget {
                                       innerColor: currentInnerColor,
                                       onTap: () {
                                         viewModel.selectCategory(category.id);
+
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -173,7 +174,24 @@ class MainHomeScreen extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                      },
+                                    );
+                                    // _MainHomeLevelCard(
+                                    //   title: category.title,
+                                    //   imageAsset: myCustomImage,
+                                    //   mainColor: currentMainColor,
+                                    //   borderColor: currentBorderColor,
+                                    //   innerColor: currentInnerColor,
+                                    //   onTap: () {
+                                    //     viewModel.selectCategory(category.id);
+                                    //     Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             const HomeScreen(),
+                                    //       ),
+                                    //     );
+                                    // });
+                                  },
                                 ),
                         )
                         // Expanded(
@@ -578,5 +596,314 @@ class _MainHomeLevelCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class LevelCard extends StatefulWidget {
+  const LevelCard({
+    required this.title,
+    required this.imageAsset,
+    required this.mainColor,
+    required this.borderColor,
+    required this.innerColor,
+    required this.onTap,
+  });
+
+  final String title;
+  final String imageAsset;
+  final Color mainColor;
+  final Color borderColor;
+  final Color innerColor;
+  final VoidCallback onTap;
+
+  @override
+  State<LevelCard> createState() => LevelCardState();
+}
+
+class LevelCardState extends State<LevelCard> {
+  bool _isPressed = false;
+
+  void _updatePressed(bool value) {
+    if (_isPressed == value) return;
+
+    setState(() {
+      _isPressed = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(30);
+
+    final glowColor = Color.lerp(
+      widget.mainColor,
+      Colors.white,
+      0.18,
+    )!;
+
+    return AnimatedScale(
+      scale: _isPressed ? 0.95 : 1,
+      duration: Duration(milliseconds: _isPressed ? 100 : 320),
+      curve: _isPressed ? Curves.easeOut : Curves.elasticOut,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: (_) => _updatePressed(true),
+        onTapUp: (_) => _updatePressed(false),
+        onTapCancel: () => _updatePressed(false),
+        onTap: widget.onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.10),
+                blurRadius: 28,
+                offset: const Offset(0, 8),
+              ),
+              BoxShadow(
+                color: widget.borderColor.withOpacity(0.14),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: borderRadius,
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  widget.mainColor.withOpacity(0.95),
+                  widget.borderColor,
+                ],
+              ),
+              border: Border.all(
+                color: widget.borderColor,
+                width: 3.4,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(26),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      widget.mainColor,
+                      widget.mainColor.withOpacity(0.88),
+                    ],
+                  ),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(26),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: const [0, 0.16, 0.42, 1],
+                            colors: [
+                              Colors.white.withOpacity(0.38),
+                              Colors.white.withOpacity(0.16),
+                              Colors.white.withOpacity(0.04),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 12,
+                      right: 12,
+                      top: 10,
+                      height: 40,
+                      child: IgnorePointer(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(22),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white.withOpacity(0.34),
+                                Colors.white.withOpacity(0.06),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: CustomPaint(
+                        painter: _MainHomeCardFramePainter(
+                          radius: 26,
+                          edgeColor: widget.borderColor,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 34,
+                            child: Center(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  widget.title.toUpperCase(),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.1,
+                                    color: Colors.black,
+                                  ).copyWith(
+                                    shadows: [
+                                      Shadow(
+                                        color: glowColor.withOpacity(
+                                          _isPressed ? 0.95 : 0.82,
+                                        ),
+                                        blurRadius: _isPressed ? 12 : 9,
+                                      ),
+                                      Shadow(
+                                        color: Colors.black.withOpacity(0.22),
+                                        offset: const Offset(0, 2),
+                                        blurRadius: 2,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Expanded(
+                            child: Center(
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.26),
+                                  borderRadius: BorderRadius.circular(18),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.58),
+                                    width: 1.8,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.white.withOpacity(0.18),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, -1),
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: widget.innerColor,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: widget.borderColor,
+                                      width: 3,
+                                    ),
+                                    image: DecorationImage(
+                                      image: AssetImage(widget.imageAsset),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MainHomeCardFramePainter extends CustomPainter {
+  const _MainHomeCardFramePainter({
+    required this.radius,
+    required this.edgeColor,
+  });
+
+  final double radius;
+  final Color edgeColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+
+    final rrect = RRect.fromRectAndRadius(
+      rect,
+      Radius.circular(radius),
+    );
+
+    final innerHighlightPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.3
+      ..color = Colors.white.withOpacity(0.72);
+
+    final innerShadowPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.2
+      ..color = edgeColor.withOpacity(0.16);
+
+    canvas.drawRRect(
+      rrect.deflate(1.2),
+      innerHighlightPaint,
+    );
+
+    canvas.drawRRect(
+      rrect.deflate(3.0),
+      innerShadowPaint,
+    );
+
+    final bottomShadeRect = Rect.fromLTWH(
+      6,
+      size.height * 0.56,
+      size.width - 12,
+      size.height * 0.28,
+    );
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        bottomShadeRect,
+        Radius.circular(radius - 8),
+      ),
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.transparent,
+            edgeColor.withOpacity(0.08),
+          ],
+        ).createShader(bottomShadeRect),
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _MainHomeCardFramePainter oldDelegate) {
+    return oldDelegate.radius != radius || oldDelegate.edgeColor != edgeColor;
   }
 }
