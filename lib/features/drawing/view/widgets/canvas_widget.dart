@@ -392,9 +392,13 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
   Offset _toLocal(
       Offset raw, BoxConstraints constraints, double canvasDimension) {
+    final double maxW = constraints.maxWidth.isFinite ? constraints.maxWidth : canvasDimension;
+    final double maxH = constraints.maxHeight.isFinite ? constraints.maxHeight : canvasDimension;
+    final dx = raw.dx - (maxW - canvasDimension) / 2;
+    final dy = raw.dy - (maxH - canvasDimension) / 2;
     return Offset(
-      raw.dx - (constraints.maxWidth - canvasDimension) / 2,
-      raw.dy - (constraints.maxHeight - canvasDimension) / 2,
+      dx.isFinite ? dx : 0.0,
+      dy.isFinite ? dy : 0.0,
     );
   }
 
@@ -664,15 +668,15 @@ class _CanvasWidgetState extends State<CanvasWidget>
       if (!mounted) return;
       drawingVm.checkExcellence();
 
-      final allFilled =
-          drawingVm.filledRegions.length == widget.level.regions.length;
-      if (allFilled && _show3DMessage == null) {
-        if (drawingVm.isExcellence) {
-          _show3DAppreciationMessage('Excellence! +100');
-        } else {
-          _show3DAppreciationMessage('Good as Different');
-        }
-      }
+      // final allFilled =
+      //     drawingVm.filledRegions.length == widget.level.regions.length;
+      // if (allFilled && _show3DMessage == null) {
+      //   if (drawingVm.isExcellence) {
+      //     _show3DAppreciationMessage('Excellence! +100');
+      //   } else {
+      //     _show3DAppreciationMessage('Good as Different');
+      //   }
+      // }
     });
   }
 
@@ -816,8 +820,11 @@ class _CanvasWidgetState extends State<CanvasWidget>
           padding: const EdgeInsets.only(top: 40),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final canvasDimension =
+              double canvasDimension =
                   math.min(constraints.maxWidth, constraints.maxHeight);
+              if (!canvasDimension.isFinite || canvasDimension <= 0) {
+                canvasDimension = 512.0;
+              }
               final canvasSize = Size.square(canvasDimension);
               final scaleFactor = canvasDimension / 300.0;
               final skin = skinsVm.selectedSkin;

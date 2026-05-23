@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/levels/model/level_model.dart';
 
-class LevelPreview extends StatelessWidget {
+class LevelPreview extends StatefulWidget {
   const LevelPreview({
     super.key,
     required this.level,
@@ -11,6 +11,8 @@ class LevelPreview extends StatelessWidget {
     this.padding = const EdgeInsets.all(10),
     this.borderRadius = const BorderRadius.all(Radius.circular(18)),
     this.style = LevelPreviewStyle.colored,
+    this.animate = true,
+    this.filledRegions,
   });
 
   final LevelModel level;
@@ -19,25 +21,84 @@ class LevelPreview extends StatelessWidget {
   final EdgeInsets padding;
   final BorderRadius borderRadius;
   final LevelPreviewStyle style;
+  final bool animate;
+  final Map<String, Color>? filledRegions;
+
+  @override
+  State<LevelPreview> createState() => _LevelPreviewState();
+}
+
+class _LevelPreviewState extends State<LevelPreview>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    
+    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    if (widget.animate) {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant LevelPreview oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.animate != widget.animate) {
+      if (widget.animate) {
+        _controller.repeat(reverse: true);
+      } else {
+        _controller.stop();
+        _controller.value = 0.5; // mid point, i.e., scale 1.0
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      padding: padding,
+    Widget previewChild = Container(
+      width: widget.size,
+      height: widget.size,
+      padding: widget.padding,
       decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: borderRadius,
+        color: widget.backgroundColor,
+        borderRadius: widget.borderRadius,
       ),
       child: CustomPaint(
         painter: _LevelPreviewPainter(
-          level: level,
-          style: style,
+          level: widget.level,
+          style: widget.style,
+          filledRegions: widget.filledRegions,
         ),
-        size: Size.square(size),
+        size: Size.square(widget.size),
       ),
     );
+
+    if (widget.animate) {
+      return ScaleTransition(
+        scale: _scaleAnimation,
+        child: previewChild,
+      );
+    }
+    return previewChild;
   }
 }
 
@@ -50,10 +111,12 @@ class _LevelPreviewPainter extends CustomPainter {
   const _LevelPreviewPainter({
     required this.level,
     required this.style,
+    this.filledRegions,
   });
 
   final LevelModel level;
   final LevelPreviewStyle style;
+  final Map<String, Color>? filledRegions;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -70,11 +133,19 @@ class _LevelPreviewPainter extends CustomPainter {
 
     for (final region in level.regions) {
       final path = region.toPath(sourceSize);
+      
+      Color fillColor;
+      if (style == LevelPreviewStyle.lineArt) {
+        fillColor = Colors.white;
+      } else if (filledRegions != null) {
+        fillColor = filledRegions![region.id] ?? Colors.white;
+      } else {
+        fillColor = level.getTargetColorForRegion(region.id);
+      }
+
       final fillPaint = Paint()
         ..style = PaintingStyle.fill
-        ..color = style == LevelPreviewStyle.lineArt
-            ? Colors.white
-            : level.getTargetColorForRegion(region.id)
+        ..color = fillColor
         ..isAntiAlias = true;
       final outlinePaint = Paint()
         ..style = PaintingStyle.stroke
@@ -93,6 +164,8 @@ class _LevelPreviewPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _LevelPreviewPainter oldDelegate) {
-    return oldDelegate.level != level || oldDelegate.style != style;
+    return oldDelegate.level != level || 
+        oldDelegate.style != style ||
+        oldDelegate.filledRegions != filledRegions;
   }
 }

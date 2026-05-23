@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
+import 'package:play_craft_kids/features/skins/viewmodel/skins_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/routes/app_routes.dart';
@@ -90,7 +91,7 @@ class _DrawingScreenState extends State<DrawingScreen>
         viewModel.rewardStars != null &&
         _handledCompletionLevelId != level.id) {
       _handledCompletionLevelId = level.id;
-      _playCompletionCelebration(viewModel, level);
+      _showFeedbackAndEvaluationDialog(viewModel, level);
     }
   }
 
@@ -323,35 +324,33 @@ class _DrawingScreenState extends State<DrawingScreen>
                               //   ),
 
                               // if (!_showPreviewOverlay) ...[
-                              
-                              
+
                               // ],
-  Text(
-                                  'LEVEL ${viewModel.levelNumber ?? 1}',
-                                  style: GoogleFonts.fredoka(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF222222),
-                                    letterSpacing: 2.0,
-                                  ),
+                              Text(
+                                'LEVEL ${viewModel.levelNumber ?? 1}',
+                                style: GoogleFonts.fredoka(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF222222),
+                                  letterSpacing: 2.0,
                                 ),
-                                // const SizedBox(height: 8),
-                                // Text(
-                                //   'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
-                                //   style: const TextStyle(
-                                //     color: Colors.grey,
-                                //     fontSize: 12,
-                                //   ),
-                                // ),
-                                const SizedBox(height: 8),
-                                _LevelBadge(
-                                  title: level.title,
-                                  levelNumber: viewModel.levelNumber ?? 1,
-                                  level: level,
-                                ),
-                                const SizedBox(height: 10),
-                                _BrushSizeSelector(viewModel: viewModel),
-                              
+                              ),
+                              // const SizedBox(height: 8),
+                              // Text(
+                              //   'Filled: ${viewModel.filledRegions.length} / ${level.regions.length}',
+                              //   style: const TextStyle(
+                              //     color: Colors.grey,
+                              //     fontSize: 12,
+                              //   ),
+                              // ),
+                              const SizedBox(height: 8),
+                              _LevelBadge(
+                                title: level.title,
+                                levelNumber: viewModel.levelNumber ?? 1,
+                                level: level,
+                              ),
+                              const SizedBox(height: 10),
+                              _BrushSizeSelector(viewModel: viewModel),
 
                               Expanded(
                                 child: Center(
@@ -401,7 +400,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                           // Left Column Icons
                           Positioned(
                             left: 16,
-                            top: 16,
+                            top: 1,
                             child: Column(
                               children: [
                                 SidebarIcon(
@@ -454,7 +453,7 @@ class _DrawingScreenState extends State<DrawingScreen>
 // Right Column Icons
                           Positioned(
                             right: 16,
-                            top: 16,
+                            top: 1,
                             child: Column(
                               children: [
                                 SidebarIcon(
@@ -724,6 +723,83 @@ class _DrawingScreenState extends State<DrawingScreen>
       arguments: DrawingRouteArgs(levelId: levelId),
     );
   }
+
+  Future<void> _showFeedbackAndEvaluationDialog(
+    DrawingViewModel viewModel,
+    LevelModel level,
+  ) async {
+    final score = viewModel.accuracyScore;
+    final isSuccess = score >= 0.70;
+
+    if (isSuccess) {
+      _rewardCaptureFuture ??= _saveService.capture(_canvasRepaintKey);
+
+      try {
+        final skinsViewModel = context.read<SkinsViewModel>();
+        skinsViewModel.unlockByLevel(viewModel.levelNumber ?? 1);
+      } catch (_) {}
+    }
+
+    if (!mounted) return;
+
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: "Evaluation",
+      barrierColor: Colors.black.withValues(alpha: 0.6),
+      transitionDuration: const Duration(milliseconds: 350),
+      pageBuilder: (dialogContext, animation, secondaryAnimation) {
+        return _EvaluationDialogContent(
+          level: level,
+          score: score,
+          isSuccess: isSuccess,
+          coins: viewModel.rewardCoins ?? level.rewardCoins,
+          stars: viewModel.rewardStars ?? level.stars,
+          userFilledRegions: Map<String, Color>.from(viewModel.filledRegions),
+          onTryAgain: () {
+            Navigator.pop(dialogContext);
+            viewModel.resetCanvas();
+            _handledCompletionLevelId = null;
+            if (mounted) {
+              setState(() {
+                // Keep in coloring phase — the child already drew the outline.
+                // They only need to redo the coloring.
+                _canvasPhase = GuidedCanvasPhase.coloring;
+                _coloringEnabled = true;
+                _awaitingPartTick = false;
+                _showColorPalette = true;
+              });
+            }
+          },
+          onNextLevel: () {
+            Navigator.pop(dialogContext);
+            final nextLevelId = viewModel.nextLevelId;
+            if (nextLevelId != null) {
+              _openLevelById(nextLevelId);
+            } else {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.home,
+                (_) => false,
+              );
+            }
+          },
+        );
+      },
+      transitionBuilder: (ctx, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(
+            scale: CurvedAnimation(
+              parent: animation,
+              curve: Curves.elasticOut,
+            ),
+            child: child,
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _TickActionButton extends StatelessWidget {
@@ -808,23 +884,24 @@ class _LevelBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      width: 220,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.blue.withValues(alpha: 0.3),
-            blurRadius: 10,
+            blurRadius: 12,
             spreadRadius: 2,
+            offset: const Offset(0, 4),
           ),
         ],
-        // border: Border.all(color: const Color(0xFFEAF5FF), width: 3),
+        border: Border.all(color: const Color(0xFFEAF5FF), width: 3),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircleAvatar(
             radius: 20,
@@ -842,26 +919,49 @@ class _LevelBadge extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Expanded(
             child: Text(
               title,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.fredoka(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
                 color: const Color(0xFF222222),
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          // Small preview of the completed level
-          LevelPreview(
-            level: level,
-            size: 48,
-            backgroundColor: const Color(0xFFF8FBFF),
-            padding: const EdgeInsets.all(6),
-            borderRadius: BorderRadius.circular(12),
+          const SizedBox(width: 6),
+          // Bouncy, glowing preview button showing color guide when clicked
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.mediumImpact();
+              _showColoringGuideDialog(context, level);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFFFC107).withValues(alpha: 0.5),
+                    blurRadius: 8,
+                    spreadRadius: 1,
+                  ),
+                ],
+                border: Border.all(
+                  color: const Color(0xFFFFD54F),
+                  width: 2.5,
+                ),
+              ),
+              child: LevelPreview(
+                level: level,
+                size: 52,
+                backgroundColor: const Color(0xFFF8FBFF),
+                padding: const EdgeInsets.all(5),
+                borderRadius: BorderRadius.circular(12),
+                animate: true,
+              ),
+            ),
           ),
         ],
       ),
@@ -1031,4 +1131,540 @@ class _LevelCompleteCelebration extends StatelessWidget {
       ),
     );
   }
+}
+
+class _EvaluationDialogContent extends StatefulWidget {
+  const _EvaluationDialogContent({
+    required this.level,
+    required this.score,
+    required this.isSuccess,
+    required this.coins,
+    required this.stars,
+    required this.userFilledRegions,
+    required this.onTryAgain,
+    required this.onNextLevel,
+  });
+
+  final LevelModel level;
+  final double score;
+  final bool isSuccess;
+  final int coins;
+  final int stars;
+  final Map<String, Color> userFilledRegions;
+  final VoidCallback onTryAgain;
+  final VoidCallback onNextLevel;
+
+  @override
+  State<_EvaluationDialogContent> createState() =>
+      _EvaluationDialogContentState();
+}
+
+class _EvaluationDialogContentState extends State<_EvaluationDialogContent>
+    with SingleTickerProviderStateMixin {
+  bool _showGuide = false;
+  late final AnimationController _zoomController;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _zoomController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
+      CurvedAnimation(
+        parent: _zoomController,
+        curve: Curves.easeInOut,
+      ),
+    );
+    _zoomController.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _zoomController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final accuracyPercent = (widget.score * 100).toInt();
+    final themeColor =
+        widget.isSuccess ? const Color(0xFF4CAF50) : const Color(0xFFFF5722);
+    final darkThemeColor =
+        widget.isSuccess ? const Color(0xFF2E7D32) : const Color(0xFFC62828);
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.all(24),
+            constraints: const BoxConstraints(maxWidth: 400),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(
+                color: themeColor,
+                width: 6,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+                BoxShadow(
+                  color: themeColor.withValues(alpha: 0.2),
+                  blurRadius: 30,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.isSuccess)
+                  SizedBox(
+                    height: 100,
+                    child: Lottie.asset(
+                      'assets/data/celebrate.json',
+                      repeat: true,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+
+                const SizedBox(height: 12),
+
+                // 3D Styled Feedback Header Title
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: themeColor,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: darkThemeColor, width: 4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: darkThemeColor,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    widget.isSuccess
+                        ? (accuracyPercent >= 90 ? 'EXCELLENT!' : 'GOOD!')
+                        : 'KEEP TRYING!',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      letterSpacing: 1.5,
+                      shadows: [
+                        const Shadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 2),
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+
+                // Subtitle Feedback Text
+                Text(
+                  widget.isSuccess
+                      ? 'Awesome work! You scored $accuracyPercent% correctly!'
+                      : 'You scored $accuracyPercent%! Try again to match all colors!',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.fredoka(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF333333),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Level Preview Image with interactive click guide & zoom
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showGuide = !_showGuide;
+                    });
+                    HapticFeedback.mediumImpact();
+                  },
+                  child: Column(
+                    children: [
+                      ScaleTransition(
+                        scale: _scaleAnimation,
+                        child: Container(
+                          width: 180,
+                          height: 180,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF0F8FF),
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: _showGuide
+                                  ? const Color(0xFFFFC107)
+                                  : const Color(0xFFE0E0E0),
+                              width: 4,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                              if (_showGuide)
+                                BoxShadow(
+                                  color: const Color(0xFFFFC107)
+                                      .withValues(alpha: 0.4),
+                                  blurRadius: 15,
+                                  spreadRadius: 2,
+                                ),
+                            ],
+                          ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              LevelPreview(
+                                level: widget.level,
+                                size: 150,
+                                animate: false,
+                                filledRegions: _showGuide
+                                    ? null
+                                    : widget.userFilledRegions,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.amber,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.wb_sunny_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF9E6),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                              color: const Color(0xFFFFE082), width: 1.5),
+                        ),
+                        child: Text(
+                          _showGuide
+                              ? "Target Guide Image! 🌟"
+                              : "Click image to see how to color!",
+                          style: GoogleFonts.fredoka(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFFE65100),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 32),
+
+                // Stars rating
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(3, (index) {
+                    final isGolden = widget.isSuccess && (index < widget.stars);
+                    return Icon(
+                      isGolden
+                          ? Icons.star_rounded
+                          : Icons.star_outline_rounded,
+                      size: 48,
+                      color: isGolden
+                          ? const Color(0xFFFFC107)
+                          : Colors.grey.shade300,
+                    );
+                  }),
+                ),
+
+                const SizedBox(height: 32),
+
+                // Action buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (!widget.isSuccess)
+                      Expanded(
+                        child: _evaluationActionButton(
+                          text: "TRY AGAIN",
+                          backgroundColor: const Color(0xFFFF5722),
+                          borderColor: const Color(0xFFD84315),
+                          onTap: widget.onTryAgain,
+                        ),
+                      )
+                    else ...[
+                      Expanded(
+                        child: _evaluationActionButton(
+                          text: "REPLAY",
+                          backgroundColor: const Color(0xFF5AA6FF),
+                          borderColor: const Color(0xFF2D64C8),
+                          onTap: widget.onTryAgain,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _evaluationActionButton(
+                          text: "NEXT",
+                          backgroundColor: const Color(0xFF7DE952),
+                          borderColor: const Color(0xFF45A92B),
+                          onTap: widget.onNextLevel,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _evaluationActionButton({
+    required String text,
+    required Color backgroundColor,
+    required Color borderColor,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        onTap();
+      },
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: borderColor, width: 3),
+          boxShadow: [
+            BoxShadow(
+              color: borderColor,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: GoogleFonts.fredoka(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+            shadows: const [
+              Shadow(
+                color: Colors.black26,
+                offset: Offset(0, 2),
+                blurRadius: 1,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void _showColoringGuideDialog(BuildContext context, LevelModel level) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: "ColoringGuide",
+    barrierColor: Colors.black.withValues(alpha: 0.7),
+    transitionDuration: const Duration(milliseconds: 400),
+    pageBuilder: (dialogContext, animation, secondaryAnimation) {
+      return Center(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
+            constraints: const BoxConstraints(maxWidth: 360),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(
+                color: const Color(0xFFFFC107),
+                width: 6,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.4),
+                  blurRadius: 25,
+                  offset: const Offset(0, 12),
+                ),
+                BoxShadow(
+                  color: const Color(0xFFFFC107).withValues(alpha: 0.3),
+                  blurRadius: 30,
+                  spreadRadius: 8,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 3D Styled Header Title
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFC107),
+                    borderRadius: BorderRadius.circular(20),
+                    border:
+                        Border.all(color: const Color(0xFFFFA000), width: 4),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0xFFFFA000),
+                        offset: Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    'COLOR GUIDE!',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      letterSpacing: 1.5,
+                      shadows: const [
+                        Shadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 2),
+                          blurRadius: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 28),
+
+                // Big beautiful Level Preview with a zoom effect
+                TweenAnimationBuilder<double>(
+                  tween: Tween<double>(begin: 0.8, end: 1.0),
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.elasticOut,
+                  builder: (context, scale, child) {
+                    return Transform.scale(
+                      scale: scale,
+                      child: Container(
+                        width: 220,
+                        height: 220,
+                        padding: const EdgeInsets.all(16),
+                        // decoration: BoxDecoration(
+                        //   image: DecorationImage(image: image),
+                        //   color: const Color(0xFFF9FBE7),
+                        //   shape: BoxShape.circle,
+                        //   border: Border.all(
+                        //     color: const Color(0xFFFFE082),
+                        //     width: 5,
+                        //   ),
+                        //   boxShadow: [
+                        //     BoxShadow(
+                        //       color: Colors.black.withValues(alpha: 0.1),
+                        //       blurRadius: 15,
+                        //       offset: const Offset(0, 8),
+                        //     ),
+                        //   ],
+                        // ),
+
+                        child: LevelPreview(
+                          level: level,
+                          size: 180,
+                          animate: true,
+                          style: LevelPreviewStyle.colored,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                // Guidance text
+                Text(
+                  'Color your picture like this to score 100%!',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.fredoka(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF555555),
+                  ),
+                ),
+                const SizedBox(height: 28),
+
+                // OK Button
+                GestureDetector(
+                  onTap: () => Navigator.pop(dialogContext),
+                  child: Container(
+                    height: 52,
+                    width: 160,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF4CAF50),
+                      borderRadius: BorderRadius.circular(20),
+                      border:
+                          Border.all(color: const Color(0xFF388E3C), width: 3),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0xFF388E3C),
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      'GOT IT!',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (ctx, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: ScaleTransition(
+          scale: CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutBack,
+          ),
+          child: child,
+        ),
+      );
+    },
+  );
 }

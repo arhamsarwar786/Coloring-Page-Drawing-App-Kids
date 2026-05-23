@@ -84,6 +84,19 @@ class DrawingViewModel extends BaseViewModel {
     return _filledRegions.length / total;
   }
 
+  double get accuracyScore {
+    if (_level == null || _level!.regions.isEmpty) return 0.0;
+    int correctCount = 0;
+    for (final region in _level!.regions) {
+      final userColor = _filledRegions[region.id];
+      final targetColor = _level!.getTargetColorForRegion(region.id);
+      if (userColor != null && userColor.value == targetColor.value) {
+        correctCount++;
+      }
+    }
+    return correctCount / _level!.regions.length;
+  }
+
   Future<void> loadLevel(String levelId, {String? drawingSessionId}) async {
     if (_loadedLevelId == levelId && _level != null) {
       _startFreshSessionForCurrentLevel();
@@ -322,6 +335,10 @@ class DrawingViewModel extends BaseViewModel {
     _rewardCoins = null;
     _rewardStars = null;
     _undoCount = 0;
+    // Reset the level's isCompleted flag so _evaluateCompletion can re-trigger
+    if (_level != null) {
+      _level = _level!.copyWith(isCompleted: false);
+    }
     notifyListeners();
   }
 
@@ -355,11 +372,16 @@ class DrawingViewModel extends BaseViewModel {
     // Explicitly set this to ensure UI sees it
     notifyListeners();
 
-    await _repository.markLevelCompleted(
-      levelId: _level!.id,
-      stars: stars,
-      rewardCoins: _level!.rewardCoins,
-    );
+    // Only persist completion to repository if accuracy >= 70%
+    // Otherwise the "Try Again" dialog will handle resetting.
+    final accuracy = accuracyScore;
+    if (accuracy >= 0.70) {
+      await _repository.markLevelCompleted(
+        levelId: _level!.id,
+        stars: stars,
+        rewardCoins: _level!.rewardCoins,
+      );
+    }
     await _soundService.playCompletionFeedback();
   }
 
