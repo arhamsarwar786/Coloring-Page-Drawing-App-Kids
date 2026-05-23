@@ -73,14 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             10,
                           ),
                           child: Container(
-                            padding:
-                                EdgeInsets.only(left: 15, top: 10, bottom: 10),
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: Colors.pink.shade300,
                             ),
                             child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 SidebarIcon(
                                   icon: Icons.arrow_back_rounded,
@@ -90,94 +89,71 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.pop(context);
                                   },
                                 ),
-                                // <!-- InkWell(
-                                //   onTap: () => Navigator.pop(context),
-                                //   //  Navigator.push(context, MaterialPageRoute(builder: (context) => const MainHomeScreen())),
-                                //   child: Icon(Icons.arrow_back_ios_new_rounded,
-                                //       color: const Color.fromARGB(
-                                //           255, 222, 226, 233)),
-                                // ), -->
-
-                                SizedBox(
-                                  width: 20,
-                                ),
-
+                              
                                 Center(
-                                    child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    // Back 3D layer
-                                    Text(
-                                      viewModel.content?.appTitle ??
-                                          AppStrings.appTitle,
-                                      style: TextStyle(
-                                        fontSize: 34,
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.black.withOpacity(0.5),
-                                      ),
-                                    ),
-
-                                    Transform.translate(
-                                      offset: const Offset(-3, -3),
-                                      child: Text(
-                                        viewModel.content?.appTitle ??
-                                            AppStrings.appTitle,
-                                        style: const TextStyle(
-                                          fontSize: 34,
-                                          fontWeight: FontWeight.w900,
-                                          color: Color(0xFFFF4FD8),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      // Shadow layer
+                                      Transform.translate(
+                                        offset: const Offset(6, 6),
+                                        child: Text(
+                                          viewModel.content?.appTitle ??
+                                              AppStrings.appTitle,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 38,
+                                            fontWeight: FontWeight.w900,
+                                            color:
+                                                Colors.black.withOpacity(0.35),
+                                            letterSpacing: 1, // spacing kam
+                                          ),
                                         ),
                                       ),
-                                    ),
 
-                                    // Main colorful text
-                                    Text(
-                                      viewModel.content?.appTitle ??
-                                          AppStrings.appTitle,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 34,
-                                        fontWeight: FontWeight.w900,
-                                        foreground: Paint()
-                                          ..shader = const LinearGradient(
-                                            colors: [
-                                              Color.fromARGB(
-                                                  255, 233, 231, 220),
-                                              Color.fromARGB(
-                                                  255, 236, 224, 231),
-                                              Color.fromARGB(
-                                                  255, 223, 223, 228),
-                                              Color.fromARGB(
-                                                  255, 224, 229, 230),
-                                            ],
-                                          ).createShader(
-                                            Rect.fromLTWH(0, 0, 300, 70),
+                                      // Pink 3D layer
+                                      Transform.translate(
+                                        offset: const Offset(3, 3),
+                                        child: Text(
+                                          viewModel.content?.appTitle ??
+                                              AppStrings.appTitle,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontSize: 38,
+                                            fontWeight: FontWeight.w900,
+                                            color: Color(0xFFFF4FA3),
+                                            letterSpacing: 1, // spacing kam
                                           ),
-                                        shadows: const [
-                                          Shadow(
-                                            offset: Offset(3, 3),
-                                            blurRadius: 10,
-                                            color: Colors.black45,
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                                    // Text(
-                                    //   viewModel.content?.appTitle ??
-                                    //       AppStrings.appTitle,
-                                    //   textAlign: TextAlign.center,
-                                    //   style: Theme.of(context)
-                                    //       .textTheme
-                                    //       .headlineSmall
-                                    //       ?.copyWith(
-                                    //           color: const Color.fromARGB(
-                                    //               255, 222, 226, 233),
-                                    //           fontWeight: FontWeight.bold,
-                                    //           fontSize: 30),
-                                    // ),
-                                    ),
+
+                                      // Main white text
+                                      Text(
+                                        viewModel.content?.appTitle ??
+                                            AppStrings.appTitle,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontSize: 38,
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white,
+                                          letterSpacing: 1, // spacing kam
+                                          shadows: [
+                                            Shadow(
+                                              offset: Offset(0, 0),
+                                              blurRadius: 10,
+                                              color: Colors.white70,
+                                            ),
+                                            Shadow(
+                                              offset: Offset(2, 2),
+                                              blurRadius: 6,
+                                              color: Colors.black26,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
 
                                 Spacer(),
                                 SidebarIcon(

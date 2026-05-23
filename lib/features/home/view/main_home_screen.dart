@@ -57,81 +57,229 @@ class MainHomeScreen extends StatelessWidget {
                             child: Row(
                               children: [
                                 Center(
-                                    child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    // Back 3D layer
-                                    Text(
-                                      viewModel.content?.appTitle ??
-                                          AppStrings.appTitle,
-                                      style: TextStyle(
-                                        fontSize: 34,
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.black.withOpacity(0.5),
-                                      ),
-                                    ),
-
-                                    Transform.translate(
-                                      offset: const Offset(-3, -3),
-                                      child: Text(
-                                        viewModel.content?.appTitle ??
-                                            AppStrings.appTitle,
-                                        style: const TextStyle(
-                                          fontSize: 34,
-                                          fontWeight: FontWeight.w900,
-                                          color: Color(0xFFFF4FD8),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      // Shadow layer
+                                      Transform.translate(
+                                        offset: const Offset(6, 6),
+                                        child: Text(
+                                          viewModel.content?.appTitle ??
+                                              AppStrings.appTitle,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 38,
+                                            fontWeight: FontWeight.w900,
+                                            color:
+                                                Colors.black.withOpacity(0.35),
+                                            letterSpacing: 1, // spacing kam
+                                          ),
                                         ),
                                       ),
-                                    ),
 
-                                    // Main colorful text
-                                    Text(
-                                      viewModel.content?.appTitle ??
-                                          AppStrings.appTitle,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 34,
-                                        fontWeight: FontWeight.w900,
-                                        foreground: Paint()
-                                          ..shader = const LinearGradient(
-                                            colors: [
-                                              Color.fromARGB(
-                                                  255, 233, 231, 220),
-                                              Color.fromARGB(
-                                                  255, 236, 224, 231),
-                                              Color.fromARGB(
-                                                  255, 223, 223, 228),
-                                              Color.fromARGB(
-                                                  255, 224, 229, 230),
-                                            ],
-                                          ).createShader(
-                                            Rect.fromLTWH(0, 0, 300, 70),
+                                      // Pink 3D layer
+                                      Transform.translate(
+                                        offset: const Offset(3, 3),
+                                        child: Text(
+                                          viewModel.content?.appTitle ??
+                                              AppStrings.appTitle,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontSize: 38,
+                                            fontWeight: FontWeight.w900,
+                                            color: Color(0xFFFF4FA3),
+                                            letterSpacing: 1, // spacing kam
                                           ),
-                                        shadows: const [
-                                          Shadow(
-                                            offset: Offset(3, 3),
-                                            blurRadius: 10,
-                                            color: Colors.black45,
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                                    // Text(
-                                    //   viewModel.content?.appTitle ??
-                                    //       AppStrings.appTitle,
-                                    //   textAlign: TextAlign.center,
-                                    //   style: Theme.of(context)
-                                    //       .textTheme
-                                    //       .headlineSmall
-                                    //       ?.copyWith(
-                                    //           color: const Color.fromARGB(
-                                    //               255, 222, 226, 233),
-                                    //           fontWeight: FontWeight.bold,
-                                    //           fontSize: 30),
-                                    // ),
-                                    ),
+
+                                      // Main white text
+                                      Text(
+                                        viewModel.content?.appTitle ??
+                                            AppStrings.appTitle,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontSize: 38,
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white,
+                                          letterSpacing: 1, // spacing kam
+                                          shadows: [
+                                            Shadow(
+                                              offset: Offset(0, 0),
+                                              blurRadius: 10,
+                                              color: Colors.white70,
+                                            ),
+                                            Shadow(
+                                              offset: Offset(2, 2),
+                                              blurRadius: 6,
+                                              color: Colors.black26,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // Center(
+                                //   child: Stack(
+                                //     alignment: Alignment.center,
+                                //     children: [
+                                //       // Deep black shadow
+                                //       Transform.translate(
+                                //         offset: const Offset(10, 10),
+                                //         child: Text(
+                                //           viewModel.content?.appTitle ??
+                                //               AppStrings.appTitle,
+                                //           textAlign: TextAlign.center,
+                                //           style: TextStyle(
+                                //             fontSize: 44,
+                                //             fontWeight: FontWeight.w900,
+                                //             color:
+                                //                 Colors.black.withOpacity(0.35),
+                                //             // letterSpacing: 3,
+                                //           ),
+                                //         ),
+                                //       ),
+
+                                //       // Pink 3D layer
+                                //       Transform.translate(
+                                //         offset: const Offset(5, 5),
+                                //         child: Text(
+                                //           viewModel.content?.appTitle ??
+                                //               AppStrings.appTitle,
+                                //           textAlign: TextAlign.center,
+                                //           style: const TextStyle(
+                                //             fontSize: 44,
+                                //             fontWeight: FontWeight.w900,
+                                //             color: Color(0xFFFF4FA3),
+                                //             // letterSpacing: 1,
+                                //           ),
+                                //         ),
+                                //       ),
+
+                                //       // Main white text
+                                //       Text(
+                                //         viewModel.content?.appTitle ??
+                                //             AppStrings.appTitle,
+                                //         textAlign: TextAlign.center,
+                                //         style: const TextStyle(
+                                //           fontSize: 44,
+                                //           fontWeight: FontWeight.w900,
+                                //           color: Colors.white,
+                                //           // letterSpacing: 1,
+                                //           shadows: [
+                                //             Shadow(
+                                //               offset: Offset(0, 0),
+                                //               blurRadius: 15,
+                                //               color: Colors.white70,
+                                //             ),
+                                //             Shadow(
+                                //               offset: Offset(3, 3),
+                                //               blurRadius: 8,
+                                //               color: Colors.black26,
+                                //             ),
+                                //           ],
+                                //         ),
+                                //       ),
+
+                                //       // Glossy shine
+                                //       // Positioned(
+                                //       //   top: 5,
+                                //       //   child: Container(
+                                //       //     width: 200,
+                                //       //     height: 12,
+                                //       //     decoration: BoxDecoration(
+                                //       //       borderRadius:
+                                //       //           BorderRadius.circular(30),
+                                //       //       gradient: LinearGradient(
+                                //       //         colors: [
+                                //       //           Colors.white.withOpacity(0.9),
+                                //       //           Colors.white.withOpacity(0.0),
+                                //       //         ],
+                                //       //       ),
+                                //       //     ),
+                                //       //   ),
+                                //       // ),
+                                //     ],
+                                //   ),
+                                // ),
+                                // Center(
+                                //     child: Stack(
+                                //   alignment: Alignment.center,
+                                //   children: [
+                                //     // Back 3D layer
+                                //     Text(
+                                //       viewModel.content?.appTitle ??
+                                //           AppStrings.appTitle,
+                                //       style: TextStyle(
+                                //         fontSize: 34,
+                                //         fontWeight: FontWeight.w900,
+                                //         color: Colors.black.withOpacity(0.5),
+                                //       ),
+                                //     ),
+
+                                //     Transform.translate(
+                                //       offset: const Offset(-3, -3),
+                                //       child: Text(
+                                //         viewModel.content?.appTitle ??
+                                //             AppStrings.appTitle,
+                                //         style: const TextStyle(
+                                //           fontSize: 34,
+                                //           fontWeight: FontWeight.w900,
+                                //           color: Color(0xFFFF4FD8),
+                                //         ),
+                                //       ),
+                                //     ),
+
+                                //     // Main colorful text
+                                //     Text(
+                                //       viewModel.content?.appTitle ??
+                                //           AppStrings.appTitle,
+                                //       textAlign: TextAlign.center,
+                                //       style: TextStyle(
+                                //         fontSize: 34,
+                                //         fontWeight: FontWeight.w900,
+                                //         foreground: Paint()
+                                //           ..shader = const LinearGradient(
+                                //             colors: [
+                                //               Color.fromARGB(
+                                //                   255, 233, 231, 220),
+                                //               Color.fromARGB(
+                                //                   255, 236, 224, 231),
+                                //               Color.fromARGB(
+                                //                   255, 223, 223, 228),
+                                //               Color.fromARGB(
+                                //                   255, 224, 229, 230),
+                                //             ],
+                                //           ).createShader(
+                                //             Rect.fromLTWH(0, 0, 300, 70),
+                                //           ),
+                                //         shadows: const [
+                                //           Shadow(
+                                //             offset: Offset(3, 3),
+                                //             blurRadius: 10,
+                                //             color: Colors.black45,
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ),
+                                //   ],
+                                // )
+                                //     // Text(
+                                //     //   viewModel.content?.appTitle ??
+                                //     //       AppStrings.appTitle,
+                                //     //   textAlign: TextAlign.center,
+                                //     //   style: Theme.of(context)
+                                //     //       .textTheme
+                                //     //       .headlineSmall
+                                //     //       ?.copyWith(
+                                //     //           color: const Color.fromARGB(
+                                //     //               255, 222, 226, 233),
+                                //     //           fontWeight: FontWeight.bold,
+                                //     //           fontSize: 30),
+                                //     // ),
+                                //     ),
+
                                 Spacer(),
                                 SidebarIcon(
                                   icon: Icons.settings_rounded,
@@ -185,14 +333,14 @@ class MainHomeScreen extends StatelessWidget {
                                 )
                               : GridView.builder(
                                   physics: const BouncingScrollPhysics(),
-                                  padding: const EdgeInsets.all(16.0),
+                                  padding: const EdgeInsets.all(10.0),
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    crossAxisSpacing: 16,
+                                    crossAxisSpacing: 10,
                                     mainAxisSpacing: 16,
                                     childAspectRatio:
-                                        0.70, // Level card ratio follow kiya ha
+                                        0.72, // Level card ratio follow kiya ha
                                   ),
                                   itemCount: allCategories.length,
                                   itemBuilder: (context, index) {
