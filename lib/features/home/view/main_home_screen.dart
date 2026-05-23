@@ -261,6 +261,7 @@ class MainHomeScreen extends StatelessWidget {
 
                                     return InkWell(
                                       onTap: () {
+                                        viewModel.selectCategory(category.id);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
