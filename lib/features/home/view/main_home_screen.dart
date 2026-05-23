@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:play_craft_kids/core/constants/app_strings.dart';
+import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
+import 'package:play_craft_kids/features/home/components/center_cade.dart';
 import 'package:play_craft_kids/features/home/view/home_screen.dart';
+import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 // Apne actual project paths ke mutabik in imports ko adjust kar lena:
@@ -45,25 +48,124 @@ class MainHomeScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(
                               top: 16.0, left: 16.0, right: 16.0),
                           child: Container(
-                            padding: EdgeInsets.only(left: 15),
+                            padding:
+                                EdgeInsets.only(left: 15, top: 10, bottom: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: Colors.pink.shade300,
                             ),
-                            child: Center(
-                              child: Text(
-                                viewModel.content?.appTitle ??
-                                    AppStrings.appTitle,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(
-                                        color: const Color.fromARGB(
-                                            255, 222, 226, 233),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 30),
-                              ),
+                            child: Row(
+                              children: [
+                                Center(
+                                    child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    // Back 3D layer
+                                    Text(
+                                      viewModel.content?.appTitle ??
+                                          AppStrings.appTitle,
+                                      style: TextStyle(
+                                        fontSize: 34,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.black.withOpacity(0.5),
+                                      ),
+                                    ),
+
+                                    Transform.translate(
+                                      offset: const Offset(-3, -3),
+                                      child: Text(
+                                        viewModel.content?.appTitle ??
+                                            AppStrings.appTitle,
+                                        style: const TextStyle(
+                                          fontSize: 34,
+                                          fontWeight: FontWeight.w900,
+                                          color: Color(0xFFFF4FD8),
+                                        ),
+                                      ),
+                                    ),
+
+                                    // Main colorful text
+                                    Text(
+                                      viewModel.content?.appTitle ??
+                                          AppStrings.appTitle,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 34,
+                                        fontWeight: FontWeight.w900,
+                                        foreground: Paint()
+                                          ..shader = const LinearGradient(
+                                            colors: [
+                                              Color.fromARGB(
+                                                  255, 233, 231, 220),
+                                              Color.fromARGB(
+                                                  255, 236, 224, 231),
+                                              Color.fromARGB(
+                                                  255, 223, 223, 228),
+                                              Color.fromARGB(
+                                                  255, 224, 229, 230),
+                                            ],
+                                          ).createShader(
+                                            Rect.fromLTWH(0, 0, 300, 70),
+                                          ),
+                                        shadows: const [
+                                          Shadow(
+                                            offset: Offset(3, 3),
+                                            blurRadius: 10,
+                                            color: Colors.black45,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                                    // Text(
+                                    //   viewModel.content?.appTitle ??
+                                    //       AppStrings.appTitle,
+                                    //   textAlign: TextAlign.center,
+                                    //   style: Theme.of(context)
+                                    //       .textTheme
+                                    //       .headlineSmall
+                                    //       ?.copyWith(
+                                    //           color: const Color.fromARGB(
+                                    //               255, 222, 226, 233),
+                                    //           fontWeight: FontWeight.bold,
+                                    //           fontSize: 30),
+                                    // ),
+                                    ),
+                                Spacer(),
+                                SidebarIcon(
+                                  icon: Icons.settings_rounded,
+                                  assetName: 'assets/images/setting.png',
+                                  onPressed: () {
+                                    showGeneralDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      barrierLabel: "Settings",
+                                      barrierColor: Colors.transparent,
+                                      transitionDuration:
+                                          const Duration(milliseconds: 250),
+                                      pageBuilder: (_, __, ___) =>
+                                          const SettingsDialog(),
+                                      transitionBuilder:
+                                          (_, animation, __, child) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: ScaleTransition(
+                                            scale: CurvedAnimation(
+                                              parent: animation,
+                                              curve: Curves.easeOutBack,
+                                            ),
+                                            child: child,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -104,16 +206,16 @@ class MainHomeScreen extends StatelessWidget {
 
                                     if (categoryTitle == 'fruits') {
                                       myCustomImage =
-                                          'assets/images/fruits.png'; // 🍎 level apple asset name
+                                          'assets/images/fruitsss.png'; // 🍎 level apple asset name
                                     } else if (categoryTitle == 'animals') {
                                       myCustomImage =
-                                          'assets/images/animal.png'; // 🍌 level banana asset name
+                                          'assets/images/animals.png'; // 🍌 level banana asset name
                                     } else if (categoryTitle == 'sports') {
                                       myCustomImage =
-                                          'assets/images/sport.png'; // 🍊 level orange asset name
+                                          'assets/images/sports.png'; // 🍊 level orange asset name
                                     } else if (categoryTitle == 'vehicles') {
                                       myCustomImage =
-                                          'assets/images/vehicles.png'; // 🐱 level cat vector asset name
+                                          'assets/images/vehicle.png'; // 🐱 level cat vector asset name
                                     }
 
                                     // --- 2. Vibrant Glossy Colors Logic (Level screen combinations) ---
@@ -157,15 +259,8 @@ class MainHomeScreen extends StatelessWidget {
                                     Color currentInnerColor = innerBoxColors[
                                         index % innerBoxColors.length];
 
-                                    return LevelCard(
-                                      title: category.title,
-                                      imageAsset: myCustomImage,
-                                      mainColor: currentMainColor,
-                                      borderColor: currentBorderColor,
-                                      innerColor: currentInnerColor,
+                                    return InkWell(
                                       onTap: () {
-                                        viewModel.selectCategory(category.id);
-
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -174,8 +269,72 @@ class MainHomeScreen extends StatelessWidget {
                                           ),
                                         );
                                       },
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            // child: Transform.translate(
+                                            //   offset: const Offset(-3, -3),
+                                            //   child: Text(
+
+                                            //     category.title,
+                                            //     style: const TextStyle(
+                                            //       fontSize: 34,
+                                            //       fontWeight: FontWeight.w900,
+                                            //       color: Color(0xFFFF4FD8),
+                                            //     ),
+                                            //   ),
+
+                                            // ),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        myCustomImage),
+                                                    fit: BoxFit.cover)),
+                                          ),
+                                          Positioned(
+                                            left: 0,
+                                            right: 0,
+                                            top: 20,
+                                            child: Center(
+                                              child: Transform.translate(
+                                                offset: const Offset(-3, -3),
+                                                child: Text(
+                                                  category.title,
+                                                  style: const TextStyle(
+                                                    fontSize: 34,
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Color.fromARGB(
+                                                        255, 32, 6, 36),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     );
-                                    // _MainHomeLevelCard(
+                                    // LevelCard(
+                                    //   title: category.title,
+                                    //   imageAsset: myCustomImage,
+                                    //   mainColor: currentMainColor,
+                                    //   borderColor: currentBorderColor,
+                                    //   innerColor: currentInnerColor,
+                                    //   onTap: () {
+                                    //     viewModel.selectCategory(category.id);
+
+                                    //     Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             const HomeScreen(),
+                                    //       ),
+                                    //     );
+                                    //   },
+                                    // );
+                                    // // _MainHomeLevelCard(
                                     //   title: category.title,
                                     //   imageAsset: myCustomImage,
                                     //   mainColor: currentMainColor,
@@ -747,88 +906,49 @@ class LevelCardState extends State<LevelCard> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 34,
-                            child: Center(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  widget.title.toUpperCase(),
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 1.1,
-                                    color: Colors.black,
-                                  ).copyWith(
-                                    shadows: [
-                                      Shadow(
-                                        color: glowColor.withOpacity(
-                                          _isPressed ? 0.95 : 0.82,
-                                        ),
-                                        blurRadius: _isPressed ? 12 : 9,
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 34,
+                          child: Center(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                widget.title.toUpperCase(),
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.1,
+                                  color: Colors.black,
+                                ).copyWith(
+                                  shadows: [
+                                    Shadow(
+                                      color: glowColor.withOpacity(
+                                        _isPressed ? 0.95 : 0.82,
                                       ),
-                                      Shadow(
-                                        color: Colors.black.withOpacity(0.22),
-                                        offset: const Offset(0, 2),
-                                        blurRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Expanded(
-                            child: Center(
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.26),
-                                  borderRadius: BorderRadius.circular(18),
-                                  border: Border.all(
-                                    color: Colors.white.withOpacity(0.58),
-                                    width: 1.8,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.white.withOpacity(0.18),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, -1),
+                                      blurRadius: _isPressed ? 12 : 9,
                                     ),
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.05),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 4),
+                                    Shadow(
+                                      color: Colors.black.withOpacity(0.22),
+                                      offset: const Offset(0, 2),
+                                      blurRadius: 2,
                                     ),
                                   ],
                                 ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: widget.innerColor,
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: widget.borderColor,
-                                      width: 3,
-                                    ),
-                                    image: DecorationImage(
-                                      image: AssetImage(widget.imageAsset),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: Center(
+                            child: CenterCade(
+                                imagePath: widget.imageAsset, name: "name"),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

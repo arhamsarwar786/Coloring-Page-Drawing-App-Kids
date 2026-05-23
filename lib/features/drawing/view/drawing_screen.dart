@@ -205,135 +205,134 @@ class _DrawingScreenState extends State<DrawingScreen>
                           // Center Content
                           Column(
                             children: [
-                              const SizedBox(height: 32),
+                              // const SizedBox(height: 32),
                               // Preview Overlay - shows at top when active
-                              if (_showPreviewOverlay)
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Color like this:',
-                                        style: GoogleFonts.fredoka(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Container(
-                                        width: 160,
-                                        height: 160,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          border: Border.all(
-                                              color: Colors.grey.shade300,
-                                              width: 2),
-                                        ),
-                                        child: CustomPaint(
-                                          painter: AdvancedCanvasPainter(
-                                            level: level,
-                                            paths: Map.fromEntries(
-                                              level.regions.map((r) {
-                                                return MapEntry(
-                                                    r.id,
-                                                    r.toPath(
-                                                        const Size(160, 160)));
-                                              }),
-                                            ),
-                                            paintPaths: {},
-                                            dashedPaths: {},
-                                            metricsCache: {},
-                                            filledRegions: Map.fromEntries(
-                                              level.regions.map((r) {
-                                                final targetColorId = level
-                                                    .getTargetColorIdForRegion(
-                                                        r.id);
-                                                if (targetColorId != null) {
-                                                  for (final color
-                                                      in level.palette) {
-                                                    if (color.id ==
-                                                        targetColorId) {
-                                                      return MapEntry(
-                                                          r.id, color.color);
-                                                    }
-                                                  }
-                                                }
-                                                return MapEntry(
-                                                    r.id, Colors.white);
-                                              }),
-                                            ),
-                                            drawingController:
-                                                _previewDrawingController,
-                                            coloringController:
-                                                _previewColoringController,
-                                            activePartHighlighter:
-                                                _previewHighlighter,
-                                            fillAnimationValue: 0,
-                                            activeFillRegionId: null,
-                                            activeFillRegionOriginalColor: null,
-                                            repaint: Listenable.merge([]),
-                                          ),
-                                          size: const Size(160, 160),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              // Show Again button (appears after 10 seconds, only once)
-                              if (_showAgainButton && !_showPreviewOverlay)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // Call Show Again handler in CanvasWidget
-                                      final canvasState = _canvasWidgetKey
-                                          .currentState as dynamic;
-                                      try {
-                                        canvasState?.showPreviewAgain();
-                                      } catch (_) {}
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue.shade600,
-                                      foregroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(24),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 40, vertical: 16),
-                                      elevation: 8,
-                                    ),
-                                    child: Text(
-                                      'Show Again',
-                                      style: GoogleFonts.fredoka(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              if (!_showPreviewOverlay) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  color: Colors.white,
-                                  child: Text(
-                                    'LEVEL ${viewModel.levelNumber ?? 1}',
-                                    style: GoogleFonts.fredoka(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w700,
-                                      color: const Color(0xFF222222),
-                                      letterSpacing: 2.0,
-                                    ),
+                              // if (_showPreviewOverlay)
+                              //   Container(
+                              //     width: double.infinity,
+                              //     padding: const EdgeInsets.symmetric(
+                              //         horizontal: 16, vertical: 12),
+                              //     decoration: BoxDecoration(
+                              //       color: Colors.white,
+                              //       borderRadius: BorderRadius.circular(12),
+                              //     ),
+                              //     child: Column(
+                              //       children: [
+                              //         Text(
+                              //           'Color like this:',
+                              //           style: GoogleFonts.fredoka(
+                              //             fontSize: 20,
+                              //             fontWeight: FontWeight.w600,
+                              //             color: Colors.black87,
+                              //           ),
+                              //         ),
+                              //         const SizedBox(height: 12),
+                              //         Container(
+                              //           width: 160,
+                              //           height: 160,
+                              //           decoration: BoxDecoration(
+                              //             color: Colors.white,
+                              //             borderRadius:
+                              //                 BorderRadius.circular(12),
+                              //             border: Border.all(
+                              //                 color: Colors.grey.shade300,
+                              //                 width: 2),
+                              //           ),
+                              //           child: CustomPaint(
+                              //             painter: AdvancedCanvasPainter(
+                              //               level: level,
+                              //               paths: Map.fromEntries(
+                              //                 level.regions.map((r) {
+                              //                   return MapEntry(
+                              //                       r.id,
+                              //                       r.toPath(
+                              //                           const Size(160, 160)));
+                              //                 }),
+                              //               ),
+                              //               paintPaths: {},
+                              //               dashedPaths: {},
+                              //               metricsCache: {},
+                              //               filledRegions: Map.fromEntries(
+                              //                 level.regions.map((r) {
+                              //                   final targetColorId = level
+                              //                       .getTargetColorIdForRegion(
+                              //                           r.id);
+                              //                   if (targetColorId != null) {
+                              //                     for (final color
+                              //                         in level.palette) {
+                              //                       if (color.id ==
+                              //                           targetColorId) {
+                              //                         return MapEntry(
+                              //                             r.id, color.color);
+                              //                       }
+                              //                     }
+                              //                   }
+                              //                   return MapEntry(
+                              //                       r.id, Colors.white);
+                              //                 }),
+                              //               ),
+                              //               drawingController:
+                              //                   _previewDrawingController,
+                              //               coloringController:
+                              //                   _previewColoringController,
+                              //               activePartHighlighter:
+                              //                   _previewHighlighter,
+                              //               fillAnimationValue: 0,
+                              //               activeFillRegionId: null,
+                              //               activeFillRegionOriginalColor: null,
+                              //               repaint: Listenable.merge([]),
+                              //             ),
+                              //             size: const Size(160, 160),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // // Show Again button (appears after 10 seconds, only once)
+                              // if (_showAgainButton && !_showPreviewOverlay)
+                              //   Padding(
+                              //     padding: const EdgeInsets.symmetric(
+                              //         horizontal: 16, vertical: 8),
+                              //     child: ElevatedButton(
+                              //       onPressed: () {
+                              //         // Call Show Again handler in CanvasWidget
+                              //         final canvasState = _canvasWidgetKey
+                              //             .currentState as dynamic;
+                              //         try {
+                              //           canvasState?.showPreviewAgain();
+                              //         } catch (_) {}
+                              //       },
+                              //       style: ElevatedButton.styleFrom(
+                              //         backgroundColor: Colors.blue.shade600,
+                              //         foregroundColor: Colors.white,
+                              //         shape: RoundedRectangleBorder(
+                              //           borderRadius: BorderRadius.circular(24),
+                              //         ),
+                              //         padding: const EdgeInsets.symmetric(
+                              //             horizontal: 40, vertical: 16),
+                              //         elevation: 8,
+                              //       ),
+                              //       child: Text(
+                              //         'Show Again',
+                              //         style: GoogleFonts.fredoka(
+                              //           fontSize: 18,
+                              //           fontWeight: FontWeight.w600,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+
+                              // if (!_showPreviewOverlay) ...[
+                              
+                              
+                              // ],
+  Text(
+                                  'LEVEL ${viewModel.levelNumber ?? 1}',
+                                  style: GoogleFonts.fredoka(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xFF222222),
+                                    letterSpacing: 2.0,
                                   ),
                                 ),
                                 // const SizedBox(height: 8),
@@ -352,50 +351,47 @@ class _DrawingScreenState extends State<DrawingScreen>
                                 ),
                                 const SizedBox(height: 10),
                                 _BrushSizeSelector(viewModel: viewModel),
-                              ],
+                              
+
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Center(
-                                    child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: SizedBox(
-                                        width: 2048,
-                                        height: 2048,
-                                        child: CanvasWidget(
-                                          key: _canvasWidgetKey,
-                                          level: level,
-                                          repaintBoundaryKey: _canvasRepaintKey,
-                                          guideAsset: null, // we use paths n
-                                          filledRegions:
-                                              viewModel.filledRegions,
-                                          onFill: viewModel.fillRegionAt,
-                                          enableColoring: _coloringEnabled &&
-                                              !_awaitingPartTick,
-                                          onPhaseChanged: _onCanvasPhaseChanged,
-                                          onRegionFilled: _onRegionFilled,
-                                          initialSnapshot:
-                                              viewModel.initialSessionSnapshot,
-                                          onSnapshotChanged:
-                                              _handleCanvasSnapshotChanged,
-                                          onPreviewStateChanged: (isShowing) {
-                                            setState(() {
-                                              _showPreviewOverlay = isShowing;
-                                            });
-                                          },
-                                          onShowAgainButtonStateChanged:
-                                              (isShowing) {
-                                            setState(() {
-                                              _showAgainButton = isShowing;
-                                            });
-                                          },
-                                        ),
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: SizedBox(
+                                      // width: 2048,
+                                      height: 2048,
+                                      child: CanvasWidget(
+                                        key: _canvasWidgetKey,
+                                        level: level,
+                                        repaintBoundaryKey: _canvasRepaintKey,
+                                        guideAsset: null, // we use paths n
+                                        filledRegions: viewModel.filledRegions,
+                                        onFill: viewModel.fillRegionAt,
+                                        enableColoring: _coloringEnabled &&
+                                            !_awaitingPartTick,
+                                        onPhaseChanged: _onCanvasPhaseChanged,
+                                        onRegionFilled: _onRegionFilled,
+                                        initialSnapshot:
+                                            viewModel.initialSessionSnapshot,
+                                        onSnapshotChanged:
+                                            _handleCanvasSnapshotChanged,
+                                        onPreviewStateChanged: (isShowing) {
+                                          setState(() {
+                                            _showPreviewOverlay = isShowing;
+                                          });
+                                        },
+                                        onShowAgainButtonStateChanged:
+                                            (isShowing) {
+                                          setState(() {
+                                            _showAgainButton = isShowing;
+                                          });
+                                        },
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
+
                               const SizedBox(height: 10),
                               _buildBottomAction(level, viewModel),
                               const SizedBox(height: 32),
@@ -408,7 +404,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                             top: 16,
                             child: Column(
                               children: [
-                                _SidebarIcon(
+                                SidebarIcon(
                                   icon: Icons.arrow_back_rounded,
                                   assetName: 'assets/images/pop-button.png',
                                   onPressed: () {
@@ -417,7 +413,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   },
                                 ),
                                 const SizedBox(height: 16),
-                                // _SidebarIcon(
+                                // SidebarIcon(
                                 //   icon: Icons.edit_rounded,
                                 //   assetName: 'assets/images/pen.png',
                                 //   onPressed: () async {
@@ -429,7 +425,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                                 //     }
                                 //   },
                                 // ),
-                                _SidebarIcon(
+                                SidebarIcon(
                                   icon: Icons.edit_rounded,
                                   assetName: 'assets/images/pen.png',
                                   onPressed: () {
@@ -446,7 +442,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                                 ),
 
                                 const SizedBox(height: 16),
-                                // _SidebarIcon(
+                                // SidebarIcon(
                                 //   icon: Icons.photo_library_rounded,
                                 //   assetName: 'assets/images/photo.png',
                                 //   onPressed: () => Navigator.pushNamed(
@@ -461,7 +457,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                             top: 16,
                             child: Column(
                               children: [
-                                _SidebarIcon(
+                                SidebarIcon(
                                   icon: Icons.settings_rounded,
                                   assetName: 'assets/images/setting.png',
                                   onPressed: () {
@@ -491,14 +487,14 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   },
                                 ),
                                 // const SizedBox(height: 16),
-                                // _SidebarIcon(
+                                // SidebarIcon(
                                 //   icon: Icons.edit_rounded,
                                 //   assetName: 'assets/images/pen.png',
                                 //   onPressed: () =>
                                 //       Navigator.pushNamed(context, AppRoutes.skins),
                                 // ),
                                 const SizedBox(height: 16),
-                                _SidebarIcon(
+                                SidebarIcon(
                                   icon: Icons.photo_library_rounded,
                                   assetName: 'assets/images/photo.png',
                                   onPressed: () async {
@@ -765,8 +761,8 @@ class _TickActionButton extends StatelessWidget {
   }
 }
 
-class _SidebarIcon extends StatelessWidget {
-  const _SidebarIcon({
+class SidebarIcon extends StatelessWidget {
+  const SidebarIcon({
     required this.icon,
     this.assetName,
     this.onPressed,

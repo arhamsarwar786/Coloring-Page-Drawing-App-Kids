@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
+import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/routes/app_routes.dart';
@@ -71,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             10,
                           ),
                           child: Container(
-                            padding: EdgeInsets.only(left: 15),
+                            padding:
+                                EdgeInsets.only(left: 15, top: 10, bottom: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: Colors.pink.shade300,
@@ -79,30 +82,136 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Row(
                               // mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                InkWell(
-                                  onTap: () => Navigator.pop(context),
-                                  //  Navigator.push(context, MaterialPageRoute(builder: (context) => const MainHomeScreen())),
-                                  child: Icon(Icons.arrow_back_ios_new_rounded,
-                                      color: const Color.fromARGB(
-                                          255, 222, 226, 233)),
+                                SidebarIcon(
+                                  icon: Icons.arrow_back_rounded,
+                                  assetName: 'assets/images/pop-button.png',
+                                  onPressed: () {
+                                    // PopScope handles the final capture
+                                    Navigator.pop(context);
+                                  },
                                 ),
+                                // <!-- InkWell(
+                                //   onTap: () => Navigator.pop(context),
+                                //   //  Navigator.push(context, MaterialPageRoute(builder: (context) => const MainHomeScreen())),
+                                //   child: Icon(Icons.arrow_back_ios_new_rounded,
+                                //       color: const Color.fromARGB(
+                                //           255, 222, 226, 233)),
+                                // ), -->
+
                                 SizedBox(
                                   width: 20,
                                 ),
+
                                 Center(
-                                  child: Text(
-                                    viewModel.content?.appTitle ??
-                                        AppStrings.appTitle,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall
-                                        ?.copyWith(
-                                            color: const Color.fromARGB(
-                                                255, 222, 226, 233),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 30),
-                                  ),
+                                    child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    // Back 3D layer
+                                    Text(
+                                      viewModel.content?.appTitle ??
+                                          AppStrings.appTitle,
+                                      style: TextStyle(
+                                        fontSize: 34,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.black.withOpacity(0.5),
+                                      ),
+                                    ),
+
+                                    Transform.translate(
+                                      offset: const Offset(-3, -3),
+                                      child: Text(
+                                        viewModel.content?.appTitle ??
+                                            AppStrings.appTitle,
+                                        style: const TextStyle(
+                                          fontSize: 34,
+                                          fontWeight: FontWeight.w900,
+                                          color: Color(0xFFFF4FD8),
+                                        ),
+                                      ),
+                                    ),
+
+                                    // Main colorful text
+                                    Text(
+                                      viewModel.content?.appTitle ??
+                                          AppStrings.appTitle,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 34,
+                                        fontWeight: FontWeight.w900,
+                                        foreground: Paint()
+                                          ..shader = const LinearGradient(
+                                            colors: [
+                                              Color.fromARGB(
+                                                  255, 233, 231, 220),
+                                              Color.fromARGB(
+                                                  255, 236, 224, 231),
+                                              Color.fromARGB(
+                                                  255, 223, 223, 228),
+                                              Color.fromARGB(
+                                                  255, 224, 229, 230),
+                                            ],
+                                          ).createShader(
+                                            Rect.fromLTWH(0, 0, 300, 70),
+                                          ),
+                                        shadows: const [
+                                          Shadow(
+                                            offset: Offset(3, 3),
+                                            blurRadius: 10,
+                                            color: Colors.black45,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                                    // Text(
+                                    //   viewModel.content?.appTitle ??
+                                    //       AppStrings.appTitle,
+                                    //   textAlign: TextAlign.center,
+                                    //   style: Theme.of(context)
+                                    //       .textTheme
+                                    //       .headlineSmall
+                                    //       ?.copyWith(
+                                    //           color: const Color.fromARGB(
+                                    //               255, 222, 226, 233),
+                                    //           fontWeight: FontWeight.bold,
+                                    //           fontSize: 30),
+                                    // ),
+                                    ),
+
+                                Spacer(),
+                                SidebarIcon(
+                                  icon: Icons.settings_rounded,
+                                  assetName: 'assets/images/setting.png',
+                                  onPressed: () {
+                                    showGeneralDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      barrierLabel: "Settings",
+                                      barrierColor: Colors.transparent,
+                                      transitionDuration:
+                                          const Duration(milliseconds: 250),
+                                      pageBuilder: (_, __, ___) =>
+                                          const SettingsDialog(),
+                                      transitionBuilder:
+                                          (_, animation, __, child) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: ScaleTransition(
+                                            scale: CurvedAnimation(
+                                              parent: animation,
+                                              curve: Curves.easeOutBack,
+                                            ),
+                                            child: child,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+
+                                SizedBox(
+                                  width: 20,
                                 ),
                               ],
                             ),
