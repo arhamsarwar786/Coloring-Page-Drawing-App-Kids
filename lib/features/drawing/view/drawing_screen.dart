@@ -1502,153 +1502,155 @@ void _showColoringGuideDialog(BuildContext context, LevelModel level) {
     barrierColor: Colors.black.withValues(alpha: 0.7),
     transitionDuration: const Duration(milliseconds: 400),
     pageBuilder: (dialogContext, animation, secondaryAnimation) {
-      return Center(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.all(24),
-            padding: const EdgeInsets.all(24),
-            constraints: const BoxConstraints(maxWidth: 360),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(32),
-              border: Border.all(
-                color: const Color(0xFFFFC107),
-                width: 6,
+      return Material(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(24),
+              constraints: const BoxConstraints(maxWidth: 360),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32),
+                border: Border.all(
+                  color: const Color(0xFFFFC107),
+                  width: 6,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    blurRadius: 25,
+                    offset: const Offset(0, 12),
+                  ),
+                  // BoxShadow(
+                  //   color: const Color(0xFFFFC107).withValues(alpha: 0.3),
+                  //   blurRadius: 30,
+                  //   spreadRadius: 8,
+                  // ),
+                ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.4),
-                  blurRadius: 25,
-                  offset: const Offset(0, 12),
-                ),
-                BoxShadow(
-                  color: const Color(0xFFFFC107).withValues(alpha: 0.3),
-                  blurRadius: 30,
-                  spreadRadius: 8,
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // 3D Styled Header Title
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFC107),
-                    borderRadius: BorderRadius.circular(20),
-                    border:
-                        Border.all(color: const Color(0xFFFFA000), width: 4),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0xFFFFA000),
-                        offset: Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    'COLOR GUIDE!',
-                    style: GoogleFonts.fredoka(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      letterSpacing: 1.5,
-                      shadows: const [
-                        Shadow(
-                          color: Colors.black26,
-                          offset: Offset(0, 2),
-                          blurRadius: 2,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 28),
-
-                // Big beautiful Level Preview with a zoom effect
-                TweenAnimationBuilder<double>(
-                  tween: Tween<double>(begin: 0.8, end: 1.0),
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.elasticOut,
-                  builder: (context, scale, child) {
-                    return Transform.scale(
-                      scale: scale,
-                      child: Container(
-                        width: 220,
-                        height: 220,
-                        padding: const EdgeInsets.all(16),
-                        // decoration: BoxDecoration(
-                        //   image: DecorationImage(image: image),
-                        //   color: const Color(0xFFF9FBE7),
-                        //   shape: BoxShape.circle,
-                        //   border: Border.all(
-                        //     color: const Color(0xFFFFE082),
-                        //     width: 5,
-                        //   ),
-                        //   boxShadow: [
-                        //     BoxShadow(
-                        //       color: Colors.black.withValues(alpha: 0.1),
-                        //       blurRadius: 15,
-                        //       offset: const Offset(0, 8),
-                        //     ),
-                        //   ],
-                        // ),
-
-                        child: LevelPreview(
-                          level: level,
-                          size: 180,
-                          animate: true,
-                          style: LevelPreviewStyle.colored,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 24),
-
-                // Guidance text
-                Text(
-                  'Color your picture like this to score 100%!',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.fredoka(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF555555),
-                  ),
-                ),
-                const SizedBox(height: 28),
-
-                // OK Button
-                GestureDetector(
-                  onTap: () => Navigator.pop(dialogContext),
-                  child: Container(
-                    height: 52,
-                    width: 160,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 3D Styled Header Title
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF4CAF50),
+                      color: const Color(0xFFFFC107),
                       borderRadius: BorderRadius.circular(20),
                       border:
-                          Border.all(color: const Color(0xFF388E3C), width: 3),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0xFF388E3C),
-                          offset: Offset(0, 5),
-                        ),
-                      ],
+                          Border.all(color: const Color(0xFFFFA000), width: 4),
+                      // boxShadow: const [
+                      //   BoxShadow(
+                      //     color: Color(0xFFFFA000),
+                      //     offset: Offset(0, 6),
+                      //   ),
+                      // ],
                     ),
-                    alignment: Alignment.center,
                     child: Text(
-                      'GOT IT!',
+                      'COLOR GUIDE!',
                       style: GoogleFonts.fredoka(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
                         color: Colors.white,
+                        letterSpacing: 1.5,
+                        // shadows: const [
+                        //   // Shadow(
+                        //   //   color: Colors.black26,
+                        //   //   offset: Offset(0, 2),
+                        //   //   blurRadius: 2,
+                        //   // ),
+                        // ],
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 28),
+
+                  // Big beautiful Level Preview with a zoom effect
+                  TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0.8, end: 1.0),
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.elasticOut,
+                    builder: (context, scale, child) {
+                      return Transform.scale(
+                        scale: scale,
+                        child: Container(
+                          width: 220,
+                          height: 220,
+                          padding: const EdgeInsets.all(16),
+                          // decoration: BoxDecoration(
+                          //   image: DecorationImage(image: image),
+                          //   color: const Color(0xFFF9FBE7),
+                          //   shape: BoxShape.circle,
+                          //   border: Border.all(
+                          //     color: const Color(0xFFFFE082),
+                          //     width: 5,
+                          //   ),
+                          //   boxShadow: [
+                          //     BoxShadow(
+                          //       color: Colors.black.withValues(alpha: 0.1),
+                          //       blurRadius: 15,
+                          //       offset: const Offset(0, 8),
+                          //     ),
+                          //   ],
+                          // ),
+
+                          child: LevelPreview(
+                            level: level,
+                            size: 180,
+                            animate: true,
+                            style: LevelPreviewStyle.colored,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Guidance text
+                  Text(
+                    'Color your picture like this to score 100%!',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.fredoka(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF555555),
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+
+                  // OK Button
+                  GestureDetector(
+                    onTap: () => Navigator.pop(dialogContext),
+                    child: Container(
+                      height: 52,
+                      width: 160,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4CAF50),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: const Color(0xFF388E3C), width: 3),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0xFF388E3C),
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'GOT IT!',
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

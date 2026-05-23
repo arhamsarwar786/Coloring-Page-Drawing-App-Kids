@@ -73,89 +73,89 @@ class _HomeScreenState extends State<HomeScreen> {
                             10,
                           ),
                           child: Container(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 12,
+                            ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: Colors.pink.shade300,
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
+                                // Back Button
                                 SidebarIcon(
                                   icon: Icons.arrow_back_rounded,
                                   assetName: 'assets/images/pop-button.png',
                                   onPressed: () {
-                                    // PopScope handles the final capture
                                     Navigator.pop(context);
                                   },
                                 ),
-                              
-                                Center(
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      // Shadow layer
-                                      Transform.translate(
-                                        offset: const Offset(6, 6),
-                                        child: Text(
-                                          viewModel.content?.appTitle ??
-                                              AppStrings.appTitle,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 38,
-                                            fontWeight: FontWeight.w900,
-                                            color:
-                                                Colors.black.withOpacity(0.35),
-                                            letterSpacing: 1, // spacing kam
-                                          ),
-                                        ),
-                                      ),
 
-                                      // Pink 3D layer
-                                      Transform.translate(
-                                        offset: const Offset(3, 3),
-                                        child: Text(
-                                          viewModel.content?.appTitle ??
-                                              AppStrings.appTitle,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            fontSize: 38,
-                                            fontWeight: FontWeight.w900,
-                                            color: Color(0xFFFF4FA3),
-                                            letterSpacing: 1, // spacing kam
-                                          ),
-                                        ),
-                                      ),
+                                const SizedBox(width: 10),
 
-                                      // Main white text
-                                      Text(
-                                        viewModel.content?.appTitle ??
-                                            AppStrings.appTitle,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontSize: 38,
-                                          fontWeight: FontWeight.w900,
-                                          color: Colors.white,
-                                          letterSpacing: 1, // spacing kam
-                                          shadows: [
-                                            Shadow(
-                                              offset: Offset(0, 0),
-                                              blurRadius: 10,
-                                              color: Colors.white70,
+                                // Title
+                                Expanded(
+                                  child: Center(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          // Shadow Layer
+                                          Transform.translate(
+                                            offset: const Offset(6, 6),
+                                            child: Text(
+                                              viewModel.content?.appTitle ??
+                                                  AppStrings.appTitle,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 38,
+                                                fontWeight: FontWeight.w900,
+                                                color: Colors.black
+                                                    .withOpacity(0.35),
+                                                letterSpacing: 1,
+                                              ),
                                             ),
-                                            Shadow(
-                                              offset: Offset(2, 2),
-                                              blurRadius: 6,
-                                              color: Colors.black26,
+                                          ),
+
+                                          // Pink 3D Layer
+                                          Transform.translate(
+                                            offset: const Offset(3, 3),
+                                            child: Text(
+                                              viewModel.content?.appTitle ??
+                                                  AppStrings.appTitle,
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 38,
+                                                fontWeight: FontWeight.w900,
+                                                color: Color(0xFFFF4FA3),
+                                                letterSpacing: 1,
+                                              ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+
+                                          // Main White Text
+                                          Text(
+                                            viewModel.content?.appTitle ??
+                                                AppStrings.appTitle,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              fontSize: 38,
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.white,
+                                              letterSpacing: 1,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
 
-                                Spacer(),
+                                const SizedBox(width: 10),
+
+                                // Settings Button
                                 SidebarIcon(
                                   icon: Icons.settings_rounded,
                                   assetName: 'assets/images/setting.png',
@@ -185,15 +185,139 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                   },
                                 ),
-
-                                SizedBox(
-                                  width: 20,
-                                ),
                               ],
                             ),
                           ),
                         ),
                       ),
+                      // SliverToBoxAdapter(
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.fromLTRB(
+                      //       AppSpacing.lg,
+                      //       14,
+                      //       AppSpacing.lg,
+                      //       10,
+                      //     ),
+                      //     child: Container(
+                      //       padding: EdgeInsets.only(top: 10, bottom: 10),
+                      //       decoration: BoxDecoration(
+                      //         borderRadius: BorderRadius.circular(30),
+                      //         color: Colors.pink.shade300,
+                      //       ),
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //         children: [
+                      //           SidebarIcon(
+                      //             icon: Icons.arrow_back_rounded,
+                      //             assetName: 'assets/images/pop-button.png',
+                      //             onPressed: () {
+                      //               // PopScope handles the final capture
+                      //               Navigator.pop(context);
+                      //             },
+                      //           ),
+                      //           Center(
+                      //             child: Stack(
+                      //               alignment: Alignment.center,
+                      //               children: [
+                      //                 // Shadow layer
+                      //                 Transform.translate(
+                      //                   offset: const Offset(6, 6),
+                      //                   child: Text(
+                      //                     viewModel.content?.appTitle ??
+                      //                         AppStrings.appTitle,
+                      //                     textAlign: TextAlign.center,
+                      //                     style: TextStyle(
+                      //                       fontSize: 38,
+                      //                       fontWeight: FontWeight.w900,
+                      //                       color:
+                      //                           Colors.black.withOpacity(0.35),
+                      //                       letterSpacing: 1, // spacing kam
+                      //                     ),
+                      //                   ),
+                      //                 ),
+
+                      //                 // Pink 3D layer
+                      //                 Transform.translate(
+                      //                   offset: const Offset(3, 3),
+                      //                   child: Text(
+                      //                     viewModel.content?.appTitle ??
+                      //                         AppStrings.appTitle,
+                      //                     textAlign: TextAlign.center,
+                      //                     style: const TextStyle(
+                      //                       fontSize: 38,
+                      //                       fontWeight: FontWeight.w900,
+                      //                       color: Color(0xFFFF4FA3),
+                      //                       letterSpacing: 1, // spacing kam
+                      //                     ),
+                      //                   ),
+                      //                 ),
+
+                      //                 // Main white text
+                      //                 Text(
+                      //                   viewModel.content?.appTitle ??
+                      //                       AppStrings.appTitle,
+                      //                   textAlign: TextAlign.center,
+                      //                   style: const TextStyle(
+                      //                     fontSize: 38,
+                      //                     fontWeight: FontWeight.w900,
+                      //                     color: Colors.white,
+                      //                     letterSpacing: 1, // spacing kam
+                      //                     shadows: [
+                      //                       Shadow(
+                      //                         offset: Offset(0, 0),
+                      //                         blurRadius: 10,
+                      //                         color: Colors.white70,
+                      //                       ),
+                      //                       Shadow(
+                      //                         offset: Offset(2, 2),
+                      //                         blurRadius: 6,
+                      //                         color: Colors.black26,
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //           ),
+                      //           Spacer(),
+                      //           SidebarIcon(
+                      //             icon: Icons.settings_rounded,
+                      //             assetName: 'assets/images/setting.png',
+                      //             onPressed: () {
+                      //               showGeneralDialog(
+                      //                 context: context,
+                      //                 barrierDismissible: true,
+                      //                 barrierLabel: "Settings",
+                      //                 barrierColor: Colors.transparent,
+                      //                 transitionDuration:
+                      //                     const Duration(milliseconds: 250),
+                      //                 pageBuilder: (_, __, ___) =>
+                      //                     const SettingsDialog(),
+                      //                 transitionBuilder:
+                      //                     (_, animation, __, child) {
+                      //                   return FadeTransition(
+                      //                     opacity: animation,
+                      //                     child: ScaleTransition(
+                      //                       scale: CurvedAnimation(
+                      //                         parent: animation,
+                      //                         curve: Curves.easeOutBack,
+                      //                       ),
+                      //                       child: child,
+                      //                     ),
+                      //                   );
+                      //                 },
+                      //               );
+                      //             },
+                      //           ),
+                      //           SizedBox(
+                      //             width: 20,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
                       SliverPadding(
                         padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
                         sliver: SliverLayoutBuilder(
