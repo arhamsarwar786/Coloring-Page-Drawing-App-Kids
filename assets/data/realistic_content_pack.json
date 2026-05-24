@@ -4,7 +4,7 @@
       "id": "animals",
       "levels": [
         {
-          "id": "Dog_realistic",
+          "id": "Dog",
           "title": "Dog",
           "subtitle": "Anatomically segmented canine facial structure.",
           "difficulty": "Hard",
@@ -116,8 +116,8 @@
       "id": "sports",
       "levels": [
         {
-          "id": "tennis_realistic",
-          "title": "Tennis Racket (Realistic)",
+          "id": "tennis",
+          "title": "Tennis Racket ",
           "subtitle": "Frame, bed, throat, and grip segmented by function.",
           "difficulty": "Hard",
           "rewardCoins": 110,
@@ -187,8 +187,8 @@
       "id": "vehicles",
       "levels": [
         {
-          "id": "car_realistic",
-          "title": "Sedan (Realistic)",
+          "id": "car",
+          "title": "Sedan",
           "subtitle": "Segmented chassis, glazing, wheel systems, and lights.",
           "difficulty": "Hard",
           "rewardCoins": 125,
@@ -291,8 +291,8 @@
       "id": "nature",
       "levels": [
         {
-          "id": "sunflower_realistic",
-          "title": "Sunflower (Realistic)",
+          "id": "sunflower",
+          "title": "Sunflower",
           "subtitle": "Radial botanical structure with layered center and foliage.",
           "difficulty": "Hard",
           "rewardCoins": 115,

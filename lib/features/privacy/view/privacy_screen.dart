@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../shared/components/doodle_text.dart';
 import '../../../shared/components/sticker_icon_button.dart';
+import '../../../shared/utils/interaction_feedback.dart';
 
 class PrivacyScreen extends StatelessWidget {
   const PrivacyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+       return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemStatusBarContrastEnforced: false,
+        systemNavigationBarContrastEnforced: false,
+      ),
+      child: Scaffold(
       backgroundColor: const Color(0xFFFFFBF3),
       body: SafeArea(
         child: Padding(
@@ -17,12 +30,13 @@ class PrivacyScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              StickerIconButton(
-                size: 56,
-                icon: Icons.arrow_back_rounded,
-                // assetName: 'assets/images/retry.png',
-                onPressed: () => Navigator.pop(context),
-              ),
+              _SidebarIcon(
+                              icon: Icons.arrow_back_rounded,
+                              assetName: 'assets/images/pop-button.png',
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
               const SizedBox(height: 22),
               const Center(
                 child: DoodleText(
@@ -56,28 +70,62 @@ class PrivacyScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF33E61F),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                  ),
-                  child: const Text(
-                    AppStrings.back,
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-                  ),
-                ),
-              ),
+              // const Spacer(),
+              // SizedBox(
+              //   width: double.infinity,
+              //   child: FilledButton(
+              //     onPressed: tapActionCallback(
+              //       context,
+              //       () => Navigator.pop(context),
+              //     ),
+              //     style: FilledButton.styleFrom(
+              //       backgroundColor: const Color(0xFF33E61F),
+              //       foregroundColor: Colors.white,
+              //       padding: const EdgeInsets.symmetric(vertical: 16),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(24),
+              //       ),
+              //     ),
+              //     child: const Text(
+              //       AppStrings.back,
+              //       style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
+      ),
+      ),
+    );
+  }
+}
+
+class _SidebarIcon extends StatelessWidget {
+  const _SidebarIcon({
+    required this.icon,
+    this.assetName,
+    this.onPressed,
+  });
+
+  final IconData icon;
+  final String? assetName;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: tapActionCallback(context, onPressed),
+      child: SizedBox(
+        width: 42,
+        height: 42,
+        child: assetName != null
+            ? Image.asset(assetName!, fit: BoxFit.contain)
+            : Icon(
+                icon,
+                color: const Color(0xFF666666),
+                size: 28,
+              ),
       ),
     );
   }

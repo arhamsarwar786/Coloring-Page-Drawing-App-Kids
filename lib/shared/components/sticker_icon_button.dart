@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import '../utils/interaction_feedback.dart';
 
 class StickerIconButton extends StatelessWidget {
   const StickerIconButton({
@@ -14,7 +18,7 @@ class StickerIconButton extends StatelessWidget {
 
   final IconData icon;
   final String? assetName;
-  final VoidCallback? onPressed;
+  final FutureOr<void> Function()? onPressed;
   final double size;
   final Color backgroundColor;
   final Color borderColor;
@@ -23,7 +27,7 @@ class StickerIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () => handleTapAction(context, onPressed),
       child: assetName != null
           ? Container(
               decoration: BoxDecoration(boxShadow: [

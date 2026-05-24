@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/features/home/view/main_home_screen.dart';
 
 import '../../features/drawing/view/drawing_screen.dart';
 import '../../features/home/view/home_screen.dart';
@@ -12,6 +15,7 @@ import '../../features/splash/view/splash_screen.dart';
 abstract final class AppRoutes {
   static const String splash = '/';
   static const String home = '/home';
+  static const String mainHome = '/main-home';
   static const String drawing = '/drawing';
   static const String levels = '/levels';
   static const String skins = '/skins';
@@ -29,11 +33,18 @@ abstract final class AppRoutes {
         return MaterialPageRoute<void>(
           builder: (_) => const HomeScreen(),
         );
+      case mainHome:
+        return MaterialPageRoute<void>(
+          builder: (_) => const MainHomeScreen(),
+        );
       case drawing:
         final args = settings.arguments;
         if (args is DrawingRouteArgs) {
           return MaterialPageRoute<void>(
-            builder: (_) => DrawingScreen(levelId: args.levelId),
+            builder: (_) => DrawingScreen(
+              levelId: args.levelId,
+              drawingSessionId: args.drawingSessionId,
+            ),
           );
         }
         return MaterialPageRoute<void>(
@@ -76,9 +87,15 @@ abstract final class AppRoutes {
 class DrawingRouteArgs {
   const DrawingRouteArgs({
     required this.levelId,
+    this.levelTitle,
+    this.levelNumber,
+    this.drawingSessionId,
   });
 
   final String levelId;
+  final String? levelTitle;
+  final int? levelNumber;
+  final String? drawingSessionId;
 }
 
 class RewardRouteArgs {
@@ -89,6 +106,7 @@ class RewardRouteArgs {
     required this.coins,
     required this.stars,
     required this.nextLevelId,
+    this.completedImageBytes,
   });
 
   final String levelId;
@@ -97,4 +115,5 @@ class RewardRouteArgs {
   final int coins;
   final int stars;
   final String? nextLevelId;
+  final Uint8List? completedImageBytes;
 }

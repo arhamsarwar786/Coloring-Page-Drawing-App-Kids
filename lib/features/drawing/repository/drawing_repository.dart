@@ -6,6 +6,7 @@ abstract class DrawingRepository {
   Future<LevelModel?> getLevelById(String levelId);
   Future<int?> getLevelNumber(String levelId);
   Future<String?> getNextLevelId(String levelId);
+  Future<String?> getPreviousLevelId(String levelId);
   Future<void> saveLastPlayedLevel(String levelId);
   Future<void> markLevelCompleted({
     required String levelId,
@@ -39,6 +40,11 @@ class DrawingRepositoryImpl implements DrawingRepository {
   @override
   Future<String?> getNextLevelId(String levelId) {
     return _contentService.getNextLevelId(levelId);
+  }
+
+  @override
+  Future<String?> getPreviousLevelId(String levelId) {
+    return _contentService.getPreviousLevelId(levelId);
   }
 
   @override

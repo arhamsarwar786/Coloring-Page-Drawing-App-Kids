@@ -12,7 +12,7 @@ abstract final class AppStrings {
   static const String reset = 'Reset';
   static const String loadError = 'Something went wrong while loading the app.';
   static const String lockedLevelMessage =
-      'Finish the previous level to unlock this one.';
+      'Reach 80% on the previous level to unlock this one.';
   static const String completedBadge = 'Completed';
   static const String lockedBadge = 'Locked';
   static const String progressBadge = 'In Progress';

@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../model/drawing_point.dart';
+import '../../model/drawing_session_snapshot.dart';
 import '../../../levels/model/level_model.dart';
 
 enum GuidedCanvasPhase { outline, coloring, completed }
@@ -99,6 +100,50 @@ class DrawingStepController extends ChangeNotifier {
   double progressFor(String regionId) {
     if (_completedRegionIds.contains(regionId)) return 1.0;
     return _regionProgress[regionId] ?? 0.0;
+  }
+
+  DrawingStepSnapshot exportSnapshot() {
+    var currentIndex = _currentIndex;
+    var currentPartProgress = _currentPartProgress;
+
+    if (_awaitingFingerLift) {
+      currentIndex = math.min(_currentIndex + 1, _parts.length);
+      currentPartProgress = 0.0;
+    }
+
+    return DrawingStepSnapshot(
+      completedPartIds: _completedPartIds.toList(growable: false),
+      completedRegionIds: _completedRegionIds.toList(growable: false),
+      regionProgress: Map<String, double>.from(_regionProgress),
+      currentIndex: currentIndex,
+      currentPartProgress: currentPartProgress,
+    );
+  }
+
+  void restoreSnapshot(DrawingStepSnapshot snapshot) {
+    _completedPartIds
+      ..clear()
+      ..addAll(
+        snapshot.completedPartIds.where(
+          (partId) => _parts.any((part) => part.id == partId),
+        ),
+      );
+    _completedRegionIds
+      ..clear()
+      ..addAll(snapshot.completedRegionIds);
+    _regionProgress
+      ..clear()
+      ..addAll(
+        snapshot.regionProgress.map(
+          (key, value) => MapEntry<String, double>(key, value.clamp(0.0, 1.0)),
+        ),
+      );
+    _currentIndex = snapshot.currentIndex.clamp(0, _parts.length);
+    _currentPartProgress = snapshot.currentPartProgress.clamp(0.0, 1.0);
+    _animatingPart = null;
+    _pointerReleased = true;
+    _awaitingFingerLift = false;
+    notifyListeners();
   }
 
   bool beginCurrentPart() {
@@ -389,17 +434,19 @@ class DrawingStepController extends ChangeNotifier {
 class ColoringStepController extends ChangeNotifier {
   ColoringStepController({
     this.cellSize = 5.0,
-    this.brushRadius = 16.0,
+    this.brushRadius = 18.0,
     this.completionThreshold = 0.94,
   });
 
-  static const double _strokeWidthMultiplier = 2.2;
+  static const double _strokeWidthMultiplier = 2.8;
+  static const double _renderStrokeWidthScale = 3.0;
   static const double _interpolationSpacingFactor = 0.3;
   static const double _motionSmoothingFactor = 0.94;
 
   final double cellSize;
   final double brushRadius;
   final double completionThreshold;
+  double _brushScale = 1.0;
   List<String> _orderedRegionIds = <String>[];
   Set<String> _filledRegionIds = <String>{};
   final Map<String, double> _fillProgress = <String, double>{};
@@ -412,14 +459,112 @@ class ColoringStepController extends ChangeNotifier {
   Color? _activePaintColor;
   bool _isPainting = false;
   Offset? _lastPaintPoint;
+  double? _activeStrokeWidth;
 
   String? get activeRegionId => _activeRegionId;
   Color? get activePaintColor => _activePaintColor;
   bool get hasActiveRegion => _activeRegionId != null;
   bool get isPainting => _isPainting;
   Offset? get lastPaintPoint => _lastPaintPoint;
+  double get _storedStrokeWidth =>
+      brushRadius * _strokeWidthMultiplier * _brushScale;
+  double get _activeStrokeWidthValue => _activeStrokeWidth ?? _storedStrokeWidth;
+  double get _effectiveCoverageRadius =>
+      (_activeStrokeWidthValue * _renderStrokeWidthScale) / 2;
   UnmodifiableSetView<String> get filledRegionIds =>
       UnmodifiableSetView<String>(_filledRegionIds);
+
+  void setBrushScale(double value) {
+    if (_brushScale == value || value <= 0) return;
+    _brushScale = value;
+  }
+
+  ColoringStepSnapshot exportSnapshot() {
+    return ColoringStepSnapshot(
+      filledRegionIds: _filledRegionIds.toList(growable: false),
+      fillProgress: Map<String, double>.from(_fillProgress),
+      coverableCells: _coverableCells.map(
+        (key, value) =>
+            MapEntry<String, List<String>>(key, value.toList(growable: false)),
+      ),
+      paintedCells: _paintedCells.map(
+        (key, value) =>
+            MapEntry<String, List<String>>(key, value.toList(growable: false)),
+      ),
+      coloredStrokes: _coloredStrokes.map(
+        (key, value) => MapEntry<String, List<DrawingStroke>>(
+          key,
+          value
+              .map(
+                (stroke) => stroke.copyWith(
+                  points: List<Offset>.from(stroke.points),
+                ),
+              )
+              .toList(growable: false),
+        ),
+      ),
+      activeRegionId: _activeRegionId,
+      pendingCompletedRegionId: _pendingCompletedRegionId,
+    );
+  }
+
+  void restoreSnapshot(ColoringStepSnapshot snapshot) {
+    _filledRegionIds = snapshot.filledRegionIds.toSet();
+    _fillProgress
+      ..clear()
+      ..addAll(
+        snapshot.fillProgress.map(
+          (key, value) => MapEntry<String, double>(key, value.clamp(0.0, 1.0)),
+        ),
+      );
+    _coverableCells
+      ..clear()
+      ..addAll(
+        snapshot.coverableCells.map(
+          (key, value) => MapEntry<String, Set<String>>(key, value.toSet()),
+        ),
+      );
+    _paintedCells
+      ..clear()
+      ..addAll(
+        snapshot.paintedCells.map(
+          (key, value) => MapEntry<String, Set<String>>(key, value.toSet()),
+        ),
+      );
+    _coloredStrokes
+      ..clear()
+      ..addAll(
+        snapshot.coloredStrokes.map(
+          (key, value) => MapEntry<String, List<DrawingStroke>>(
+            key,
+            value
+                .map(
+                  (stroke) => stroke.copyWith(
+                    points: List<Offset>.from(stroke.points),
+                  ),
+                )
+                .toList(growable: true),
+          ),
+        ),
+      );
+    _activeRegionId = snapshot.activeRegionId;
+    _pendingCompletedRegionId = snapshot.pendingCompletedRegionId;
+    _activePaintColor = null;
+    _isPainting = false;
+    _lastPaintPoint = null;
+    _activeStrokeWidth = null;
+
+    if (_activeRegionId == null ||
+        !_orderedRegionIds.contains(_activeRegionId) ||
+        _filledRegionIds.contains(_activeRegionId)) {
+      final nextIndex = _orderedRegionIds.indexWhere(
+        (regionId) => !_filledRegionIds.contains(regionId),
+      );
+      _activeRegionId = nextIndex == -1 ? null : _orderedRegionIds[nextIndex];
+    }
+
+    notifyListeners();
+  }
 
   void configure({
     required List<String> orderedRegionIds,
@@ -434,6 +579,7 @@ class ColoringStepController extends ChangeNotifier {
     _pendingCompletedRegionId = null;
     _isPainting = false;
     _lastPaintPoint = null;
+    _activeStrokeWidth = null;
     syncFilledRegions(filledRegions);
   }
 
@@ -459,6 +605,7 @@ class ColoringStepController extends ChangeNotifier {
       _pendingCompletedRegionId = null;
       _isPainting = false;
       _lastPaintPoint = null;
+      _activeStrokeWidth = null;
     }
 
     notifyListeners();
@@ -482,6 +629,7 @@ class ColoringStepController extends ChangeNotifier {
     _lastPaintPoint = startPoint;
     _activePaintColor = color;
     _pendingCompletedRegionId = null;
+    _activeStrokeWidth = _storedStrokeWidth;
 
     final strokes = _coloredStrokes.putIfAbsent(
       regionId,
@@ -491,7 +639,7 @@ class ColoringStepController extends ChangeNotifier {
       DrawingStroke(
         points: <Offset>[startPoint],
         color: color,
-        strokeWidth: brushRadius * _strokeWidthMultiplier,
+        strokeWidth: _activeStrokeWidthValue,
       ),
     );
 
@@ -541,7 +689,7 @@ class ColoringStepController extends ChangeNotifier {
         DrawingStroke(
           points: acceptedPoints,
           color: color,
-          strokeWidth: brushRadius * _strokeWidthMultiplier,
+          strokeWidth: _activeStrokeWidthValue,
         ),
       );
     } else {
@@ -565,6 +713,7 @@ class ColoringStepController extends ChangeNotifier {
 
     _isPainting = false;
     _lastPaintPoint = null;
+    _activeStrokeWidth = null;
     final completedRegionId = _finalizeActiveRegionIfReady();
     notifyListeners();
     return completedRegionId;
@@ -576,6 +725,7 @@ class ColoringStepController extends ChangeNotifier {
     _pendingCompletedRegionId = null;
     _isPainting = false;
     _lastPaintPoint = null;
+    _activeStrokeWidth = null;
 
     final nextIndex = _orderedRegionIds.indexWhere(
       (candidate) => !_filledRegionIds.contains(candidate),
@@ -609,12 +759,13 @@ class ColoringStepController extends ChangeNotifier {
       () => _buildCoverableCells(path),
     );
     final painted = _paintedCells.putIfAbsent(regionId, () => <String>{});
+    final coverageRadius = _effectiveCoverageRadius;
 
     for (final point in points) {
-      final minX = ((point.dx - brushRadius) / cellSize).floor();
-      final maxX = ((point.dx + brushRadius) / cellSize).floor();
-      final minY = ((point.dy - brushRadius) / cellSize).floor();
-      final maxY = ((point.dy + brushRadius) / cellSize).floor();
+      final minX = ((point.dx - coverageRadius) / cellSize).floor();
+      final maxX = ((point.dx + coverageRadius) / cellSize).floor();
+      final minY = ((point.dy - coverageRadius) / cellSize).floor();
+      final maxY = ((point.dy + coverageRadius) / cellSize).floor();
 
       for (int gx = minX; gx <= maxX; gx += 1) {
         for (int gy = minY; gy <= maxY; gy += 1) {
@@ -625,7 +776,7 @@ class ColoringStepController extends ChangeNotifier {
             (gx * cellSize) + cellSize / 2,
             (gy * cellSize) + cellSize / 2,
           );
-          if ((cellCenter - point).distance <= brushRadius) {
+          if ((cellCenter - point).distance <= coverageRadius) {
             painted.add(key);
           }
         }
@@ -682,7 +833,7 @@ class ColoringStepController extends ChangeNotifier {
     final distance = delta.distance;
     if (distance == 0) return <Offset>[end];
 
-    final spacing = brushRadius * _interpolationSpacingFactor;
+    final spacing = _effectiveCoverageRadius * _interpolationSpacingFactor;
     final steps = math.max(1, (distance / spacing).ceil());
     return List<Offset>.generate(
       steps,
@@ -771,17 +922,31 @@ class ActivePartHighlighter {
   }
 
   void paintColoringHighlight(Canvas canvas, Path path, Size size) {
-    final fillPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = const Color(0x22FFB74D);
-    canvas.drawPath(path, fillPaint);
+    final strokeWidth = size.shortestSide * 0.016;
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.fill
+        ..color = const Color(0x30FFB74D)
+        ..isAntiAlias = true,
+    );
 
     canvas.drawPath(
       path,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = size.shortestSide * 0.016
-        ..color = Colors.orangeAccent
+        ..strokeWidth = strokeWidth * 1.9
+        ..color = const Color(0x61FFC46B)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+        ..isAntiAlias = true,
+    );
+
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..color = const Color(0xF2FF9800)
         ..isAntiAlias = true,
     );
   }
