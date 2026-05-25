@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/drawing/viewmodel/drawing_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -46,10 +47,18 @@ class _LevelScreenState extends State<LevelScreen> {
                     padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
                     child: Row(
                       children: <Widget>[
-                        _HistoryIconButton(
+                        SidebarIcon(
                           icon: Icons.arrow_back_rounded,
-                          onTap: () => Navigator.pop(context),
+                          assetName: 'assets/images/pop-button.png',
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
+
+                        // _HistoryIconButton(
+                        //   icon: Icons.arrow_back_rounded,
+                        //   onTap: () => Navigator.pop(context),
+                        // ),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Text(
@@ -79,10 +88,15 @@ class _LevelScreenState extends State<LevelScreen> {
                                 int? completionCount;
                                 if (entry.isCompleted) {
                                   final sameLevelCompleted = viewModel.entries
-                                      .where((e) => e.levelId == entry.levelId && e.isCompleted)
+                                      .where((e) =>
+                                          e.levelId == entry.levelId &&
+                                          e.isCompleted)
                                       .toList();
-                                  sameLevelCompleted.sort((a, b) => a.lastEditedAt.compareTo(b.lastEditedAt));
-                                  final order = sameLevelCompleted.indexWhere((e) => e.id == entry.id) + 1;
+                                  sameLevelCompleted.sort((a, b) =>
+                                      a.lastEditedAt.compareTo(b.lastEditedAt));
+                                  final order = sameLevelCompleted
+                                          .indexWhere((e) => e.id == entry.id) +
+                                      1;
                                   if (order > 1) {
                                     completionCount = order;
                                   }
@@ -213,10 +227,14 @@ class _HistoryCard extends StatelessWidget {
   String _ordinal(int n) {
     if (n >= 11 && n <= 13) return '${n}th';
     switch (n % 10) {
-      case 1: return '${n}st';
-      case 2: return '${n}nd';
-      case 3: return '${n}rd';
-      default: return '${n}th';
+      case 1:
+        return '${n}st';
+      case 2:
+        return '${n}nd';
+      case 3:
+        return '${n}rd';
+      default:
+        return '${n}th';
     }
   }
 
@@ -307,7 +325,8 @@ class _HistoryCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (completionCount != null && completionCount! > 1) ...[
+                        if (completionCount != null &&
+                            completionCount! > 1) ...[
                           const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(

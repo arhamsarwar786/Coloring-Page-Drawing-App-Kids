@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:play_craft_kids/shared/components/sticker_icon_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../../levels/model/level_model.dart';
@@ -392,8 +393,11 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
   Offset _toLocal(
       Offset raw, BoxConstraints constraints, double canvasDimension) {
-    final double maxW = constraints.maxWidth.isFinite ? constraints.maxWidth : canvasDimension;
-    final double maxH = constraints.maxHeight.isFinite ? constraints.maxHeight : canvasDimension;
+    final double maxW =
+        constraints.maxWidth.isFinite ? constraints.maxWidth : canvasDimension;
+    final double maxH = constraints.maxHeight.isFinite
+        ? constraints.maxHeight
+        : canvasDimension;
     final dx = raw.dx - (maxW - canvasDimension) / 2;
     final dy = raw.dy - (maxH - canvasDimension) / 2;
     return Offset(
@@ -1266,14 +1270,22 @@ class _MultiStepTutorialDialogState extends State<_MultiStepTutorialDialog>
               children: <Widget>[
                 Align(
                   alignment: Alignment.centerRight,
-                  child: IconButton.filled(
-                    onPressed: widget.onClose,
-                    icon: const Icon(Icons.close_rounded),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF242424),
-                    ),
+                  child: StickerIconButton(
+                    icon: Icons.arrow_back_rounded,
+                    assetName: 'assets/images/close.png',
+                    size: 48,
+                    backgroundColor: Colors.white,
+                    iconColor: const Color(0xFF17A7F2),
+                    onPressed: () => Navigator.pop(context),
                   ),
+                  // IconButton.filled(
+                  //   onPressed: widget.onClose,
+                  //   icon: const Icon(Icons.close_rounded),
+                  //   style: IconButton.styleFrom(
+                  //     backgroundColor: Colors.white,
+                  //     foregroundColor: const Color(0xFF242424),
+                  //   ),
+                  // ),
                 ),
                 Expanded(
                   child: Center(
@@ -1403,7 +1415,8 @@ class _TutorialStage extends StatelessWidget {
               animation: animation,
               builder: (context, child) {
                 final progress = Curves.easeInOut.transform(animation.value);
-                final markerPosition = _markerPositionFor(canvasSize, progress, step);
+                final markerPosition =
+                    _markerPositionFor(canvasSize, progress, step);
 
                 return Stack(
                   clipBehavior: Clip.none,

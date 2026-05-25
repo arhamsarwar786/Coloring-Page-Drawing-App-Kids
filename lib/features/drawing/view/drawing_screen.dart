@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
 import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
 import 'package:play_craft_kids/features/skins/viewmodel/skins_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -101,7 +102,7 @@ class _DrawingScreenState extends State<DrawingScreen>
     _historySaveDebounce?.cancel();
     _previewDrawingController.dispose();
     _previewColoringController.dispose();
-    _persistHistorySnapshot(captureThumbnail: true);
+    persistHistorySnapshot(captureThumbnail: true);
     try {
       _viewModel.removeListener(_onViewModelChange);
       _viewModel.markActive(false);
@@ -138,7 +139,7 @@ class _DrawingScreenState extends State<DrawingScreen>
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden) {
-      _persistHistorySnapshot(captureThumbnail: true);
+      persistHistorySnapshot(captureThumbnail: true);
     }
   }
 
@@ -163,7 +164,7 @@ class _DrawingScreenState extends State<DrawingScreen>
               if (didPop) return;
 
               // Capture final state before exiting
-              await _persistHistorySnapshot(captureThumbnail: true);
+              await persistHistorySnapshot(captureThumbnail: true);
 
               if (context.mounted) {
                 Navigator.pop(context);
@@ -429,7 +430,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   assetName: 'assets/images/pen.png',
                                   onPressed: () {
                                     // un-awaited: Yeh background mein chalta rahega
-                                    _persistHistorySnapshot(
+                                    persistHistorySnapshot(
                                         captureThumbnail: true);
 
                                     // Fauran next screen par bhej dein
@@ -460,26 +461,38 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   icon: Icons.settings_rounded,
                                   assetName: 'assets/images/setting.png',
                                   onPressed: () {
-                                    showGeneralDialog(
+                                    // showGeneralDialog(
+                                    //   context: context,
+                                    //   barrierDismissible: true,
+                                    //   barrierLabel: "Settings",
+                                    //   barrierColor: Colors.transparent,
+                                    //   transitionDuration:
+                                    //       const Duration(milliseconds: 250),
+                                    //   pageBuilder: (_, __, ___) =>
+                                    //       const SettingsDialog(),
+                                    //   transitionBuilder:
+                                    //       (_, animation, __, child) {
+                                    //     return FadeTransition(
+                                    //       opacity: animation,
+                                    //       child: ScaleTransition(
+                                    //         scale: CurvedAnimation(
+                                    //           parent: animation,
+                                    //           curve: Curves.easeOutBack,
+                                    //         ),
+                                    //         child: child,
+                                    //       ),
+                                    //     );
+                                    //   },
+                                    // );
+
+                                    showDialog(
                                       context: context,
-                                      barrierDismissible: true,
-                                      barrierLabel: "Settings",
-                                      barrierColor: Colors.transparent,
-                                      transitionDuration:
-                                          const Duration(milliseconds: 250),
-                                      pageBuilder: (_, __, ___) =>
-                                          const SettingsDialog(),
-                                      transitionBuilder:
-                                          (_, animation, __, child) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: ScaleTransition(
-                                            scale: CurvedAnimation(
-                                              parent: animation,
-                                              curve: Curves.easeOutBack,
-                                            ),
-                                            child: child,
-                                          ),
+                                      barrierColor: Colors.black.withOpacity(
+                                          0.45), // Piche ka area dark karne ke liye
+                                      builder: (BuildContext context) {
+                                        return const Center(
+                                          child:
+                                              KidsSettingsDialog(), // Humara naya settings dialog widget
                                         );
                                       },
                                     );
@@ -497,7 +510,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   icon: Icons.photo_library_rounded,
                                   assetName: 'assets/images/photo.png',
                                   onPressed: () async {
-                                    await _persistHistorySnapshot(
+                                    await persistHistorySnapshot(
                                         captureThumbnail: true);
                                     if (context.mounted) {
                                       Navigator.pushNamed(
@@ -619,11 +632,11 @@ class _DrawingScreenState extends State<DrawingScreen>
     _historySaveDebounce?.cancel();
     _historySaveDebounce = Timer(
       const Duration(milliseconds: 900),
-      () => _persistHistorySnapshot(captureThumbnail: false),
+      () => persistHistorySnapshot(captureThumbnail: false),
     );
   }
 
-  Future<void> _persistHistorySnapshot({
+  Future<void> persistHistorySnapshot({
     required bool captureThumbnail,
   }) async {
     if (_isSavingHistory) {

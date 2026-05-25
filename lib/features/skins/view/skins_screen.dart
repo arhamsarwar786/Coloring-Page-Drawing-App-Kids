@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
 import 'package:provider/provider.dart';
 
 import '../../../shared/components/doodle_text.dart';
@@ -25,38 +26,85 @@ class SkinsScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               // Header
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF17A7F2),
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(32)),
-                ),
-                child: Row(
+
+              SizedBox(
+                height: 140,
+                width: double.infinity,
+                child: Stack(
                   children: [
-                    StickerIconButton(
-                      icon: Icons.arrow_back_rounded,
-                      assetName: 'assets/images/close.png',
-                      size: 48,
-                      backgroundColor: Colors.white,
-                      iconColor: const Color(0xFF17A7F2),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    const Expanded(
-                      child: Center(
-                        child: DoodleText(
-                          'SKINS',
-                          fontSize: 32,
-                          fillColor: Colors.white,
-                          shadowColor: Color(0x33000000),
+                    ClipPath(
+                      clipper: AppBarClipper(),
+                      child: Container(
+                        height: 140,
+                        color: const Color(0xff3b9499),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, bottom: 20),
+                              child: StickerIconButton(
+                                icon: Icons.arrow_back_rounded,
+                                assetName: 'assets/images/close.png',
+                                size: 48,
+                                backgroundColor: Colors.white,
+                                iconColor: const Color(0xFF17A7F2),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ),
+
+                            const Expanded(
+                              child: Center(
+                                child: DoodleText(
+                                  'SKINS',
+                                  fontSize: 32,
+                                  fillColor: Colors.white,
+                                  shadowColor: Color(0x33000000),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 48),
+
+                            // const SizedBox(width: 60),
+                          ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48), // Spacer to center the title
                   ],
                 ),
               ),
+
+              // Container(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              //   decoration: const BoxDecoration(
+              //     color: Color(0xFF17A7F2),
+              //     borderRadius:
+              //         BorderRadius.vertical(bottom: Radius.circular(32)),
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       StickerIconButton(
+              //         icon: Icons.arrow_back_rounded,
+              //         assetName: 'assets/images/close.png',
+              //         size: 48,
+              //         backgroundColor: Colors.white,
+              //         iconColor: const Color(0xFF17A7F2),
+              //         onPressed: () => Navigator.pop(context),
+              //       ),
+              //       const Expanded(
+              //         child: Center(
+              //           child: DoodleText(
+              //             'SKINS',
+              //             fontSize: 32,
+              //             fillColor: Colors.white,
+              //             shadowColor: Color(0x33000000),
+              //           ),
+              //         ),
+              //       ),
+              //       const SizedBox(width: 48), // Spacer to center the title
+              //     ],
+              //   ),
+              // ),
 
               // Content
               Expanded(

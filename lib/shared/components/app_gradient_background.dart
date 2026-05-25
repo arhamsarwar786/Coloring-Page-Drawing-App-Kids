@@ -10,12 +10,13 @@ class AppGradientBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(
-                "assets/images/bg.png",
-              ),
-              fit: BoxFit.cover)),
+      color: Colors.white,
+      // decoration: BoxDecoration(
+      //     image: DecorationImage(
+      //         image: AssetImage(
+      //           "assets/images/bg.png",
+      //         ),
+      //         fit: BoxFit.cover)),
       // /
       child: Stack(
         children: <Widget>[

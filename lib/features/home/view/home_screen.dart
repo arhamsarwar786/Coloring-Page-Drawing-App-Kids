@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
+import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
 import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -27,297 +30,169 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(
-                "assets/images/bg.png",
-              ),
-              fit: BoxFit.cover)),
-      height: double.infinity,
-      width: double.infinity,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: AppGradientBackground(
-          child: SafeArea(
-            child: Consumer<HomeViewModel>(
-              builder: (context, viewModel, _) {
-                if (viewModel.isLoading && viewModel.content == null) {
-                  return const Loader();
-                }
-                if (viewModel.errorMessage != null &&
-                    viewModel.content == null) {
-                  return _HomeError(
-                    message: viewModel.errorMessage!,
-                    onRetry: viewModel.load,
-                  );
-                }
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: AppGradientBackground(
+        child: SafeArea(
+          child: Consumer<HomeViewModel>(
+            builder: (context, viewModel, _) {
+              if (viewModel.isLoading && viewModel.content == null) {
+                return const Loader();
+              }
+              if (viewModel.errorMessage != null && viewModel.content == null) {
+                return _HomeError(
+                  message: viewModel.errorMessage!,
+                  onRetry: viewModel.load,
+                );
+              }
 
-                // Only show levels for the selected category
-                final selectedLevels = viewModel.levelsForSelectedCategory;
-                if (selectedLevels.isEmpty) {
-                  return const SizedBox.shrink();
-                }
+              // Only show levels for the selected category
+              final selectedLevels = viewModel.levelsForSelectedCategory;
+              if (selectedLevels.isEmpty) {
+                return const SizedBox.shrink();
+              }
 
-                return RefreshIndicator(
+              // ==========================================
+              // BACKGROUND DYNAMIC LOGIC
+              // ==========================================
+              final firstLevel =
+                  selectedLevels.isNotEmpty ? selectedLevels[0] : null;
+              String categoryName = '';
+              if (firstLevel != null && firstLevel.title != null) {
+                categoryName = firstLevel.title.toString().toLowerCase();
+              }
+
+              String backgroundAsset =
+                  'assets/images/bg.png'; // Default background
+              var category = viewModel.selectedCategory;
+              if (categoryName.contains('fruit') ||
+                  categoryName.contains('apple')) {
+                backgroundAsset = 'assets/images/fruitbg.png';
+              } else if (category?.id?.contains('animals') == true) {
+                backgroundAsset = 'assets/images/animalbg.png';
+              } else if (category?.id?.contains('sports') == true) {
+                backgroundAsset = 'assets/images/sportbg.png';
+              } else if (category?.id?.contains('vehicles') == true) {
+                backgroundAsset = 'assets/images/vehiclesbg.png';
+              }
+              // ==========================================
+
+              return Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(backgroundAsset),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                height: double.infinity,
+                width: double.infinity,
+                child: RefreshIndicator(
                   onRefresh: _isOpeningLevel ? () async {} : viewModel.load,
                   child: CustomScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     slivers: <Widget>[
                       SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            AppSpacing.lg,
-                            14,
-                            AppSpacing.lg,
-                            10,
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.pink.shade300,
-                            ),
-                            child: Row(
-                              children: [
-                                // Back Button
-                                SidebarIcon(
-                                  icon: Icons.arrow_back_rounded,
-                                  assetName: 'assets/images/pop-button.png',
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-
-                                const SizedBox(width: 10),
-
-                                // Title
-                                Expanded(
-                                  child: Center(
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          // Shadow Layer
-                                          Transform.translate(
-                                            offset: const Offset(6, 6),
-                                            child: Text(
-                                              viewModel.content?.appTitle ??
-                                                  AppStrings.appTitle,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 38,
-                                                fontWeight: FontWeight.w900,
-                                                color: Colors.black
-                                                    .withOpacity(0.35),
-                                                letterSpacing: 1,
-                                              ),
-                                            ),
-                                          ),
-
-                                          // Pink 3D Layer
-                                          Transform.translate(
-                                            offset: const Offset(3, 3),
-                                            child: Text(
-                                              viewModel.content?.appTitle ??
-                                                  AppStrings.appTitle,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                fontSize: 38,
-                                                fontWeight: FontWeight.w900,
-                                                color: Color(0xFFFF4FA3),
-                                                letterSpacing: 1,
-                                              ),
-                                            ),
-                                          ),
-
-                                          // Main White Text
-                                          Text(
-                                            viewModel.content?.appTitle ??
-                                                AppStrings.appTitle,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontSize: 38,
-                                              fontWeight: FontWeight.w900,
-                                              color: Colors.white,
-                                              letterSpacing: 1,
-                                            ),
-                                          ),
-                                        ],
+                        child: 
+                        SizedBox(
+                          height: 140,
+                          width: double.infinity,
+                          child: Stack(
+                            children: [
+                              ClipPath(
+                                clipper: AppBarClipper(),
+                                child: Container(
+                                  height: 140,
+                                  color: const Color(0xff3b9499),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SidebarIcon(
+                                          icon: Icons.arrow_back_rounded,
+                                          assetName:
+                                              'assets/images/pop-button.png',
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
                                       ),
-                                    ),
+
+                                      // Title
+                                      Expanded(
+                                        child: Center(
+                                          child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                // Shadow Layer
+                                                Transform.translate(
+                                                  offset: const Offset(6, 6),
+                                                  child: Text(
+                                                    viewModel.selectedCategory
+                                                            ?.id ??
+                                                        AppStrings.appTitle,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 50,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Colors.black
+                                                          .withOpacity(0.35),
+                                                      letterSpacing: 1,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                // Pink 3D Layer
+                                                Transform.translate(
+                                                  offset: const Offset(3, 3),
+                                                  child: Text(
+                                                    viewModel.selectedCategory
+                                                            ?.id ??
+                                                        AppStrings.appTitle,
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      fontSize: 50,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Color(0xFFFF4FA3),
+                                                      letterSpacing: 1,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                // Main White Text
+                                                Text(
+                                                  viewModel.selectedCategory
+                                                          ?.id ??
+                                                      AppStrings.appTitle,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontSize: 50,
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.white,
+                                                    letterSpacing: 1,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      const SizedBox(width: 60),
+                                    ],
                                   ),
                                 ),
-
-                                const SizedBox(width: 10),
-
-                                // Settings Button
-                                SidebarIcon(
-                                  icon: Icons.settings_rounded,
-                                  assetName: 'assets/images/setting.png',
-                                  onPressed: () {
-                                    showGeneralDialog(
-                                      context: context,
-                                      barrierDismissible: true,
-                                      barrierLabel: "Settings",
-                                      barrierColor: Colors.transparent,
-                                      transitionDuration:
-                                          const Duration(milliseconds: 250),
-                                      pageBuilder: (_, __, ___) =>
-                                          const SettingsDialog(),
-                                      transitionBuilder:
-                                          (_, animation, __, child) {
-                                        return FadeTransition(
-                                          opacity: animation,
-                                          child: ScaleTransition(
-                                            scale: CurvedAnimation(
-                                              parent: animation,
-                                              curve: Curves.easeOutBack,
-                                            ),
-                                            child: child,
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
+                    
+                    
+                    
                       ),
-                      // SliverToBoxAdapter(
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.fromLTRB(
-                      //       AppSpacing.lg,
-                      //       14,
-                      //       AppSpacing.lg,
-                      //       10,
-                      //     ),
-                      //     child: Container(
-                      //       padding: EdgeInsets.only(top: 10, bottom: 10),
-                      //       decoration: BoxDecoration(
-                      //         borderRadius: BorderRadius.circular(30),
-                      //         color: Colors.pink.shade300,
-                      //       ),
-                      //       child: Row(
-                      //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //         children: [
-                      //           SidebarIcon(
-                      //             icon: Icons.arrow_back_rounded,
-                      //             assetName: 'assets/images/pop-button.png',
-                      //             onPressed: () {
-                      //               // PopScope handles the final capture
-                      //               Navigator.pop(context);
-                      //             },
-                      //           ),
-                      //           Center(
-                      //             child: Stack(
-                      //               alignment: Alignment.center,
-                      //               children: [
-                      //                 // Shadow layer
-                      //                 Transform.translate(
-                      //                   offset: const Offset(6, 6),
-                      //                   child: Text(
-                      //                     viewModel.content?.appTitle ??
-                      //                         AppStrings.appTitle,
-                      //                     textAlign: TextAlign.center,
-                      //                     style: TextStyle(
-                      //                       fontSize: 38,
-                      //                       fontWeight: FontWeight.w900,
-                      //                       color:
-                      //                           Colors.black.withOpacity(0.35),
-                      //                       letterSpacing: 1, // spacing kam
-                      //                     ),
-                      //                   ),
-                      //                 ),
-
-                      //                 // Pink 3D layer
-                      //                 Transform.translate(
-                      //                   offset: const Offset(3, 3),
-                      //                   child: Text(
-                      //                     viewModel.content?.appTitle ??
-                      //                         AppStrings.appTitle,
-                      //                     textAlign: TextAlign.center,
-                      //                     style: const TextStyle(
-                      //                       fontSize: 38,
-                      //                       fontWeight: FontWeight.w900,
-                      //                       color: Color(0xFFFF4FA3),
-                      //                       letterSpacing: 1, // spacing kam
-                      //                     ),
-                      //                   ),
-                      //                 ),
-
-                      //                 // Main white text
-                      //                 Text(
-                      //                   viewModel.content?.appTitle ??
-                      //                       AppStrings.appTitle,
-                      //                   textAlign: TextAlign.center,
-                      //                   style: const TextStyle(
-                      //                     fontSize: 38,
-                      //                     fontWeight: FontWeight.w900,
-                      //                     color: Colors.white,
-                      //                     letterSpacing: 1, // spacing kam
-                      //                     shadows: [
-                      //                       Shadow(
-                      //                         offset: Offset(0, 0),
-                      //                         blurRadius: 10,
-                      //                         color: Colors.white70,
-                      //                       ),
-                      //                       Shadow(
-                      //                         offset: Offset(2, 2),
-                      //                         blurRadius: 6,
-                      //                         color: Colors.black26,
-                      //                       ),
-                      //                     ],
-                      //                   ),
-                      //                 ),
-                      //               ],
-                      //             ),
-                      //           ),
-                      //           Spacer(),
-                      //           SidebarIcon(
-                      //             icon: Icons.settings_rounded,
-                      //             assetName: 'assets/images/setting.png',
-                      //             onPressed: () {
-                      //               showGeneralDialog(
-                      //                 context: context,
-                      //                 barrierDismissible: true,
-                      //                 barrierLabel: "Settings",
-                      //                 barrierColor: Colors.transparent,
-                      //                 transitionDuration:
-                      //                     const Duration(milliseconds: 250),
-                      //                 pageBuilder: (_, __, ___) =>
-                      //                     const SettingsDialog(),
-                      //                 transitionBuilder:
-                      //                     (_, animation, __, child) {
-                      //                   return FadeTransition(
-                      //                     opacity: animation,
-                      //                     child: ScaleTransition(
-                      //                       scale: CurvedAnimation(
-                      //                         parent: animation,
-                      //                         curve: Curves.easeOutBack,
-                      //                       ),
-                      //                       child: child,
-                      //                     ),
-                      //                   );
-                      //                 },
-                      //               );
-                      //             },
-                      //           ),
-                      //           SizedBox(
-                      //             width: 20,
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-
                       SliverPadding(
                         padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
                         sliver: SliverLayoutBuilder(
@@ -334,14 +209,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     selectedLevels,
                                   );
                                   return LevelCard(
-                                    level: level,
-                                    levelNumber: levelNumber,
-                                    palette: _paletteFor(index),
-                                    isLocked: isLocked,
-                                    isBusy: _isOpeningLevel,
-                                    onTap: () =>
-                                        _openLevel(context, viewModel, level),
-                                  );
+                                      level: level,
+                                      levelNumber: levelNumber,
+                                      palette: _paletteFor(index),
+                                      isLocked: isLocked,
+                                      isBusy: _isOpeningLevel,
+                                      onTap: () {
+                                        handleTapAction(context, () {});
+                                        _openLevel(context, viewModel, level);
+                                      });
                                 },
                                 childCount: selectedLevels.length,
                               ),
@@ -361,9 +237,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -392,6 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_isOpeningLevel) return;
 
     if (viewModel.isLevelLocked(level)) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text(AppStrings.lockedLevelMessage)),
       );
@@ -550,6 +427,7 @@ class _HomeError extends StatelessWidget {
 
 class LevelCard extends StatefulWidget {
   const LevelCard({
+    super.key,
     required this.level,
     required this.levelNumber,
     required this.palette,
@@ -558,9 +436,9 @@ class LevelCard extends StatefulWidget {
     required this.onTap,
   });
 
-  final LevelModel level;
+  final dynamic level;
   final int levelNumber;
-  final _CardPalette palette;
+  final dynamic palette;
   final bool isLocked;
   final bool isBusy;
   final VoidCallback onTap;
@@ -573,9 +451,7 @@ class LevelCardState extends State<LevelCard> {
   bool _isPressed = false;
 
   void _updatePressed(bool value) {
-    if (_isPressed == value) {
-      return;
-    }
+    if (_isPressed == value) return;
     setState(() {
       _isPressed = value;
     });
@@ -583,12 +459,11 @@ class LevelCardState extends State<LevelCard> {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(30);
-    final glowColor = Color.lerp(
-      widget.palette.outerTop,
-      Colors.white,
-      0.16,
-    )!;
+    // === YAHAN CHANGES KI HAIN ===
+    // Lock hone par bhi original palettes wale bright colors hi show honge!
+    final Color mainBodyColor = widget.palette.outerTop;
+    final Color bottomBorderColor = widget.palette.edge;
+    final Color innerWhiteBoxColor = Colors.white.withOpacity(0.35);
 
     return IgnorePointer(
       ignoring: widget.isBusy,
@@ -596,7 +471,7 @@ class LevelCardState extends State<LevelCard> {
         duration: const Duration(milliseconds: 160),
         opacity: widget.isBusy ? 0.72 : 1,
         child: AnimatedScale(
-          scale: _isPressed ? 0.95 : 1,
+          scale: _isPressed ? 0.94 : 1,
           duration: Duration(milliseconds: _isPressed ? 110 : 320),
           curve: _isPressed ? Curves.easeOut : Curves.elasticOut,
           child: GestureDetector(
@@ -604,252 +479,126 @@ class LevelCardState extends State<LevelCard> {
             onTapDown: (_) => _updatePressed(true),
             onTapUp: (_) => _updatePressed(false),
             onTapCancel: () => _updatePressed(false),
-            onTap: tapActionCallback(context, widget.onTap),
+            onTap: widget.onTap,
             child: Container(
+              padding: const EdgeInsets.only(
+                  bottom: 7.0, left: 4.0, right: 4.0, top: 4.0),
               decoration: BoxDecoration(
-                boxShadow: <BoxShadow>[
+                color: bottomBorderColor,
+                borderRadius: BorderRadius.circular(26.0),
+                boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.10),
-                    blurRadius: 28,
-                    offset: const Offset(0, 8),
-                  ),
-                  BoxShadow(
-                    color: widget.palette.edge.withValues(alpha: 0.12),
-                    blurRadius: 18,
-                    offset: const Offset(0, 10),
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 4,
+                    offset: const Offset(0, 6),
                   ),
                 ],
-                borderRadius: borderRadius,
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: borderRadius,
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: <Color>[
-                      widget.palette.outerTop,
-                      widget.palette.outerBottom,
-                    ],
-                  ),
-                  border: Border.all(
-                    color: widget.palette.edge,
-                    width: 3.4,
-                  ),
+                  color: mainBodyColor,
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(26),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          widget.palette.innerTop,
-                          widget.palette.innerBottom,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 6,
+                      left: 10,
+                      child: Container(
+                        width: 24,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 10.0),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 8),
+                              decoration: BoxDecoration(
+                                color: innerWhiteBoxColor,
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    final previewSize =
+                                        constraints.biggest.shortestSide;
+                                    return LevelPreview(
+                                      level: widget.level,
+                                      size: previewSize,
+                                      backgroundColor: Colors.transparent,
+                                      padding: EdgeInsets.zero,
+                                      borderRadius: BorderRadius.zero,
+                                      style: LevelPreviewStyle.colored,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            (widget.level.title ??
+                                    'LEVEL ${widget.levelNumber}')
+                                .toUpperCase(),
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.fredoka(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.5,
+                              color: Colors
+                                  .white, // Text hamesha white aur pyara dikhega
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  offset: const Offset(0, 2),
+                                  blurRadius: 2,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 2),
                         ],
                       ),
                     ),
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned.fill(
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(26),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                stops: const <double>[0, 0.16, 0.42, 1],
-                                colors: <Color>[
-                                  Colors.white.withValues(alpha: 0.38),
-                                  Colors.white.withValues(alpha: 0.16),
-                                  Colors.white.withValues(alpha: 0.04),
-                                  Colors.transparent,
-                                ],
-                              ),
-                            ),
+
+                    // === LOCK OVERLAY LAYER ===
+                    // Agar level lock hoga, toh color ke upar sirf yeh semi-transparent lock overlay aayega!
+                    if (widget.isLocked)
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            // Halke se black shade se transparent layer di hai taake peeche ka color bhi dikhe aur lock bhi pyara lage
+                            color: Colors.black.withOpacity(0.28),
                           ),
-                        ),
-                        Positioned(
-                          left: 12,
-                          right: 12,
-                          top: 10,
-                          height: 40,
-                          child: IgnorePointer(
-                            child: DecoratedBox(
+                          child: Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(22),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: <Color>[
-                                    Colors.white.withValues(alpha: 0.34),
-                                    Colors.white.withValues(alpha: 0.06),
-                                  ],
-                                ),
+                                color: Colors.black.withOpacity(0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.lock_rounded,
+                                color: Colors.white,
+                                size: 38,
                               ),
                             ),
                           ),
                         ),
-                        Positioned.fill(
-                          child: CustomPaint(
-                            painter: _LevelCardFramePainter(
-                              radius: 26,
-                              edgeColor: widget.palette.edge,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 34,
-                                child: Center(
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      'LEVEL ${widget.levelNumber}',
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.fredoka(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 1.0,
-                                        color: Colors.black,
-                                        shadows: <Shadow>[
-                                          Shadow(
-                                            color: glowColor.withValues(
-                                              alpha: _isPressed ? 0.95 : 0.82,
-                                            ),
-                                            blurRadius: _isPressed ? 12 : 9,
-                                          ),
-                                          Shadow(
-                                            color: Colors.black.withValues(
-                                              alpha: 0.22,
-                                            ),
-                                            offset: const Offset(0, 2),
-                                            blurRadius: 2,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Expanded(
-                                child: Center(
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.26),
-                                      borderRadius: BorderRadius.circular(18),
-                                      border: Border.all(
-                                        color: Colors.white.withValues(
-                                          alpha: 0.58,
-                                        ),
-                                        width: 1.8,
-                                      ),
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                          color: Colors.white.withValues(
-                                            alpha: 0.18,
-                                          ),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, -1),
-                                        ),
-                                        BoxShadow(
-                                          color: Colors.black.withValues(
-                                            alpha: 0.05,
-                                          ),
-                                          blurRadius: 10,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: LayoutBuilder(
-                                      builder: (context, constraints) {
-                                        final previewSize =
-                                            constraints.biggest.shortestSide;
-                                        return LevelPreview(
-                                          level: widget.level,
-                                          size: previewSize,
-                                          backgroundColor: Colors.transparent,
-                                          padding: EdgeInsets.zero,
-                                          borderRadius: BorderRadius.zero,
-                                          style: LevelPreviewStyle.colored,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        if (widget.isLocked)
-                          Positioned.fill(
-                            child: IgnorePointer(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(26),
-                                  color: Colors.black.withValues(alpha: 0.58),
-                                ),
-                                child: Center(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 18,
-                                      vertical: 15,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.96),
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 2,
-                                      ),
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                          color: Colors.black.withValues(
-                                            alpha: 0.24,
-                                          ),
-                                          blurRadius: 20,
-                                          offset: const Offset(0, 10),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        const Icon(
-                                          Icons.lock_rounded,
-                                          color: Color(0xFF222222),
-                                          size: 42,
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Text(
-                                          AppStrings.lockedBadge,
-                                          style: GoogleFonts.fredoka(
-                                            color: const Color(0xFF222222),
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -860,122 +609,13 @@ class LevelCardState extends State<LevelCard> {
   }
 }
 
-class _LevelCardFramePainter extends CustomPainter {
-  const _LevelCardFramePainter({
-    required this.radius,
-    required this.edgeColor,
-  });
-
-  final double radius;
-  final Color edgeColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final rrect = RRect.fromRectAndRadius(rect, Radius.circular(radius));
-
-    final innerHighlightPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.3
-      ..color = Colors.white.withValues(alpha: 0.72);
-
-    final innerShadowPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.2
-      ..color = edgeColor.withValues(alpha: 0.16);
-
-    canvas.drawRRect(rrect.deflate(1.2), innerHighlightPaint);
-    canvas.drawRRect(rrect.deflate(3.0), innerShadowPaint);
-
-    final bottomShadeRect = Rect.fromLTWH(
-      6,
-      size.height * 0.56,
-      size.width - 12,
-      size.height * 0.28,
-    );
-
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(bottomShadeRect, Radius.circular(radius - 8)),
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[
-            Colors.transparent,
-            edgeColor.withValues(alpha: 0.08),
-          ],
-        ).createShader(bottomShadeRect),
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _LevelCardFramePainter oldDelegate) {
-    return oldDelegate.radius != radius || oldDelegate.edgeColor != edgeColor;
-  }
-}
-
-class _LevelCardIconPainter extends CustomPainter {
-  const _LevelCardIconPainter({
-    required this.level,
-    required this.fillColor,
-  });
-
-  final LevelModel level;
-  final Color fillColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const sourceSize = Size(100, 100);
-    final scale = size.shortestSide / sourceSize.shortestSide;
-    final previewWidth = sourceSize.width * scale;
-    final previewHeight = sourceSize.height * scale;
-    final dx = (size.width - previewWidth) / 2;
-    final dy = (size.height - previewHeight) / 2;
-
-    canvas.save();
-    canvas.translate(dx, dy);
-    canvas.scale(scale, scale);
-
-    final shadowPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = Colors.black.withValues(alpha: 0.10)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
-
-    final fillPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = fillColor
-      ..isAntiAlias = true;
-
-    final outlinePaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.8
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round
-      ..color = const Color(0xFF151515)
-      ..isAntiAlias = true;
-
-    for (final region in level.regions) {
-      final path = region.toPath(sourceSize);
-
-      canvas.save();
-      canvas.translate(0, 2.4);
-      canvas.drawPath(path, shadowPaint);
-      canvas.restore();
-
-      canvas.drawPath(path, fillPaint);
-      canvas.drawPath(path, outlinePaint);
-    }
-
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(covariant _LevelCardIconPainter oldDelegate) {
-    return oldDelegate.level != level || oldDelegate.fillColor != fillColor;
-  }
-}
-
 class _CardPalette {
+  final Color outerTop;
+  final Color outerBottom;
+  final Color innerTop;
+  final Color innerBottom;
+  final Color edge;
+
   const _CardPalette({
     required this.outerTop,
     required this.outerBottom,
@@ -983,10 +623,618 @@ class _CardPalette {
     required this.innerBottom,
     required this.edge,
   });
-
-  final Color outerTop;
-  final Color outerBottom;
-  final Color innerTop;
-  final Color innerBottom;
-  final Color edge;
 }
+
+// import 'dart:developer';
+
+// import 'package:flutter/material.dart';
+// import 'package:google_fonts/google_fonts.dart';
+// import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
+// import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
+// import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
+// import 'package:provider/provider.dart';
+
+// import '../../../app/routes/app_routes.dart';
+// import '../../../core/constants/app_spacing.dart';
+// import '../../../core/constants/app_strings.dart';
+// import '../../../shared/components/app_gradient_background.dart';
+// import '../../../shared/components/level_preview.dart';
+// import '../../../shared/utils/interaction_feedback.dart';
+// import '../../../shared/widgets/custom_button.dart';
+// import '../../../shared/widgets/loader.dart';
+// import '../../levels/model/level_model.dart';
+// import '../viewmodel/home_viewmodel.dart';
+
+// class HomeScreen extends StatefulWidget {
+//   const HomeScreen({super.key});
+
+//   @override
+//   State<HomeScreen> createState() => _HomeScreenState();
+// }
+
+// class _HomeScreenState extends State<HomeScreen> {
+//   bool _isOpeningLevel = false;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.transparent,
+//       body: AppGradientBackground(
+//         child: SafeArea(
+//           child: Consumer<HomeViewModel>(
+//             builder: (context, viewModel, _) {
+//               if (viewModel.isLoading && viewModel.content == null) {
+//                 return const Loader();
+//               }
+//               if (viewModel.errorMessage != null && viewModel.content == null) {
+//                 return _HomeError(
+//                   message: viewModel.errorMessage!,
+//                   onRetry: viewModel.load,
+//                 );
+//               }
+
+//               // Only show levels for the selected category
+//               final selectedLevels = viewModel.levelsForSelectedCategory;
+//               if (selectedLevels.isEmpty) {
+//                 return const SizedBox.shrink();
+//               }
+
+//               // ==========================================
+//               // BACKGROUND DYNAMIC LOGIC (YAHAN PE PERFECT CHALEGI)
+//               // ==========================================
+//               final firstLevel =
+//                   selectedLevels.isNotEmpty ? selectedLevels[0] : null;
+//               String categoryName = '';
+//               if (firstLevel != null && firstLevel.title != null) {
+//                 categoryName = firstLevel.title.toString().toLowerCase();
+//               }
+
+//               String backgroundAsset =
+//                   'assets/images/bg.png'; // Default background
+//               var category = viewModel.selectedCategory;
+//               if (categoryName.contains('fruit') ||
+//                   categoryName.contains('apple')) {
+//                 backgroundAsset = 'assets/images/fruitbg.png';
+//               } else if (category?.id?.contains('animals') == true ||
+//                   category?.id?.contains('animals') == true) {
+//                 backgroundAsset = 'assets/images/animalbg.png';
+//               } else if (category?.id?.contains('sports') == true) {
+//                 // Sports category added here
+//                 backgroundAsset = 'assets/images/sportbg.png';
+//               } else if (category?.id?.contains('vehicles') == true) {
+//                 backgroundAsset = 'assets/images/vehiclesbg.png';
+//               }
+//               // ==========================================
+
+//               return Container(
+//                 // Hum ne backgroundAsset ko yahan use kar liya taake dynamic change ho ske
+//                 decoration: BoxDecoration(
+//                   image: DecorationImage(
+//                     image: AssetImage(backgroundAsset),
+//                     fit: BoxFit.cover,
+//                   ),
+//                 ),
+//                 height: double.infinity,
+//                 width: double.infinity,
+//                 child: RefreshIndicator(
+//                   onRefresh: _isOpeningLevel ? () async {} : viewModel.load,
+//                   child: CustomScrollView(
+//                     physics: const AlwaysScrollableScrollPhysics(),
+//                     slivers: <Widget>[
+//                       SliverToBoxAdapter(
+//                           child: SizedBox(
+//                         height:
+//                             140, // Jetni aapke curved bar ki height hai, utni hi yahan de dein
+//                         width: double.infinity,
+//                         child: Stack(
+//                           children: [
+//                             ClipPath(
+//                               clipper: AppBarClipper(),
+//                               child: Container(
+//                                 height: 140,
+//                                 color: const Color(0xff3b9499),
+//                                 child: Row(
+//                                   children: [
+//                                     Padding(
+//                                       padding: const EdgeInsets.all(8.0),
+//                                       child: SidebarIcon(
+//                                         icon: Icons.arrow_back_rounded,
+//                                         assetName:
+//                                             'assets/images/pop-button.png',
+//                                         onPressed: () {
+//                                           Navigator.pop(context);
+//                                         },
+//                                       ),
+//                                     ),
+
+//                                     // Title
+//                                     Expanded(
+//                                       child: Center(
+//                                         child: FittedBox(
+//                                           fit: BoxFit.scaleDown,
+//                                           child: Stack(
+//                                             alignment: Alignment.center,
+//                                             children: [
+//                                               // Shadow Layer
+//                                               Transform.translate(
+//                                                 offset: const Offset(6, 6),
+//                                                 child: Text(
+//                                                   viewModel.selectedCategory
+//                                                           ?.id ??
+//                                                       AppStrings.appTitle,
+//                                                   textAlign: TextAlign.center,
+//                                                   style: TextStyle(
+//                                                     fontSize: 50,
+//                                                     fontWeight: FontWeight.w900,
+//                                                     color: Colors.black
+//                                                         .withOpacity(0.35),
+//                                                     letterSpacing: 1,
+//                                                   ),
+//                                                 ),
+//                                               ),
+
+//                                               // Pink 3D Layer
+//                                               Transform.translate(
+//                                                 offset: const Offset(3, 3),
+//                                                 child: Text(
+//                                                   viewModel.selectedCategory
+//                                                           ?.id ??
+//                                                       AppStrings.appTitle,
+//                                                   textAlign: TextAlign.center,
+//                                                   style: const TextStyle(
+//                                                     fontSize: 50,
+//                                                     fontWeight: FontWeight.w900,
+//                                                     color: Color(0xFFFF4FA3),
+//                                                     letterSpacing: 1,
+//                                                   ),
+//                                                 ),
+//                                               ),
+
+//                                               // Main White Text
+//                                               Text(
+//                                                 viewModel
+//                                                         .selectedCategory?.id ??
+//                                                     AppStrings.appTitle,
+//                                                 textAlign: TextAlign.center,
+//                                                 style: const TextStyle(
+//                                                   fontSize: 50,
+//                                                   fontWeight: FontWeight.w900,
+//                                                   color: Colors.white,
+//                                                   letterSpacing: 1,
+//                                                 ),
+//                                               ),
+//                                             ],
+//                                           ),
+//                                         ),
+//                                       ),
+//                                     ),
+
+//                                     SizedBox(
+//                                       width: 60,
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       )
+//                           ),
+//                       SliverPadding(
+//                         padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+//                         sliver: SliverLayoutBuilder(
+//                           builder: (context, constraints) {
+//                             final columns = _columnCountForWidth(
+//                                 constraints.crossAxisExtent);
+//                             return SliverGrid(
+//                               delegate: SliverChildBuilderDelegate(
+//                                 (context, index) {
+//                                   final level = selectedLevels[index];
+//                                   final levelNumber = index + 1;
+//                                   final isLocked = viewModel.isLevelLockedAt(
+//                                     index,
+//                                     selectedLevels,
+//                                   );
+//                                   return LevelCard(
+//                                     level: level,
+//                                     levelNumber: levelNumber,
+//                                     palette: _paletteFor(index),
+//                                     isLocked: isLocked,
+//                                     isBusy: _isOpeningLevel,
+//                                     onTap: () =>
+//                                         _openLevel(context, viewModel, level),
+//                                   );
+//                                 },
+//                                 childCount: selectedLevels.length,
+//                               ),
+//                               gridDelegate:
+//                                   SliverGridDelegateWithFixedCrossAxisCount(
+//                                 crossAxisCount: columns,
+//                                 mainAxisSpacing: 12,
+//                                 crossAxisSpacing: 12,
+//                                 childAspectRatio: _aspectRatioForWidth(
+//                                   constraints.crossAxisExtent,
+//                                   columns,
+//                                 ),
+//                               ),
+//                             );
+//                           },
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   int _columnCountForWidth(double width) {
+//     if (width >= 900) return 5;
+//     if (width >= 700) return 4;
+//     if (width >= 520) return 3;
+//     return 2;
+//   }
+
+//   double _aspectRatioForWidth(double width, int columns) {
+//     if (columns >= 5) return 0.76;
+//     if (columns == 4) return 0.75;
+//     if (columns == 3) return 0.74;
+//     return 0.73;
+//   }
+
+//   Future<void> _openLevel(
+//     BuildContext context,
+//     HomeViewModel viewModel,
+//     LevelModel level,
+//   ) async {
+//     if (_isOpeningLevel) return;
+
+//     if (viewModel.isLevelLocked(level)) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text(AppStrings.lockedLevelMessage)),
+//       );
+//       return;
+//     }
+
+//     setState(() {
+//       _isOpeningLevel = true;
+//     });
+
+//     try {
+//       final isReady = await viewModel.prepareLevel(level.id);
+//       if (!context.mounted) return;
+
+//       if (!isReady) {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           const SnackBar(content: Text(AppStrings.lockedLevelMessage)),
+//         );
+//         return;
+//       }
+
+//       await Navigator.pushNamed(
+//         context,
+//         AppRoutes.drawing,
+//         arguments: DrawingRouteArgs(
+//           levelId: level.id,
+//           levelTitle: level.title,
+//           levelNumber: viewModel.levelNumberFor(level.id),
+//         ),
+//       );
+
+//       if (!context.mounted) return;
+//       await context.read<HomeViewModel>().load();
+//     } finally {
+//       if (mounted) {
+//         setState(() {
+//           _isOpeningLevel = false;
+//         });
+//       }
+//     }
+//   }
+
+//   _CardPalette _paletteFor(int index) {
+//     const palettes = <_CardPalette>[
+//       _CardPalette(
+//         outerTop: Color(0xFF66BAF9),
+//         outerBottom: Color(0xFF2F8BDB),
+//         innerTop: Color(0xFF95D8FF),
+//         innerBottom: Color(0xFF66BDF4),
+//         edge: Color(0xFF2674C3),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFFFFD34D),
+//         outerBottom: Color(0xFFF0B52B),
+//         innerTop: Color(0xFFFFE27B),
+//         innerBottom: Color(0xFFFFCF49),
+//         edge: Color(0xFFD39B16),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFF63DDD7),
+//         outerBottom: Color(0xFF27B7B6),
+//         innerTop: Color(0xFF96F0E4),
+//         innerBottom: Color(0xFF59D3CF),
+//         edge: Color(0xFF219795),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFFB6ED64),
+//         outerBottom: Color(0xFF7DC83B),
+//         innerTop: Color(0xFFD4F68F),
+//         innerBottom: Color(0xFFB0E45D),
+//         edge: Color(0xFF69AB2A),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFFFFB156),
+//         outerBottom: Color(0xFFF37A22),
+//         innerTop: Color(0xFFFFCB82),
+//         innerBottom: Color(0xFFFFA14A),
+//         edge: Color(0xFFD36A18),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFFFFAE58),
+//         outerBottom: Color(0xFFF18832),
+//         innerTop: Color(0xFFFFD295),
+//         innerBottom: Color(0xFFFFA550),
+//         edge: Color(0xFFD26A21),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFFBC86FF),
+//         outerBottom: Color(0xFF8B52DF),
+//         innerTop: Color(0xFFD9B0FF),
+//         innerBottom: Color(0xFFB67BF8),
+//         edge: Color(0xFF7542C9),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFFA7DEFF),
+//         outerBottom: Color(0xFF65BEEB),
+//         innerTop: Color(0xFFCDEEFF),
+//         innerBottom: Color(0xFF99D6F8),
+//         edge: Color(0xFF529FC9),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFFFFA6C8),
+//         outerBottom: Color(0xFFEC6796),
+//         innerTop: Color(0xFFFFCBDF),
+//         innerBottom: Color(0xFFFF96BE),
+//         edge: Color(0xFFD55282),
+//       ),
+//       _CardPalette(
+//         outerTop: Color(0xFFFF7FD0),
+//         outerBottom: Color(0xFFD93FAE),
+//         innerTop: Color(0xFFFFA8E2),
+//         innerBottom: Color(0xFFFF74CF),
+//         edge: Color(0xFFBA2C91),
+//       ),
+//     ];
+
+//     return palettes[index % palettes.length];
+//   }
+// }
+
+// class _HomeError extends StatelessWidget {
+//   const _HomeError({
+//     required this.message,
+//     required this.onRetry,
+//   });
+
+//   final String message;
+//   final Future<void> Function() onRetry;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Padding(
+//         padding: const EdgeInsets.all(AppSpacing.xl),
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: <Widget>[
+//             const Icon(Icons.cloud_off_rounded, size: 54),
+//             const SizedBox(height: AppSpacing.md),
+//             Text(
+//               message,
+//               textAlign: TextAlign.center,
+//               style: Theme.of(context).textTheme.bodyLarge,
+//             ),
+//             const SizedBox(height: AppSpacing.md),
+//             CustomButton(
+//               label: AppStrings.retry,
+//               onPressed: onRetry,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// // LevelCard class ko waise hi rehne diya hai jaisa aap ne bheja tha...
+// class LevelCard extends StatefulWidget {
+//   const LevelCard({
+//     super.key,
+//     required this.level,
+//     required this.levelNumber,
+//     required this.palette,
+//     required this.isLocked,
+//     required this.isBusy,
+//     required this.onTap,
+//   });
+
+//   final dynamic level;
+//   final int levelNumber;
+//   final dynamic palette;
+//   final bool isLocked;
+//   final bool isBusy;
+//   final VoidCallback onTap;
+
+//   @override
+//   State<LevelCard> createState() => LevelCardState();
+// }
+
+// class LevelCardState extends State<LevelCard> {
+//   bool _isPressed = false;
+
+//   void _updatePressed(bool value) {
+//     if (_isPressed == value) return;
+//     setState(() {
+//       _isPressed = value;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final Color mainBodyColor =
+//         widget.isLocked ? Colors.grey.shade400 : widget.palette.outerTop;
+//     final Color bottomBorderColor =
+//         widget.isLocked ? Colors.grey.shade600 : widget.palette.edge;
+
+//     final Color innerWhiteBoxColor =
+//         widget.isLocked ? Colors.grey.shade300 : Colors.white.withOpacity(0.35);
+
+//     return IgnorePointer(
+//       ignoring: widget.isBusy,
+//       child: AnimatedOpacity(
+//         duration: const Duration(milliseconds: 160),
+//         opacity: widget.isBusy ? 0.72 : 1,
+//         child: AnimatedScale(
+//           scale: _isPressed ? 0.94 : 1,
+//           duration: Duration(milliseconds: _isPressed ? 110 : 320),
+//           curve: _isPressed ? Curves.easeOut : Curves.elasticOut,
+//           child: GestureDetector(
+//             behavior: HitTestBehavior.opaque,
+//             onTapDown: (_) => _updatePressed(true),
+//             onTapUp: (_) => _updatePressed(false),
+//             onTapCancel: () => _updatePressed(false),
+//             onTap: widget.onTap,
+//             child: Container(
+//               padding: const EdgeInsets.only(
+//                   bottom: 7.0, left: 4.0, right: 4.0, top: 4.0),
+//               decoration: BoxDecoration(
+//                 color: bottomBorderColor,
+//                 borderRadius: BorderRadius.circular(26.0),
+//                 boxShadow: [
+//                   BoxShadow(
+//                     color: Colors.black.withOpacity(0.15),
+//                     blurRadius: 4,
+//                     offset: const Offset(0, 6),
+//                   ),
+//                 ],
+//               ),
+//               child: Container(
+//                 decoration: BoxDecoration(
+//                   color: mainBodyColor,
+//                   borderRadius: BorderRadius.circular(20.0),
+//                 ),
+//                 child: Stack(
+//                   children: [
+//                     Positioned(
+//                       top: 6,
+//                       left: 10,
+//                       child: Container(
+//                         width: 24,
+//                         height: 8,
+//                         decoration: BoxDecoration(
+//                           color: Colors.white.withOpacity(0.4),
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                       ),
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 10.0, vertical: 10.0),
+//                       child: Column(
+//                         children: [
+//                           Expanded(
+//                             child: Container(
+//                               width: double.infinity,
+//                               margin: const EdgeInsets.only(bottom: 8),
+//                               decoration: BoxDecoration(
+//                                 color: innerWhiteBoxColor,
+//                                 borderRadius: BorderRadius.circular(16.0),
+//                               ),
+//                               child: Padding(
+//                                 padding: const EdgeInsets.all(10.0),
+//                                 child: LayoutBuilder(
+//                                   builder: (context, constraints) {
+//                                     final previewSize =
+//                                         constraints.biggest.shortestSide;
+//                                     return LevelPreview(
+//                                       level: widget.level,
+//                                       size: previewSize,
+//                                       backgroundColor: Colors.transparent,
+//                                       padding: EdgeInsets.zero,
+//                                       borderRadius: BorderRadius.zero,
+//                                       style: LevelPreviewStyle.colored,
+//                                     );
+//                                   },
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                           Text(
+//                             (widget.level.title ??
+//                                     'LEVEL ${widget.levelNumber}')
+//                                 .toUpperCase(),
+//                             maxLines: 1,
+//                             textAlign: TextAlign.center,
+//                             overflow: TextOverflow.ellipsis,
+//                             style: GoogleFonts.fredoka(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.w900,
+//                               letterSpacing: 0.5,
+//                               color: widget.isLocked
+//                                   ? Colors.grey.shade700
+//                                   : Colors.white,
+//                               shadows: widget.isLocked
+//                                   ? []
+//                                   : [
+//                                       Shadow(
+//                                         color: Colors.black.withOpacity(0.25),
+//                                         offset: const Offset(0, 2),
+//                                         blurRadius: 2,
+//                                       ),
+//                                     ],
+//                             ),
+//                           ),
+//                           const SizedBox(height: 2),
+//                         ],
+//                       ),
+//                     ),
+//                     if (widget.isLocked)
+//                       Positioned.fill(
+//                         child: Container(
+//                           decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(20),
+//                             color: Colors.black.withOpacity(0.15),
+//                           ),
+//                         ),
+//                       ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// // Dummy classes/Palettes for smooth compilation
+// class _CardPalette {
+//   final Color outerTop;
+//   final Color outerBottom;
+//   final Color innerTop;
+//   final Color innerBottom;
+//   final Color edge;
+
+//   const _CardPalette({
+//     required this.outerTop,
+//     required this.outerBottom,
+//     required this.innerTop,
+//     required this.innerBottom,
+//     required this.edge,
+//   });
+// }

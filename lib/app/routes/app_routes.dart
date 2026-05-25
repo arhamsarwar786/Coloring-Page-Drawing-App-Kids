@@ -35,7 +35,7 @@ abstract final class AppRoutes {
         );
       case mainHome:
         return MaterialPageRoute<void>(
-          builder: (_) => const MainHomeScreen(),
+          builder: (_) =>  MainHomeScreen(),
         );
       case drawing:
         final args = settings.arguments;
