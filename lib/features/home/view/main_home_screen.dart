@@ -69,6 +69,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 bottomColor: Colors.orange,
                 isSelected: selectedIndex == 0, // Agar index 0 hai to true hoga
                 onTap: () {
+                  handleTapAction(context, () {});
                   setState(() {
                     selectedIndex = 0; // Click hone par state update hogi
                   });
@@ -81,6 +82,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 topColor: const Color(0xFFFFA48A),
                 bottomColor: const Color(0xFFD9534F),
                 onTap: () {
+                  handleTapAction(context, () {});
                   // persistHistorySnapshot(
                   // captureThumbnail: true);
                   if (context.mounted) {
@@ -104,6 +106,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 isSelected: selectedIndex == 2, // Agar index 1 hai to true hoga
                 onTap: () {
                   setState(() {
+                    handleTapAction(context, () {});
                     showDialog(
                       context: context,
                       barrierColor: Colors.black.withOpacity(

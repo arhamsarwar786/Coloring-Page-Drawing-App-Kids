@@ -52,16 +52,72 @@ class SkinsScreen extends StatelessWidget {
                               ),
                             ),
 
-                            const Expanded(
+                            Expanded(
                               child: Center(
-                                child: DoodleText(
-                                  'SKINS',
-                                  fontSize: 32,
-                                  fillColor: Colors.white,
-                                  shadowColor: Color(0x33000000),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      // Shadow Layer
+                                      Transform.translate(
+                                        offset: const Offset(6, 6),
+                                        child: Text(
+                                          "SKINS",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.w900,
+                                            color:
+                                                Colors.black.withOpacity(0.35),
+                                            letterSpacing: 1,
+                                          ),
+                                        ),
+                                      ),
+
+                                      // Pink 3D Layer
+                                      Transform.translate(
+                                        offset: const Offset(3, 3),
+                                        child: Text(
+                                          "SKINS",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.w900,
+                                            color: Color(0xFFFF4FA3),
+                                            letterSpacing: 1,
+                                          ),
+                                        ),
+                                      ),
+
+                                      // Main White Text
+                                      Text(
+                                        "SKINS",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontSize: 50,
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white,
+                                          letterSpacing: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
+
+                            // const Expanded(
+                            //   child: Center(
+                            //     child: DoodleText(
+                            //       'SKINS',
+                            //       fontSize: 32,
+                            //       fillColor: Colors.white,
+                            //       shadowColor: Color(0x33000000),
+                            //     ),
+                            //   ),
+                            // ),
+
                             const SizedBox(width: 48),
 
                             // const SizedBox(width: 60),

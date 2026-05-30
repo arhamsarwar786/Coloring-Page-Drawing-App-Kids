@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/drawing/viewmodel/drawing_viewmodel.dart';
+import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
 import 'package:provider/provider.dart';
 
 import '../../../app/routes/app_routes.dart';
@@ -47,29 +48,126 @@ class _LevelScreenState extends State<LevelScreen> {
                     padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
                     child: Row(
                       children: <Widget>[
-                        SidebarIcon(
-                          icon: Icons.arrow_back_rounded,
-                          assetName: 'assets/images/pop-button.png',
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-
-                        // _HistoryIconButton(
-                        //   icon: Icons.arrow_back_rounded,
-                        //   onTap: () => Navigator.pop(context),
-                        // ),
-                        const SizedBox(width: 14),
                         Expanded(
-                          child: Text(
-                            'Drawing History',
-                            style: GoogleFonts.fredoka(
-                              fontSize: 28,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF1F2A44),
+                          child: SizedBox(
+                            height: 140,
+                            // width: double.infinity,
+                            child: Stack(
+                              children: [
+                                ClipPath(
+                                  clipper: AppBarClipper(),
+                                  child: Container(
+                                    height: 140,
+                                    color: const Color(0xff3b9499),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SidebarIcon(
+                                            icon: Icons.arrow_back_rounded,
+                                            assetName:
+                                                'assets/images/pop-button.png',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+
+                                        // Title
+                                        Expanded(
+                                          child: Center(
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  // Shadow Layer
+                                                  Transform.translate(
+                                                    offset: const Offset(6, 6),
+                                                    child: Text(
+                                                      "Drawing History",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontSize: 50,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors.black
+                                                            .withOpacity(0.35),
+                                                        letterSpacing: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  // Pink 3D Layer
+                                                  Transform.translate(
+                                                    offset: const Offset(3, 3),
+                                                    child: Text(
+                                                      "Drawing History",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontSize: 50,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color:
+                                                            Color(0xFFFF4FA3),
+                                                        letterSpacing: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  // Main White Text
+                                                  Text(
+                                                    "Drawing History",
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      fontSize: 50,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Colors.white,
+                                                      letterSpacing: 1,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 60),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
+
+                        // SidebarIcon(
+                        //   icon: Icons.arrow_back_rounded,
+                        //   assetName: 'assets/images/pop-button.png',
+                        //   onPressed: () {
+                        //     Navigator.pop(context);
+                        //   },
+                        // ),
+
+                        // // _HistoryIconButton(
+                        // //   icon: Icons.arrow_back_rounded,
+                        // //   onTap: () => Navigator.pop(context),
+                        // // ),
+                        // const SizedBox(width: 14),
+                        // Expanded(
+                        //   child: Text(
+                        //     'Drawing History',
+                        //     style: GoogleFonts.fredoka(
+                        //       fontSize: 28,
+                        //       fontWeight: FontWeight.w700,
+                        //       color: const Color(0xFF1F2A44),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
