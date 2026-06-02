@@ -276,10 +276,17 @@ class CategorySelectionBar extends StatelessWidget {
         return Icons.apple;
       case 'animals':
         return Icons.pets;
-      // case 'vehicles':
-      //   return Icons.directions_car;
-      // case 'shapes':
-      //   return Icons.category;
+      case 'vegetables':
+        return Icons.grass;
+      case 'wild animals':
+      case 'wild_animals':
+        return Icons.pets;
+      case 'colors':
+        return Icons.color_lens;
+      case 'alphabets':
+        return Icons.abc;
+      case 'drawing':
+        return Icons.brush;
       default:
         return Icons.grid_view_rounded;
     }

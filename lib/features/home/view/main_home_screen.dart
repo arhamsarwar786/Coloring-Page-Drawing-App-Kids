@@ -194,33 +194,31 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                         category.title.toLowerCase();
 
                                     // --- 1. Dynamic Image Logic ---
-                                    String myCustomImage =
-                                        'assets/images/sports/sport.png';
+                                    String myCustomImage = 'assets/images/logo.png';
                                     if (categoryTitle == 'fruits') {
-                                      // Choose a random fruit image
-                                      final fruitImages = [
-                                        'assets/images/apples.png',
-                                        // 'assets/images/animalss.png',
-                                        // 'assets/images/sport.png',
-                                      ];
-                                      myCustomImage = fruitImages[
-                                          Random().nextInt(fruitImages.length)];
+                                      myCustomImage = 'assets/images/apples.png';
                                     } else if (categoryTitle == 'animals') {
-                                      myCustomImage =
-                                          'assets/images/animalss.png';
-                                    } else if (categoryTitle == 'sports') {
-                                      myCustomImage = 'assets/images/sport.png';
-                                    } else if (categoryTitle == 'vehicles') {
-                                      myCustomImage =
-                                          'assets/images/vehicles.png';
+                                      myCustomImage = 'assets/images/animalss.png';
+                                    } else if (categoryTitle == 'vegetables') {
+                                      myCustomImage = 'assets/images/orange.webp';
+                                    } else if (categoryTitle == 'wild animals' || categoryTitle == 'wild_animals') {
+                                      myCustomImage = 'assets/images/un_colored_dolphin.webp';
+                                    } else if (categoryTitle == 'colors') {
+                                      myCustomImage = 'assets/images/logo.png';
+                                    } else if (categoryTitle == 'alphabets') {
+                                      myCustomImage = 'assets/images/logo.png';
+                                    } else if (categoryTitle == 'drawing') {
+                                      myCustomImage = 'assets/images/pen.png';
                                     }
 
-                                    // --- 2. Dynamic Colors Logic (First code wale colors match kiye hain) ---
+                                    // --- 2. Dynamic Colors Logic ---
                                     final List<Color> cardMainColors = [
-                                      const Color(0xFF4DB6AC), // fruits Teal
-                                      const Color(0xFFFFB74D), // animals Orange
-                                      const Color(0xFFF06292), // sports Pink
-                                      const Color(0xFF81C784), // vehicles Green
+                                      const Color(0xFF4DB6AC), // Teal
+                                      const Color(0xFFFFB74D), // Orange
+                                      const Color(0xFFF06292), // Pink
+                                      const Color(0xFF81C784), // Green
+                                      const Color(0xFFBA68C8), // Purple
+                                      const Color(0xFF4FC3F7), // Light Blue
                                     ];
 
                                     final List<Color> cardBorderColors = [
@@ -228,6 +226,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                       const Color(0xFFD88916), // Darker Orange
                                       const Color(0xFFB83763), // Darker Pink
                                       const Color(0xFF539456), // Darker Green
+                                      const Color(0xFF7B1FA2), // Darker Purple
+                                      const Color(0xFF0288D1), // Darker Light Blue
                                     ];
 
                                     // Har category index ke mutabiq apna color khud choose kar legi
@@ -247,13 +247,12 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                       borderColor:
                                           currentBorderColor, // Dynamic border
                                       onTap: () {
-                                        print(
-                                            '-----------mmmmm----${category.levels.first.activityItem?.imagePath}');
-                                        // Direct navigation without category id
+                                        // Set selected category first
+                                        viewModel.selectCategory(category.id);
                                         tapActionCallback(context, () {});
                                         handleTapAction(context, () {});
                                         Navigator.pushNamed(
-                                            context, AppRoutes.drawing);
+                                            context, AppRoutes.home);
                                       },
                                     );
                                   },

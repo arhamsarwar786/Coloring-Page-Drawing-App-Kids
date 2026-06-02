@@ -19,6 +19,7 @@ import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/loader.dart';
 import '../../levels/model/level_model.dart';
 import '../viewmodel/home_viewmodel.dart';
+import 'package:play_craft_kids/features/tracing/viewmodel/activity_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -131,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   offset: const Offset(6, 6),
                                                   child: Text(
                                                     viewModel.selectedCategory
-                                                            ?.id ??
+                                                            ?.title ??
                                                         AppStrings.appTitle,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
@@ -150,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   offset: const Offset(3, 3),
                                                   child: Text(
                                                     viewModel.selectedCategory
-                                                            ?.id ??
+                                                            ?.title ??
                                                         AppStrings.appTitle,
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
@@ -166,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 // Main White Text
                                                 Text(
                                                   viewModel.selectedCategory
-                                                          ?.id ??
+                                                          ?.title ??
                                                       AppStrings.appTitle,
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
@@ -221,17 +222,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Provider.of<ColoringProvider>(
                                                 context,
                                                 listen: false);
-                                        if (level.activityItem != null) {
-                                          coloringProvider.setItem(
-                                              level.activityItem!, 1);
-                                        }
+                                        final activity = level.activityItem ?? ActivityItem(
+                                          id: level.id,
+                                          label: level.title,
+                                          display: level.title,
+                                          color: Colors.red,
+                                          imagePath: level.imagePath ?? 'assets/images/un_border_apple.webp',
+                                        );
+                                        coloringProvider.setItem(activity, 1);
 
-                                        _openLevel(context, viewModel, level);
-                                        //                                   var provider = Provider.of<ColoringProvider>(context, listen: false);
-                                        //                                   // addPostFrameCallback;
-                                        //                                    _provider?.setItem(model, 1); setState(() {   loader = true;
-                                        // });
-                                        // level.activityItem;
                                         handleTapAction(context, () {});
                                         _openLevel(context, viewModel, level);
                                       });
@@ -307,18 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       }
 
-      // Determine asset path based on level title
-      String assetPath = 'assets/images/apple.webp';
-      final title = level.title?.toString().toLowerCase() ?? '';
-      if (title.contains('banana')) {
-        assetPath = 'assets/images/banana.webp';
-      } else if (title.contains('mango')) {
-        assetPath = 'assets/images/mango.jpg';
-      } else if (title.contains('orange')) {
-        assetPath = 'assets/images/orange.webp';
-      } else if (title.contains('apple')) {
-        assetPath = 'assets/images/apple.webp';
-      }
+      String assetPath = level.imagePath ?? 'assets/images/apple.webp';
 
       await Navigator.push(
         context,

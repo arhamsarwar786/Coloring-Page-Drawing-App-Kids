@@ -45,7 +45,7 @@ class _LevelScreenState extends State<LevelScreen> {
               return Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
+                    padding: const EdgeInsets.fromLTRB(0, 18, 0, 12),
                     child: Row(
                       children: <Widget>[
                         Expanded(

@@ -521,6 +521,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                               ],
                             ),
                           ),
+
                           if (_showCompletionCelebration)
                             const Positioned.fill(
                               child: IgnorePointer(
