@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/core/constants/app_colors.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
 import 'package:play_craft_kids/features/coloring/widgets/canvas_widget.dart';
 
@@ -44,12 +45,12 @@ class _ColoringBoardState extends State<ColoringBoard> {
             // color: AppColors.smartGreen.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              // color: AppColors.smartGreen.withValues(alpha: 0.2),
+              color: AppColors.rose,
               width: 2,
             ),
             boxShadow: [
               BoxShadow(
-                // color: AppColors.smartGreen.withValues(alpha: 0.04),
+                color: AppColors.rose,
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -61,21 +62,19 @@ class _ColoringBoardState extends State<ColoringBoard> {
             children: [
               const Icon(
                 Icons.star_rounded,
-                // color: AppColors.smartGreen,
+                color: Colors.white,
                 size: 20,
               ),
               const SizedBox(width: 8),
               Flexible(
                 child: Text(
-                  "instructionText",
-                  // _instructionText,
+                  // "instructionText",
+                  _instructionText,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w900,
-                    // color: AppColors.smartGreen,
-                    letterSpacing: 0.2,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white),
                 ),
               ),
             ],
@@ -103,11 +102,11 @@ class _ColoringBoardState extends State<ColoringBoard> {
 
         // ── Canvas ──────────────────────────────────────────────────────────
         Expanded(
-          flex: 12,
+          flex: 10,
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
-              color: Colors.amber,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(32),
               border: Border.all(
                 // color: AppColors.primaryPurple.withValues(alpha: 0.3),
