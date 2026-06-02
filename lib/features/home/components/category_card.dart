@@ -106,13 +106,11 @@
 //   }
 // }
 
-
-
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
   final String title;
-  final String imagePath;
+  final String? imagePath;
   final Color baseColor;
   final Color borderColor;
   final VoidCallback onTap;
@@ -120,7 +118,7 @@ class CategoryCard extends StatelessWidget {
   const CategoryCard({
     Key? key,
     required this.title,
-    required this.imagePath,
+    this.imagePath,
     required this.baseColor,
     required this.borderColor,
     required this.onTap,
@@ -133,12 +131,17 @@ class CategoryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(5.0), // Border thickness
         decoration: BoxDecoration(
-          color: borderColor,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [borderColor.withOpacity(0.8), borderColor],
+          ),
           borderRadius: BorderRadius.circular(28.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              blurRadius: 4,
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 6,
+              spreadRadius: 1,
               offset: const Offset(0, 4),
             ),
           ],
@@ -174,7 +177,9 @@ class CategoryCard extends StatelessWidget {
                     // Dynamic Image
                     Expanded(
                       child: Center(
-                        child: Image.asset(imagePath, fit: BoxFit.contain),
+                        child: imagePath != null
+    ? Image.asset(imagePath!, fit: BoxFit.contain)
+    : Icon(Icons.image_not_supported, size: 48, color: Colors.white70),
                       ),
                     ),
                     const SizedBox(height: 4),

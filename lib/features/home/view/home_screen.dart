@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:play_craft_kids/features/coloring/view/coloring_screen.dart';
+import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
 import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
@@ -92,8 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     slivers: <Widget>[
                       SliverToBoxAdapter(
-                        child: 
-                        SizedBox(
+                        child: SizedBox(
                           height: 140,
                           width: double.infinity,
                           child: Stack(
@@ -189,9 +190,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                    
-                    
-                    
                       ),
                       SliverPadding(
                         padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
@@ -215,6 +213,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                       isLocked: isLocked,
                                       isBusy: _isOpeningLevel,
                                       onTap: () {
+                                        debugPrint("Level: ${level.title}");
+                                        debugPrint(
+                                            "Image Path: ${level.activityItem?.imagePath}");
+
+                                        final coloringProvider =
+                                            Provider.of<ColoringProvider>(
+                                                context,
+                                                listen: false);
+                                        if (level.activityItem != null) {
+                                          coloringProvider.setItem(
+                                              level.activityItem!, 1);
+                                        }
+
+                                        _openLevel(context, viewModel, level);
+                                        //                                   var provider = Provider.of<ColoringProvider>(context, listen: false);
+                                        //                                   // addPostFrameCallback;
+                                        //                                    _provider?.setItem(model, 1); setState(() {   loader = true;
+                                        // });
+                                        // level.activityItem;
                                         handleTapAction(context, () {});
                                         _openLevel(context, viewModel, level);
                                       });
@@ -290,14 +307,23 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       }
 
-      await Navigator.pushNamed(
+      // Determine asset path based on level title
+      String assetPath = 'assets/images/apple.webp';
+      final title = level.title?.toString().toLowerCase() ?? '';
+      if (title.contains('banana')) {
+        assetPath = 'assets/images/banana.webp';
+      } else if (title.contains('mango')) {
+        assetPath = 'assets/images/mango.jpg';
+      } else if (title.contains('orange')) {
+        assetPath = 'assets/images/orange.webp';
+      } else if (title.contains('apple')) {
+        assetPath = 'assets/images/apple.webp';
+      }
+
+      await Navigator.push(
         context,
-        AppRoutes.drawing,
-        arguments: DrawingRouteArgs(
-          levelId: level.id,
-          levelTitle: level.title,
-          levelNumber: viewModel.levelNumberFor(level.id),
-        ),
+        MaterialPageRoute(
+            builder: (context) => ColoringScreen(imagePath: assetPath)),
       );
 
       if (!context.mounted) return;
@@ -524,10 +550,33 @@ class LevelCardState extends State<LevelCard> {
                               margin: const EdgeInsets.only(bottom: 8),
                               decoration: BoxDecoration(
                                 color: innerWhiteBoxColor,
+                                border: Border.all(
+                                    color: Colors.black.withOpacity(0.5),
+                                    width: 1),
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
+                                // child: Builder(
+                                //   builder: (context) {
+                                //     final title = widget.level.title
+                                //             ?.toString()
+                                //             .toLowerCase() ??
+                                //         '';
+                                //     String assetPath =
+                                //         'assets/images/apple.webp';
+                                //     if (title.contains('banana')) {
+                                //       assetPath = 'assets/images/banana.webp';
+                                //     } else if (title.contains('mango')) {
+                                //       assetPath = 'assets/images/mango.jpg';
+                                //     } else if (title.contains('orange')) {
+                                //       assetPath = 'assets/images/orange.webp';
+                                //     } else if (title.contains('apple')) {
+                                //       assetPath = 'assets/images/apple.webp';
+                                //     }
+                                //     return Image.asset(assetPath);
+                                //   },
+                                // ),
                                 child: LayoutBuilder(
                                   builder: (context, constraints) {
                                     final previewSize =

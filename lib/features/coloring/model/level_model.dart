@@ -1,10 +1,8 @@
-import 'dart:developer';
+// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
-import 'package:play_craft_kids/features/tracing/viewmodel/activity_item.dart';
-
-import '../../drawing/model/color_model.dart';
+import 'color_model.dart';
 
 enum RegionShapeType {
   circle,
@@ -42,6 +40,11 @@ class LevelRegionModel {
     this.viewBoxSize,
     this.targetColorId,
     this.points = const <Offset>[],
+    this.bx1,
+    this.by1,
+    this.bx2,
+    this.by2,
+    this.sequenceIndex = 999,
   });
 
   final String id;
@@ -56,9 +59,15 @@ class LevelRegionModel {
   final double? viewBoxSize;
   final String? targetColorId;
   final List<Offset> points;
+  final double? bx1;
+  final double? by1;
+  final double? bx2;
+  final double? by2;
+  final int sequenceIndex;
 
   factory LevelRegionModel.fromJson(Map<String, dynamic> json) {
-    final rawPoints = (json['points'] as List<dynamic>?)
+    final rawPoints =
+        (json['points'] as List<dynamic>?)
             ?.map(
               (point) => Offset(
                 ((point as List<dynamic>)[0] as num).toDouble(),
@@ -81,28 +90,31 @@ class LevelRegionModel {
       viewBoxSize: (json['viewBoxSize'] as num?)?.toDouble(),
       targetColorId: json['targetColorId'] as String?,
       points: rawPoints,
+      bx1: (json['bx1'] as num?)?.toDouble(),
+      by1: (json['by1'] as num?)?.toDouble(),
+      bx2: (json['bx2'] as num?)?.toDouble(),
+      by2: (json['by2'] as num?)?.toDouble(),
+      sequenceIndex: (json['sequenceIndex'] as num?)?.toInt() ?? 999,
     );
   }
 
   Path toPath(Size size) {
     switch (shapeType) {
       case RegionShapeType.circle:
-        return Path()
-          ..addOval(
-            Rect.fromCircle(
-              center: Offset((cx ?? 0) * size.width, (cy ?? 0) * size.height),
-              radius: (radius ?? 0) * size.shortestSide,
-            ),
-          );
+        return Path()..addOval(
+          Rect.fromCircle(
+            center: Offset((cx ?? 0) * size.width, (cy ?? 0) * size.height),
+            radius: (radius ?? 0) * size.shortestSide,
+          ),
+        );
       case RegionShapeType.oval:
-        return Path()
-          ..addOval(
-            Rect.fromCenter(
-              center: Offset((cx ?? 0) * size.width, (cy ?? 0) * size.height),
-              width: ((rx ?? 0) * 2) * size.width,
-              height: ((ry ?? 0) * 2) * size.height,
-            ),
-          );
+        return Path()..addOval(
+          Rect.fromCenter(
+            center: Offset((cx ?? 0) * size.width, (cy ?? 0) * size.height),
+            width: ((rx ?? 0) * 2) * size.width,
+            height: ((ry ?? 0) * 2) * size.height,
+          ),
+        );
       case RegionShapeType.polygon:
         final path = Path();
         if (points.isEmpty) return path;
@@ -118,8 +130,10 @@ class LevelRegionModel {
       case RegionShapeType.path:
         if (svgPath == null) return Path();
         final rawPath = parseSvgPathData(svgPath!);
-        final sourceSize =
-            viewBoxSize == null || viewBoxSize == 0 ? 100.0 : viewBoxSize!;
+        final sourceSize = viewBoxSize == null || viewBoxSize == 0
+            ? 100.0
+            : viewBoxSize!;
+
         final matrix = Matrix4.identity()
           ..scale(size.width / sourceSize, size.height / sourceSize);
         return rawPath.transform(matrix.storage);
@@ -132,7 +146,7 @@ class LevelRegionModel {
 }
 
 class LevelModel {
-  LevelModel({
+  const LevelModel({
     required this.id,
     required this.title,
     required this.subtitle,
@@ -145,11 +159,8 @@ class LevelModel {
     this.isCompleted = false,
     this.stars = 0,
     this.isFavorite = false,
-    this.previewImage,
-    this.imagePath,
-    this.activityItem,
   });
-  final String? previewImage;
+
   final String id;
   final String title;
   final String subtitle;
@@ -162,11 +173,8 @@ class LevelModel {
   final bool isCompleted;
   final int stars;
   final bool isFavorite;
-  String? imagePath;
-  ActivityItem? activityItem;
 
   factory LevelModel.fromJson(Map<String, dynamic> json) {
-    log('${json['activity']}');
     return LevelModel(
       id: json['id'] as String,
       title: json['title'] as String,
@@ -175,38 +183,34 @@ class LevelModel {
       rewardCoins: json['rewardCoins'] as int,
       recommendedBrushSize: (json['recommendedBrushSize'] as num).toDouble(),
       guideAsset: json['guideAsset'] as String?,
-      previewImage: json['previewImage'] as String?,
       palette: (json['palette'] as List<dynamic>)
-          .map((item) =>
-              DrawingColorModel.fromJson(item as Map<String, dynamic>))
+          .map(
+            (item) => DrawingColorModel.fromJson(item as Map<String, dynamic>),
+          )
           .toList(),
       regions: (json['regions'] as List<dynamic>)
           .map(
-              (item) => LevelRegionModel.fromJson(item as Map<String, dynamic>))
+            (item) => LevelRegionModel.fromJson(item as Map<String, dynamic>),
+          )
           .toList(),
-      imagePath: json['imagePath'] as String?,
-      activityItem: json['activity'] != null
-          ? ActivityItem.fromJson(json['activity'] as Map<String, dynamic>)
-          : null,
     );
   }
 
   LevelModel copyWith({bool? isCompleted, int? stars, bool? isFavorite}) {
     return LevelModel(
-        id: id,
-        title: title,
-        subtitle: subtitle,
-        difficulty: difficulty,
-        rewardCoins: rewardCoins,
-        recommendedBrushSize: recommendedBrushSize,
-        palette: palette,
-        regions: regions,
-        guideAsset: guideAsset,
-        isCompleted: isCompleted ?? this.isCompleted,
-        stars: stars ?? this.stars,
-        isFavorite: isFavorite ?? this.isFavorite,
-        imagePath: imagePath ?? this.imagePath,
-        activityItem: activityItem);
+      id: id,
+      title: title,
+      subtitle: subtitle,
+      difficulty: difficulty,
+      rewardCoins: rewardCoins,
+      recommendedBrushSize: recommendedBrushSize,
+      palette: palette,
+      regions: regions,
+      guideAsset: guideAsset,
+      isCompleted: isCompleted ?? this.isCompleted,
+      stars: stars ?? this.stars,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
   }
 
   Color get accentColor =>
@@ -221,8 +225,9 @@ class LevelModel {
     final regionName = regionId.toLowerCase();
 
     if (id == 'apple') {
-      if (regionName.contains('body') || regionName.contains('shine'))
+      if (regionName.contains('body') || regionName.contains('shine')) {
         return 'red';
+      }
       if (regionName.contains('leaf')) return 'green';
       if (regionName.contains('stem')) return 'brown';
     } else if (id == 'banana') {
@@ -235,27 +240,35 @@ class LevelModel {
     } else if (id == 'cat') {
       if (regionName.contains('face') ||
           regionName.contains('ear_left') ||
-          regionName.contains('ear_right')) return 'orange';
-      if (regionName.contains('inner') || regionName.contains('nose'))
+          regionName.contains('ear_right')) {
+        return 'orange';
+      }
+      if (regionName.contains('inner') || regionName.contains('nose')) {
         return 'pink';
+      }
       if (regionName.contains('muzzle')) return 'white';
     } else if (id == 'fish') {
-      if (regionName.contains('body') || regionName.contains('tail'))
+      if (regionName.contains('body') || regionName.contains('tail')) {
         return 'blue';
+      }
       if (regionName.contains('fin')) return 'orange';
       if (regionName.contains('eye')) return 'yellow';
     } else if (id == 'football') {
       if (regionName.contains('body')) return 'white';
       if (regionName.contains('patch')) return 'black';
     } else if (id == 'tennis') {
-      if (regionName.contains('head') || regionName.contains('throat'))
+      if (regionName.contains('head') || regionName.contains('throat')) {
         return 'blue';
-      if (regionName.contains('handle') || regionName.contains('grip'))
+      }
+      if (regionName.contains('handle') || regionName.contains('grip')) {
         return 'gray';
+      }
     } else if (id == 'car') {
       if (regionName.contains('body') ||
           regionName.contains('roof') ||
-          regionName.contains('taillight')) return 'red';
+          regionName.contains('taillight')) {
+        return 'red';
+      }
       if (regionName.contains('window')) return 'blue';
       if (regionName.contains('wheel')) return 'black';
       if (regionName.contains('headlight')) return 'gray';

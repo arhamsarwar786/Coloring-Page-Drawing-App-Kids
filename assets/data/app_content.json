@@ -17,6 +17,14 @@
           "rewardCoins": 40,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/apple.webp",
+          "activity": {
+            "id": "apple",
+            "lable": "Apple",
+            "display": "Apple",
+            "color": "0xFFFF0000",
+            "imagePath": "assets/images/un_border_apple.webp"
+          },
           "palette": [
             {
               "id": "red",
@@ -63,6 +71,14 @@
           "rewardCoins": 40,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/banana.webp",
+          "activity": {
+            "id": "banana",
+            "lable": "Banana",
+            "display": "Banana",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_border_banana.webp"
+          },
           "palette": [
             {
               "id": "light_yellow",
@@ -149,6 +165,76 @@
           "rewardCoins": 45,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/orange.webp",
+          "activity": {
+            "id": "orange",
+            "lable": "Orange",
+            "display": "Orange",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_border_orange.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "mango",
+          "title": "Mango",
+          "subtitle": "A juicy citrus orange with a green leaf!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/mango.jpg",
+          "activity": {
+            "id": "mango",
+            "lable": "Mango",
+            "display": "Mango",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_border_mango.webp"
+          },
           "palette": [
             {
               "id": "orange",

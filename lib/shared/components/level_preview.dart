@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../features/levels/model/level_model.dart';
@@ -36,11 +38,12 @@ class _LevelPreviewState extends State<LevelPreview>
   @override
   void initState() {
     super.initState();
+    log("${widget.level.imagePath}");
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     );
-    
+
     _scaleAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
       CurvedAnimation(
         parent: _controller,
@@ -82,14 +85,28 @@ class _LevelPreviewState extends State<LevelPreview>
         color: widget.backgroundColor,
         borderRadius: widget.borderRadius,
       ),
-      child: CustomPaint(
-        painter: _LevelPreviewPainter(
-          level: widget.level,
-          style: widget.style,
-          filledRegions: widget.filledRegions,
-        ),
-        size: Size.square(widget.size),
-      ),
+      // child:
+      child: widget.level.imagePath != null
+          ? Image.asset(
+              widget.level.imagePath!,
+              fit: BoxFit.contain,
+            )
+          : CustomPaint(
+              painter: _LevelPreviewPainter(
+                level: widget.level,
+                style: widget.style,
+                filledRegions: widget.filledRegions,
+              ),
+              size: Size.square(widget.size),
+            ),
+      // CustomPaint(
+      //   painter: _LevelPreviewPainter(
+      //     level: widget.level,
+      //     style: widget.style,
+      //     filledRegions: widget.filledRegions,
+      //   ),
+      //   size: Size.square(widget.size),
+      // ),
     );
 
     if (widget.animate) {
@@ -131,40 +148,40 @@ class _LevelPreviewPainter extends CustomPainter {
     canvas.translate(dx, dy);
     canvas.scale(scale, scale);
 
-    for (final region in level.regions) {
-      final path = region.toPath(sourceSize);
-      
-      Color fillColor;
-      if (style == LevelPreviewStyle.lineArt) {
-        fillColor = Colors.white;
-      } else if (filledRegions != null) {
-        fillColor = filledRegions![region.id] ?? Colors.white;
-      } else {
-        fillColor = level.getTargetColorForRegion(region.id);
-      }
+    // for (final region in level.regions) {
+    //   final path = region.toPath(sourceSize);
 
-      final fillPaint = Paint()
-        ..style = PaintingStyle.fill
-        ..color = fillColor
-        ..isAntiAlias = true;
-      final outlinePaint = Paint()
-        ..style = PaintingStyle.stroke
-        ..color = Colors.black.withValues(
-          alpha: style == LevelPreviewStyle.lineArt ? 0.92 : 0.28,
-        )
-        ..strokeWidth = style == LevelPreviewStyle.lineArt ? 3 : 2
-        ..isAntiAlias = true;
+    //   Color fillColor;
+    //   if (style == LevelPreviewStyle.lineArt) {
+    //     fillColor = Colors.white;
+    //   } else if (filledRegions != null) {
+    //     fillColor = filledRegions![region.id] ?? Colors.white;
+    //   } else {
+    //     fillColor = level.getTargetColorForRegion(region.id);
+    //   }
 
-      canvas.drawPath(path, fillPaint);
-      canvas.drawPath(path, outlinePaint);
-    }
+    //   final fillPaint = Paint()
+    //     ..style = PaintingStyle.fill
+    //     ..color = fillColor
+    //     ..isAntiAlias = true;
+    //   final outlinePaint = Paint()
+    //     ..style = PaintingStyle.stroke
+    //     ..color = Colors.black.withValues(
+    //       alpha: style == LevelPreviewStyle.lineArt ? 0.92 : 0.28,
+    //     )
+    //     ..strokeWidth = style == LevelPreviewStyle.lineArt ? 3 : 2
+    //     ..isAntiAlias = true;
+
+    //   canvas.drawPath(path, fillPaint);
+    //   canvas.drawPath(path, outlinePaint);
+    // }
 
     canvas.restore();
   }
 
   @override
   bool shouldRepaint(covariant _LevelPreviewPainter oldDelegate) {
-    return oldDelegate.level != level || 
+    return oldDelegate.level != level ||
         oldDelegate.style != style ||
         oldDelegate.filledRegions != filledRegions;
   }

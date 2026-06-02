@@ -166,6 +166,7 @@ class HomeViewModel extends BaseViewModel {
     return _levelProgress[levelId] ?? 0.0;
   }
 
+  // Loads progress per level from history
   Future<Map<String, double>> _loadLevelProgress() async {
     final progressByLevel = <String, double>{};
     try {

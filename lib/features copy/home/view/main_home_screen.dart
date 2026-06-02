@@ -7,13 +7,13 @@ import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.d
 import 'package:play_craft_kids/features/home/components/category_card.dart';
 
 import 'package:play_craft_kids/features/home/view/home_screen.dart';
+import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
 import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
 import 'package:play_craft_kids/shared/utils/interaction_feedback.dart';
 import 'package:provider/provider.dart';
-import 'dart:math';
 
 // Apne actual project paths ke mutabik in imports ko adjust kar lena:
-import '../viewmodel/home_viewmodel.dart';
+// import '../viewmodel/home_viewmodel.dart';
 
 class MainHomeScreen extends StatefulWidget {
   @override
@@ -195,20 +195,14 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
                                     // --- 1. Dynamic Image Logic ---
                                     String myCustomImage =
-                                        'assets/images/sports/sport.png';
+                                        'assets/images/default.png';
                                     if (categoryTitle == 'fruits') {
-                                      // Choose a random fruit image
-                                      final fruitImages = [
-                                        'assets/images/apples.png',
-                                        // 'assets/images/animalss.png',
-                                        // 'assets/images/sport.png',
-                                      ];
-                                      myCustomImage = fruitImages[
-                                          Random().nextInt(fruitImages.length)];
+                                      myCustomImage =
+                                          'assets/images/apples.png';
                                     } else if (categoryTitle == 'animals') {
                                       myCustomImage =
                                           'assets/images/animalss.png';
-                                    } else if (categoryTitle == 'sports') {
+                                    } else if (categoryTitle == 'Drawing') {
                                       myCustomImage = 'assets/images/sport.png';
                                     } else if (categoryTitle == 'vehicles') {
                                       myCustomImage =
@@ -247,13 +241,18 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                       borderColor:
                                           currentBorderColor, // Dynamic border
                                       onTap: () {
-                                        print(
-                                            '-----------mmmmm----${category.levels.first.activityItem?.imagePath}');
-                                        // Direct navigation without category id
+                                        // Ab yahan sahi category.id pass hogi!
+                                        viewModel.selectCategory(category.id);
                                         tapActionCallback(context, () {});
                                         handleTapAction(context, () {});
-                                        Navigator.pushNamed(
-                                            context, AppRoutes.drawing);
+                                        // handleTapAction() {}
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomeScreen(),
+                                          ),
+                                        );
                                       },
                                     );
                                   },

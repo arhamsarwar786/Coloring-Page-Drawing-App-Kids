@@ -1,4 +1,5 @@
 import 'package:play_craft_kids/shared/services/local_storage_base.dart';
+import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -102,5 +103,6 @@ List<SingleChildWidget> buildAppProviders() {
       ),
     ),
     ChangeNotifierProvider(create: (_) => SkinsViewModel()),
-  ];
+    ChangeNotifierProvider(create: (_) => ColoringProvider()),
+];
 }
