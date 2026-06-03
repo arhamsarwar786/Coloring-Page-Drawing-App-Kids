@@ -413,7 +413,7 @@
           "rewardCoins": 45,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
-          "imagePath": "assets/images/grapes.webp",
+          "imagePath": "assets/images/grapes.png",
           "activity": {
             "id": "grapes",
             "lable": "Grapes",
@@ -537,7 +537,7 @@
           "rewardCoins": 45,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
-          "imagePath": "assets/images/pear.webp",
+          "imagePath": "assets/images/peach.webp",
           "activity": {
             "id": "peach",
             "lable": "Peach",
@@ -599,7 +599,7 @@
           "rewardCoins": 45,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
-          "imagePath": "assets/images/plum.webp",
+          "imagePath": "assets/images/plum.png",
           "activity": {
             "id": "plum",
             "lable": "Plum",
@@ -669,6 +669,7 @@
           "rewardCoins": 60,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/cat.webp",
           "palette": [
             {
               "id": "orange",
@@ -686,13 +687,12 @@
               "hex": "#F5F5F5"
             }
           ],
-          "imagePath": "assets/images/un_border_apple.webp",
           "activity": {
             "id": "cat",
             "lable": "Cat",
             "display": "Cat",
             "color": "0xFFFF8C00",
-            "imagePath": "assets/images/un_border_apple.webp"
+            "imagePath": "assets/images/un_colored_cat.webp"
           },
           "regions": [
             {
@@ -740,20 +740,20 @@
           ]
         },
         {
-          "id": "fish",
-          "title": "Fish",
-          "subtitle": "A happy little fish!",
+          "id": "dog",
+          "title": "Dog",
+          "subtitle": "A happy little dog!",
           "difficulty": "Easy",
           "rewardCoins": 50,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/un_colored_dolphin.webp",
+          "imagePath": "assets/images/dog.webp",
           "activity": {
-            "id": "fish",
-            "lable": "Fish",
-            "display": "Fish",
+            "id": "dog",
+            "lable": "Dog",
+            "display": "Dog",
             "color": "0xFF2196F3",
-            "imagePath": "assets/images/un_colored_dolphin.webp"
+            "imagePath": "assets/images/un_colored_dog.webp"
           },
           "palette": [
             {
@@ -818,18 +818,129 @@
         {
           "id": "carrot",
           "title": "Carrot",
-          "subtitle": "A crunchy orange carrot!",
+          "subtitle": "A crunchy carrot!",
           "difficulty": "Easy",
           "rewardCoins": 40,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
-          "imagePath": "assets/images/orange.webp",
+          "imagePath": "assets/images/carrot.webp",
           "activity": {
             "id": "carrot",
             "lable": "Carrot",
             "display": "Carrot",
             "color": "0xFFFF9800",
-            "imagePath": "assets/images/un_border_orange.webp"
+            "imagePath": "assets/images/un_colored_carrot.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "potato",
+          "title": "Potato",
+          "subtitle": "A crunchy potato!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/potato.webp",
+          "activity": {
+            "id": "potato",
+            "lable": "Potato",
+            "display": "Potato",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_potato.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "eggplant",
+          "title": "Eggplant",
+          "subtitle": "A crunchy eggplant!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/eggplant.webp",
+          "activity": {
+            "id": "eggplant",
+            "lable": "Eggplant",
+            "display": "Eggplant",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_eggplant.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "tomato",
+          "title": "Tomato",
+          "subtitle": "A crunchy Tomato!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/tomato.webp",
+          "activity": {
+            "id": "tomato",
+            "lable": "Tomato",
+            "display": "Tomato",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_tomato.webp"
           },
           "palette": [
             {
@@ -861,20 +972,94 @@
       "accentColor": "#FFB74D",
       "levels": [
         {
-          "id": "dolphin",
-          "title": "Dolphin",
-          "subtitle": "A playful dolphin!",
+          "id": "elephant",
+          "title": "Elephant",
+          "subtitle": "A playful Elephant!",
           "difficulty": "Easy",
           "rewardCoins": 50,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/un_colored_dolphin.webp",
+          "imagePath": "assets/images/elephant.webp",
           "activity": {
-            "id": "dolphin",
-            "lable": "Dolphin",
-            "display": "Dolphin",
+            "id": "elephant",
+            "lable": "Elephant",
+            "display": "Elephant",
             "color": "0xFF2196F3",
-            "imagePath": "assets/images/un_colored_dolphin.webp"
+            "imagePath": "assets/images/un_colored_elephant.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "lion",
+          "title": "Lion",
+          "subtitle": "A playful Lion!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/lion.webp",
+          "activity": {
+            "id": "lion",
+            "lable": "Lion",
+            "display": "Lion",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_lion.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "bear",
+          "title": "Bear",
+          "subtitle": "A playful Bear!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/bear.webp",
+          "activity": {
+            "id": "bear",
+            "lable": "Bear",
+            "display": "Bear",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_Bear.webp"
           },
           "palette": [
             {

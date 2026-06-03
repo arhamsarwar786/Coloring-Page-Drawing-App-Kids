@@ -73,10 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundAsset = 'assets/images/fruitbg.png';
               } else if (category?.id?.contains('animals') == true) {
                 backgroundAsset = 'assets/images/animalbg.png';
-              } else if (category?.id?.contains('sports') == true) {
-                backgroundAsset = 'assets/images/sportbg.png';
+              } else if (category?.id?.contains('vegetables') == true) {
+                backgroundAsset = 'assets/images/vegetable_bg.png';
               } else if (category?.id?.contains('vehicles') == true) {
                 backgroundAsset = 'assets/images/vehiclesbg.png';
+              } else if (category?.id?.contains('colors') == true) {
+                backgroundAsset = 'assets/images/bg.png';
+              } else if (category?.id?.contains('alphabets') == true) {
+                backgroundAsset = 'assets/images/alphaets.png';
               }
               // ==========================================
 
@@ -85,6 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   image: DecorationImage(
                     image: AssetImage(backgroundAsset),
                     fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(0.4),
+                      BlendMode.lighten,
+                    ),
                   ),
                 ),
                 height: double.infinity,
@@ -222,13 +230,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Provider.of<ColoringProvider>(
                                                 context,
                                                 listen: false);
-                                        final activity = level.activityItem ?? ActivityItem(
-                                          id: level.id,
-                                          label: level.title,
-                                          display: level.title,
-                                          color: Colors.red,
-                                          imagePath: level.imagePath ?? 'assets/images/un_border_apple.webp',
-                                        );
+                                        final activity = level.activityItem ??
+                                            ActivityItem(
+                                              id: level.id,
+                                              label: level.title,
+                                              display: level.title,
+                                              color: Colors.red,
+                                              imagePath: level.imagePath ??
+                                                  'assets/images/un_border_apple.webp',
+                                            );
                                         coloringProvider.setItem(activity, 1);
 
                                         handleTapAction(context, () {});
