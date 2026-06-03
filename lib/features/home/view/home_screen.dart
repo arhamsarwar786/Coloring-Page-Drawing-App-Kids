@@ -239,7 +239,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               imagePath: level.imagePath ??
                                                   'assets/images/un_border_apple.webp',
                                             );
-                                        coloringProvider.setItem(activity, 1);
+                                        coloringProvider.setItem(activity, 1,
+                                            level: level);
 
                                         handleTapAction(context, () {});
                                         _openLevel(context, viewModel, level);

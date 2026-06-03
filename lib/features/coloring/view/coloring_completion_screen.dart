@@ -27,24 +27,22 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen> {
     _confettiController.play();
 
     // Play successful completion SFX and record progress
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (!mounted) return;
-    //   final provider = Provider.of<ColoringProvider>(context, listen: false);
-    //   final soundPath = _getSoundForActivityItem(provider);
-    //   if (soundPath != null) {
-    //     MusicService.instance.stopLetterSound();
-    //     MusicService.instance.playLetterSound(soundPath);
-    //   }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final provider = Provider.of<ColoringProvider>(context, listen: false);
+      // final soundPath = _getSoundForActivityItem(provider);
+      // if (soundPath != null) {
+      //   // MusicService.instance.stopLetterSound();
+      //   // MusicService.instance.playLetterSound(soundPath);
+      // }
 
-    //   // Record progress using the actual category ID from provider
-    //   // final progressProvider = Provider.of<ProgressViewModel>(
-    //   //   context,
-    //   //   listen: false,
-    //   // );
-    //   // progressProvider.addEvent(provider.currentCategoryId, 'coloring', provider.stars);
-    // });
-  
-  
+      // Record progress using the actual category ID from provider
+      // final progressProvider = Provider.of<ProgressViewModel>(
+      //   context,
+      //   listen: false,
+      // );
+      // progressProvider.addEvent(provider.currentCategoryId, 'coloring', provider.stars);
+    });
   }
 
   @override
@@ -239,21 +237,21 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen> {
           String word = '';
           Widget leadWidget;
 
-          // final item = provider.currentItem;
-          // if (item != null) {
-          //   word = item.label;
-          //   leadWidget = item.imagePath != null
-          //       ? Image.asset(
-          //           item.imagePath!,
-          //           width: 150,
-          //           height: 150,
-          //           fit: BoxFit.contain,
-          //         )
-          //       : Text(item.display, style: const TextStyle(fontSize: 80));
-          // } else {
-          //   word = "Picture";
-          //   leadWidget = const Icon(Icons.palette_rounded, size: 80);
-          // }
+          final item = provider.currentItem;
+          if (item != null) {
+            word = item.label;
+            leadWidget = item.imagePath != null
+                ? Image.asset(
+                    item.imagePath!,
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.contain,
+                  )
+                : Text(item.display, style: const TextStyle(fontSize: 80));
+          } else {
+            word = "Picture";
+            leadWidget = const Icon(Icons.palette_rounded, size: 80);
+          }
 
           return Container(
             child: Stack(
@@ -327,16 +325,19 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen> {
                                             top: 70,
                                             left: 10,
                                             right: 10,
-                                            bottom: 150, // Leave room for bounce info
+                                            bottom:
+                                                150, // Leave room for bounce info
                                           ),
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(28),
+                                            borderRadius:
+                                                BorderRadius.circular(28),
                                             child: widget.coloredImage != null
                                                 ? RawImage(
                                                     image: widget.coloredImage,
                                                     fit: BoxFit.contain,
                                                   )
-                                                : Container(color: Colors.white),
+                                                : Container(
+                                                    color: Colors.white),
                                           ),
                                         ),
                                       ),
@@ -486,8 +487,6 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen> {
                               //     ),
                               //   ),
                               // ),
-                           
-                           
                             ],
                           ),
                         ),

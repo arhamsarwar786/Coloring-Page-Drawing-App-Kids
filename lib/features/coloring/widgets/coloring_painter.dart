@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:play_craft_kids/features/coloring/model/drawing_point.dart';
-import 'package:play_craft_kids/features/coloring/model/level_model.dart';
+import 'package:play_craft_kids/features/levels/model/level_model.dart';
 import 'package:play_craft_kids/features/coloring/widgets/animal_path_data.dart';
 import 'package:play_craft_kids/features/coloring/widgets/guided_painting_controllers.dart';
 

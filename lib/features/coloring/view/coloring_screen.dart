@@ -33,20 +33,6 @@ class _ColoringScreenState extends State<ColoringScreen> {
       if (!mounted) return;
       _provider = Provider.of<ColoringProvider>(context, listen: false);
       _provider?.addListener(_onProviderChange);
-      // var model = ActivityItem(
-      //   id: '1',
-      //   label: 'one',
-      //   display: '1',
-      //   color: Colors.red,
-      //   // Prefer imagePath passed via widget, fallback to provider's current item, then default asset
-      //   imagePath: widget.imagePath ??
-      //       _provider?.currentItem?.imagePath ??
-      //       "assets/images/un_colored_dolphin.webp",
-      // );
-      //   _provider?.setItem(model, 1);
-      //   setState(() {
-      //     loader = true;
-      //   });
     });
   }
 

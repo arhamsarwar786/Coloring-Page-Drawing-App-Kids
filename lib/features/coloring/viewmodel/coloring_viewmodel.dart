@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:play_craft_kids/features/coloring/model/color_model.dart';
 import 'package:play_craft_kids/features/coloring/model/level_model.dart';
 import 'package:play_craft_kids/features/coloring/widgets/coloring_levels_data.dart';
 import 'package:play_craft_kids/features/tracing/viewmodel/activity_item.dart';
@@ -190,11 +191,88 @@ class ColoringProvider extends ChangeNotifier {
     _loadImage();
   }
 
-  void setItem(ActivityItem item, int categoryId) {
+  void setItem(ActivityItem item, int categoryId, {dynamic level}) {
     log('----.............${item.imagePath}---....${item.id}');
     _currentItem = item;
     _currentCategoryId = categoryId;
-    _configureItem();
+    if (level != null) {
+      _currentLevel = LevelModel(
+        id: level.id as String,
+        title: level.title as String,
+        subtitle: level.subtitle as String,
+        difficulty: level.difficulty as String,
+        rewardCoins: level.rewardCoins as int,
+        recommendedBrushSize: (level.recommendedBrushSize as num).toDouble(),
+        palette: (level.palette as List<dynamic>).map((p) => DrawingColorModel(
+          id: p.id as String,
+          label: p.label as String,
+          color: p.color as Color,
+        )).toList(),
+        regions: (level.regions as List<dynamic>).map((r) => LevelRegionModel(
+          id: r.id as String,
+          label: r.label as String,
+          shapeType: RegionShapeType.values.firstWhere(
+            (e) => e.toString().split('.').last == r.shapeType.toString().split('.').last,
+            orElse: () => RegionShapeType.path,
+          ),
+          cx: (r.cx as num?)?.toDouble(),
+          cy: (r.cy as num?)?.toDouble(),
+          radius: (r.radius as num?)?.toDouble(),
+          rx: (r.rx as num?)?.toDouble(),
+          ry: (r.ry as num?)?.toDouble(),
+          svgPath: r.svgPath as String?,
+          viewBoxSize: (r.viewBoxSize as num?)?.toDouble(),
+          targetColorId: r.targetColorId as String?,
+          points: List<Offset>.from(r.points as List<dynamic>),
+        )).toList(),
+        guideAsset: level.guideAsset as String?,
+        isCompleted: level.isCompleted as bool? ?? false,
+        stars: level.stars as int? ?? 0,
+        isFavorite: level.isFavorite as bool? ?? false,
+      );
+
+      _orderedParts = const [];
+      _activeRegionIndex = 0;
+      _completedRegionIds.clear();
+
+      final fromLevel = _currentLevel!.palette.map((e) => e.color).toList();
+      final extras = <Color>[
+        Colors.red,
+        Colors.pink,
+        Colors.purple,
+        Colors.deepPurple,
+        Colors.indigo,
+        Colors.blue,
+        Colors.lightBlue,
+        Colors.cyan,
+        Colors.teal,
+        Colors.green,
+        Colors.lightGreen,
+        Colors.lime,
+        Colors.yellow,
+        Colors.amber,
+        Colors.orange,
+        Colors.deepOrange,
+        Colors.brown,
+        Colors.grey,
+        Colors.blueGrey,
+        Colors.black,
+        Colors.white,
+      ];
+      _palette = <Color>{...fromLevel, ...extras}.toList();
+
+      if (_palette.isNotEmpty) {
+        _activeColor = _palette.first;
+      }
+
+      _stopwatch
+        ..reset()
+        ..start();
+
+      _loadImage();
+    } else {
+      _configureItem();
+    }
     notifyListeners();
   }
 

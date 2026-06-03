@@ -897,7 +897,7 @@
           "rewardCoins": 40,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
-          "imagePath": "assets/images/eggplant.webp",
+          "imagePath": "assets/images/egg_plant.webp",
           "activity": {
             "id": "eggplant",
             "lable": "Eggplant",
