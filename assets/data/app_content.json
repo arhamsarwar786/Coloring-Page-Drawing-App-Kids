@@ -5035,6 +5035,968 @@
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
+        },
+        {
+          "id": "cabbage",
+          "title": "Cabbage",
+          "subtitle": "A crunchy Cabbage!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/cabbage.webp",
+          "activity": {
+            "id": "cabbage",
+            "lable": "Cabbage",
+            "display": "Cabbage",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_cabbage.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "onion",
+          "title": "Onion",
+          "subtitle": "A crunchy Onion!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/onion.webp",
+          "activity": {
+            "id": "onion",
+            "lable": "Onion",
+            "display": "Onion",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_onion.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "cauliflower",
+          "title": "Cauliflower",
+          "subtitle": "A crunchy Cauliflower!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/cauliflower.webp",
+          "activity": {
+            "id": "cauliflower",
+            "lable": "Cauliflower",
+            "display": "Cauliflower",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_cauliflower.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "spinach",
+          "title": "Spinach",
+          "subtitle": "A crunchy Spinach!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/spinach.webp",
+          "activity": {
+            "id": "spinach",
+            "lable": "Spinach",
+            "display": "Spinach",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_spinach.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "peas",
+          "title": "Peas",
+          "subtitle": "A crunchy Peas!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/peas.webp",
+          "activity": {
+            "id": "peas",
+            "lable": "Peas",
+            "display": "Peas",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_peas.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "cucumber ",
+          "title": "Cucumber",
+          "subtitle": "A crunchy cucumber !",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/cucumber.webp",
+          "activity": {
+            "id": "cucumber",
+            "lable": "Cucumber",
+            "display": "Cucumber",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_cucumber.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "garlic",
+          "title": "Garlic",
+          "subtitle": "A crunchy Garlic   !",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/garlic.webp",
+          "activity": {
+            "id": "garlic",
+            "lable": "Garlic",
+            "display": "Garlic",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_garlic.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "ginger",
+          "title": "Ginger",
+          "subtitle": "A crunchy Ginger   !",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/ginger.webp",
+          "activity": {
+            "id": "ginger",
+            "lable": "Ginger",
+            "display": "Ginger",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_ginger.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "radish",
+          "title": "Radish",
+          "subtitle": "A crunchy Radish!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/radish.webp",
+          "activity": {
+            "id": "radish",
+            "lable": "Radish",
+            "display": "Radish",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_radish.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "pumpkin",
+          "title": "Pumpkin",
+          "subtitle": "A crunchy Pumpkin!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/pumpkin.webp",
+          "activity": {
+            "id": "pumpkin",
+            "lable": "Pumpkin",
+            "display": "Pumpkin",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_pumpkin.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "corn",
+          "title": "Corn",
+          "subtitle": "A crunchy Corn!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/corn.webp",
+          "activity": {
+            "id": "corn",
+            "lable": "Corn",
+            "display": "Corn",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_corn.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "okra",
+          "title": "Okra",
+          "subtitle": "A crunchy Okra!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/okra.webp",
+          "activity": {
+            "id": "okra",
+            "lable": "Okra",
+            "display": "Okra",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_okra.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "chili_pepper",
+          "title": "Chili Pepper",
+          "subtitle": "A crunchy Chili Pepper!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/chili_pepper.webp",
+          "activity": {
+            "id": "chili_pepper",
+            "lable": "Chili Pepper",
+            "display": "Chili Pepper",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_chili_pepper.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "beetroot",
+          "title": "Beetroot",
+          "subtitle": "A crunchy Beetroot!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/beetroot.webp",
+          "activity": {
+            "id": "beetroot",
+            "lable": "Beetroot",
+            "display": "Beetroot",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_beetroot.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "turnip",
+          "title": "Turnip",
+          "subtitle": "A crunchy Turnip!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/turnip.webp",
+          "activity": {
+            "id": "turnip",
+            "lable": "Turnip",
+            "display": "Turnip",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_turnip.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "lettuce",
+          "title": "Lettuce",
+          "subtitle": "A crunchy Lettuce!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/lettuce.webp",
+          "activity": {
+            "id": "lettuce",
+            "lable": "Lettuce",
+            "display": "Lettuce",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_lettuce.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "broccoli",
+          "title": "Broccoli",
+          "subtitle": "A healthy Broccoli!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/broccoli.webp",
+          "activity": {
+            "id": "broccoli",
+            "lable": "Broccoli",
+            "display": "Broccoli",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_broccoli.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "bell_pepper",
+          "title": "Bell Pepper",
+          "subtitle": "A healthy Bell Pepper!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/bell_pepper.webp",
+          "activity": {
+            "id": "bell_pepper",
+            "lable": "Bell Pepper",
+            "display": "Bell Pepper",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_bell_pepper.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "sweet_potato",
+          "title": "Sweet Potato",
+          "subtitle": "A healthy Sweet Potato!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/sweet_potato.webp",
+          "activity": {
+            "id": "sweet_potato",
+            "lable": "Sweet Potato",
+            "display": "Sweet Potato",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_sweet_potato.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "zucchini",
+          "title": "Zucchini",
+          "subtitle": "A healthy Zucchini!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/zucchini.webp",
+          "activity": {
+            "id": "zucchini",
+            "lable": "Zucchini",
+            "display": "Zucchini",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_zucchini.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "celery",
+          "title": "Celery",
+          "subtitle": "A healthy Celery!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/celery.webp",
+          "activity": {
+            "id": "celery",
+            "lable": "Celery",
+            "display": "Celery",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_celery.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "mushroom",
+          "title": "Mushroom",
+          "subtitle": "A healthy Mushroom!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/mushroom.webp",
+          "activity": {
+            "id": "mushroom",
+            "lable": "Mushroom",
+            "display": "Mushroom",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_mushroom.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "asparagus",
+          "title": "Asparagus",
+          "subtitle": "A healthy Asparagus!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/asparagus.webp",
+          "activity": {
+            "id": "asparagus",
+            "lable": "Asparagus",
+            "display": "Asparagus",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_asparagus.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "leek",
+          "title": "Leek",
+          "subtitle": "A healthy Leek!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/leek.webp",
+          "activity": {
+            "id": "leek",
+            "lable": "Leek",
+            "display": "Leek",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_leek.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "artichoke",
+          "title": "Artichoke",
+          "subtitle": "A healthy Artichoke!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/artichoke.webp",
+          "activity": {
+            "id": "artichoke",
+            "lable": "Artichoke",
+            "display": "Artichoke",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_artichoke.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "parsnip",
+          "title": "Parsnip",
+          "subtitle": "A healthy Parsnip!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/parsnip.webp",
+          "activity": {
+            "id": "parsnip",
+            "lable": "Parsnip",
+            "display": "Parsnip",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_parsnip.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
         }
       ]
     },
@@ -6733,6 +7695,265 @@
             "display": "Octopus",
             "color": "0xFF00BCD4",
             "imagePath": "assets/images/un_border_octopus.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "tree",
+          "title": "Tree",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/tree.webp",
+          "activity": {
+            "id": "tree",
+            "lable": "Tree",
+            "display": "Tree",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_tree.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "house",
+          "title": "House",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/house.webp",
+          "activity": {
+            "id": "house",
+            "lable": "House",
+            "display": "House",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_house.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "flower",
+          "title": "Flower",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/flower.webp",
+          "activity": {
+            "id": "flower",
+            "lable": "Flower",
+            "display": "Flower",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_flower.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "moon",
+          "title": "Moon",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/moon.webp",
+          "activity": {
+            "id": "moon",
+            "lable": "Moon",
+            "display": "Moon",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_moon.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "rainbow",
+          "title": "Rainbow",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/rainbow.webp",
+          "activity": {
+            "id": "rainbow",
+            "lable": "Rainbow",
+            "display": "Rainbow",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_rainbow.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "balloon",
+          "title": "Balloon",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/balloon.webp",
+          "activity": {
+            "id": "balloon",
+            "lable": "Balloon",
+            "display": "Balloon",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_balloon.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "ice_cream",
+          "title": "Ice Cream",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/ice_cream.webp",
+          "activity": {
+            "id": "ice_cream",
+            "lable": "Ice Cream",
+            "display": "Ice Cream",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_ice_cream.webp"
           },
           "palette": [
             {
