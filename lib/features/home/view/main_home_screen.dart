@@ -440,7 +440,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
                                       // --- Dynamic Image Logic ---
                                       String myCustomImage =
-                                          'assets/images/logo.png';
+                                          'assets/images/dog.webp';
                                       if (categoryTitle == 'fruits') {
                                         myCustomImage =
                                             'assets/images/apples.png';

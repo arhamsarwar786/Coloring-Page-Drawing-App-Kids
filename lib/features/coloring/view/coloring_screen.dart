@@ -129,7 +129,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
                         //   ),
                         // ),
                         Positioned(
-                          right: 16,
+                          // right: 16,
                           top: 1,
                           child: Column(
                             children: [
@@ -198,31 +198,31 @@ class _ColoringScreenState extends State<ColoringScreen> {
                           ),
                         ),
 
-                        SidebarIcon(
-                          icon: Icons.edit_rounded,
-                          assetName: 'assets/images/pen.png',
-                          onPressed: () {
-                            // un-awaited: Yeh background mein chalta rahega
-                            // persistHistorySnapshot(captureThumbnail: true);
+                        // SidebarIcon(
+                        //   icon: Icons.edit_rounded,
+                        //   assetName: 'assets/images/pen.png',
+                        //   onPressed: () {
+                        //     // un-awaited: Yeh background mein chalta rahega
+                        //     // persistHistorySnapshot(captureThumbnail: true);
 
-                            // Fauran next screen par bhej dein
-                            if (context.mounted) {
-                              Navigator.pushNamed(context, AppRoutes.skins);
-                            }
-                          },
-                        ),
+                        //     // Fauran next screen par bhej dein
+                        //     if (context.mounted) {
+                        //       Navigator.pushNamed(context, AppRoutes.skins);
+                        //     }
+                        //   },
+                        // ),
 
-                        SidebarIcon(
-                          icon: Icons.photo_library_rounded,
-                          assetName: 'assets/images/photo.png',
-                          onPressed: () async {
-                            // await persistHistorySnapshot(
-                            //     captureThumbnail: true);
-                            // if (context.mounted) {
-                            //   Navigator.pushNamed(context, AppRoutes.levels);
-                            // }
-                          },
-                        ),
+                        // SidebarIcon(
+                        //   icon: Icons.photo_library_rounded,
+                        //   assetName: 'assets/images/photo.png',
+                        //   onPressed: () async {
+                        //     // await persistHistorySnapshot(
+                        //     //     captureThumbnail: true);
+                        //     // if (context.mounted) {
+                        //     //   Navigator.pushNamed(context, AppRoutes.levels);
+                        //     // }
+                        //   },
+                        // ),
 
                         // Item name title
                         // Expanded(

@@ -3,7 +3,12 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
+import 'package:play_craft_kids/features/drawing/repository/drawing_repository.dart';
+import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
+import 'package:play_craft_kids/features/levels/model/level_model.dart';
+import 'package:play_craft_kids/features/tracing/viewmodel/activity_item.dart';
 import 'package:provider/provider.dart';
+import 'package:play_craft_kids/features/coloring/view/coloring_screen.dart';
 
 class ColoringCompletionScreen extends StatefulWidget {
   /// The exact pixel image the child painted — pass from PixelColoringCanvas.
@@ -429,64 +434,104 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen> {
                               //   ),
                               //   const SizedBox(width: 24),
                               // ],
-                              // // Next Button
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     // Navigator.of(context).pushReplacement(
-                              //     //   MaterialPageRoute(
-                              //     //     builder: (_) =>
-                              //     //         // const ColoringSummaryScreen(),
-                              //     //   ),
-                              //     // );
-                              //   },
-                              //   child: Container(
-                              //     height: 70,
-                              //     padding: const EdgeInsets.symmetric(
-                              //       horizontal: 40,
-                              //     ),
-                              //     decoration: BoxDecoration(
-                              //       gradient: const LinearGradient(
-                              //         colors: [
-                              //           AppColors.smartGreen,
-                              //           Color(0xFF34D399), // premium mint green
-                              //         ],
-                              //         begin: Alignment.topLeft,
-                              //         end: Alignment.bottomRight,
-                              //       ),
-                              //       borderRadius: BorderRadius.circular(35),
-                              //       boxShadow: [
-                              //         BoxShadow(
-                              //           color: AppColors.smartGreen.withValues(
-                              //             alpha: 0.4,
-                              //           ),
-                              //           blurRadius: 15,
-                              //           spreadRadius: 2,
-                              //           offset: const Offset(0, 6),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //     child: const Row(
-                              //       mainAxisSize: MainAxisSize.min,
-                              //       children: [
-                              //         Text(
-                              //           'Next',
-                              //           style: TextStyle(
-                              //             color: Colors.white,
-                              //             fontSize: 24,
-                              //             fontWeight: FontWeight.w900,
-                              //             letterSpacing: 0.5,
-                              //           ),
-                              //         ),
-                              //         SizedBox(width: 10),
-                              //         Icon(
-                              //           Icons.arrow_forward_rounded,
-                              //           color: Colors.white,
-                              //           size: 28,
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
+                              // Next Button
+                              GestureDetector(
+                                onTap: () async {
+                                  final currentLevel = provider.currentLevel;
+                                  if (currentLevel != null) {
+                                    // 1. Save progress
+                                    final drawingRepo = context.read<DrawingRepository>();
+                                    await drawingRepo.markLevelCompleted(
+                                      levelId: currentLevel.id,
+                                      stars: 3, // hardcoded 3 stars for coloring
+                                      rewardCoins: currentLevel.rewardCoins,
+                                    );
+                                    // 2. Refresh HomeViewModel so it updates locks
+                                    final homeVM = context.read<HomeViewModel>();
+                                    await homeVM.load();
+
+                                    // 3. Find next level
+                                    final nextLevelId = await drawingRepo.getNextLevelId(currentLevel.id);
+                                    LevelModel? nextLevel;
+                                    if (nextLevelId != null) {
+                                      nextLevel = await drawingRepo.getLevelById(nextLevelId);
+                                    }
+                                    
+                                    if (nextLevel != null && mounted) {
+                                      // 4. Setup Provider for next level
+                                      final coloringProvider = context.read<ColoringProvider>();
+                                      final activity = ActivityItem(
+                                            id: nextLevel.id,
+                                            label: nextLevel.title,
+                                            display: nextLevel.title,
+                                            color: Colors.red,
+                                            imagePath: nextLevel.activityItem?.imagePath ?? nextLevel.imagePath ?? 'assets/images/un_border_apple.webp',
+                                      );
+                                      coloringProvider.setItem(activity, provider.currentCategoryId, level: nextLevel);
+                                      
+                                      // 5. Navigate to Next Level ColoringScreen
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                          builder: (_) => ColoringScreen(imagePath: activity.imagePath),
+                                        ),
+                                        (route) => route.isFirst,
+                                      );
+                                    } else if (mounted) {
+                                      // If no next level, go back to home
+                                      Navigator.of(context).popUntil((route) => route.isFirst);
+                                    }
+                                  } else {
+                                     Navigator.of(context).popUntil((route) => route.isFirst);
+                                  }
+                                },
+                                child: Container(
+                                  height: 70,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 40,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color(0xFF34D399),
+                                        Color(0xFF34D399), // premium mint green
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(35),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(0xFF34D399).withValues(
+                                          alpha: 0.4,
+                                        ),
+                                        blurRadius: 15,
+                                        spreadRadius: 2,
+                                        offset: const Offset(0, 6),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Next',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w900,
+                                          letterSpacing: 0.5,
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Icon(
+                                        Icons.arrow_forward_rounded,
+                                        color: Colors.white,
+                                        size: 28,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),

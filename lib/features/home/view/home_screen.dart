@@ -294,13 +294,13 @@ class _HomeScreenState extends State<HomeScreen> {
   ) async {
     if (_isOpeningLevel) return;
 
-    if (viewModel.isLevelLocked(level)) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(AppStrings.lockedLevelMessage)),
-      );
-      return;
-    }
+    // if (viewModel.isLevelLocked(level)) {
+    //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text(AppStrings.lockedLevelMessage)),
+    //   );
+    //   return;
+    // }
 
     setState(() {
       _isOpeningLevel = true;
@@ -310,12 +310,12 @@ class _HomeScreenState extends State<HomeScreen> {
       final isReady = await viewModel.prepareLevel(level.id);
       if (!context.mounted) return;
 
-      if (!isReady) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(AppStrings.lockedLevelMessage)),
-        );
-        return;
-      }
+      // if (!isReady) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text(AppStrings.lockedLevelMessage)),
+      //   );
+      //   return;
+      // }
 
       String assetPath = level.imagePath ?? 'assets/images/apple.webp';
 
@@ -622,30 +622,30 @@ class LevelCardState extends State<LevelCard> {
 
                     // === LOCK OVERLAY LAYER ===
                     // Agar level lock hoga, toh color ke upar sirf yeh semi-transparent lock overlay aayega!
-                    if (widget.isLocked)
-                      Positioned.fill(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            // Halke se black shade se transparent layer di hai taake peeche ka color bhi dikhe aur lock bhi pyara lage
-                            color: Colors.black.withOpacity(0.28),
-                          ),
-                          child: Center(
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.lock_rounded,
-                                color: Colors.white,
-                                size: 38,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                    // if (widget.isLocked)
+                    //   Positioned.fill(
+                    //     child: Container(
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(20),
+                    //         // Halke se black shade se transparent layer di hai taake peeche ka color bhi dikhe aur lock bhi pyara lage
+                    //         color: Colors.black.withOpacity(0.28),
+                    //       ),
+                    //       child: Center(
+                    //         child: Container(
+                    //           padding: const EdgeInsets.all(12),
+                    //           decoration: BoxDecoration(
+                    //             color: Colors.black.withOpacity(0.2),
+                    //             shape: BoxShape.circle,
+                    //           ),
+                    //           child: const Icon(
+                    //             Icons.lock_rounded,
+                    //             color: Colors.white,
+                    //             size: 38,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
                   ],
                 ),
               ),

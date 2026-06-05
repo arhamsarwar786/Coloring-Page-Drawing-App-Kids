@@ -295,7 +295,7 @@
             "lable": "Strawberry",
             "display": "Strawberry",
             "color": "0xFFFBC02D",
-            "imagePath": "assets/images/un_border_mango.webp"
+            "imagePath": "assets/images/un_colored_strawberry.webp"
           },
           "palette": [
             {
@@ -357,7 +357,7 @@
             "lable": "Pinaple",
             "display": "Pinaple",
             "color": "0xFFFBC02D",
-            "imagePath": "assets/images/un_border_mango.webp"
+            "imagePath": "assets/images/un_colored_pinaple.webp"
           },
           "palette": [
             {
@@ -419,7 +419,7 @@
             "lable": "Grapes",
             "display": "Grapes",
             "color": "0xFFFBC02D",
-            "imagePath": "assets/images/un_border_mango.webp"
+            "imagePath": "assets/images/un_colorder_grapes.webp"
           },
           "palette": [
             {
@@ -481,7 +481,7 @@
             "lable": "Pear",
             "display": "Pear",
             "color": "0xFFFBC02D",
-            "imagePath": "assets/images/un_border_mango.webp"
+            "imagePath": "assets/images/un_colored_pear.webp"
           },
           "palette": [
             {
@@ -543,7 +543,7 @@
             "lable": "Peach",
             "display": "Peach",
             "color": "0xFFFBC02D",
-            "imagePath": "assets/images/un_border_mango.webp"
+            "imagePath": "assets/images/un_colored_peach.webp"
           },
           "palette": [
             {
@@ -605,7 +605,1247 @@
             "lable": "Plum",
             "display": "Plum",
             "color": "0xFFFBC02D",
-            "imagePath": "assets/images/un_border_mango.webp"
+            "imagePath": "assets/images/un_colored_plum.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "papaya",
+          "title": "Papaya",
+          "subtitle": "A juicy citrus orange with a green leaf!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/papaya.webp",
+          "activity": {
+            "id": "papaya",
+            "lable": "Papaya",
+            "display": "Papaya",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored-papaya.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "pomegranate",
+          "title": "Pomegranate",
+          "subtitle": "A juicy citrus orange with a green leaf!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/pomegranate.webp",
+          "activity": {
+            "id": "pomegranate",
+            "lable": "Pomegranate",
+            "display": "Pomegranate",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_pomegranate.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "guava",
+          "title": "Guava",
+          "subtitle": "A juicy citrus orange with a green leaf!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/guava.webp",
+          "activity": {
+            "id": "guava",
+            "lable": "Guava",
+            "display": "Guava",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_guava.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "kiwi",
+          "title": "Kiwi",
+          "subtitle": "A kiwi fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/kiwi.webp",
+          "activity": {
+            "id": "kiwi",
+            "lable": "Kiwi",
+            "display": "Kiwi",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_kiwi.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "melon",
+          "title": "Melon",
+          "subtitle": "A Melon fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/melon.webp",
+          "activity": {
+            "id": "melon",
+            "lable": "Melon",
+            "display": "Melon",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_melon.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "apricot",
+          "title": "Apricot",
+          "subtitle": "A Apricot fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/apricot.webp",
+          "activity": {
+            "id": "apricot",
+            "lable": "Apricot",
+            "display": "Apricot",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_apricot.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "cherry",
+          "title": "Cherry",
+          "subtitle": "A Cherry fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/cherry.webp",
+          "activity": {
+            "id": "cherry",
+            "lable": "Cherry",
+            "display": "Cherry",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_cherry.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "avocado",
+          "title": "Avocado",
+          "subtitle": "A Avocado fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/avocado.webp",
+          "activity": {
+            "id": "avocado",
+            "lable": "Avocado",
+            "display": "Avocado",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_avocado.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "blackberry",
+          "title": "Blackberry",
+          "subtitle": "A Blackberry fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/blackberry.webp",
+          "activity": {
+            "id": "blackberry",
+            "lable": "Blackberry",
+            "display": "Blackberry",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_blackberry.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "blueberry",
+          "title": "Blueberry",
+          "subtitle": "A Blueberry fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/blueberry.webp",
+          "activity": {
+            "id": "blueberry",
+            "lable": "Blueberry",
+            "display": "Blueberry",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_blueberry.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "raspberry",
+          "title": "Raspberry",
+          "subtitle": "A Raspberry fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/raspberry.webp",
+          "activity": {
+            "id": "raspberry",
+            "lable": "Raspberry",
+            "display": "Raspberry",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_raspberry.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "lychee",
+          "title": "Lychee",
+          "subtitle": "A Lychee fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/lychee.webp",
+          "activity": {
+            "id": "lychee",
+            "lable": "Lychee",
+            "display": "Lychee",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_lychee.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "dragon_fruit",
+          "title": "Dragon Fruit",
+          "subtitle": "A Dragon Fruit fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/dragon_fruit.webp",
+          "activity": {
+            "id": "dragon_fruit",
+            "lable": "Dragon Fruit",
+            "display": "Dragon Fruit",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_dragon_fruit.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "coconut",
+          "title": "Coconut",
+          "subtitle": "A Coconut fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/coconut.webp",
+          "activity": {
+            "id": "coconut",
+            "lable": "Coconut",
+            "display": "Coconut",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_coconut.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "passion_fruit",
+          "title": "Passion Fruit",
+          "subtitle": "A Passion Fruit fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/passion_fruit.webp",
+          "activity": {
+            "id": "passion_fruit",
+            "lable": "Passion Fruit",
+            "display": "Passion Fruit",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_passion_fruit.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "fig",
+          "title": "Fig",
+          "subtitle": "A Fig fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/fig.webp",
+          "activity": {
+            "id": "fig",
+            "lable": "Fig",
+            "display": "Fig",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_fig.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "watermelon",
+          "title": "Watermelon",
+          "subtitle": "A Watermelon fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/watermelon.webp",
+          "activity": {
+            "id": "watermelon",
+            "lable": "Watermelon",
+            "display": "Watermelon",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_watermelon.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "jackfruit",
+          "title": "Jackfruit",
+          "subtitle": "A jackfruit fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/jackfruit.webp",
+          "activity": {
+            "id": "jackfruit",
+            "lable": "Jackfruit",
+            "display": "Jackfruit",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_jackfruit.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "cranberry",
+          "title": "Cranberry",
+          "subtitle": "A Cranberry fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/cranberry.webp",
+          "activity": {
+            "id": "cranberry",
+            "lable": "Cranberry",
+            "display": "Cranberry",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_cranberry.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF7043"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#558B2F"
+            },
+            {
+              "id": "brown",
+              "label": "Brown",
+              "hex": "#5D4037"
+            }
+          ],
+          "regions": [
+            {
+              "id": "orange_body",
+              "label": "Orange Body",
+              "type": "path",
+              "targetColorId": "orange",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            },
+            {
+              "id": "orange_stem",
+              "label": "Stem",
+              "type": "path",
+              "targetColorId": "brown",
+              "svgPath": "M48,14 C47,8 49,3 50,2 C51,3 53,8 52,14 Z"
+            },
+            {
+              "id": "orange_leaf",
+              "label": "Leaf",
+              "type": "path",
+              "targetColorId": "green",
+              "svgPath": "M50,8 C58,2 70,6 66,15 C62,20 52,15 50,8 Z"
+            }
+          ]
+        },
+        {
+          "id": "tangerine",
+          "title": "Tangerine",
+          "subtitle": "A Tangerine fruit!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/tangerine.webp",
+          "activity": {
+            "id": "tangerine",
+            "lable": "Tangerine",
+            "display": "Tangerine",
+            "color": "0xFFFBC02D",
+            "imagePath": "assets/images/un_colored_tangerine.webp"
           },
           "palette": [
             {
@@ -656,86 +1896,1151 @@
       ]
     },
     {
-      "id": "animals",
-      "title": "Animals",
-      "subtitle": "Cute animal friends to color.",
-      "accentColor": "#81C784",
+      "id": "alphabets",
+      "title": "Alphabets",
+      "subtitle": "Color the letters!",
+      "accentColor": "#9C27B0",
+      "levels": [
+        {
+          "id": "letter_a",
+          "title": "Letter A",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/a.webp",
+          "activity": {
+            "id": "letter_a",
+            "lable": "Letter A",
+            "display": "Letter A",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_a.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_b",
+          "title": "Letter B",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/b.webp",
+          "activity": {
+            "id": "letter_b",
+            "lable": "Letter B",
+            "display": "Letter B",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_b.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_c",
+          "title": "Letter C",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/c.webp",
+          "activity": {
+            "id": "letter_c",
+            "lable": "Letter C",
+            "display": "Letter C",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_c.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_d",
+          "title": "Letter D",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/d.webp",
+          "activity": {
+            "id": "letter_d",
+            "lable": "Letter D",
+            "display": "Letter D",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_d.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_e",
+          "title": "Letter E",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/e.webp",
+          "activity": {
+            "id": "letter_e",
+            "lable": "Letter E",
+            "display": "Letter E",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_e.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_f",
+          "title": "Letter F",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/f.webp",
+          "activity": {
+            "id": "letter_f",
+            "lable": "Letter F",
+            "display": "Letter F",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_f.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_g",
+          "title": "Letter G",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/g.webp",
+          "activity": {
+            "id": "letter_g",
+            "lable": "Letter G",
+            "display": "Letter G",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_g.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_h",
+          "title": "Letter H",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/h.webp",
+          "activity": {
+            "id": "letter_h",
+            "lable": "Letter H",
+            "display": "Letter H",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_h.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_i",
+          "title": "Letter I",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/i.webp",
+          "activity": {
+            "id": "letter_i",
+            "lable": "Letter I",
+            "display": "Letter I",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_i.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_j",
+          "title": "Letter J",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/j.webp",
+          "activity": {
+            "id": "letter_j",
+            "lable": "Letter J",
+            "display": "Letter J",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_j.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_k",
+          "title": "Letter K",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/k.webp",
+          "activity": {
+            "id": "letter_k",
+            "lable": "Letter K",
+            "display": "Letter K",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_k.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_l",
+          "title": "Letter L",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/l.webp",
+          "activity": {
+            "id": "letter_l",
+            "lable": "Letter L",
+            "display": "Letter L",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_l.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_m",
+          "title": "Letter M",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/m.webp",
+          "activity": {
+            "id": "letter_m",
+            "lable": "Letter M",
+            "display": "Letter M",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_m.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_n",
+          "title": "Letter N",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/n.webp",
+          "activity": {
+            "id": "letter_n",
+            "lable": "Letter N",
+            "display": "Letter N",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_n.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_o",
+          "title": "Letter O",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/o.webp",
+          "activity": {
+            "id": "letter_o",
+            "lable": "Letter O",
+            "display": "Letter O",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_o.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_p",
+          "title": "Letter P",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/p.webp",
+          "activity": {
+            "id": "letter_p",
+            "lable": "Letter P",
+            "display": "Letter P",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_p.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_q",
+          "title": "Letter Q",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/q.webp",
+          "activity": {
+            "id": "letter_q",
+            "lable": "Letter Q",
+            "display": "Letter Q",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_q.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_r",
+          "title": "Letter R",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/r.webp",
+          "activity": {
+            "id": "letter_r",
+            "lable": "Letter R",
+            "display": "Letter R",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_r.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_s",
+          "title": "Letter S",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/s.webp",
+          "activity": {
+            "id": "letter_s",
+            "lable": "Letter S",
+            "display": "Letter S",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_s.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_t",
+          "title": "Letter T",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/t.webp",
+          "activity": {
+            "id": "letter_t",
+            "lable": "Letter T",
+            "display": "Letter T",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_t.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_u",
+          "title": "Letter U",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/u.webp",
+          "activity": {
+            "id": "letter_u",
+            "lable": "Letter U",
+            "display": "Letter U",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_u.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_v",
+          "title": "Letter V",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/v.webp",
+          "activity": {
+            "id": "letter_v",
+            "lable": "Letter V",
+            "display": "Letter V",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_v.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_w",
+          "title": "Letter W",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/w.webp",
+          "activity": {
+            "id": "letter_w",
+            "lable": "Letter W",
+            "display": "Letter W",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_w.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_x",
+          "title": "Letter X",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/x.webp",
+          "activity": {
+            "id": "letter_x",
+            "lable": "Letter X",
+            "display": "Letter X",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_x.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_y",
+          "title": "Letter Y",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/y.webp",
+          "activity": {
+            "id": "letter_y",
+            "lable": "Letter Y",
+            "display": "Letter Y",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_y.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "letter_z",
+          "title": "Letter Z",
+          "subtitle": "A is for Apple!",
+          "difficulty": "Easy",
+          "rewardCoins": 45,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/z.webp",
+          "activity": {
+            "id": "letter_z",
+            "lable": "Letter Z",
+            "display": "Letter Z",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_z.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "letter_a_body",
+              "label": "Letter A Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "animal",
+      "title": "Animal",
+      "subtitle": "Draw and paint animal!",
+      "accentColor": "#00BCD4",
       "levels": [
         {
           "id": "cat",
           "title": "Cat",
-          "subtitle": "A cute kitty face!",
-          "difficulty": "Medium",
-          "rewardCoins": 60,
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/girl.png",
+          "guideAsset": "assets/images/boy.png",
           "imagePath": "assets/images/cat.webp",
-          "palette": [
-            {
-              "id": "orange",
-              "label": "Orange",
-              "hex": "#FF8C00"
-            },
-            {
-              "id": "pink",
-              "label": "Pink",
-              "hex": "#FFB6C1"
-            },
-            {
-              "id": "white",
-              "label": "White",
-              "hex": "#F5F5F5"
-            }
-          ],
           "activity": {
             "id": "cat",
             "lable": "Cat",
             "display": "Cat",
-            "color": "0xFFFF8C00",
-            "imagePath": "assets/images/un_colored_cat.webp"
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_cat.webp"
           },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
           "regions": [
             {
-              "id": "cat_face",
-              "label": "Cat Face",
+              "id": "canvas_body",
+              "label": "Canvas Body",
               "type": "path",
-              "svgPath": "M50,85 C30,85 12,73 11,54 C10,37 20,24 33,20 C37,18 41,18 43,16 C45,14 48,13 50,13 C52,13 55,14 57,16 C59,18 63,18 67,20 C80,24 90,37 89,54 C88,73 70,85 50,85 Z"
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "buffalo",
+          "title": "Buffalo",
+          "subtitle": "A happy little Buffalo!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/buffalo.webp",
+          "activity": {
+            "id": "buffalo",
+            "lable": "Buffalo",
+            "display": "Buffalo",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_buffalo.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             },
             {
-              "id": "cat_ear_left",
-              "label": "Left Ear",
-              "type": "path",
-              "svgPath": "M15,50 L7,12 L40,28 Z"
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
             },
             {
-              "id": "cat_ear_right",
-              "label": "Right Ear",
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
               "type": "path",
-              "svgPath": "M85,50 L93,12 L60,28 Z"
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
             },
             {
-              "id": "cat_inner_ear_left",
-              "label": "Inner Ear Left",
+              "id": "fish_tail",
+              "label": "Fish Tail",
               "type": "path",
-              "svgPath": "M17,46 L12,18 L36,30 Z"
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
             },
             {
-              "id": "cat_inner_ear_right",
-              "label": "Inner Ear Right",
+              "id": "fish_fin_top",
+              "label": "Top Fin",
               "type": "path",
-              "svgPath": "M83,46 L88,18 L64,30 Z"
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
             },
             {
-              "id": "cat_nose",
-              "label": "Nose",
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
               "type": "path",
-              "svgPath": "M50,57 C47,55 44,58 46,61 C48,63 52,63 54,61 C56,58 53,55 50,57 Z"
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
             },
             {
-              "id": "cat_muzzle",
-              "label": "Muzzle",
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "goat",
+          "title": "Goat",
+          "subtitle": "A happy little Goat!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/goat.webp",
+          "activity": {
+            "id": "goat",
+            "lable": "Goat",
+            "display": "Goat",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_goat.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
               "type": "path",
-              "svgPath": "M34,63 C34,73 40,79 50,79 C60,79 66,73 66,63 C60,61 40,61 34,63 Z"
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
             }
           ]
         },
@@ -753,7 +3058,1775 @@
             "lable": "Dog",
             "display": "Dog",
             "color": "0xFF2196F3",
-            "imagePath": "assets/images/un_colored_dog.webp"
+            "imagePath": "assets/images/un_colored_goat.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "sheep",
+          "title": "Sheep",
+          "subtitle": "A happy little Sheep!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/sheep.webp",
+          "activity": {
+            "id": "sheep",
+            "lable": "Sheep",
+            "display": "Sheep",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_sheep.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "horse",
+          "title": "Horse",
+          "subtitle": "A happy little Horse!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/horse.webp",
+          "activity": {
+            "id": "horse",
+            "lable": "Horse",
+            "display": "Horse",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_horse.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "rabbit",
+          "title": "Rabbit",
+          "subtitle": "A happy little Rabbit!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/Rabbit.webp",
+          "activity": {
+            "id": "rabbit",
+            "lable": "Rabbit",
+            "display": "Rabbit",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_rabbit.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "duck",
+          "title": "Duck",
+          "subtitle": "A happy little Duck!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/duck.webp",
+          "activity": {
+            "id": "duck",
+            "lable": "Duck",
+            "display": "Duck",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_duck.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "donkey",
+          "title": "Donkey",
+          "subtitle": "A happy little Donkey!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/Donkey.webp",
+          "activity": {
+            "id": "donkey",
+            "lable": "Donkey",
+            "display": "Donkey",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_Donkey.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "cow",
+          "title": "Cow",
+          "subtitle": "A happy little Cow!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/cow.webp",
+          "activity": {
+            "id": "cow",
+            "lable": "Cow",
+            "display": "Cow",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_cow.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "hen",
+          "title": "Hen",
+          "subtitle": "A happy little Hen!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/hen.webp",
+          "activity": {
+            "id": "hen",
+            "lable": "Hen",
+            "display": "Hen",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_hen.jpeg"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "rooster",
+          "title": "Rooster",
+          "subtitle": "A happy little Rooster!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/rooster.webp",
+          "activity": {
+            "id": "rooster",
+            "lable": "Rooster",
+            "display": "Rooster",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_rooster.jpeg"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "camel",
+          "title": "Camel",
+          "subtitle": "A happy little Camel!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/camel.webp",
+          "activity": {
+            "id": "camel",
+            "lable": "Camel",
+            "display": "Camel",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_camel.jpeg"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "hamster",
+          "title": "Hamster",
+          "subtitle": "A happy little Hamster!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/hamster.webp",
+          "activity": {
+            "id": "hamster",
+            "lable": "Hamster",
+            "display": "Hamster",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_hamster.jpeg"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "yak",
+          "title": "Yak",
+          "subtitle": "A happy little Yak!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/yak.webp",
+          "activity": {
+            "id": "yak",
+            "lable": "Yak",
+            "display": "Yak",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_yak.jpeg"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "parrot",
+          "title": "Parrot",
+          "subtitle": "A happy little Parrot!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/parrot.webp",
+          "activity": {
+            "id": "parrot",
+            "lable": "Parrot",
+            "display": "Parrot",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_parrot.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "penguin",
+          "title": "Penguin",
+          "subtitle": "A happy little Penguin!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/penguin.webp",
+          "activity": {
+            "id": "penguin",
+            "lable": "Penguin",
+            "display": "Penguin",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_penguin.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "peacock",
+          "title": "Peacock",
+          "subtitle": "A happy little Peacock!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/peacock.webp",
+          "activity": {
+            "id": "peacock",
+            "lable": "Peacock",
+            "display": "Peacock",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_peacock.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "owl",
+          "title": "Owl",
+          "subtitle": "A happy little Owl!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/owl.webp",
+          "activity": {
+            "id": "owl",
+            "lable": "Owl",
+            "display": "Owl",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_owl.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "turkey",
+          "title": "Turkey",
+          "subtitle": "A happy little Turkey!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/turkey.webp",
+          "activity": {
+            "id": "turkey",
+            "lable": "Turkey",
+            "display": "Turkey",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_turkey.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "fish",
+          "title": "Fish",
+          "subtitle": "A happy little Fish!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/fish.webp",
+          "activity": {
+            "id": "fish",
+            "lable": "Fish",
+            "display": "Fish",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_fish.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "guineapig",
+          "title": "Guinea Pig",
+          "subtitle": "A happy little Guinea Pig!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/guineapig.webp",
+          "activity": {
+            "id": "guineapig",
+            "lable": "Guinea Pig",
+            "display": "Guinea Pig",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_guineapig.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "alpaca",
+          "title": "Alpaca",
+          "subtitle": "A happy little Alpaca!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/alpaca.webp",
+          "activity": {
+            "id": "alpaca",
+            "lable": "Alpaca",
+            "display": "Alpaca",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_alpaca.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "mule",
+          "title": "Mule",
+          "subtitle": "A happy little Mule!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/mule.webp",
+          "activity": {
+            "id": "mule",
+            "lable": "mule",
+            "display": "mule",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_mule.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "ox",
+          "title": "Ox",
+          "subtitle": "A happy little Ox!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/ox.webp",
+          "activity": {
+            "id": "ox",
+            "lable": "ox",
+            "display": "ox",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_ox.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "goose",
+          "title": "Goose",
+          "subtitle": "A happy little Goose!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/goose.webp",
+          "activity": {
+            "id": "goose",
+            "lable": "goose",
+            "display": "goose",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_goose.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "swan",
+          "title": "Swan",
+          "subtitle": "A happy little Swan!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/swan.webp",
+          "activity": {
+            "id": "swan",
+            "lable": "swan",
+            "display": "swan",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_swan.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "pigeon",
+          "title": "Pigeon",
+          "subtitle": "A happy little Pigeon!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/pigeon.webp",
+          "activity": {
+            "id": "pigeon",
+            "lable": "pigeon",
+            "display": "pigeon",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_pigeon.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "llama",
+          "title": "Llama",
+          "subtitle": "A happy little Llama!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/llama.webp",
+          "activity": {
+            "id": "llama",
+            "lable": "llama",
+            "display": "llama",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_llama.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "tortoise",
+          "title": "Tortoise",
+          "subtitle": "A happy little Tortoise!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/tortoise.webp",
+          "activity": {
+            "id": "tortoise",
+            "lable": "tortoise",
+            "display": "tortoise",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_tortoise.webp"
           },
           "palette": [
             {
@@ -1081,6 +5154,1005 @@
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
+        },
+        {
+          "id": "tiger",
+          "title": "Tiger",
+          "subtitle": "A playful Tiger!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/tiger.webp",
+          "activity": {
+            "id": "tiger",
+            "lable": "Tiger",
+            "display": "Tiger",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_tiger.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "giraffe",
+          "title": "Giraffe",
+          "subtitle": "A playful Giraffe!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/giraffe.webp",
+          "activity": {
+            "id": "giraffe",
+            "lable": "Giraffe",
+            "display": "Giraffe",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_giraffe.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "monkey",
+          "title": "Monkey",
+          "subtitle": "A playful Monkey!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/monkey.webp",
+          "activity": {
+            "id": "monkey",
+            "lable": "Monkey",
+            "display": "Monkey",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_monkey.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "zebra",
+          "title": "Zebra",
+          "subtitle": "A playful Zebra!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/zebra.webp",
+          "activity": {
+            "id": "zebra",
+            "lable": "Zebra",
+            "display": "Zebra",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_zebra.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "fox",
+          "title": "Fox",
+          "subtitle": "A playful Fox!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/fox.webp",
+          "activity": {
+            "id": "fox",
+            "lable": "Fox",
+            "display": "Fox",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_fox.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "wolf",
+          "title": "Wolf",
+          "subtitle": "A playful Wolf!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/wolf.webp",
+          "activity": {
+            "id": "wolf",
+            "lable": "Wolf",
+            "display": "Wolf",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_wolf.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "cheetah",
+          "title": "Cheetah",
+          "subtitle": "A playful Cheetah!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/cheetah.webp",
+          "activity": {
+            "id": "cheetah",
+            "label": "cheetah",
+            "display": "cheetah",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_cheetah.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "hippopotamus",
+          "title": "Hippopotamus",
+          "subtitle": "A playful Hippopotamus!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/hippopotamus.webp",
+          "activity": {
+            "id": "hippopotamus",
+            "label": "Hippopotamus",
+            "display": "Hippopotamus",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_hippopotamus.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "leopard",
+          "title": "Leopard",
+          "subtitle": "A playful Leopard!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/leopard.webp",
+          "activity": {
+            "id": "leopard",
+            "label": "leopard",
+            "display": "leopard",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_leopard.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "rhinoceros",
+          "title": "Rhinoceros",
+          "subtitle": "A playful Rhinoceros!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/rhinoceros.webp",
+          "activity": {
+            "id": "rhinoceros",
+            "label": "rhinoceros",
+            "display": "rhinoceros",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_rhinoceros.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "kangaroo",
+          "title": "Kangaroo",
+          "subtitle": "A playful Kangaroo!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/kangaroo.webp",
+          "activity": {
+            "id": "kangaroo",
+            "label": "kangaroo",
+            "display": "kangaroo",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_kangaroo.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "gorilla",
+          "title": "Gorilla",
+          "subtitle": "A playful Gorilla!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/gorilla.webp",
+          "activity": {
+            "id": "gorilla",
+            "label": "gorilla",
+            "display": "gorilla",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_gorilla.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "panda",
+          "title": "Panda",
+          "subtitle": "A playful Panda!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/panda.webp",
+          "activity": {
+            "id": "panda",
+            "label": "panda",
+            "display": "panda",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_panda.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "hyena",
+          "title": "Hyena",
+          "subtitle": "A playful Hyena!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/hyena.webp",
+          "activity": {
+            "id": "hyena",
+            "label": "hyena",
+            "display": "hyena",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_hyena.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "shark",
+          "title": "Shark",
+          "subtitle": "A playful Shark!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/shark.webp",
+          "activity": {
+            "id": "shark",
+            "label": "shark",
+            "display": "shark",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_shark.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "dolphin",
+          "title": "Dolphin",
+          "subtitle": "A playful Dolphin!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/dolphin.webp",
+          "activity": {
+            "id": "dolphin",
+            "label": "dolphin",
+            "display": "dolphin",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_dolphin.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "jaguar",
+          "title": "Jaguar",
+          "subtitle": "A playful Jaguar!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/jaguar.webp",
+          "activity": {
+            "id": "jaguar",
+            "label": "jaguar",
+            "display": "jaguar",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_jaguar.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "antelope",
+          "title": "Antelope",
+          "subtitle": "A playful Antelope!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/Antelope.webp",
+          "activity": {
+            "id": "antelope",
+            "label": "antelope",
+            "display": "antelope",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_antelope.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "bison",
+          "title": "Bison",
+          "subtitle": "A playful Bison!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/bison.webp",
+          "activity": {
+            "id": "bison",
+            "label": "Bison",
+            "display": "Bison",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_bison.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "eagle",
+          "title": "Eagle",
+          "subtitle": "A playful Eagle!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/eagle.webp",
+          "activity": {
+            "id": "eagle",
+            "label": "Eagle",
+            "display": "Eagle",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_eagle.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "wildboar",
+          "title": "Wild Boar",
+          "subtitle": "A playful Wild Boar!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/wildboar.webp",
+          "activity": {
+            "id": "wildboar",
+            "label": "Wild Boar",
+            "display": "Wild Boar",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_wildboar.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "snake",
+          "title": "Snake",
+          "subtitle": "A playful Snake!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/snake.webp",
+          "activity": {
+            "id": "snake",
+            "label": "Snake",
+            "display": "Snake",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_snake.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "octopus",
+          "title": "Octopus",
+          "subtitle": "A playful Octopus!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/octopus.webp",
+          "activity": {
+            "id": "octopus",
+            "label": "Octopus",
+            "display": "Octopus",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_octopus.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "owl",
+          "title": "Owl",
+          "subtitle": "A playful Owl!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/owl.webp",
+          "activity": {
+            "id": "owl",
+            "label": "Owl",
+            "display": "Owl",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_owl.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "chimpanzee",
+          "title": "Chimpanzee",
+          "subtitle": "A playful Chimpanzee!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/chimpanzee.webp",
+          "activity": {
+            "id": "chimpanzee",
+            "label": "Chimpanzee",
+            "display": "Chimpanzee",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_chimpanzee.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "moose",
+          "title": "Moose",
+          "subtitle": "A playful Moose!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/moose.webp",
+          "activity": {
+            "id": "moose",
+            "label": "Moose",
+            "display": "Moose",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_moose.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "pelican",
+          "title": "Pelican",
+          "subtitle": "A playful Pelican!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/pelican.webp",
+          "activity": {
+            "id": "pelican",
+            "label": "Pelican",
+            "display": "Pelican",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_pelican.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
         }
       ]
     },
@@ -1091,20 +6163,230 @@
       "accentColor": "#E91E63",
       "levels": [
         {
-          "id": "rainbow",
-          "title": "Rainbow",
-          "subtitle": "A beautiful colorful rainbow!",
+          "id": "heart",
+          "title": "Heart",
+          "subtitle": "A beautiful colorful heart!",
           "difficulty": "Easy",
           "rewardCoins": 40,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/girl.png",
-          "imagePath": "assets/images/apple.webp",
+          "imagePath": "assets/images/heart.webp",
           "activity": {
-            "id": "rainbow",
-            "lable": "Rainbow",
-            "display": "Rainbow",
+            "id": "heart",
+            "lable": "Heart",
+            "display": "Heart",
             "color": "0xFFFF4B4B",
-            "imagePath": "assets/images/un_border_apple.webp"
+            "imagePath": "assets/images/un_border_heart.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            }
+          ],
+          "regions": [
+            {
+              "id": "rainbow_arch",
+              "label": "Rainbow Arch",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "circle",
+          "title": "Circle",
+          "subtitle": "A beautiful colorful circle!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/circle.webp",
+          "activity": {
+            "id": "circle",
+            "lable": "Circle",
+            "display": "Circle",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_border_circle.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            }
+          ],
+          "regions": [
+            {
+              "id": "rainbow_arch",
+              "label": "Rainbow Arch",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "diamond",
+          "title": "Diamond",
+          "subtitle": "A beautiful colorful diamond!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/diamond.webp",
+          "activity": {
+            "id": "diamond",
+            "lable": "Diamond",
+            "display": "Diamond",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_border_diamond.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            }
+          ],
+          "regions": [
+            {
+              "id": "rainbow_arch",
+              "label": "Rainbow Arch",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "square",
+          "title": "Square",
+          "subtitle": "A beautiful colorful diamond!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/square.webp",
+          "activity": {
+            "id": "square",
+            "lable": "Square",
+            "display": "Square",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_border_square.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            }
+          ],
+          "regions": [
+            {
+              "id": "rainbow_arch",
+              "label": "Rainbow Arch",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "star",
+          "title": "Star",
+          "subtitle": "A beautiful colorful diamond!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/star.webp",
+          "activity": {
+            "id": "star",
+            "lable": "Star",
+            "display": "Star",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_border_star.webp"
+          },
+          "palette": [
+            {
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            }
+          ],
+          "regions": [
+            {
+              "id": "rainbow_arch",
+              "label": "Rainbow Arch",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "triangle",
+          "title": "Triangle",
+          "subtitle": "A beautiful colorful diamond!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/triangle.webp",
+          "activity": {
+            "id": "triangle",
+            "lable": "Triangle",
+            "display": "Triangle",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_triangle.webp"
           },
           "palette": [
             {
@@ -1135,32 +6417,32 @@
       ]
     },
     {
-      "id": "alphabets",
-      "title": "Alphabets",
-      "subtitle": "Color the letters!",
-      "accentColor": "#9C27B0",
+      "id": "drawing",
+      "title": "Drawing",
+      "subtitle": "Draw and paint freely!",
+      "accentColor": "#00BCD4",
       "levels": [
         {
-          "id": "letter_a",
-          "title": "Letter A",
-          "subtitle": "A is for Apple!",
+          "id": "bicycle",
+          "title": "Bicycle",
+          "subtitle": "Paint your own design!",
           "difficulty": "Easy",
-          "rewardCoins": 45,
+          "rewardCoins": 50,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/girl.png",
-          "imagePath": "assets/images/apple.webp",
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/bicycle.webp",
           "activity": {
-            "id": "letter_a",
-            "lable": "Letter A",
-            "display": "Letter A",
-            "color": "0xFFFF4B4B",
-            "imagePath": "assets/images/un_border_apple.webp"
+            "id": "bicycle",
+            "lable": "Bicycle",
+            "display": "Bicycle",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_bicycle.webp"
           },
           "palette": [
             {
-              "id": "red",
-              "label": "Red",
-              "hex": "#FF4B4B"
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
             },
             {
               "id": "yellow",
@@ -1170,36 +6452,287 @@
           ],
           "regions": [
             {
-              "id": "letter_a_body",
-              "label": "Letter A Body",
+              "id": "canvas_body",
+              "label": "Canvas Body",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "drawing",
-      "title": "Drawing",
-      "subtitle": "Draw and paint freely!",
-      "accentColor": "#00BCD4",
-      "levels": [
+        },
         {
-          "id": "free_draw",
-          "title": "Free Draw",
+          "id": "bus",
+          "title": "Bus",
           "subtitle": "Paint your own design!",
           "difficulty": "Easy",
           "rewardCoins": 50,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/un_border_apple.webp",
+          "imagePath": "assets/images/bus.webp",
           "activity": {
-            "id": "free_draw",
-            "lable": "Free Draw",
-            "display": "Free Draw",
+            "id": "bus",
+            "lable": "Bus",
+            "display": "Bus",
             "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_apple.webp"
+            "imagePath": "assets/images/un_border_bus.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "car",
+          "title": "Car",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/car.webp",
+          "activity": {
+            "id": "car",
+            "lable": "Car",
+            "display": "Car",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_car.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "dolphin",
+          "title": "Dolphin",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/dolphin.webp",
+          "activity": {
+            "id": "dolphin",
+            "lable": "Dolphin",
+            "display": "Dolphin",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_dolphin.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "fish",
+          "title": "Fish",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/fish.webp",
+          "activity": {
+            "id": "fish",
+            "lable": "Fish",
+            "display": "Fish",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_fish.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "train",
+          "title": "Train",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/train.webp",
+          "activity": {
+            "id": "train",
+            "lable": "Train",
+            "display": "Train",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_train.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "shark",
+          "title": "Shark",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/shark.webp",
+          "activity": {
+            "id": "shark",
+            "lable": "Shark",
+            "display": "Shark",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_shark.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "truck",
+          "title": "truck",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy octopus",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/truck.webp",
+          "activity": {
+            "id": "truck",
+            "lable": "Truck",
+            "display": "Truck",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_truck.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "octopus",
+          "title": "Octopus",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/octopus.webp",
+          "activity": {
+            "id": "octopus",
+            "lable": "Octopus",
+            "display": "Octopus",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_border_octopus.webp"
           },
           "palette": [
             {
