@@ -6754,7 +6754,7 @@
           "rewardCoins": 50,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/Antelope.webp",
+          "imagePath": "assets/images/antelope.webp",
           "activity": {
             "id": "antelope",
             "label": "antelope",
@@ -9237,7 +9237,7 @@
           "rewardCoins": 50,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/Boat.webp",
+          "imagePath": "assets/images/boat.webp",
           "activity": {
             "id": "Boat",
             "lable": "Boat",

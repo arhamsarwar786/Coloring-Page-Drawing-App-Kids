@@ -128,74 +128,70 @@ class _ColoringScreenState extends State<ColoringScreen> {
                         //     letterSpacing: 2.0,
                         //   ),
                         // ),
-                        Positioned(
-                          // right: 16,
-                          top: 1,
-                          child: Column(
-                            children: [
-                              SidebarIcon(
-                                icon: Icons.settings_rounded,
-                                assetName: 'assets/images/setting.png',
-                                onPressed: () {
-                                  // showGeneralDialog(
-                                  //   context: context,
-                                  //   barrierDismissible: true,
-                                  //   barrierLabel: "Settings",
-                                  //   barrierColor: Colors.transparent,
-                                  //   transitionDuration:
-                                  //       const Duration(milliseconds: 250),
-                                  //   pageBuilder: (_, __, ___) =>
-                                  //       const SettingsDialog(),
-                                  //   transitionBuilder:
-                                  //       (_, animation, __, child) {
-                                  //     return FadeTransition(
-                                  //       opacity: animation,
-                                  //       child: ScaleTransition(
-                                  //         scale: CurvedAnimation(
-                                  //           parent: animation,
-                                  //           curve: Curves.easeOutBack,
-                                  //         ),
-                                  //         child: child,
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  // );
+                        Column(
+                          children: [
+                            SidebarIcon(
+                              icon: Icons.settings_rounded,
+                              assetName: 'assets/images/setting.png',
+                              onPressed: () {
+                                // showGeneralDialog(
+                                //   context: context,
+                                //   barrierDismissible: true,
+                                //   barrierLabel: "Settings",
+                                //   barrierColor: Colors.transparent,
+                                //   transitionDuration:
+                                //       const Duration(milliseconds: 250),
+                                //   pageBuilder: (_, __, ___) =>
+                                //       const SettingsDialog(),
+                                //   transitionBuilder:
+                                //       (_, animation, __, child) {
+                                //     return FadeTransition(
+                                //       opacity: animation,
+                                //       child: ScaleTransition(
+                                //         scale: CurvedAnimation(
+                                //           parent: animation,
+                                //           curve: Curves.easeOutBack,
+                                //         ),
+                                //         child: child,
+                                //       ),
+                                //     );
+                                //   },
+                                // );
 
-                                  showDialog(
-                                    context: context,
-                                    barrierColor: Colors.black.withOpacity(
-                                        0.45), // Piche ka area dark karne ke liye
-                                    builder: (BuildContext context) {
-                                      return const Center(
-                                        child:
-                                            KidsSettingsDialog(), // Humara naya settings dialog widget
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                              // const SizedBox(height: 16),
-                              // SidebarIcon(
-                              //   icon: Icons.edit_rounded,
-                              //   assetName: 'assets/images/pen.png',
-                              //   onPressed: () =>
-                              //       Navigator.pushNamed(context, AppRoutes.skins),
-                              // ),
-                              const SizedBox(height: 16),
-                              // SidebarIcon(
-                              //   icon: Icons.photo_library_rounded,
-                              //   assetName: 'assets/images/photo.png',
-                              //   onPressed: () async {
-                              //     await persistHistorySnapshot(
-                              //         captureThumbnail: true);
-                              //     if (context.mounted) {
-                              //       Navigator.pushNamed(
-                              //           context, AppRoutes.levels);
-                              //     }
-                              //   },
-                              // ),
-                            ],
-                          ),
+                                showDialog(
+                                  context: context,
+                                  barrierColor: Colors.black.withOpacity(
+                                      0.45), // Piche ka area dark karne ke liye
+                                  builder: (BuildContext context) {
+                                    return const Center(
+                                      child:
+                                          KidsSettingsDialog(), // Humara naya settings dialog widget
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            // const SizedBox(height: 16),
+                            // SidebarIcon(
+                            //   icon: Icons.edit_rounded,
+                            //   assetName: 'assets/images/pen.png',
+                            //   onPressed: () =>
+                            //       Navigator.pushNamed(context, AppRoutes.skins),
+                            // ),
+                            const SizedBox(height: 16),
+                            // SidebarIcon(
+                            //   icon: Icons.photo_library_rounded,
+                            //   assetName: 'assets/images/photo.png',
+                            //   onPressed: () async {
+                            //     await persistHistorySnapshot(
+                            //         captureThumbnail: true);
+                            //     if (context.mounted) {
+                            //       Navigator.pushNamed(
+                            //           context, AppRoutes.levels);
+                            //     }
+                            //   },
+                            // ),
+                          ],
                         ),
 
                         // SidebarIcon(
