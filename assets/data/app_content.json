@@ -7138,7 +7138,7 @@
             "lable": "Heart",
             "display": "Heart",
             "color": "0xFFFF4B4B",
-            "imagePath": "assets/images/un_border_heart.webp"
+            "imagePath": "assets/images/un_colored_heart.webp"
           },
           "palette": [
             {
@@ -7180,7 +7180,7 @@
             "lable": "Circle",
             "display": "Circle",
             "color": "0xFFFF4B4B",
-            "imagePath": "assets/images/un_border_circle.webp"
+            "imagePath": "assets/images/un_colored_circle.webp"
           },
           "palette": [
             {
@@ -7222,7 +7222,7 @@
             "lable": "Diamond",
             "display": "Diamond",
             "color": "0xFFFF4B4B",
-            "imagePath": "assets/images/un_border_diamond.webp"
+            "imagePath": "assets/images/un_colored_diamond.webp"
           },
           "palette": [
             {
@@ -7264,7 +7264,7 @@
             "lable": "Square",
             "display": "Square",
             "color": "0xFFFF4B4B",
-            "imagePath": "assets/images/un_border_square.webp"
+            "imagePath": "assets/images/un_colored_square.webp"
           },
           "palette": [
             {
@@ -7293,6 +7293,43 @@
           ]
         },
         {
+          "id": "moon",
+          "title": "Moon",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/moon.webp",
+          "activity": {
+            "id": "moon",
+            "lable": "Moon",
+            "display": "Moon",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_moon.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
           "id": "star",
           "title": "Star",
           "subtitle": "A beautiful colorful diamond!",
@@ -7306,7 +7343,7 @@
             "lable": "Star",
             "display": "Star",
             "color": "0xFFFF4B4B",
-            "imagePath": "assets/images/un_border_star.webp"
+            "imagePath": "assets/images/un_colored_star.webp"
           },
           "palette": [
             {
@@ -7375,417 +7412,422 @@
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "drawing",
-      "title": "Drawing",
-      "subtitle": "Draw and paint freely!",
-      "accentColor": "#00BCD4",
-      "levels": [
+        },
         {
-          "id": "bicycle",
-          "title": "Bicycle",
-          "subtitle": "Paint your own design!",
+          "id": "heart_back",
+          "title": "Heart Back",
+          "subtitle": "A beautiful colorful diamond!",
           "difficulty": "Easy",
-          "rewardCoins": 50,
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/bicycle.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/heart_back.webp",
           "activity": {
-            "id": "bicycle",
-            "lable": "Bicycle",
-            "display": "Bicycle",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_bicycle.webp"
+            "id": "heart_back",
+            "lable": "Heart Back",
+            "display": "Heart Back",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_heart_back.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "rainbow_arch",
+              "label": "Rainbow Arch",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "bus",
-          "title": "Bus",
-          "subtitle": "Paint your own design!",
+          "id": "smiley",
+          "title": "Smiley Face",
+          "subtitle": "Color the smiley!",
           "difficulty": "Easy",
-          "rewardCoins": 50,
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/bus.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/smile.webp",
           "activity": {
-            "id": "bus",
-            "lable": "Bus",
-            "display": "Bus",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_bus.webp"
+            "id": "smiley",
+            "lable": "Smiley",
+            "display": "Smiley",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_smile.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "rainbow_arch",
+              "label": "Rainbow Arch",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "car",
-          "title": "Car",
-          "subtitle": "Paint your own design!",
+          "id": "sad_face",
+          "title": "Sad Face",
+          "subtitle": "Color the sad face!",
           "difficulty": "Easy",
-          "rewardCoins": 50,
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/car.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/sad.webp",
           "activity": {
-            "id": "car",
-            "lable": "Car",
-            "display": "Car",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_car.webp"
+            "id": "sad_face",
+            "lable": "Sad Face",
+            "display": "Sad Face",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_sad.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "smiley_face",
+              "label": "Smiley Face",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "dolphin",
-          "title": "Dolphin",
-          "subtitle": "Paint your own design!",
+          "id": "happy_face",
+          "title": "Happy Face",
+          "subtitle": "Color the happy face!",
           "difficulty": "Easy",
-          "rewardCoins": 50,
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/dolphin.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/happy.webp",
           "activity": {
-            "id": "dolphin",
-            "lable": "Dolphin",
-            "display": "Dolphin",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_dolphin.webp"
+            "id": "happy_face",
+            "lable": "Happy Face",
+            "display": "Happy Face",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_happy.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "heart_face",
+              "label": "Heart Face",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "fish",
-          "title": "Fish",
-          "subtitle": "Paint your own design!",
+          "id": "shocked_face",
+          "title": "Shocked Face",
+          "subtitle": "Color the shocked face!",
           "difficulty": "Easy",
-          "rewardCoins": 50,
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/fish.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/shocked.webp",
           "activity": {
-            "id": "fish",
-            "lable": "Fish",
-            "display": "Fish",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_fish.webp"
+            "id": "shocked_face",
+            "lable": "Shocked Face",
+            "display": "Shocked Face",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_shocked.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "heart_face",
+              "label": "Heart Face",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "train",
-          "title": "Train",
-          "subtitle": "Paint your own design!",
+          "id": "dorimi",
+          "title": "Dorimi",
+          "subtitle": "Color the dorimi!",
           "difficulty": "Easy",
-          "rewardCoins": 50,
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/train.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/dorimi.webp",
           "activity": {
-            "id": "train",
-            "lable": "Train",
-            "display": "Train",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_train.webp"
+            "id": "dorimi",
+            "lable": "Dorimi",
+            "display": "Dorimi",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_dorimi.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "heart_face",
+              "label": "Heart Face",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "shark",
-          "title": "Shark",
-          "subtitle": "Paint your own design!",
+          "id": "doraemon",
+          "title": "Doraemon",
+          "subtitle": "Color the doraemon!",
           "difficulty": "Easy",
-          "rewardCoins": 50,
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/shark.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/doraemon.webp",
           "activity": {
-            "id": "shark",
-            "lable": "Shark",
-            "display": "Shark",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_shark.webp"
+            "id": "doraemon",
+            "lable": "Doraemon",
+            "display": "Doraemon",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_doraemon.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "heart_face",
+              "label": "Heart Face",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "truck",
-          "title": "truck",
-          "subtitle": "Paint your own design!",
-          "difficulty": "Easy octopus",
-          "rewardCoins": 50,
+          "id": "shizuka",
+          "title": "Shizuka",
+          "subtitle": "Color the shizuka!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/truck.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/shizuka.webp",
           "activity": {
-            "id": "truck",
-            "lable": "Truck",
-            "display": "Truck",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_truck.webp"
+            "id": "shizuka",
+            "lable": "Shizuka",
+            "display": "Shizuka",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_shizuka.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "heart_face",
+              "label": "Heart Face",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "octopus",
-          "title": "Octopus",
-          "subtitle": "Paint your own design!",
-          "difficulty": "Easy ",
-          "rewardCoins": 50,
+          "id": "nobita",
+          "title": "Nobita",
+          "subtitle": "Color the nobita!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
           "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/octopus.webp",
+          "imagePath": "assets/images/nobita.webp",
           "activity": {
-            "id": "octopus",
-            "lable": "Octopus",
-            "display": "Octopus",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_octopus.webp"
+            "id": "nobita",
+            "lable": "Nobita",
+            "display": "Nobita",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_nobita.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
+            },
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "heart_face",
+              "label": "Heart Face",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
           ]
         },
         {
-          "id": "tree",
-          "title": "Tree",
-          "subtitle": "Paint your own design!",
-          "difficulty": "Easy ",
-          "rewardCoins": 50,
+          "id": "doll",
+          "title": "Doll",
+          "subtitle": "Color the doll!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
           "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/tree.webp",
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/doll.webp",
           "activity": {
-            "id": "tree",
-            "lable": "Tree",
-            "display": "Tree",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_tree.webp"
+            "id": "doll",
+            "lable": "Doll",
+            "display": "Doll",
+            "color": "0xFFFF4B4B",
+            "imagePath": "assets/images/un_colored_doll.webp"
           },
           "palette": [
             {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
+              "id": "red",
+              "label": "Red",
+              "hex": "#FF4B4B"
             },
             {
               "id": "yellow",
               "label": "Yellow",
               "hex": "#FFD600"
-            }
-          ],
-          "regions": [
-            {
-              "id": "canvas_body",
-              "label": "Canvas Body",
-              "type": "path",
-              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
-            }
-          ]
-        },
-        {
-          "id": "house",
-          "title": "House",
-          "subtitle": "Paint your own design!",
-          "difficulty": "Easy ",
-          "rewardCoins": 50,
-          "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/house.webp",
-          "activity": {
-            "id": "house",
-            "lable": "House",
-            "display": "House",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_house.webp"
-          },
-          "palette": [
-            {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
             },
             {
-              "id": "yellow",
-              "label": "Yellow",
-              "hex": "#FFD600"
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
             }
           ],
           "regions": [
             {
-              "id": "canvas_body",
-              "label": "Canvas Body",
+              "id": "heart_face",
+              "label": "Heart Face",
               "type": "path",
               "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
             }
@@ -7805,44 +7847,7 @@
             "lable": "Flower",
             "display": "Flower",
             "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_flower.webp"
-          },
-          "palette": [
-            {
-              "id": "cyan",
-              "label": "Cyan",
-              "hex": "#00BCD4"
-            },
-            {
-              "id": "yellow",
-              "label": "Yellow",
-              "hex": "#FFD600"
-            }
-          ],
-          "regions": [
-            {
-              "id": "canvas_body",
-              "label": "Canvas Body",
-              "type": "path",
-              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
-            }
-          ]
-        },
-        {
-          "id": "moon",
-          "title": "Moon",
-          "subtitle": "Paint your own design!",
-          "difficulty": "Easy ",
-          "rewardCoins": 50,
-          "recommendedBrushSize": 6,
-          "guideAsset": "assets/images/boy.png",
-          "imagePath": "assets/images/moon.webp",
-          "activity": {
-            "id": "moon",
-            "lable": "Moon",
-            "display": "Moon",
-            "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_moon.webp"
+            "imagePath": "assets/images/un_colored_flower.webp"
           },
           "palette": [
             {
@@ -7879,7 +7884,7 @@
             "lable": "Rainbow",
             "display": "Rainbow",
             "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_rainbow.webp"
+            "imagePath": "assets/images/un_colored_rainbow.webp"
           },
           "palette": [
             {
@@ -7916,7 +7921,7 @@
             "lable": "Balloon",
             "display": "Balloon",
             "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_balloon.webp"
+            "imagePath": "assets/images/un_colored_balloon.webp"
           },
           "palette": [
             {
@@ -7953,7 +7958,1551 @@
             "lable": "Ice Cream",
             "display": "Ice Cream",
             "color": "0xFF00BCD4",
-            "imagePath": "assets/images/un_border_ice_cream.webp"
+            "imagePath": "assets/images/un_colored_ice_cream.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "bison",
+          "title": "Bison",
+          "subtitle": "A playful Bison!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/bison.webp",
+          "activity": {
+            "id": "bison",
+            "label": "Bison",
+            "display": "Bison",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_bison.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "bell_pepper",
+          "title": "Bell Pepper",
+          "subtitle": "A healthy Bell Pepper!",
+          "difficulty": "Easy",
+          "rewardCoins": 40,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/girl.png",
+          "imagePath": "assets/images/bell_pepper.webp",
+          "activity": {
+            "id": "bell_pepper",
+            "lable": "Bell Pepper",
+            "display": "Bell Pepper",
+            "color": "0xFFFF9800",
+            "imagePath": "assets/images/un_colored_bell_pepper.webp"
+          },
+          "palette": [
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF9800"
+            },
+            {
+              "id": "green",
+              "label": "Green",
+              "hex": "#4CAF50"
+            }
+          ],
+          "regions": [
+            {
+              "id": "carrot_body",
+              "label": "Carrot Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "snowman",
+          "title": "Snowman",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/snowman.webp",
+          "activity": {
+            "id": "snowman",
+            "lable": "Snowman",
+            "display": "Snowman",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_snowman.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "butterfly",
+          "title": "Butterfly",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/butterfly.webp",
+          "activity": {
+            "id": "butterfly",
+            "lable": "Butterfly",
+            "display": "Butterfly",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_butterfly.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "bridge",
+          "title": "Bridge",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/bridge.webp",
+          "activity": {
+            "id": "bridge",
+            "lable": "Bridge",
+            "display": "Bridge",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_bridge.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "eagle",
+          "title": "Eagle",
+          "subtitle": "A playful Eagle!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/eagle.webp",
+          "activity": {
+            "id": "eagle",
+            "label": "Eagle",
+            "display": "Eagle",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_eagle.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "white",
+              "label": "White",
+              "hex": "#FFFFFF"
+            }
+          ],
+          "regions": [
+            {
+              "id": "dolphin_body",
+              "label": "Dolphin Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "mule",
+          "title": "Mule",
+          "subtitle": "A happy little Mule!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/mule.webp",
+          "activity": {
+            "id": "mule",
+            "lable": "mule",
+            "display": "mule",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_mule.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "ox",
+          "title": "Ox",
+          "subtitle": "A happy little Ox!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/ox.webp",
+          "activity": {
+            "id": "ox",
+            "lable": "ox",
+            "display": "ox",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_ox.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        },
+        {
+          "id": "goose",
+          "title": "Goose",
+          "subtitle": "A happy little Goose!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/goose.webp",
+          "activity": {
+            "id": "goose",
+            "lable": "goose",
+            "display": "goose",
+            "color": "0xFF2196F3",
+            "imagePath": "assets/images/un_colored_goose.webp"
+          },
+          "palette": [
+            {
+              "id": "blue",
+              "label": "Blue",
+              "hex": "#2196F3"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFC107"
+            },
+            {
+              "id": "orange",
+              "label": "Orange",
+              "hex": "#FF5722"
+            }
+          ],
+          "regions": [
+            {
+              "id": "fish_body",
+              "label": "Fish Body",
+              "type": "path",
+              "svgPath": "M76,50 C76,30 64,16 48,16 C30,16 10,30 10,50 C10,70 30,84 48,84 C64,84 76,70 76,50 Z"
+            },
+            {
+              "id": "fish_tail",
+              "label": "Fish Tail",
+              "type": "path",
+              "svgPath": "M76,50 L94,34 C97,31 99,34 97,40 L90,50 L97,60 C99,66 97,69 94,66 Z"
+            },
+            {
+              "id": "fish_fin_top",
+              "label": "Top Fin",
+              "type": "path",
+              "svgPath": "M38,16 C42,5 58,4 62,16 Z"
+            },
+            {
+              "id": "fish_fin_bottom",
+              "label": "Bottom Fin",
+              "type": "path",
+              "svgPath": "M36,84 C40,95 56,96 60,84 Z"
+            },
+            {
+              "id": "fish_eye",
+              "label": "Eye",
+              "type": "circle",
+              "cx": 0.30,
+              "cy": 0.42,
+              "radius": 0.07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "drawing",
+      "title": "Drawing",
+      "subtitle": "Draw and paint freely!",
+      "accentColor": "#00BCD4",
+      "levels": [
+        {
+          "id": "bicycle",
+          "title": "Bicycle",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/bicycle.webp",
+          "activity": {
+            "id": "bicycle",
+            "lable": "Bicycle",
+            "display": "Bicycle",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_bicycle.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "bus",
+          "title": "Bus",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/bus.webp",
+          "activity": {
+            "id": "bus",
+            "lable": "Bus",
+            "display": "Bus",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_bus.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "car",
+          "title": "Car",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/car.webp",
+          "activity": {
+            "id": "car",
+            "lable": "Car",
+            "display": "Car",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_car.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "dolphin",
+          "title": "Dolphin",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/dolphin.webp",
+          "activity": {
+            "id": "dolphin",
+            "lable": "Dolphin",
+            "display": "Dolphin",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_dolphin.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "fish",
+          "title": "Fish",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/fish.webp",
+          "activity": {
+            "id": "fish",
+            "lable": "Fish",
+            "display": "Fish",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_fish.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "train",
+          "title": "Train",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/train.webp",
+          "activity": {
+            "id": "train",
+            "lable": "Train",
+            "display": "Train",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_train.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "shark",
+          "title": "Shark",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/shark.webp",
+          "activity": {
+            "id": "shark",
+            "lable": "Shark",
+            "display": "Shark",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_shark.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "truck",
+          "title": "truck",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy octopus",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/truck.webp",
+          "activity": {
+            "id": "truck",
+            "lable": "Truck",
+            "display": "Truck",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_truck.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "octopus",
+          "title": "Octopus",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/octopus.webp",
+          "activity": {
+            "id": "octopus",
+            "lable": "Octopus",
+            "display": "Octopus",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_octopus.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "tree",
+          "title": "Tree",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/tree.webp",
+          "activity": {
+            "id": "tree",
+            "lable": "Tree",
+            "display": "Tree",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_tree.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "house",
+          "title": "House",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/house.webp",
+          "activity": {
+            "id": "house",
+            "lable": "House",
+            "display": "House",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_house.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "flower",
+          "title": "Flower",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/flower.webp",
+          "activity": {
+            "id": "flower",
+            "lable": "Flower",
+            "display": "Flower",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_flower.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "rainbow",
+          "title": "Rainbow",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/rainbow.webp",
+          "activity": {
+            "id": "rainbow",
+            "lable": "Rainbow",
+            "display": "Rainbow",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_rainbow.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "balloon",
+          "title": "Balloon",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/balloon.webp",
+          "activity": {
+            "id": "balloon",
+            "lable": "Balloon",
+            "display": "Balloon",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_balloon.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "ice_cream",
+          "title": "Ice Cream",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/ice_cream.webp",
+          "activity": {
+            "id": "ice_cream",
+            "lable": "Ice Cream",
+            "display": "Ice Cream",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_ice_cream.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "crown",
+          "title": "Crown",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/crown.webp",
+          "activity": {
+            "id": "crown",
+            "lable": "Crown",
+            "display": "Crown",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_crown.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "gift_box",
+          "title": "Gift Box",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/gift_box.webp",
+          "activity": {
+            "id": "gift_box",
+            "lable": "Gift Box",
+            "display": "Gift Box",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_gift_box.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "cake",
+          "title": "Cake",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/cake.webp",
+          "activity": {
+            "id": "cake",
+            "lable": "Cake",
+            "display": "Cake",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_cake.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "pencil",
+          "title": "Pencil",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/pencil.webp",
+          "activity": {
+            "id": "pencil",
+            "lable": "Pencil",
+            "display": "Pencil",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_pencil.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "book",
+          "title": "Book",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/book.webp",
+          "activity": {
+            "id": "book",
+            "lable": "Book",
+            "display": "Book",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_book.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "clock",
+          "title": "Clock",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/clock.webp",
+          "activity": {
+            "id": "clock",
+            "lable": "Clock",
+            "display": "Clock",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_clock.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "lamp",
+          "title": "Lamp",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/lamp.webp",
+          "activity": {
+            "id": "lamp",
+            "lable": "Lamp",
+            "display": "Lamp",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_lamp.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "Boat",
+          "title": "Boat",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/Boat.webp",
+          "activity": {
+            "id": "Boat",
+            "lable": "Boat",
+            "display": "Boat",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_Boat.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "airplane",
+          "title": "Airplane",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/airplane.webp",
+          "activity": {
+            "id": "airplane",
+            "lable": "Airplane",
+            "display": "Airplane",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_airplane.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "castle",
+          "title": "Castle",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/castle.webp",
+          "activity": {
+            "id": "castle",
+            "lable": "Castle",
+            "display": "Castle",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_castle.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "robot",
+          "title": "Robot",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/robot.webp",
+          "activity": {
+            "id": "robot",
+            "lable": "Robot",
+            "display": "Robot",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_robot.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "snowman",
+          "title": "Snowman",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/snowman.webp",
+          "activity": {
+            "id": "snowman",
+            "lable": "Snowman",
+            "display": "Snowman",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_snowman.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "butterfly",
+          "title": "Butterfly",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/butterfly.webp",
+          "activity": {
+            "id": "butterfly",
+            "lable": "Butterfly",
+            "display": "Butterfly",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_butterfly.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "bridge",
+          "title": "Bridge",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/bridge.webp",
+          "activity": {
+            "id": "bridge",
+            "lable": "Bridge",
+            "display": "Bridge",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_bridge.webp"
+          },
+          "palette": [
+            {
+              "id": "cyan",
+              "label": "Cyan",
+              "hex": "#00BCD4"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow",
+              "hex": "#FFD600"
+            }
+          ],
+          "regions": [
+            {
+              "id": "canvas_body",
+              "label": "Canvas Body",
+              "type": "path",
+              "svgPath": "M50,14 C62,10 78,20 84,36 C90,52 86,68 76,80 C66,90 52,93 40,90 C28,87 18,76 17,62 C16,46 22,30 33,20 C40,13 44,14 50,14 Z"
+            }
+          ]
+        },
+        {
+          "id": "camera",
+          "title": "Camera",
+          "subtitle": "Paint your own design!",
+          "difficulty": "Easy ",
+          "rewardCoins": 50,
+          "recommendedBrushSize": 6,
+          "guideAsset": "assets/images/boy.png",
+          "imagePath": "assets/images/camera.webp",
+          "activity": {
+            "id": "camera",
+            "lable": "Camera",
+            "display": "Camera",
+            "color": "0xFF00BCD4",
+            "imagePath": "assets/images/un_colored_camera.webp"
           },
           "palette": [
             {
