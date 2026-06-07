@@ -84,6 +84,25 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     final provider = context.read<ColoringProvider>();
     _earnedCoins = provider.currentLevel?.rewardCoins ?? 20;
 
+    // Instantly mark the level as completed if they passed (so backing out still saves progress)
+    final passed = provider.overallCoveragePercent >= 70;
+    if (passed) {
+      final currentLevel = provider.currentLevel;
+      if (currentLevel != null) {
+        final drawingRepo = context.read<DrawingRepository>();
+        await drawingRepo.markLevelCompleted(
+          levelId: currentLevel.id,
+          stars: 3,
+          rewardCoins: currentLevel.rewardCoins,
+        );
+        if (mounted) {
+          final homeVM = context.read<HomeViewModel>();
+          await homeVM.refreshProgress();
+          await homeVM.load();
+        }
+      }
+    }
+
     await Future.delayed(const Duration(milliseconds: 150));
     if (!mounted) return;
 
@@ -420,27 +439,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                               label: 'Home',
                               color: Colors.white.withValues(alpha: 0.18),
                               textColor: Colors.white,
-                              onTap: () async {
-                                final currentLevel = provider.currentLevel;
-                                if (currentLevel != null) {
-                                  final drawingRepo =
-                                      context.read<DrawingRepository>();
-                                  await drawingRepo.markLevelCompleted(
-                                    levelId: currentLevel.id,
-                                    stars: 3,
-                                    rewardCoins: currentLevel.rewardCoins,
-                                  );
-                                  if (mounted) {
-                                    final homeVM =
-                                        context.read<HomeViewModel>();
-                                    await homeVM.refreshProgress();
-                                    await homeVM.load();
-                                  }
-                                }
-                                if (mounted) {
-                                  Navigator.of(context)
-                                      .popUntil((route) => route.isFirst);
-                                }
+                              onTap: () {
+                                Navigator.of(context).popUntil((route) => route.isFirst);
                               },
                             ),
                             const SizedBox(width: 12),
@@ -455,22 +455,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                                       onTap: () async {
                                         final currentLevel = provider.currentLevel;
                                         if (currentLevel != null) {
-                                          // 1. Mark completed & refresh home
                                           final drawingRepo =
                                               context.read<DrawingRepository>();
-                                          await drawingRepo.markLevelCompleted(
-                                            levelId: currentLevel.id,
-                                            stars: 3,
-                                            rewardCoins: currentLevel.rewardCoins,
-                                          );
-
-                                          // 2. Refresh HomeViewModel BEFORE navigating
-                                          if (mounted) {
-                                            final homeVM =
-                                                context.read<HomeViewModel>();
-                                            await homeVM.refreshProgress();
-                                            await homeVM.load();
-                                          }
 
                                           // 3. Find next level
                                           final nextLevelId = await drawingRepo
