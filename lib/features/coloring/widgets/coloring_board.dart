@@ -246,10 +246,10 @@ class _ColoringBoardState extends State<ColoringBoard> {
         Container(
           height: 58,
           padding: const EdgeInsets.symmetric(vertical: 2),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(24),
-          ),
+          // decoration: BoxDecoration(
+          //   color: Colors.white.withValues(alpha: 0.5),
+          //   borderRadius: BorderRadius.circular(24),
+          // ),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 12),

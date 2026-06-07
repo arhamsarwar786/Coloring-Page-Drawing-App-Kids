@@ -136,17 +136,17 @@ class HomeViewModel extends BaseViewModel {
     if (levelIndex <= 0) return false;
     if (levelIndex >= levels.length) return true;
 
-    for (var index = 0; index < levelIndex; index++) {
-      final level = levels[index];
-      if (level.isCompleted) {
-        continue;
-      }
-      if (levelProgressFor(level.id) < unlockProgressThreshold) {
-        return true;
-      }
+    // Only check the immediately previous level, not all of them.
+    final previousLevel = levels[levelIndex - 1];
+    if (previousLevel.isCompleted) {
+      return false;
+    }
+    
+    if (levelProgressFor(previousLevel.id) >= unlockProgressThreshold) {
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   Future<bool> prepareLevel(String levelId) async {

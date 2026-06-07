@@ -60,6 +60,7 @@ class ColoringProvider extends ChangeNotifier {
   Uint8List? _isInside;
   Uint8List? _paintedPixels;
   Uint8List? _activeRegionMask;
+  Uint32List? _referencePixels;
 
   int imgWidth = 0;
   int imgHeight = 0;
@@ -106,11 +107,103 @@ class ColoringProvider extends ChangeNotifier {
   bool get autoZoomEnabled => _autoZoomEnabled;
   int get activeRegionIndex => _activeRegionIndex;
   double get brushScale => _brushScale;
+
+  String _getColoredImagePath(String outlinePath) {
+    final parts = outlinePath.split('/');
+    if (parts.isEmpty) return outlinePath;
+    final fileName = parts.last;
+    String cleanName = fileName
+        .replaceFirst('un_colored-_', '')
+        .replaceFirst('un_colored_', '')
+        .replaceFirst('un_border_', '')
+        .replaceFirst('un_color_', '')
+        .replaceFirst('un_colorder_', '')
+        .replaceFirst('uncolored_', '');
+
+    if (cleanName == 'mango.webp') {
+      cleanName = 'mango.png';
+    } else if (cleanName == 'grapes.webp') {
+      cleanName = 'grapes.png';
+    } else if (cleanName == 'strawberry.webp') {
+      cleanName = 'strawberry.png';
+    } else if (cleanName == 'plum.webp') {
+      cleanName = 'plum.png';
+    } else if (cleanName == 'camel.jpeg') {
+      cleanName = 'camel.webp';
+    } else if (cleanName == 'hamster.jpeg') {
+      cleanName = 'hamster.webp';
+    } else if (cleanName == 'hen.jpeg') {
+      cleanName = 'hen.webp';
+    } else if (cleanName == 'rooster.jpeg') {
+      cleanName = 'rooster.webp';
+    } else if (cleanName == 'yak.jpeg') {
+      cleanName = 'yak.webp';
+    } else if (cleanName == 'rabbit.webp') {
+      cleanName = 'Rabbit.webp';
+    } else if (cleanName == 'donkey.webp') {
+      cleanName = 'Donkey.webp';
+    }
+
+    parts[parts.length - 1] = cleanName;
+    return parts.join('/');
+  }
+
   int get brushSizePercent => (_brushScale * 100).round();
   int get totalParts => _orderedParts.length;
   int get completedParts => _completedRegionIds.length;
   bool get isPartByPartComplete =>
       _orderedParts.isNotEmpty && completedParts >= totalParts;
+
+  /// Overall painting coverage across the ENTIRE image (0–100).
+  /// Counts how many paintable pixels (_isInside == 1) the child touched with the correct color.
+  int get overallCoveragePercent {
+    final inside = _isInside;
+    final painted = _paintedPixels;
+    final pixels = _pixels;
+    final refPixels = _referencePixels;
+    if (inside == null || painted == null || pixels == null || inside.isEmpty) return 0;
+    
+    int coverable = 0;
+    int correctCount = 0;
+    
+    for (int i = 0; i < inside.length; i++) {
+      if (inside[i] != 1) continue;
+      coverable++;
+      if (painted[i] == 1) {
+        if (refPixels == null) {
+          // If we couldn't load the reference colored image, just give them the point
+          correctCount++;
+        } else {
+          // Check if the painted color matches the reference color roughly
+          if (_isColorMatch(pixels[i], refPixels[i])) {
+            correctCount++;
+          }
+        }
+      }
+    }
+    if (coverable == 0) return 100;
+    return ((correctCount / coverable) * 100).round().clamp(0, 100);
+  }
+
+  bool _isColorMatch(int paintedRgba, int refRgba) {
+    // Both are little-endian rgba8888 -> (A << 24) | (B << 16) | (G << 8) | R
+    final pr = paintedRgba & 0xFF;
+    final pg = (paintedRgba >> 8) & 0xFF;
+    final pb = (paintedRgba >> 16) & 0xFF;
+
+    final rr = refRgba & 0xFF;
+    final rg = (refRgba >> 8) & 0xFF;
+    final rb = (refRgba >> 16) & 0xFF;
+
+    final dr = pr - rr;
+    final dg = pg - rg;
+    final db = pb - rb;
+    final distSq = dr * dr + dg * dg + db * db;
+    
+    // Very generous threshold to account for JPEG artifacts, anti-aliasing, and limited palette.
+    // 100^2 * 3 = 30000. We'll use 20000 as a threshold for distance squared.
+    return distSq < 20000;
+  }
   _ColoringPart? get _activePart => _activeRegionIndex < _orderedParts.length
       ? _orderedParts[_activeRegionIndex]
       : null;
@@ -285,19 +378,39 @@ class ColoringProvider extends ChangeNotifier {
     coloredImage = null;
     originalOutlineImage = null;
     activeRegionHighlightImage = null;
-    _pixels = null;
     _isInside = null;
     _paintedPixels = null;
     _activeRegionMask = null;
+    _referencePixels = null;
     imgWidth = 0;
     imgHeight = 0;
     _undoStack.clear();
     notifyListeners();
 
     // Use the resolved level ID for the asset name
-    // Use the imagePath from the current ActivityItem if provided; otherwise fallback to dolphin.
     final assetPath =
         _currentItem?.imagePath ?? 'assets/images/un_colored_dolphin.webp';
+
+    const kCanvasSize = 640;
+
+    // Try loading the colored reference image to check accuracy later
+    try {
+      final coloredAssetPath = _getColoredImagePath(assetPath);
+      final coloredData = await rootBundle.load(coloredAssetPath);
+      final coloredBytes = coloredData.buffer.asUint8List();
+      final refCodec = await ui.instantiateImageCodec(
+        coloredBytes,
+        targetWidth: kCanvasSize,
+        targetHeight: kCanvasSize,
+      );
+      final refFrame = await refCodec.getNextFrame();
+      final refBd = await refFrame.image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      if (refBd != null) {
+        _referencePixels = refBd.buffer.asUint32List();
+      }
+    } catch (_) {
+      _referencePixels = null; // Ignore errors if a colored version doesn't exist
+    }
 
     try {
       final data = await rootBundle.load(assetPath);
@@ -309,7 +422,6 @@ class ColoringProvider extends ChangeNotifier {
       originalOutlineImage = fullFrame.image;
 
       // ── 640×640 working canvas ───────────────────────────────────────────
-      const kCanvasSize = 640;
       final thumbCodec = await ui.instantiateImageCodec(
         bytes,
         targetWidth: kCanvasSize,

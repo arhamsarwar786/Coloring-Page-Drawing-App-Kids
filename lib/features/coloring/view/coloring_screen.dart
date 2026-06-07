@@ -125,18 +125,66 @@ class _ColoringScreenState extends State<ColoringScreen> {
                       // crossAxisAlignment: CrossAxisAlignment.,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // const AppBackButton(),
-                        // const SizedBox(width: 8),
-
                         SidebarIcon(
                           icon: Icons.arrow_back_rounded,
                           assetName: 'assets/images/pop-button.png',
                           onPressed: () {
-                            Navigator.pop(context);
+                            // Pop back to home levels screen (not all the way to root)
+                            Navigator.of(context).pop();
                           },
                         ),
 
-                        // const SizedBox(height: 16),
+                        // ── Coin counter badge ─────────────────────────────────────────
+                        Consumer<HomeViewModel>(
+                          builder: (context, homeVM, _) {
+                            final coins = homeVM.earnedCoins;
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeOutBack,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFFFFD700), Color(0xFFFF9100)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        const Color(0xFFFFD700).withOpacity(0.45),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text('🪙',
+                                      style: TextStyle(fontSize: 16)),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '$coins',
+                                    style: GoogleFonts.fredoka(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      shadows: const [
+                                        Shadow(
+                                            color: Colors.black26,
+                                            blurRadius: 3,
+                                            offset: Offset(0, 1)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+
                         AnimatedPreviewButton(
                           onPressed: () {
                             final coloredPath =

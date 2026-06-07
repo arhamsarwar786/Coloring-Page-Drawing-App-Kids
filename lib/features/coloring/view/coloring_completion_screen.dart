@@ -147,11 +147,18 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
           final item = provider.currentItem;
           final word = item?.label ?? 'Picture';
           final coins = provider.currentLevel?.rewardCoins ?? _earnedCoins;
+          
+          final coverage = provider.overallCoveragePercent;
+          final passed = coverage >= 70;
 
           return Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF1A1060), Color(0xFF3B1FA8), Color(0xFF6B35CF)],
+                colors: [
+                  ui.Color.fromARGB(255, 196, 189, 236),
+                  ui.Color.fromARGB(255, 54, 164, 207),
+                  ui.Color.fromARGB(255, 203, 189, 228)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -216,11 +223,11 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
 
                       // ── "Woohoo!" header ───────────────────────────────────
                       Text(
-                        '🎉 WooHoo! 🎉',
+                        passed ? '🎉 WooHoo! 🎉' : 'Keep Trying!',
                         style: GoogleFonts.fredoka(
                           fontSize: 34,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFFFFD700),
+                          color: passed ? const Color(0xFFFFD700) : const Color(0xFFFF5722),
                           shadows: [
                             const Shadow(
                               color: Colors.black38,
@@ -232,7 +239,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Beautiful $word!',
+                        passed ? 'Beautiful $word!' : 'You can do better!',
                         style: GoogleFonts.fredoka(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
@@ -256,7 +263,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                                   borderRadius: BorderRadius.circular(32),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color(0xFF6B35CF).withValues(alpha: 0.5),
+                                      color: const Color(0xFF6B35CF)
+                                          .withValues(alpha: 0.5),
                                       blurRadius: 40,
                                       spreadRadius: 4,
                                       offset: const Offset(0, 12),
@@ -367,7 +375,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                             borderRadius: BorderRadius.circular(40),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFFFFD700).withValues(alpha: 0.45),
+                                color: const Color(0xFFFFD700)
+                                    .withValues(alpha: 0.45),
                                 blurRadius: 16,
                                 offset: const Offset(0, 6),
                               ),
@@ -435,79 +444,89 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                               },
                             ),
                             const SizedBox(width: 12),
-                            // Next level button
+                            // Next level or Restart button
                             Expanded(
-                              child: _ActionButton(
-                                icon: Icons.arrow_forward_rounded,
-                                label: 'Next Level',
-                                color: const Color(0xFF00E676),
-                                textColor: Colors.white,
-                                onTap: () async {
-                                  final currentLevel = provider.currentLevel;
-                                  if (currentLevel != null) {
-                                    // 1. Mark completed & refresh home
-                                    final drawingRepo =
-                                        context.read<DrawingRepository>();
-                                    await drawingRepo.markLevelCompleted(
-                                      levelId: currentLevel.id,
-                                      stars: 3,
-                                      rewardCoins: currentLevel.rewardCoins,
-                                    );
+                              child: passed
+                                  ? _ActionButton(
+                                      icon: Icons.arrow_forward_rounded,
+                                      label: 'Next Level',
+                                      color: const Color(0xFF00E676),
+                                      textColor: Colors.white,
+                                      onTap: () async {
+                                        final currentLevel = provider.currentLevel;
+                                        if (currentLevel != null) {
+                                          // 1. Mark completed & refresh home
+                                          final drawingRepo =
+                                              context.read<DrawingRepository>();
+                                          await drawingRepo.markLevelCompleted(
+                                            levelId: currentLevel.id,
+                                            stars: 3,
+                                            rewardCoins: currentLevel.rewardCoins,
+                                          );
 
-                                    // 2. Refresh HomeViewModel BEFORE navigating
-                                    //    so the home grid shows the unlocked level
-                                    if (mounted) {
-                                      final homeVM =
-                                          context.read<HomeViewModel>();
-                                      await homeVM.refreshProgress();
-                                      await homeVM.load();
-                                    }
+                                          // 2. Refresh HomeViewModel BEFORE navigating
+                                          if (mounted) {
+                                            final homeVM =
+                                                context.read<HomeViewModel>();
+                                            await homeVM.refreshProgress();
+                                            await homeVM.load();
+                                          }
 
-                                    // 3. Find next level
-                                    final nextLevelId = await drawingRepo
-                                        .getNextLevelId(currentLevel.id);
-                                    LevelModel? nextLevel;
-                                    if (nextLevelId != null) {
-                                      nextLevel = await drawingRepo
-                                          .getLevelById(nextLevelId);
-                                    }
+                                          // 3. Find next level
+                                          final nextLevelId = await drawingRepo
+                                              .getNextLevelId(currentLevel.id);
+                                          LevelModel? nextLevel;
+                                          if (nextLevelId != null) {
+                                            nextLevel = await drawingRepo
+                                                .getLevelById(nextLevelId);
+                                          }
 
-                                    if (nextLevel != null && mounted) {
-                                      // 4. Setup provider for next level
-                                      final coloringProvider =
-                                          context.read<ColoringProvider>();
-                                      final activity = ActivityItem(
-                                        id: nextLevel.id,
-                                        label: nextLevel.title,
-                                        display: nextLevel.title,
-                                        color: Colors.red,
-                                        imagePath: nextLevel
-                                                .activityItem?.imagePath ??
-                                            nextLevel.imagePath ??
-                                            'assets/images/un_border_apple.webp',
-                                      );
-                                      coloringProvider.setItem(
-                                          activity, provider.currentCategoryId,
-                                          level: nextLevel);
+                                          if (nextLevel != null && mounted) {
+                                            // 4. Setup provider for next level
+                                            final coloringProvider =
+                                                context.read<ColoringProvider>();
+                                            final activity = ActivityItem(
+                                              id: nextLevel.id,
+                                              label: nextLevel.title,
+                                              display: nextLevel.title,
+                                              color: Colors.red,
+                                              imagePath: nextLevel
+                                                      .activityItem?.imagePath ??
+                                                  nextLevel.imagePath ??
+                                                  'assets/images/un_border_apple.webp',
+                                            );
+                                            coloringProvider.setItem(
+                                                activity, provider.currentCategoryId,
+                                                level: nextLevel);
 
-                                      // 5. Navigate — keep Home as root
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                          builder: (_) => ColoringScreen(
-                                              imagePath: activity.imagePath),
-                                        ),
-                                        (route) => route.isFirst,
-                                      );
-                                    } else if (mounted) {
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
-                                    }
-                                  } else {
-                                    Navigator.of(context)
-                                        .popUntil((route) => route.isFirst);
-                                  }
-                                },
-                              ),
+                                            // 5. Navigate — keep Home as root
+                                            Navigator.of(context).pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                builder: (_) => ColoringScreen(
+                                                    imagePath: activity.imagePath),
+                                              ),
+                                              (route) => route.isFirst,
+                                            );
+                                          } else if (mounted) {
+                                            Navigator.of(context)
+                                                .popUntil((route) => route.isFirst);
+                                          }
+                                        } else {
+                                          Navigator.of(context)
+                                              .popUntil((route) => route.isFirst);
+                                        }
+                                      },
+                                    )
+                                  : _ActionButton(
+                                      icon: Icons.replay_rounded,
+                                      label: 'Try Again!',
+                                      color: const Color(0xFFFF5722),
+                                      textColor: Colors.white,
+                                      onTap: () {
+                                        provider.retry();
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
                             ),
                           ],
                         ),
