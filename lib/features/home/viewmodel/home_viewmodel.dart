@@ -23,12 +23,22 @@ class HomeViewModel extends BaseViewModel {
   final HistoryRepository _historyRepository;
   static const double unlockProgressThreshold = 0.8;
 
+  // ── Points ──────────────────────────────────────────────────────────────
+  static const int _completionPointsValue = 20;
+  static const int _colorMatchPointsValue = 10;
+  static const int _dailyBonusPointsValue = 50;
+
   HomeContentModel? _content;
   String? _selectedCategoryId;
   String? _lastPlayedLevelId;
   Map<String, double> _levelProgress = const <String, double>{};
+  int _totalPoints = 0;
 
   HomeContentModel? get content => _content;
+
+  /// Total accumulated points.
+  int get totalPoints => _totalPoints;
+
   List<CategoryModel> get categories =>
       _content?.categories ?? const <CategoryModel>[];
 
@@ -92,6 +102,7 @@ class HomeViewModel extends BaseViewModel {
       _content = await _repository.loadHomeContent();
       _lastPlayedLevelId = await _repository.getLastPlayedLevelId();
       _levelProgress = await _loadLevelProgress();
+      _totalPoints = await _repository.getPoints();
       if (_content!.categories.isNotEmpty) {
         final hasCurrentSelection = _content!.categories
             .any((category) => category.id == _selectedCategoryId);
@@ -126,7 +137,11 @@ class HomeViewModel extends BaseViewModel {
     if (levelIndex >= levels.length) return true;
 
     for (var index = 0; index < levelIndex; index++) {
-      if (levelProgressFor(levels[index].id) < unlockProgressThreshold) {
+      final level = levels[index];
+      if (level.isCompleted) {
+        continue;
+      }
+      if (levelProgressFor(level.id) < unlockProgressThreshold) {
         return true;
       }
     }
@@ -163,6 +178,10 @@ class HomeViewModel extends BaseViewModel {
   }
 
   double levelProgressFor(String levelId) {
+    final level = _findLevel(levelId);
+    if (level != null && level.isCompleted) {
+      return 1.0;
+    }
     return _levelProgress[levelId] ?? 0.0;
   }
 
@@ -192,6 +211,54 @@ class HomeViewModel extends BaseViewModel {
       return null;
     }
     return index + 1;
+  }
+
+  // ── Points system ─────────────────────────────────────────────────────────
+
+  /// Adds 20 points when a level is fully completed.
+  Future<void> addCompletionPoints() async {
+    _totalPoints += _completionPointsValue;
+    await _repository.savePoints(_totalPoints);
+    notifyListeners();
+  }
+
+  /// Adds 10 points when the child picks the correct colour for a region.
+  Future<void> addColorMatchPoints() async {
+    _totalPoints += _colorMatchPointsValue;
+    await _repository.savePoints(_totalPoints);
+    notifyListeners();
+  }
+
+  /// Adds 50 points once per calendar day.
+  /// Returns [true] if the bonus was awarded, [false] if already claimed today.
+  Future<bool> addDailyBonusPoints() async {
+    final today = _todayDateString();
+    final lastBonus = await _repository.getLastDailyBonusDate();
+    if (lastBonus == today) return false; // already claimed today
+
+    _totalPoints += _dailyBonusPointsValue;
+    await _repository.savePoints(_totalPoints);
+    await _repository.saveLastDailyBonusDate(today);
+    notifyListeners();
+    return true;
+  }
+
+  String _todayDateString() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  }
+
+  // ── Level-unlock refresh ───────────────────────────────────────────────────
+
+  /// Lightweight refresh: reloads level-progress data and notifies the UI
+  /// to redraw lock states. Much cheaper than a full [load()] since it does
+  /// not re-parse content assets.
+  Future<void> refreshProgress() async {
+    try {
+      _content = await _repository.loadHomeContent();
+    } catch (_) {}
+    _levelProgress = await _loadLevelProgress();
+    notifyListeners();
   }
 }
 

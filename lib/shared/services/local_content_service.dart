@@ -17,6 +17,8 @@ class LocalContentService {
   final Map<String, _LevelProgress> _progress =
       <String, _LevelProgress>{};
   String? _lastPlayedLevelId;
+  int _totalPoints = 0;
+  String? _lastDailyBonusDate;
   bool _stateLoaded = false;
 
   Future<HomeContentModel> loadHomeContent() async {
@@ -87,6 +89,32 @@ class LocalContentService {
   Future<String?> getLastPlayedLevelId() async {
     await _ensureStateLoaded();
     return _lastPlayedLevelId;
+  }
+
+  // ── Points ──────────────────────────────────────────────────────────────
+
+  Future<int> getPoints() async {
+    await _ensureStateLoaded();
+    return _totalPoints;
+  }
+
+  Future<void> savePoints(int points) async {
+    await _ensureStateLoaded();
+    _totalPoints = points;
+    await _persistState();
+  }
+
+  // ── Daily bonus ──────────────────────────────────────────────────────────
+
+  Future<String?> getLastDailyBonusDate() async {
+    await _ensureStateLoaded();
+    return _lastDailyBonusDate;
+  }
+
+  Future<void> saveLastDailyBonusDate(String date) async {
+    await _ensureStateLoaded();
+    _lastDailyBonusDate = date;
+    await _persistState();
   }
 
   Future<void> markLevelCompleted({
@@ -192,6 +220,8 @@ class LocalContentService {
     try {
       final jsonMap = jsonDecode(raw) as Map<String, dynamic>;
       _lastPlayedLevelId = jsonMap['lastPlayedLevelId'] as String?;
+      _totalPoints = (jsonMap['totalPoints'] as int?) ?? 0;
+      _lastDailyBonusDate = jsonMap['lastDailyBonusDate'] as String?;
       final progressMap = jsonMap['progress'] as Map<String, dynamic>? ??
           const <String, dynamic>{};
       for (final entry in progressMap.entries) {
@@ -201,12 +231,16 @@ class LocalContentService {
     } catch (_) {
       _progress.clear();
       _lastPlayedLevelId = null;
+      _totalPoints = 0;
+      _lastDailyBonusDate = null;
     }
   }
 
   Future<void> _persistState() {
     final payload = <String, dynamic>{
       'lastPlayedLevelId': _lastPlayedLevelId,
+      'totalPoints': _totalPoints,
+      'lastDailyBonusDate': _lastDailyBonusDate,
       'progress': _progress.map(
         (key, value) =>
             MapEntry<String, dynamic>(key, value.toJson()),

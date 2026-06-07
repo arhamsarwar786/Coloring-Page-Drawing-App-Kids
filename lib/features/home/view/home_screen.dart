@@ -216,6 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     selectedLevels,
                                   );
                                   return LevelCard(
+                                      key: ValueKey(level.id),
                                       level: level,
                                       levelNumber: levelNumber,
                                       palette: _paletteFor(index),
@@ -326,7 +327,10 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       if (!context.mounted) return;
-      await context.read<HomeViewModel>().load();
+      // Cheap refresh first — instantly re-evaluates lock states.
+      await context.read<HomeViewModel>().refreshProgress();
+      // Full reload to pick up coins / content changes from storage.
+      if (context.mounted) await context.read<HomeViewModel>().load();
     } finally {
       if (mounted) {
         setState(() {

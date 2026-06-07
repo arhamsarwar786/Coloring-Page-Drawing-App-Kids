@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:play_craft_kids/app/routes/app_routes.dart';
 import 'package:play_craft_kids/features/coloring/view/coloring_completion_screen.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
+import 'package:play_craft_kids/features/coloring/widgets/coloring_board.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
-import 'package:play_craft_kids/features/tracing/viewmodel/activity_item.dart';
+import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
+import 'package:play_craft_kids/features/levels/model/level_model.dart';
 import 'package:provider/provider.dart';
-import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
-import 'package:play_craft_kids/features/coloring/widgets/coloring_board.dart';
 
 class ColoringScreen extends StatefulWidget {
-  const ColoringScreen({Key? key, this.imagePath}) : super(key: key);
+  const ColoringScreen({
+    Key? key,
+    this.imagePath,
+    this.level, // optional: pass to enable points callbacks
+  }) : super(key: key);
 
   final String? imagePath;
+
+  /// The [LevelModel] being played. When provided, [HomeViewModel.addCompletionPoints]
+  /// is called automatically when the coloring activity finishes.
+  final LevelModel? level;
 
   @override
   State<ColoringScreen> createState() => _ColoringScreenState();
@@ -50,6 +56,15 @@ class _ColoringScreenState extends State<ColoringScreen> {
 
     if (provider.isPartByPartComplete && !_didNavigateToCompletion) {
       _didNavigateToCompletion = true;
+
+      // Award completion points via HomeViewModel (if level was passed in)
+      if (widget.level != null && mounted) {
+        try {
+          await context.read<HomeViewModel>().addCompletionPoints();
+        } catch (_) {
+          // HomeViewModel not in tree — skip silently
+        }
+      }
 
       // Slower zoom duration is 1.2s, let's wait 1.8s for the full zoom out & settle down!
       await Future.delayed(const Duration(milliseconds: 1800));

@@ -6,6 +6,14 @@ abstract class HomeRepository {
   Future<String?> getLaunchLevelId();
   Future<void> saveLastPlayedLevel(String levelId);
   Future<String?> getLastPlayedLevelId();
+
+  /// Points persistence
+  Future<int> getPoints();
+  Future<void> savePoints(int points);
+
+  /// Daily bonus — persists the date of the last bonus claim
+  Future<String?> getLastDailyBonusDate();
+  Future<void> saveLastDailyBonusDate(String date);
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -33,5 +41,25 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<String?> getLastPlayedLevelId() {
     return _contentService.getLastPlayedLevelId();
+  }
+
+  @override
+  Future<int> getPoints() {
+    return _contentService.getPoints();
+  }
+
+  @override
+  Future<void> savePoints(int points) {
+    return _contentService.savePoints(points);
+  }
+
+  @override
+  Future<String?> getLastDailyBonusDate() {
+    return _contentService.getLastDailyBonusDate();
+  }
+
+  @override
+  Future<void> saveLastDailyBonusDate(String date) {
+    return _contentService.saveLastDailyBonusDate(date);
   }
 }

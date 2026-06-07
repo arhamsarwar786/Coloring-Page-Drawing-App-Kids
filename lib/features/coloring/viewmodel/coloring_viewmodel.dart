@@ -706,40 +706,25 @@ class ColoringProvider extends ChangeNotifier {
   double _coverageForActiveRegion() {
     final mask = _activeRegionMask;
     final painted = _paintedPixels;
-    final px = _pixels;
     final region = _activePart;
-    if (mask == null || painted == null || px == null || region == null || imgWidth == 0 || imgHeight == 0) {
+    if (mask == null || painted == null || region == null ||
+        imgWidth == 0 || imgHeight == 0) {
       return 0.0;
     }
 
-    int? expectedRgba;
-    if (region.targetColorId != null && _currentLevel != null) {
-      for (final p in _currentLevel!.palette) {
-        if (p.id == region.targetColorId) {
-          expectedRgba = _colorToRgba(p.color, 220);
-          break;
-        }
-      }
-    }
-
+    // ── Color-match requirement removed ──────────────────────────────────────
+    // Any color the child paints counts. We only check that the pixel has been
+    // touched (painted[idx] == 1), not whether it matches a target palette id.
     var coverable = 0;
-    var correctCount = 0;
+    var paintedCount = 0;
     for (int idx = 0; idx < mask.length; idx++) {
       if (mask[idx] != 1) continue;
       coverable += 1;
-      if (painted[idx] == 1) {
-        if (expectedRgba != null) {
-          if (px[idx] == expectedRgba) {
-            correctCount += 1;
-          }
-        } else {
-          correctCount += 1;
-        }
-      }
+      if (painted[idx] == 1) paintedCount += 1;
     }
 
     if (coverable == 0) return 1.0;
-    return (correctCount / coverable).clamp(0.0, 1.0);
+    return (paintedCount / coverable).clamp(0.0, 1.0);
   }
 
   Future<void> _refreshActiveRegionMask() async {
