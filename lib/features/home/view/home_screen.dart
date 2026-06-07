@@ -641,6 +641,21 @@ class LevelCardState extends State<LevelCard> {
                           const SizedBox(height: 2),
                           Text(
                             widget.difficulty,
+                            style: GoogleFonts.fredoka(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.5,
+                              color: Colors
+                                  .white, // Text hamesha white aur pyara dikhega
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  offset: const Offset(0, 2),
+                                  blurRadius: 2,
+                                ),
+                              ],
+                            ),
+
                             // style: TextStyle(
                             //   color: getDifficultyColor(),
                             //   fontSize: 20,

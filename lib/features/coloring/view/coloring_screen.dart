@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/coloring/view/coloring_completion_screen.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
 import 'package:play_craft_kids/features/coloring/widgets/coloring_board.dart';
@@ -118,7 +119,8 @@ class _ColoringScreenState extends State<ColoringScreen> {
                   // ── Compact Header ──────────────────────────────────────────
                   // Back button | Animal title | 👆 hint icon | 🔍 zoom toggle
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,6 +136,77 @@ class _ColoringScreenState extends State<ColoringScreen> {
                           },
                         ),
 
+                        // const SizedBox(height: 16),
+                        AnimatedPreviewButton(
+                          onPressed: () {
+                            final coloredPath =
+                                getColoredImagePath(widget.imagePath ?? '');
+                            showGeneralDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              barrierLabel: "Preview",
+                              barrierColor: Colors.black.withOpacity(0.55),
+                              transitionDuration:
+                                  const Duration(milliseconds: 400),
+                              pageBuilder: (dialogContext, animation,
+                                  secondaryAnimation) {
+                                return PreviewImageDialog(
+                                    imagePath: coloredPath);
+                              },
+                              transitionBuilder:
+                                  (ctx, animation, secondaryAnimation, child) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: ScaleTransition(
+                                    scale: CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.elasticOut,
+                                    ),
+                                    child: child,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+
+                        SidebarIcon(
+                          icon: Icons.settings_rounded,
+                          assetName: 'assets/images/setting.png',
+                          onPressed: () {
+                            // showGeneralDialog(
+                            //   context: context,
+                            //   barrierDismissible: true,
+                            //   barrierLabel: "Settings",
+                            //   barrierColor: Colors.transparent,
+                            //   transitionDuration:
+                            //       const Duration(milliseconds: 250),
+                            //   pageBuilder: (_, __, ___) =>
+                            //       const SettingsDialog(),
+                            //   transitionBuilder:
+                            //       (_, animation, __, child) {
+                            //     return FadeTransition(
+                            //       opacity: animation,
+                            //       child: ScaleTransition(
+                            //         scale: CurvedAnimation(
+                            //           parent: animation,
+                            //           curve: Curves.easeOutBack,
+                            //         ),
+                            showDialog(
+                              context: context,
+                              barrierColor: Colors.black.withOpacity(
+                                  0.45), // Piche ka area dark karne ke liye
+                              builder: (BuildContext context) {
+                                return const Center(
+                                  child:
+                                      KidsSettingsDialog(), // Humara naya settings dialog widget
+                                );
+                              },
+                            );
+                          },
+                        ),
+                        // const SizedBox(height: 16),
+
                         // Text(
                         //   'LEVEL ${provider ?? 1}',
                         //   style: GoogleFonts.fredoka(
@@ -143,71 +216,136 @@ class _ColoringScreenState extends State<ColoringScreen> {
                         //     letterSpacing: 2.0,
                         //   ),
                         // ),
-                        Column(
-                          children: [
-                            SidebarIcon(
-                              icon: Icons.settings_rounded,
-                              assetName: 'assets/images/setting.png',
-                              onPressed: () {
-                                // showGeneralDialog(
-                                //   context: context,
-                                //   barrierDismissible: true,
-                                //   barrierLabel: "Settings",
-                                //   barrierColor: Colors.transparent,
-                                //   transitionDuration:
-                                //       const Duration(milliseconds: 250),
-                                //   pageBuilder: (_, __, ___) =>
-                                //       const SettingsDialog(),
-                                //   transitionBuilder:
-                                //       (_, animation, __, child) {
-                                //     return FadeTransition(
-                                //       opacity: animation,
-                                //       child: ScaleTransition(
-                                //         scale: CurvedAnimation(
-                                //           parent: animation,
-                                //           curve: Curves.easeOutBack,
-                                //         ),
-                                //         child: child,
-                                //       ),
-                                //     );
-                                //   },
-                                // );
+                        // Column(
+                        //   children: [
+                        //     SidebarIcon(
+                        //       icon: Icons.settings_rounded,
+                        //       assetName: 'assets/images/setting.png',
+                        //       onPressed: () {
+                        //         // showGeneralDialog(
+                        //         //   context: context,
+                        //         //   barrierDismissible: true,
+                        //         //   barrierLabel: "Settings",
+                        //         //   barrierColor: Colors.transparent,
+                        //         //   transitionDuration:
+                        //         //       const Duration(milliseconds: 250),
+                        //         //   pageBuilder: (_, __, ___) =>
+                        //         //       const SettingsDialog(),
+                        //         //   transitionBuilder:
+                        //         //       (_, animation, __, child) {
+                        //         //     return FadeTransition(
+                        //         //       opacity: animation,
+                        //         //       child: ScaleTransition(
+                        //         //         scale: CurvedAnimation(
+                        //         //           parent: animation,
+                        //         //           curve: Curves.easeOutBack,
+                        //         //         ),
+                        //         showDialog(
+                        //           context: context,
+                        //           barrierColor: Colors.black.withOpacity(
+                        //               0.45), // Piche ka area dark karne ke liye
+                        //           builder: (BuildContext context) {
+                        //             return const Center(
+                        //               child:
+                        //                   KidsSettingsDialog(), // Humara naya settings dialog widget
+                        //             );
+                        //           },
+                        //         );
+                        //       },
+                        //     ),
+                        //     const SizedBox(height: 16),
 
-                                showDialog(
-                                  context: context,
-                                  barrierColor: Colors.black.withOpacity(
-                                      0.45), // Piche ka area dark karne ke liye
-                                  builder: (BuildContext context) {
-                                    return const Center(
-                                      child:
-                                          KidsSettingsDialog(), // Humara naya settings dialog widget
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                            // const SizedBox(height: 16),
-                            // SidebarIcon(
-                            //   icon: Icons.edit_rounded,
-                            //   assetName: 'assets/images/pen.png',
-                            //   onPressed: () =>
-                            //       Navigator.pushNamed(context, AppRoutes.skins),
-                            // ),
-                            const SizedBox(height: 16),
-                            // SidebarIcon(
-                            //   icon: Icons.photo_library_rounded,
-                            //   assetName: 'assets/images/photo.png',
-                            //   onPressed: () async {
-                            //     await persistHistorySnapshot(
-                            //         captureThumbnail: true);
-                            //     if (context.mounted) {
-                            //       Navigator.pushNamed(
-                            //           context, AppRoutes.levels);
-                            //     }
-                            //   },
-                            // ),
-                          ],
-                        ),
+                        //     InkWell(
+                        //         onTap: () {
+                        //           final coloredPath = getColoredImagePath(
+                        //               widget.imagePath ?? '');
+                        //           showGeneralDialog(
+                        //             context: context,
+                        //             barrierDismissible: true,
+                        //             barrierLabel: "Preview",
+                        //             barrierColor:
+                        //                 Colors.black.withOpacity(0.55),
+                        //             transitionDuration:
+                        //                 const Duration(milliseconds: 400),
+                        //             pageBuilder: (dialogContext, animation,
+                        //                 secondaryAnimation) {
+                        //               return PreviewImageDialog(
+                        //                   imagePath: coloredPath);
+                        //             },
+                        //             transitionBuilder: (ctx, animation,
+                        //                 secondaryAnimation, child) {
+                        //               return FadeTransition(
+                        //                 opacity: animation,
+                        //                 child: ScaleTransition(
+                        //                   scale: CurvedAnimation(
+                        //                     parent: animation,
+                        //                     curve: Curves.elasticOut,
+                        //                   ),
+                        //                   child: child,
+                        //                 ),
+                        //               );
+                        //             },
+                        //           );
+                        //         },
+                        //         child: Container(
+                        //           child: Image.asset("assets/images/star.webp"),
+                        //           height: 50,
+                        //         )),
+                        //     // AnimatedPreviewButton(
+                        //     //   onPressed: () {
+                        //     //     final coloredPath =
+                        //     //         getColoredImagePath(widget.imagePath ?? '');
+                        //     //     showGeneralDialog(
+                        //     //       context: context,
+                        //     //       barrierDismissible: true,
+                        //     //       barrierLabel: "Preview",
+                        //     //       barrierColor: Colors.black.withOpacity(0.55),
+                        //     //       transitionDuration:
+                        //     //           const Duration(milliseconds: 400),
+                        //     //       pageBuilder: (dialogContext, animation,
+                        //     //           secondaryAnimation) {
+                        //     //         return PreviewImageDialog(
+                        //     //             imagePath: coloredPath);
+                        //     //       },
+                        //     //       transitionBuilder: (ctx, animation,
+                        //     //           secondaryAnimation, child) {
+                        //     //         return FadeTransition(
+                        //     //           opacity: animation,
+                        //     //           child: ScaleTransition(
+                        //     //             scale: CurvedAnimation(
+                        //     //               parent: animation,
+                        //     //               curve: Curves.elasticOut,
+                        //     //             ),
+                        //     //             child: child,
+                        //     //           ),
+                        //     //         );
+                        //     //       },
+                        //     //     );
+                        //     //   },
+
+                        //     // ),
+                        //     // const SizedBox(height: 16),
+                        //     // SidebarIcon(
+                        //     //   icon: Icons.edit_rounded,
+                        //     //   assetName: 'assets/images/pen.png',
+                        //     //   onPressed: () =>
+                        //     //       Navigator.pushNamed(context, AppRoutes.skins),
+                        //     // ),
+                        //     const SizedBox(height: 16),
+                        //     // SidebarIcon(
+                        //     //   icon: Icons.photo_library_rounded,
+                        //     //   assetName: 'assets/images/photo.png',
+                        //     //   onPressed: () async {
+                        //     //     await persistHistorySnapshot(
+                        //     //         captureThumbnail: true);
+                        //     //     if (context.mounted) {
+                        //     //       Navigator.pushNamed(
+                        //     //           context, AppRoutes.levels);
+                        //     //     }
+                        //     //   },
+                        //     // ),
+                        //   ],
+                        // ),
 
                         // SidebarIcon(
                         //   icon: Icons.edit_rounded,
@@ -364,6 +502,273 @@ class _ColoringScreenState extends State<ColoringScreen> {
           ),
         );
       },
+    );
+  }
+}
+
+// ── Preview popup & animations helper ────────────────────────────────────────
+
+String getColoredImagePath(String outlinePath) {
+  final parts = outlinePath.split('/');
+  if (parts.isEmpty) return outlinePath;
+  final fileName = parts.last;
+  String cleanName = fileName
+      .replaceFirst('un_colored-_', '')
+      .replaceFirst('un_colored_', '')
+      .replaceFirst('un_border_', '')
+      .replaceFirst('un_color_', '')
+      .replaceFirst('un_colorder_', '')
+      .replaceFirst('uncolored_', '');
+
+  if (cleanName == 'mango.webp') {
+    cleanName = 'mango.png';
+  } else if (cleanName == 'grapes.webp') {
+    cleanName = 'grapes.png';
+  } else if (cleanName == 'strawberry.webp') {
+    cleanName = 'strawberry.png';
+  } else if (cleanName == 'plum.webp') {
+    cleanName = 'plum.png';
+  } else if (cleanName == 'camel.jpeg') {
+    cleanName = 'camel.webp';
+  } else if (cleanName == 'hamster.jpeg') {
+    cleanName = 'hamster.webp';
+  } else if (cleanName == 'hen.jpeg') {
+    cleanName = 'hen.webp';
+  } else if (cleanName == 'rooster.jpeg') {
+    cleanName = 'rooster.webp';
+  } else if (cleanName == 'yak.jpeg') {
+    cleanName = 'yak.webp';
+  } else if (cleanName == 'rabbit.webp') {
+    cleanName = 'Rabbit.webp';
+  } else if (cleanName == 'donkey.webp') {
+    cleanName = 'Donkey.webp';
+  }
+
+  parts[parts.length - 1] = cleanName;
+  return parts.join('/');
+}
+
+class AnimatedPreviewButton extends StatefulWidget {
+  const AnimatedPreviewButton({Key? key, required this.onPressed})
+      : super(key: key);
+  final VoidCallback onPressed;
+
+  @override
+  State<AnimatedPreviewButton> createState() => _AnimatedPreviewButtonState();
+}
+
+class _AnimatedPreviewButtonState extends State<AnimatedPreviewButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.15).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: GestureDetector(
+        onTap: widget.onPressed,
+        child: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 3),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.orange.withOpacity(0.4),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.visibility_rounded,
+            color: Colors.white,
+            size: 26,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PreviewImageDialog extends StatefulWidget {
+  const PreviewImageDialog({Key? key, required this.imagePath})
+      : super(key: key);
+  final String imagePath;
+
+  @override
+  State<PreviewImageDialog> createState() => _PreviewImageDialogState();
+}
+
+class _PreviewImageDialogState extends State<PreviewImageDialog>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _bounceAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat(reverse: true);
+
+    _bounceAnimation = Tween<double>(begin: -8.0, end: 8.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 300,
+            height: 340,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF81C784), Color(0xFF4CAF50)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(color: Colors.white, width: 5),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 8),
+                Text(
+                  "LOOK & COLOR!",
+                  style: GoogleFonts.fredoka(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: 1.2,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.25),
+                        offset: const Offset(0, 2),
+                        blurRadius: 3,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: AnimatedBuilder(
+                    animation: _bounceAnimation,
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(0, _bounceAnimation.value),
+                        child: child,
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: const Color(0xFFFFEB3B), width: 4),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.12),
+                            blurRadius: 8,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        widget.imagePath,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 2,
+            right: 2,
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE57373),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.close_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
