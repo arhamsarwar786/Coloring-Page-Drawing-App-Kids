@@ -468,6 +468,12 @@ class LevelCard extends StatefulWidget {
   final bool isBusy;
   final VoidCallback onTap;
 
+  String get difficulty {
+    if (levelNumber <= 10) return "Easy";
+    if (levelNumber <= 20) return "Medium";
+    return "Hard";
+  }
+
   @override
   State<LevelCard> createState() => LevelCardState();
 }
@@ -489,6 +495,19 @@ class LevelCardState extends State<LevelCard> {
     final Color mainBodyColor = widget.palette.outerTop;
     final Color bottomBorderColor = widget.palette.edge;
     final Color innerWhiteBoxColor = Colors.white.withOpacity(0.35);
+
+    Color getDifficultyColor() {
+      switch (widget.difficulty) {
+        case "Easy":
+          return Colors.greenAccent;
+        case "Medium":
+          return Colors.orangeAccent;
+        case "Hard":
+          return Colors.redAccent;
+        default:
+          return Colors.blue;
+      }
+    }
 
     return IgnorePointer(
       ignoring: widget.isBusy,
@@ -616,12 +635,20 @@ class LevelCardState extends State<LevelCard> {
                             ),
                           ),
                           const SizedBox(height: 2),
+                          Text(
+                            widget.difficulty,
+                            // style: TextStyle(
+                            //   color: getDifficultyColor(),
+                            //   fontSize: 20,
+                            //   fontWeight: FontWeight.bold,
+                            // ),
+                          ),
                         ],
                       ),
                     ),
 
                     // === LOCK OVERLAY LAYER ===
-                    Agar level lock hoga, toh color ke upar sirf yeh semi-transparent lock overlay aayega!
+                    // Agar level lock hoga, toh color ke upar sirf yeh semi-transparent lock overlay aayega!
                     if (widget.isLocked)
                       Positioned.fill(
                         child: Container(
