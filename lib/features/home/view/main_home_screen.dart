@@ -331,21 +331,27 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               ),
 
               // Doosra Button (Index 1) - Levels
-              AppBottomBar(
-                isSelected: selectedIndex == 1,
-                icon: Icons.person_rounded,
-                topColor: const Color(0xFFFFA48A),
-                bottomColor: const Color(0xFFD9534F),
-                onTap: () {
-                  handleTapAction(context, () {});
-                  if (context.mounted) {
-                    Navigator.pushNamed(context, AppRoutes.levels);
-                  }
-                  setState(() {
-                    selectedIndex = 1;
-                  });
-                },
-              ),
+              // AppBottomBar(
+              //   isSelected: selectedIndex == 1,
+              //   icon: Icons.person_rounded,
+              //   topColor: const Color(0xFFFFA48A),
+              //   bottomColor: const Color(0xFFD9534F),
+              //   onTap: () async{
+              //      await persistHistorySnapshot(
+              //                           captureThumbnail: true);
+              //                       if (context.mounted) {
+              //                         Navigator.pushNamed(
+              //                             context, AppRoutes.levels);
+              //                       }
+              //     // handleTapAction(context, () {});
+              //     // if (context.mounted) {
+              //     //   Navigator.pushNamed(context, AppRoutes.levels);
+              //     // }
+              //     // setState(() {
+              //     //   selectedIndex = 1;
+              //     // });
+              //   },
+              // ),
 
               // Teesra Button (Index 2) - Settings
               AppBottomBar(
