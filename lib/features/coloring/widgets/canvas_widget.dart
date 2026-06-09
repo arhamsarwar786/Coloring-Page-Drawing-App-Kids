@@ -82,22 +82,22 @@ class _CanvasWidgetState extends State<CanvasWidget>
     super.dispose();
   }
 
-  void _scheduleAutoZoom(
-    ColoringProvider provider,
-    double viewportWidth,
-    double viewportHeight,
-  ) {
-    if (!provider.autoZoomEnabled ||
-        provider.activeRegionBoundsFraction == null ||
-        provider.isPartByPartComplete) {
-      return;
-    }
+  // void _scheduleAutoZoom(
+  //   ColoringProvider provider,
+  //   double viewportWidth,
+  //   double viewportHeight,
+  // ) {
+  //   if (!provider.autoZoomEnabled ||
+  //       provider.activeRegionBoundsFraction == null ||
+  //       provider.isPartByPartComplete) {
+  //     return;
+  //   }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      _applyAutoZoom(provider, viewportWidth, viewportHeight);
-    });
-  }
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     if (!mounted) return;
+  //     _applyAutoZoom(provider, viewportWidth, viewportHeight);
+  //   });
+  // }
 
   void _applyAutoZoom(
     ColoringProvider provider,
@@ -219,13 +219,13 @@ class _CanvasWidgetState extends State<CanvasWidget>
           builder: (context, constraints) {
             final side = math.min(constraints.maxWidth, constraints.maxHeight);
 
-            if (needsAutoZoom) {
-              _scheduleAutoZoom(
-                provider,
-                constraints.maxWidth,
-                constraints.maxHeight,
-              );
-            }
+            // if (needsAutoZoom) {
+            //   _scheduleAutoZoom(
+            //     provider,
+            //     constraints.maxWidth,
+            //     constraints.maxHeight,
+            //   );
+            // }
 
             return ClipRect(
               child: InteractiveViewer(

@@ -55,6 +55,11 @@ class _ColoringScreenState extends State<ColoringScreen> {
     final provider = _provider;
     if (provider == null || !mounted) return;
 
+    // Reset flag if the user hit "Try Again" and the provider is no longer complete
+    if (!provider.isPartByPartComplete && _didNavigateToCompletion) {
+      _didNavigateToCompletion = false;
+    }
+
     if (provider.isPartByPartComplete && !_didNavigateToCompletion) {
       _didNavigateToCompletion = true;
 

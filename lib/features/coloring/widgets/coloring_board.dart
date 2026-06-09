@@ -38,49 +38,49 @@ class _ColoringBoardState extends State<ColoringBoard> {
     return Column(
       children: [
         // ── Dynamic Child-Friendly Instruction Card ─────────────────────────
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-          margin: const EdgeInsets.only(bottom: 6),
-          decoration: BoxDecoration(
-            // color: AppColors.smartGreen.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: AppColors.rose,
-              width: 2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.rose,
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.star_rounded,
-                color: Colors.white,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Flexible(
-                child: Text(
-                  // "instructionText",
-                  _instructionText,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // if (provider.isLoaded && provider.totalParts > 0) ...[
+        // Container(
+        //   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+        //   margin: const EdgeInsets.only(bottom: 6),
+        //   decoration: BoxDecoration(
+        //     // color: AppColors.smartGreen.withValues(alpha: 0.12),
+        //     borderRadius: BorderRadius.circular(24),
+        //     border: Border.all(
+        //       color: AppColors.rose,
+        //       width: 2,
+        //     ),
+        //     boxShadow: [
+        //       BoxShadow(
+        //         color: AppColors.rose,
+        //         blurRadius: 10,
+        //         offset: const Offset(0, 4),
+        //       ),
+        //     ],
+        //   ),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       const Icon(
+        //         Icons.star_rounded,
+        //         color: Colors.white,
+        //         size: 20,
+        //       ),
+        //       const SizedBox(width: 8),
+        //       Flexible(
+        //         child: Text(
+        //           // "instructionText",
+        //           _instructionText,
+        //           textAlign: TextAlign.center,
+        //           style: const TextStyle(
+        //               fontSize: 16,
+        //               fontWeight: FontWeight.w900,
+        //               color: Colors.white),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // // if (provider.isLoaded && provider.totalParts > 0) ...[
         //   Padding(
         //     padding: const EdgeInsets.only(bottom: 10),
         //     child: ClipRRect(

@@ -186,6 +186,13 @@ class ColoringProvider extends ChangeNotifier {
   }
 
   bool _isColorMatch(int paintedRgba, int refRgba) {
+    // Check alpha of reference image. If it's transparent, we don't penalize the child 
+    // (this happens if the colored asset doesn't perfectly fill the uncolored outline).
+    final refAlpha = (refRgba >> 24) & 0xFF;
+    if (refAlpha < 50) {
+      return true;
+    }
+
     // Both are little-endian rgba8888 -> (A << 24) | (B << 16) | (G << 8) | R
     final pr = paintedRgba & 0xFF;
     final pg = (paintedRgba >> 8) & 0xFF;
@@ -201,8 +208,8 @@ class ColoringProvider extends ChangeNotifier {
     final distSq = dr * dr + dg * dg + db * db;
     
     // Very generous threshold to account for JPEG artifacts, anti-aliasing, and limited palette.
-    // 100^2 * 3 = 30000. We'll use 20000 as a threshold for distance squared.
-    return distSq < 20000;
+    // We use 45000 as a threshold for distance squared, which allows similar shades but rejects opposite colors.
+    return distSq < 45000;
   }
   _ColoringPart? get _activePart => _activeRegionIndex < _orderedParts.length
       ? _orderedParts[_activeRegionIndex]

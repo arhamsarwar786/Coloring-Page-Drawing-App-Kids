@@ -84,25 +84,49 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     final provider = context.read<ColoringProvider>();
     _earnedCoins = provider.currentLevel?.rewardCoins ?? 20;
 
+    // Instantly mark the level as completed if they passed (so backing out still saves progress)
+    final passed = provider.overallCoveragePercent >= 70;
+    if (passed) {
+      final currentLevel = provider.currentLevel;
+      if (currentLevel != null) {
+        final drawingRepo = context.read<DrawingRepository>();
+        await drawingRepo.markLevelCompleted(
+          levelId: currentLevel.id,
+          stars: 3,
+          rewardCoins: currentLevel.rewardCoins,
+        );
+        // Refresh home viewmodel so it's unlocked when returning
+        if (mounted) {
+          final homeVM = context.read<HomeViewModel>();
+          homeVM.refreshProgress();
+          homeVM.load();
+        }
+      }
+    }
+
     await Future.delayed(const Duration(milliseconds: 150));
     if (!mounted) return;
 
-    _confettiController.play();
+    if (passed) {
+      _confettiController.play();
+    }
     _cardController.forward();
 
     await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
 
-    // Light up stars one by one
-    for (int i = 1; i <= 3; i++) {
-      await Future.delayed(const Duration(milliseconds: 280));
-      if (!mounted) return;
-      setState(() => _visibleStars = i);
-    }
+    if (passed) {
+      // Light up stars one by one
+      for (int i = 1; i <= 3; i++) {
+        await Future.delayed(const Duration(milliseconds: 280));
+        if (!mounted) return;
+        setState(() => _visibleStars = i);
+      }
 
-    await Future.delayed(const Duration(milliseconds: 200));
-    if (!mounted) return;
-    _coinsController.forward();
+      await Future.delayed(const Duration(milliseconds: 200));
+      if (!mounted) return;
+      _coinsController.forward();
+    }
   }
 
   @override
@@ -319,93 +343,95 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                       const SizedBox(height: 20),
 
                       // ── Stars row ─────────────────────────────────────────
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(3, (i) {
-                          final lit = i < _visibleStars;
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.elasticOut,
-                            margin: const EdgeInsets.symmetric(horizontal: 6),
-                            child: AnimatedScale(
-                              scale: lit ? 1.0 : 0.6,
-                              duration: const Duration(milliseconds: 350),
+                      if (passed)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(3, (i) {
+                            final lit = i < _visibleStars;
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
                               curve: Curves.elasticOut,
-                              child: Icon(
-                                Icons.star_rounded,
-                                size: 52,
-                                color: lit
-                                    ? const Color(0xFFFFD700)
-                                    : Colors.white.withValues(alpha: 0.2),
-                                shadows: lit
-                                    ? [
-                                        const Shadow(
-                                          color: Color(0xFFFFD700),
-                                          blurRadius: 16,
-                                        ),
-                                      ]
-                                    : null,
-                              ),
-                            ),
-                          );
-                        }),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // ── Coins banner ──────────────────────────────────────
-                      AnimatedBuilder(
-                        animation: _coinsController,
-                        builder: (context, child) => Transform.translate(
-                          offset: Offset(0, _coinsSlide.value),
-                          child: Opacity(
-                            opacity: _coinsController.value,
-                            child: child,
-                          ),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 28, vertical: 12),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFFFD700), Color(0xFFFF9100)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(40),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFFFD700)
-                                    .withValues(alpha: 0.45),
-                                blurRadius: 16,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text('🪙', style: TextStyle(fontSize: 26)),
-                              const SizedBox(width: 8),
-                              Text(
-                                '+$coins Coins Earned!',
-                                style: GoogleFonts.fredoka(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                  shadows: [
-                                    const Shadow(
-                                      color: Colors.black26,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
+                              margin: const EdgeInsets.symmetric(horizontal: 6),
+                              child: AnimatedScale(
+                                scale: lit ? 1.0 : 0.6,
+                                duration: const Duration(milliseconds: 350),
+                                curve: Curves.elasticOut,
+                                child: Icon(
+                                  Icons.star_rounded,
+                                  size: 52,
+                                  color: lit
+                                      ? const Color(0xFFFFD700)
+                                      : Colors.white.withValues(alpha: 0.2),
+                                  shadows: lit
+                                      ? [
+                                          const Shadow(
+                                            color: Color(0xFFFFD700),
+                                            blurRadius: 16,
+                                          ),
+                                        ]
+                                      : null,
                                 ),
                               ),
-                            ],
+                            );
+                          }),
+                        ),
+
+                      if (passed) const SizedBox(height: 16),
+
+                      // ── Coins banner ──────────────────────────────────────
+                      if (passed)
+                        AnimatedBuilder(
+                          animation: _coinsController,
+                          builder: (context, child) => Transform.translate(
+                            offset: Offset(0, _coinsSlide.value),
+                            child: Opacity(
+                              opacity: _coinsController.value,
+                              child: child,
+                            ),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 28, vertical: 12),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFFD700), Color(0xFFFF9100)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(40),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFFFD700)
+                                      .withValues(alpha: 0.45),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text('🪙', style: TextStyle(fontSize: 26)),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '+$coins Coins Earned!',
+                                  style: GoogleFonts.fredoka(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    shadows: [
+                                      const Shadow(
+                                        color: Colors.black26,
+                                        blurRadius: 4,
+                                        offset: Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
 
                       const SizedBox(height: 24),
 
@@ -421,22 +447,6 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                               color: Colors.white.withValues(alpha: 0.18),
                               textColor: Colors.white,
                               onTap: () async {
-                                final currentLevel = provider.currentLevel;
-                                if (currentLevel != null) {
-                                  final drawingRepo =
-                                      context.read<DrawingRepository>();
-                                  await drawingRepo.markLevelCompleted(
-                                    levelId: currentLevel.id,
-                                    stars: 3,
-                                    rewardCoins: currentLevel.rewardCoins,
-                                  );
-                                  if (mounted) {
-                                    final homeVM =
-                                        context.read<HomeViewModel>();
-                                    await homeVM.refreshProgress();
-                                    await homeVM.load();
-                                  }
-                                }
                                 if (mounted) {
                                   Navigator.of(context)
                                       .popUntil((route) => route.isFirst);
@@ -455,22 +465,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                                       onTap: () async {
                                         final currentLevel = provider.currentLevel;
                                         if (currentLevel != null) {
-                                          // 1. Mark completed & refresh home
                                           final drawingRepo =
                                               context.read<DrawingRepository>();
-                                          await drawingRepo.markLevelCompleted(
-                                            levelId: currentLevel.id,
-                                            stars: 3,
-                                            rewardCoins: currentLevel.rewardCoins,
-                                          );
-
-                                          // 2. Refresh HomeViewModel BEFORE navigating
-                                          if (mounted) {
-                                            final homeVM =
-                                                context.read<HomeViewModel>();
-                                            await homeVM.refreshProgress();
-                                            await homeVM.load();
-                                          }
 
                                           // 3. Find next level
                                           final nextLevelId = await drawingRepo

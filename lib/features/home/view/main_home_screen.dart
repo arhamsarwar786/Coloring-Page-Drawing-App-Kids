@@ -299,77 +299,79 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     final allCategories = viewModel.categories;
 
     return Scaffold(
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(
-          left: 18,
-          right: 18,
-          bottom: 14,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 22,
-          vertical: 10,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // Pehla Button (Index 0) - Home
-            AppBottomBar(
-              icon: Icons.home,
-              topColor: Colors.orangeAccent,
-              bottomColor: Colors.orange,
-              isSelected: selectedIndex == 0,
-              onTap: () {
-                handleTapAction(context, () {});
-                setState(() {
-                  selectedIndex = 0;
-                });
-              },
-            ),
-
-            // Doosra Button (Index 1) - Levels
-            AppBottomBar(
-              isSelected: selectedIndex == 1,
-              icon: Icons.person_rounded,
-              topColor: const Color(0xFFFFA48A),
-              bottomColor: const Color(0xFFD9534F),
-              onTap: () {
-                handleTapAction(context, () {});
-                if (context.mounted) {
-                  Navigator.pushNamed(context, AppRoutes.levels);
-                }
-                setState(() {
-                  selectedIndex = 1;
-                });
-              },
-            ),
-
-            // Teesra Button (Index 2) - Settings
-            AppBottomBar(
-              icon: Icons.settings,
-              topColor: Colors.blueAccent,
-              bottomColor: Colors.blue,
-              isSelected: selectedIndex == 2,
-              onTap: () {
-                setState(() {
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.only(
+            left: 18,
+            right: 18,
+            // bottom: 4,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 2,
+            vertical: 5,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              // Pehla Button (Index 0) - Home
+              AppBottomBar(
+                icon: Icons.home,
+                topColor: Colors.orangeAccent,
+                bottomColor: Colors.orange,
+                isSelected: selectedIndex == 0,
+                onTap: () {
                   handleTapAction(context, () {});
-                  showDialog(
-                    context: context,
-                    barrierColor: Colors.black.withOpacity(0.45),
-                    builder: (BuildContext context) {
-                      return const Center(
-                        child:
-                            KidsSettingsDialog(), // Aapka custom settings dialog
-                      );
-                    },
-                  );
-                  selectedIndex = 2;
-                });
-              },
-            ),
-          ],
+                  setState(() {
+                    selectedIndex = 0;
+                  });
+                },
+              ),
+
+              // Doosra Button (Index 1) - Levels
+              AppBottomBar(
+                isSelected: selectedIndex == 1,
+                icon: Icons.person_rounded,
+                topColor: const Color(0xFFFFA48A),
+                bottomColor: const Color(0xFFD9534F),
+                onTap: () {
+                  handleTapAction(context, () {});
+                  if (context.mounted) {
+                    Navigator.pushNamed(context, AppRoutes.levels);
+                  }
+                  setState(() {
+                    selectedIndex = 1;
+                  });
+                },
+              ),
+
+              // Teesra Button (Index 2) - Settings
+              AppBottomBar(
+                icon: Icons.settings,
+                topColor: Colors.blueAccent,
+                bottomColor: Colors.blue,
+                isSelected: selectedIndex == 2,
+                onTap: () {
+                  setState(() {
+                    handleTapAction(context, () {});
+                    showDialog(
+                      context: context,
+                      barrierColor: Colors.black.withOpacity(0.45),
+                      builder: (BuildContext context) {
+                        return const Center(
+                          child:
+                              KidsSettingsDialog(), // Aapka custom settings dialog
+                        );
+                      },
+                    );
+                    selectedIndex = 2;
+                  });
+                },
+              ),
+            ],
+          ),
         ),
       ),
       backgroundColor: const Color(0xffFAF8F5),
