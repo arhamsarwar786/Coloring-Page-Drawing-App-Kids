@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/auth/view/sign_up_screen.dart';
 import 'package:play_craft_kids/features/home/view/main_home_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -29,7 +30,7 @@ class SplashViewModel extends BaseViewModel {
       context,
       MaterialPageRoute(
         builder: (_) =>
-            session != null ? MainHomeScreen() : const SignupScreen(),
+            session != null ? MainHomeScreen() : const LoginScreen(),
       ),
     );
 

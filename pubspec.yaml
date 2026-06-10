@@ -45,3 +45,6 @@ flutter:
     - family: Poppins
       fonts:
         - asset: fonts/poppins_bold.ttf
+    - family: Regular
+      fonts:
+        - asset: fonts/poppins-regular.ttf

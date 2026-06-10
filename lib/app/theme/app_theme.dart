@@ -7,7 +7,7 @@ abstract final class AppTheme {
   static ThemeData light() {
     final base = ThemeData(
       useMaterial3: true,
-      fontFamily: GoogleFonts.poppins().fontFamily,
+      fontFamily: "Regular",
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.rose,
         brightness: Brightness.light,
