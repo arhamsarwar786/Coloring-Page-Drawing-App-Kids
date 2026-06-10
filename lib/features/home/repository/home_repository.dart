@@ -50,6 +50,7 @@ class HomeRepositoryImpl implements HomeRepository {
 
   @override
   Future<void> savePoints(int points) {
+    print("--- STEP 1: Repository.savePoints called with: $points ---");
     return _contentService.savePoints(points);
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/features/auth/view/sign_up_screen.dart';
 
 import '../../../app/config/app_config.dart';
 import '../../../app/routes/app_routes.dart';
@@ -21,9 +22,16 @@ class SplashViewModel extends BaseViewModel {
     await _repository.loadHomeContent();
     if (!context.mounted) return;
 
-    Navigator.pushReplacementNamed(
+    Navigator.pushReplacement(
       context,
-      AppRoutes.mainHome,
+      MaterialPageRoute(
+        builder: (_) => const SignupScreen(),
+      ),
     );
+    // ReplacementNamed(
+    // //   context,
+
+    // //   // AppRoutes.mainHome,
+    // );
   }
 }

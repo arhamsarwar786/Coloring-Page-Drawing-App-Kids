@@ -80,43 +80,53 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     });
   }
 
-  void _startSequence() async {
+  Future<void> _startSequence() async {
     final provider = context.read<ColoringProvider>();
+    final homeVM = context.read<HomeViewModel>();
+
     _earnedCoins = provider.currentLevel?.rewardCoins ?? 20;
 
-    // Instantly mark the level as completed if they passed (so backing out still saves progress)
     final passed = provider.overallCoveragePercent >= 70;
+
+    // 1. DATA SAVING LOGIC (Supabase + Local)
     if (passed) {
       final currentLevel = provider.currentLevel;
       if (currentLevel != null) {
         final drawingRepo = context.read<DrawingRepository>();
+
+        // Level complete mark karein
         await drawingRepo.markLevelCompleted(
           levelId: currentLevel.id,
           stars: 3,
           rewardCoins: currentLevel.rewardCoins,
         );
-        // Refresh home viewmodel so it's unlocked when returning
+
+        // Points save karein (Supabase connection)
+        await homeVM.addCompletionPoints();
+
         if (mounted) {
-          final homeVM = context.read<HomeViewModel>();
           homeVM.refreshProgress();
           homeVM.load();
         }
       }
     }
 
+    // 2. ANIMATION LOGIC (Image display aur effect ke liye)
     await Future.delayed(const Duration(milliseconds: 150));
     if (!mounted) return;
 
     if (passed) {
       _confettiController.play();
     }
+
+    // Card animation chalayein taake image show ho
     _cardController.forward();
 
     await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
 
     if (passed) {
-      // Light up stars one by one
+      // Stars aur Coins animation
       for (int i = 1; i <= 3; i++) {
         await Future.delayed(const Duration(milliseconds: 280));
         if (!mounted) return;
@@ -128,8 +138,56 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
       _coinsController.forward();
     }
   }
+  // void _startSequence() async {
+  //   final provider = context.read<ColoringProvider>();
+  //   _earnedCoins = provider.currentLevel?.rewardCoins ?? 20;
 
-  @override
+  //   // Instantly mark the level as completed if they passed (so backing out still saves progress)
+  //   final passed = provider.overallCoveragePercent >= 70;
+  //   if (passed) {
+  //     final currentLevel = provider.currentLevel;
+  //     if (currentLevel != null) {
+  //       final drawingRepo = context.read<DrawingRepository>();
+  //       await drawingRepo.markLevelCompleted(
+  //         levelId: currentLevel.id,
+  //         stars: 3,
+  //         rewardCoins: currentLevel.rewardCoins,
+  //       );
+  //       // Refresh home viewmodel so it's unlocked when returning
+  //       if (mounted) {
+  //         final homeVM = context.read<HomeViewModel>();
+  //         homeVM.refreshProgress();
+  //         homeVM.load();
+  //       }
+  //     }
+  //   }
+
+  //   await Future.delayed(const Duration(milliseconds: 150));
+  //   if (!mounted) return;
+
+  //   if (passed) {
+  //     _confettiController.play();
+  //   }
+  //   _cardController.forward();
+
+  //   await Future.delayed(const Duration(milliseconds: 500));
+  //   if (!mounted) return;
+
+  //   if (passed) {
+  //     // Light up stars one by one
+  //     for (int i = 1; i <= 3; i++) {
+  //       await Future.delayed(const Duration(milliseconds: 280));
+  //       if (!mounted) return;
+  //       setState(() => _visibleStars = i);
+  //     }
+
+  //     await Future.delayed(const Duration(milliseconds: 200));
+  //     if (!mounted) return;
+  //     _coinsController.forward();
+  //   }
+  // }
+
+  // @override
   void dispose() {
     _confettiController.dispose();
     _cardController.dispose();
@@ -171,7 +229,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
           final item = provider.currentItem;
           final word = item?.label ?? 'Picture';
           final coins = provider.currentLevel?.rewardCoins ?? _earnedCoins;
-          
+
           final coverage = provider.overallCoveragePercent;
           final passed = coverage >= 70;
 
@@ -251,7 +309,9 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                         style: GoogleFonts.fredoka(
                           fontSize: 34,
                           fontWeight: FontWeight.w700,
-                          color: passed ? const Color(0xFFFFD700) : const Color(0xFFFF5722),
+                          color: passed
+                              ? const Color(0xFFFFD700)
+                              : const Color(0xFFFF5722),
                           shadows: [
                             const Shadow(
                               color: Colors.black38,
@@ -411,7 +471,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text('🪙', style: TextStyle(fontSize: 26)),
+                                const Text('🪙',
+                                    style: TextStyle(fontSize: 26)),
                                 const SizedBox(width: 8),
                                 Text(
                                   '+$coins Coins Earned!',
@@ -463,7 +524,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                                       color: const Color(0xFF00E676),
                                       textColor: Colors.white,
                                       onTap: () async {
-                                        final currentLevel = provider.currentLevel;
+                                        final currentLevel =
+                                            provider.currentLevel;
                                         if (currentLevel != null) {
                                           final drawingRepo =
                                               context.read<DrawingRepository>();
@@ -479,37 +541,39 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
 
                                           if (nextLevel != null && mounted) {
                                             // 4. Setup provider for next level
-                                            final coloringProvider =
-                                                context.read<ColoringProvider>();
+                                            final coloringProvider = context
+                                                .read<ColoringProvider>();
                                             final activity = ActivityItem(
                                               id: nextLevel.id,
                                               label: nextLevel.title,
                                               display: nextLevel.title,
                                               color: Colors.red,
-                                              imagePath: nextLevel
-                                                      .activityItem?.imagePath ??
+                                              imagePath: nextLevel.activityItem
+                                                      ?.imagePath ??
                                                   nextLevel.imagePath ??
                                                   'assets/images/un_border_apple.webp',
                                             );
-                                            coloringProvider.setItem(
-                                                activity, provider.currentCategoryId,
+                                            coloringProvider.setItem(activity,
+                                                provider.currentCategoryId,
                                                 level: nextLevel);
 
                                             // 5. Navigate — keep Home as root
-                                            Navigator.of(context).pushAndRemoveUntil(
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
                                               MaterialPageRoute(
                                                 builder: (_) => ColoringScreen(
-                                                    imagePath: activity.imagePath),
+                                                    imagePath:
+                                                        activity.imagePath),
                                               ),
                                               (route) => route.isFirst,
                                             );
                                           } else if (mounted) {
-                                            Navigator.of(context)
-                                                .popUntil((route) => route.isFirst);
+                                            Navigator.of(context).popUntil(
+                                                (route) => route.isFirst);
                                           }
                                         } else {
-                                          Navigator.of(context)
-                                              .popUntil((route) => route.isFirst);
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
                                         }
                                       },
                                     )
