@@ -215,9 +215,9 @@ class HomeViewModel extends BaseViewModel {
 
   // ── Points system ─────────────────────────────────────────────────────────
 
-  /// Adds 20 points when a level is fully completed.
-  Future<void> addCompletionPoints() async {
-    _totalPoints += _completionPointsValue;
+  /// Adds points when a level is fully completed.
+  Future<void> addCompletionPoints(int points) async {
+    _totalPoints += points;
     await _repository.savePoints(_totalPoints);
     notifyListeners();
   }
@@ -229,18 +229,47 @@ class HomeViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  /// Adds 50 points once per calendar day.
-  /// Returns [true] if the bonus was awarded, [false] if already claimed today.
-  Future<bool> addDailyBonusPoints() async {
-    final today = _todayDateString();
-    final lastBonus = await _repository.getLastDailyBonusDate();
-    if (lastBonus == today) return false; // already claimed today
+  /// Adds daily and streak bonus points.
+  /// Returns the amount of bonus points awarded (0 if already claimed).
+  Future<int> addDailyBonusPoints() async {
+    final today = DateTime.now();
+    final todayStr = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+    final lastBonusStr = await _repository.getLastDailyBonusDate();
+    
+    if (lastBonusStr == todayStr) return 0; // already claimed today
 
-    _totalPoints += _dailyBonusPointsValue;
+    int streak = await _repository.getCurrentStreak();
+    
+    if (lastBonusStr != null) {
+      try {
+        final lastBonusDate = DateTime.parse(lastBonusStr);
+        final diff = today.difference(lastBonusDate).inDays;
+        if (diff == 1) {
+          streak += 1;
+        } else if (diff > 1) {
+          streak = 1; // Streak broken
+        }
+      } catch (_) {
+        streak = 1;
+      }
+    } else {
+      streak = 1;
+    }
+
+    int pointsToAdd = 0;
+    if (streak == 1) pointsToAdd += 10;
+    else if (streak == 2) pointsToAdd += 15;
+    else pointsToAdd += 20; // Day 3+
+
+    if (streak == 7) pointsToAdd += 50; // 7 days streak
+    if (streak == 30) pointsToAdd += 200; // 30 days streak
+
+    _totalPoints += pointsToAdd;
     await _repository.savePoints(_totalPoints);
-    await _repository.saveLastDailyBonusDate(today);
+    await _repository.saveLastDailyBonusDate(todayStr);
+    await _repository.saveCurrentStreak(streak);
     notifyListeners();
-    return true;
+    return pointsToAdd;
   }
 
   String _todayDateString() {

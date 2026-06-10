@@ -291,6 +291,25 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   int selectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      final viewModel = context.read<HomeViewModel>();
+      final pointsAwarded = await viewModel.addDailyBonusPoints();
+      if (pointsAwarded > 0 && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('🎉 Daily Bonus! You received $pointsAwarded coins!'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // ViewModel ko read aur listen kar rahe hain
     final viewModel = context.watch<HomeViewModel>();

@@ -20,6 +20,7 @@ class LocalContentService {
   String? _lastPlayedLevelId;
   int _totalPoints = 0;
   String? _lastDailyBonusDate;
+  int _currentStreak = 0;
   bool _stateLoaded = false;
 
   Future<HomeContentModel> loadHomeContent() async {
@@ -285,6 +286,17 @@ class LocalContentService {
     await _persistState();
   }
 
+  Future<int> getCurrentStreak() async {
+    await _ensureStateLoaded();
+    return _currentStreak;
+  }
+
+  Future<void> saveCurrentStreak(int streak) async {
+    await _ensureStateLoaded();
+    _currentStreak = streak;
+    await _persistState();
+  }
+
   Future<void> markLevelCompleted({
     required String levelId,
     required int stars,
@@ -391,6 +403,7 @@ class LocalContentService {
       _lastPlayedLevelId = jsonMap['lastPlayedLevelId'] as String?;
       _totalPoints = (jsonMap['totalPoints'] as int?) ?? 0;
       _lastDailyBonusDate = jsonMap['lastDailyBonusDate'] as String?;
+      _currentStreak = (jsonMap['currentStreak'] as int?) ?? 0;
       final progressMap = jsonMap['progress'] as Map<String, dynamic>? ??
           const <String, dynamic>{};
       for (final entry in progressMap.entries) {
@@ -402,6 +415,7 @@ class LocalContentService {
       _lastPlayedLevelId = null;
       _totalPoints = 0;
       _lastDailyBonusDate = null;
+      _currentStreak = 0;
     }
   }
 
@@ -410,6 +424,7 @@ class LocalContentService {
       'lastPlayedLevelId': _lastPlayedLevelId,
       'totalPoints': _totalPoints,
       'lastDailyBonusDate': _lastDailyBonusDate,
+      'currentStreak': _currentStreak,
       'progress': _progress.map(
         (key, value) => MapEntry<String, dynamic>(key, value.toJson()),
       ),

@@ -207,9 +207,9 @@ class ColoringProvider extends ChangeNotifier {
     final db = pb - rb;
     final distSq = dr * dr + dg * dg + db * db;
     
-    // Very generous threshold to account for JPEG artifacts, anti-aliasing, and limited palette.
-    // We use 45000 as a threshold for distance squared, which allows similar shades but rejects opposite colors.
-    return distSq < 45000;
+    // Tighter threshold to ensure accurate colors.
+    // 15000 allows similar shades but rejects distinct colors like blue vs red.
+    return distSq < 15000;
   }
   _ColoringPart? get _activePart => _activeRegionIndex < _orderedParts.length
       ? _orderedParts[_activeRegionIndex]

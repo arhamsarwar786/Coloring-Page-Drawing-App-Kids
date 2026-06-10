@@ -11,9 +11,11 @@ abstract class HomeRepository {
   Future<int> getPoints();
   Future<void> savePoints(int points);
 
-  /// Daily bonus — persists the date of the last bonus claim
+  /// Daily bonus & streak
   Future<String?> getLastDailyBonusDate();
   Future<void> saveLastDailyBonusDate(String date);
+  Future<int> getCurrentStreak();
+  Future<void> saveCurrentStreak(int streak);
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -62,5 +64,15 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<void> saveLastDailyBonusDate(String date) {
     return _contentService.saveLastDailyBonusDate(date);
+  }
+
+  @override
+  Future<int> getCurrentStreak() {
+    return _contentService.getCurrentStreak();
+  }
+
+  @override
+  Future<void> saveCurrentStreak(int streak) {
+    return _contentService.saveCurrentStreak(streak);
   }
 }

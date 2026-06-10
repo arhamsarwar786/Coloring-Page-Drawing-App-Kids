@@ -84,9 +84,20 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     final provider = context.read<ColoringProvider>();
     final homeVM = context.read<HomeViewModel>();
 
-    _earnedCoins = provider.currentLevel?.rewardCoins ?? 20;
+    final coverage = provider.overallCoveragePercent;
+    final passed = coverage >= 70;
 
-    final passed = provider.overallCoveragePercent >= 70;
+    int baseCoins = 10;
+    final difficulty = provider.currentLevel?.difficulty?.toLowerCase() ?? 'easy';
+    if (difficulty == 'medium') baseCoins = 20;
+    else if (difficulty == 'hard' || difficulty == 'difficult') baseCoins = 30;
+
+    int extraCoins = 0;
+    if (coverage >= 90) {
+      extraCoins = 10;
+    }
+
+    _earnedCoins = baseCoins + extraCoins;
 
     // 1. DATA SAVING LOGIC (Supabase + Local)
     if (passed) {
@@ -102,7 +113,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
         );
 
         // Points save karein (Supabase connection)
-        await homeVM.addCompletionPoints();
+        await homeVM.addCompletionPoints(_earnedCoins);
 
         if (mounted) {
           homeVM.refreshProgress();
@@ -180,7 +191,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
         builder: (context, provider, _) {
           final item = provider.currentItem;
           final word = item?.label ?? 'Picture';
-          final coins = provider.currentLevel?.rewardCoins ?? _earnedCoins;
+          final coins = _earnedCoins;
 
           final coverage = provider.overallCoveragePercent;
           final passed = coverage >= 70;

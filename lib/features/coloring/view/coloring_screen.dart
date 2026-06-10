@@ -66,7 +66,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
       // Award completion points via HomeViewModel (if level was passed in)
       if (widget.level != null && mounted) {
         try {
-          await context.read<HomeViewModel>().addCompletionPoints();
+          await context.read<HomeViewModel>().addCompletionPoints(0);
         } catch (_) {
           // HomeViewModel not in tree — skip silently
         }
@@ -150,15 +150,18 @@ class _ColoringScreenState extends State<ColoringScreen> {
                                   horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [Color(0xFFFFD700), Color(0xFFFF9100)],
+                                  colors: [
+                                    Color(0xFFFFD700),
+                                    Color(0xFFFF9100)
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
                                 borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
                                   BoxShadow(
-                                    color:
-                                        const Color(0xFFFFD700).withOpacity(0.45),
+                                    color: const Color(0xFFFFD700)
+                                        .withOpacity(0.45),
                                     blurRadius: 8,
                                     offset: const Offset(0, 3),
                                   ),
