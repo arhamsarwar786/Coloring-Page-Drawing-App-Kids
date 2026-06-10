@@ -544,10 +544,18 @@ class _SignupScreenState extends State<SignupScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Signup Successful!")),
           );
-          Navigator.pushReplacement(
+
+          Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MainHomeScreen()),
+            MaterialPageRoute(
+              builder: (_) => MainHomeScreen(),
+            ),
+            (route) => false,
           );
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => MainHomeScreen()),
+          // );
         }
       }
     } on AuthException catch (e) {

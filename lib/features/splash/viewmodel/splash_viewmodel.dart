@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:play_craft_kids/features/auth/view/sign_up_screen.dart';
+import 'package:play_craft_kids/features/home/view/main_home_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../app/config/app_config.dart';
 import '../../../app/routes/app_routes.dart';
@@ -21,13 +23,22 @@ class SplashViewModel extends BaseViewModel {
         const Duration(milliseconds: AppConfig.splashDelayMs));
     await _repository.loadHomeContent();
     if (!context.mounted) return;
+    final session = Supabase.instance.client.auth.currentSession;
 
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const SignupScreen(),
+        builder: (_) =>
+            session != null ? MainHomeScreen() : const SignupScreen(),
       ),
     );
+
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (_) => const SignupScreen(),
+    //   ),
+    // );
     // ReplacementNamed(
     // //   context,
 

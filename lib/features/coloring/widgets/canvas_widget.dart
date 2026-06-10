@@ -330,9 +330,9 @@ class _CanvasWidgetState extends State<CanvasWidget>
                                         shape: BoxShape.circle,
                                         boxShadow: [
                                           BoxShadow(
-                                            color: const Color(
-                                              0xFF7B3FE4,
-                                            ).withValues(alpha: 0.3),
+                                            color: const ui.Color.fromARGB(
+                                                    255, 28, 45, 143)
+                                                .withValues(alpha: 0.3),
                                             blurRadius: 12,
                                             spreadRadius: 2,
                                           ),
@@ -442,11 +442,16 @@ class ColoringPainter extends CustomPainter {
         image: highlightImage,
         fit: BoxFit.fill,
         colorFilter: ColorFilter.mode(
-          const Color(
-            0xFF7B3FE4,
-          ).withValues(alpha: alpha), // Brilliant Neon Purple
+          const ui.Color.fromARGB(255, 233, 120, 27)
+              .withValues(alpha: 1.0), // Change alpha to 1.0 for solid
           BlendMode.srcIn,
         ),
+        // ColorFilter.mode(
+        //   const Color(
+        //     0xFF7B3FE4,
+        //   ).withValues(alpha: alpha), // Brilliant Neon Purple
+        //   BlendMode.srcIn,
+        // ),
         filterQuality: FilterQuality.medium,
       );
     }

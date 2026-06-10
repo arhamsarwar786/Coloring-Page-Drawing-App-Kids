@@ -138,56 +138,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
       _coinsController.forward();
     }
   }
-  // void _startSequence() async {
-  //   final provider = context.read<ColoringProvider>();
-  //   _earnedCoins = provider.currentLevel?.rewardCoins ?? 20;
 
-  //   // Instantly mark the level as completed if they passed (so backing out still saves progress)
-  //   final passed = provider.overallCoveragePercent >= 70;
-  //   if (passed) {
-  //     final currentLevel = provider.currentLevel;
-  //     if (currentLevel != null) {
-  //       final drawingRepo = context.read<DrawingRepository>();
-  //       await drawingRepo.markLevelCompleted(
-  //         levelId: currentLevel.id,
-  //         stars: 3,
-  //         rewardCoins: currentLevel.rewardCoins,
-  //       );
-  //       // Refresh home viewmodel so it's unlocked when returning
-  //       if (mounted) {
-  //         final homeVM = context.read<HomeViewModel>();
-  //         homeVM.refreshProgress();
-  //         homeVM.load();
-  //       }
-  //     }
-  //   }
-
-  //   await Future.delayed(const Duration(milliseconds: 150));
-  //   if (!mounted) return;
-
-  //   if (passed) {
-  //     _confettiController.play();
-  //   }
-  //   _cardController.forward();
-
-  //   await Future.delayed(const Duration(milliseconds: 500));
-  //   if (!mounted) return;
-
-  //   if (passed) {
-  //     // Light up stars one by one
-  //     for (int i = 1; i <= 3; i++) {
-  //       await Future.delayed(const Duration(milliseconds: 280));
-  //       if (!mounted) return;
-  //       setState(() => _visibleStars = i);
-  //     }
-
-  //     await Future.delayed(const Duration(milliseconds: 200));
-  //     if (!mounted) return;
-  //     _coinsController.forward();
-  //   }
-  // }
-
-  // @override
+  @override
   void dispose() {
     _confettiController.dispose();
     _cardController.dispose();
