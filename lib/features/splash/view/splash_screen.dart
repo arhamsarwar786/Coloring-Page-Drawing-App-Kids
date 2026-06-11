@@ -65,7 +65,8 @@ class _SplashScreenState extends State<SplashScreen>
         systemNavigationBarContrastEnforced: false,
       ),
       child: Scaffold(
-        backgroundColor: const Color(0xFF0D1B6E), // deep navy matching logo outline
+        backgroundColor:
+            const Color(0xFF0D1B6E), // deep navy matching logo outline
         body: Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -103,12 +104,12 @@ class _SplashScreenState extends State<SplashScreen>
                   curve: Curves.elasticOut,
                   builder: (context, scale, _) => Transform.scale(
                     scale: scale,
-                    child: Image.asset(
-                      'assets/images/app_icon.png',
-                      width: 220,
-                      height: 220,
-                      fit: BoxFit.contain,
-                    ),
+                    // child: Image.asset(
+                    //   'assets/images/app_icon.png',
+                    //   width: 220,
+                    //   height: 220,
+                    //   fit: BoxFit.contain,
+                    // ),
                   ),
                 ),
               ),
@@ -166,8 +167,8 @@ class _SplashLoadingAnimation extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: <Color>[
-                              AppColors.yellow,  // logo "Play" yellow
-                              AppColors.pink,    // logo "Kids" pink
+                              AppColors.yellow, // logo "Play" yellow
+                              AppColors.pink, // logo "Kids" pink
                             ],
                           ),
                           borderRadius: BorderRadius.circular(10),

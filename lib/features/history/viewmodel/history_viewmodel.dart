@@ -26,4 +26,6 @@ class HistoryViewModel extends BaseViewModel {
     }
     setLoading(false);
   }
+
+  void persistHistorySnapshot({required bool captureThumbnail}) {}
 }

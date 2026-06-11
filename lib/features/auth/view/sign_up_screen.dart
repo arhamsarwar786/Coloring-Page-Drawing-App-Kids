@@ -597,7 +597,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 "assets/images/logo.png",
                 height: 250,
               ),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -610,7 +610,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     children: [
                       const Text("CREATE YOUR ADVENTURE!",
                           style: TextStyle(
-                              fontFamily: "Poppins",
+                              fontFamily: "Regular",
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.brown)),
@@ -702,7 +702,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 onPressed: signup,
                                 child: const Text("SIGN UP!",
                                     style: TextStyle(
-                                        fontFamily: "Poppins",
+                                        fontFamily: "Regular",
                                         color: Colors.white,
                                         fontSize: 16)),
                               ),
@@ -717,8 +717,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   Text(
                     'Already have an account? ',
-                    style: GoogleFonts.fredoka(
+                    style: TextStyle(
                       fontSize: 20,
+                      fontFamily: "Regular",
                       fontWeight: FontWeight.w500,
                       color: Colors.black,
                       //  Color.fromARGB(255, 68, 152, 207),
@@ -737,8 +738,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                     child: Text(
                       ' Login',
-                      style: GoogleFonts.fredoka(
+                      style: TextStyle(
                         fontSize: 20,
+                        fontFamily: "Regular",
                         fontWeight: FontWeight.w700,
                         color: const Color.fromARGB(255, 68, 152, 207),
                         shadows: const [

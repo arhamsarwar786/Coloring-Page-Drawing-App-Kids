@@ -179,10 +179,11 @@ class _RewardScreenState extends State<RewardScreen> {
                             onTap: () => _openNext(context),
                             child: Text(
                               args.nextLevelId != null ? 'NEXT' : 'HOME',
-                              style: GoogleFonts.fredoka(
+                              style: TextStyle(
                                 fontSize: isCompact ? 30 : 34,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
+                                fontFamily: "Regular",
                                 shadows: const <Shadow>[
                                   Shadow(
                                     color: Color(0x55000000),
@@ -282,7 +283,7 @@ class _RewardPostCard extends StatelessWidget {
           //     Expanded(
           //       child: Text(
           //         'JOHN',
-          //         style: GoogleFonts.fredoka(
+          //         style: TextStyle(
           //           fontSize: titleFontSize,
           //           fontWeight: FontWeight.w500,
           //           color: Colors.black,
@@ -334,8 +335,9 @@ class _RewardPostCard extends StatelessWidget {
                     child: Text(
                       args.levelTitle,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.fredoka(
+                      style: TextStyle(
                         fontSize: 24,
+                        fontFamily: "Regular",
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF555555),
                       ),
@@ -404,18 +406,20 @@ class _RewardPostCard extends StatelessWidget {
                 children: [
                   Text(
                     'EXCELLENT!',
-                    style: GoogleFonts.fredoka(
+                    style: TextStyle(
                       fontSize: isCompact ? 22 : 26,
                       fontWeight: FontWeight.w700,
                       color: Colors.black,
+                      fontFamily: "Regular",
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Level ${args.levelNumber} completed - +${args.coins} coins',
-                    style: GoogleFonts.fredoka(
+                    style: TextStyle(
                       fontSize: isCompact ? 14 : 16,
                       fontWeight: FontWeight.w500,
+                      fontFamily: "Regular",
                       color: const Color(0xFF4D4D4D),
                     ),
                   ),
@@ -465,7 +469,7 @@ class _RewardPostCard extends StatelessWidget {
           //             const SizedBox(width: 10),
           //             Text(
           //               isSharing ? 'Sharing...' : 'Share My Drawing',
-          //               style: GoogleFonts.fredoka(
+          //               style: TextStyle(
           //                 fontSize: isCompact ? 16 : 18,
           //                 fontWeight: FontWeight.w600,
           //                 color: const Color(0xFF1A1A1A),

@@ -1,6 +1,3 @@
-
-
-
 // import 'package:flutter/material.dart';
 
 // class CategoryCard extends StatelessWidget {
@@ -60,7 +57,7 @@
 //                   ),
 //                 ),
 //               ),
-              
+
 //               // 2. Main Content (Icon + Text)
 //               Padding(
 //                 padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
@@ -71,7 +68,7 @@
 //                     // Icon/Image Section
 //                     Expanded(
 //                       child: Center(
-//                         child: iconWidget ?? (imagePath != null 
+//                         child: iconWidget ?? (imagePath != null
 //                             ? Image.asset(imagePath!, fit: BoxFit.contain)
 //                             : const SizedBox()),
 //                       ),
@@ -166,10 +163,11 @@ class CategoryCard extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               // Main Content
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -178,8 +176,9 @@ class CategoryCard extends StatelessWidget {
                     Expanded(
                       child: Center(
                         child: imagePath != null
-    ? Image.asset(imagePath!, fit: BoxFit.contain)
-    : Icon(Icons.image_not_supported, size: 48, color: Colors.white70),
+                            ? Image.asset(imagePath!, fit: BoxFit.contain)
+                            : Icon(Icons.image_not_supported,
+                                size: 48, color: Colors.white70),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -190,6 +189,7 @@ class CategoryCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
+                        fontFamily: "Regular",
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0.5,
                         shadows: [
@@ -197,7 +197,7 @@ class CategoryCard extends StatelessWidget {
                             offset: Offset(0, 2),
                             blurRadius: 2.0,
                             color: Colors.black,
-          ),
+                          ),
                         ],
                       ),
                     ),
@@ -211,5 +211,3 @@ class CategoryCard extends StatelessWidget {
     );
   }
 }
-
-

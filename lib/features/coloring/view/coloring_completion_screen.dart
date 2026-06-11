@@ -88,8 +88,10 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     final passed = coverage >= 70 && provider.hasSignificantColorVariety;
 
     int baseCoins = 10;
-    final difficulty = provider.currentLevel?.difficulty?.toLowerCase() ?? 'easy';
-    if (difficulty == 'medium') baseCoins = 20;
+    final difficulty =
+        provider.currentLevel?.difficulty?.toLowerCase() ?? 'easy';
+    if (difficulty == 'medium')
+      baseCoins = 20;
     else if (difficulty == 'hard' || difficulty == 'difficult') baseCoins = 30;
 
     int extraCoins = 0;
@@ -269,8 +271,9 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                       // ── "Woohoo!" header ───────────────────────────────────
                       Text(
                         passed ? '🎉 WooHoo! 🎉' : 'Keep Trying!',
-                        style: GoogleFonts.fredoka(
+                        style: TextStyle(
                           fontSize: 34,
+                          fontFamily: "Regular",
                           fontWeight: FontWeight.w700,
                           color: passed
                               ? const Color(0xFFFFD700)
@@ -287,7 +290,8 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                       const SizedBox(height: 4),
                       Text(
                         passed ? 'Beautiful $word!' : 'You can do better!',
-                        style: GoogleFonts.fredoka(
+                        style: TextStyle(
+                          fontFamily: "Regular",
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                           color: Colors.white.withValues(alpha: 0.9),
@@ -439,8 +443,9 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                                 const SizedBox(width: 8),
                                 Text(
                                   '+$coins Coins Earned!',
-                                  style: GoogleFonts.fredoka(
+                                  style: TextStyle(
                                     fontSize: 22,
+                                    fontFamily: "Regular",
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white,
                                     shadows: [
@@ -643,8 +648,9 @@ class _ActionButtonState extends State<_ActionButton> {
               const SizedBox(width: 8),
               Text(
                 widget.label,
-                style: GoogleFonts.fredoka(
+                style: TextStyle(
                   fontSize: 20,
+                  fontFamily: "Regular",
                   fontWeight: FontWeight.w600,
                   color: widget.textColor,
                 ),

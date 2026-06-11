@@ -73,8 +73,7 @@ class _CircleToolButton extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
-                border:
-                    Border.all(color: const Color(0xFF222222), width: 2),
+                border: Border.all(color: const Color(0xFF222222), width: 2),
               ),
               child: Icon(icon, color: const Color(0xFF111111)),
             ),
@@ -83,6 +82,7 @@ class _CircleToolButton extends StatelessWidget {
               label,
               style: const TextStyle(
                 fontSize: 11,
+                fontFamily: "Regular",
                 fontWeight: FontWeight.w800,
                 color: Color(0xFF111111),
               ),

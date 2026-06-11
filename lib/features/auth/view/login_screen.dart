@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
               //   },
               // ),
               Image.asset("assets/images/logo.png", height: 250),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       const Text("WELCOME BACK!",
                           style: TextStyle(
-                              fontFamily: "Poppins",
+                              fontFamily: "Regular",
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.brown)),
@@ -195,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onPressed: login,
                                 child: const Text("LOGIN",
                                     style: TextStyle(
-                                        fontFamily: "Poppins",
+                                        fontFamily: "Regular",
                                         color: Colors.white,
                                         fontSize: 16)),
                               ),
@@ -211,6 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text("Don't have an account?",
                       style: TextStyle(
                           fontSize: 20,
+                          fontFamily: "Regular",
                           fontWeight: FontWeight.w500,
                           color: Colors.black)),
                   InkWell(
@@ -220,8 +221,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Text(
                       ' Sign Up',
-                      style: GoogleFonts.fredoka(
+                      style: TextStyle(
                         fontSize: 20,
+                        fontFamily: "Regular",
                         fontWeight: FontWeight.w700,
                         color: const Color.fromARGB(255, 68, 152, 207),
                         shadows: const [

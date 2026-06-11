@@ -305,14 +305,24 @@ class _CanvasWidgetState extends State<CanvasWidget>
                             !provider.isDragging &&
                             !provider.isPartByPartComplete) ...[
                           Positioned(
-                            left:
-                                provider.activeRegionBoundsFraction!.center.dx *
-                                        side -
-                                    24,
-                            top:
-                                provider.activeRegionBoundsFraction!.center.dy *
-                                        side -
-                                    24,
+                            left: provider.imageDisplayRect.left +
+                                (provider
+                                        .activeRegionBoundsFraction!.center.dx *
+                                    provider.imageDisplayRect.width) -
+                                24,
+                            top: provider.imageDisplayRect.top +
+                                (provider
+                                        .activeRegionBoundsFraction!.center.dy *
+                                    provider.imageDisplayRect.height) -
+                                24,
+                            // left:
+                            //     provider.activeRegionBoundsFraction!.center.dx *
+                            //             side -
+                            //         24,
+                            // top:
+                            //     provider.activeRegionBoundsFraction!.center.dy *
+                            //             side -
+                            //         24,
                             child: AnimatedBuilder(
                               animation: _glowAnim,
                               builder: (context, _) {

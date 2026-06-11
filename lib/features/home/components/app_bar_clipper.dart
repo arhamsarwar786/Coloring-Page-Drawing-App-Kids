@@ -1,8 +1,4 @@
-
-
 import 'package:flutter/material.dart';
-
-
 
 class CurvedAppBarScreen extends StatelessWidget {
   const CurvedAppBarScreen({key});
@@ -18,7 +14,8 @@ class CurvedAppBarScreen extends StatelessWidget {
             clipper: AppBarClipper(),
             child: Container(
               height: 240, // Aap apni marzi se height adjust kar sakte hain
-              color: const Color(0xff3b9499), // Aap ki image wala teal/blue color
+              color:
+                  const Color(0xff3b9499), // Aap ki image wala teal/blue color
             ),
           ),
         ],

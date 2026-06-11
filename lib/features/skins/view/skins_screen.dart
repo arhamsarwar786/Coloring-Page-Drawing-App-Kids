@@ -67,6 +67,7 @@ class SkinsScreen extends StatelessWidget {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 50,
+                                            fontFamily: "Regular",
                                             fontWeight: FontWeight.w900,
                                             color:
                                                 Colors.black.withOpacity(0.35),
@@ -83,6 +84,7 @@ class SkinsScreen extends StatelessWidget {
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontSize: 50,
+                                            fontFamily: "Regular",
                                             fontWeight: FontWeight.w900,
                                             color: Color(0xFFFF4FA3),
                                             letterSpacing: 1,
@@ -96,6 +98,7 @@ class SkinsScreen extends StatelessWidget {
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           fontSize: 50,
+                                          fontFamily: "Regular",
                                           fontWeight: FontWeight.w900,
                                           color: Colors.white,
                                           letterSpacing: 1,

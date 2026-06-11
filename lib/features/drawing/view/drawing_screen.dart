@@ -35,10 +35,10 @@ class DrawingScreen extends StatefulWidget {
   final String? drawingSessionId;
 
   @override
-  State<DrawingScreen> createState() => _DrawingScreenState();
+  State<DrawingScreen> createState() => DrawingScreenState();
 }
 
-class _DrawingScreenState extends State<DrawingScreen>
+class DrawingScreenState extends State<DrawingScreen>
     with WidgetsBindingObserver {
   final GlobalKey _canvasRepaintKey = GlobalKey();
   final GlobalKey _canvasWidgetKey = GlobalKey();
@@ -222,7 +222,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                               //       children: [
                               //         Text(
                               //           'Color like this:',
-                              //           style: GoogleFonts.fredoka(
+                              //           style: TextStyle(
                               //             fontSize: 20,
                               //             fontWeight: FontWeight.w600,
                               //             color: Colors.black87,
@@ -316,7 +316,7 @@ class _DrawingScreenState extends State<DrawingScreen>
                               //       ),
                               //       child: Text(
                               //         'Show Again',
-                              //         style: GoogleFonts.fredoka(
+                              //         style: TextStyle(
                               //           fontSize: 18,
                               //           fontWeight: FontWeight.w600,
                               //         ),
@@ -329,8 +329,9 @@ class _DrawingScreenState extends State<DrawingScreen>
                               // ],
                               Text(
                                 'LEVEL ${viewModel.levelNumber ?? 1}',
-                                style: GoogleFonts.fredoka(
+                                style: TextStyle(
                                   fontSize: 30,
+                                  fontFamily: "Regular",
                                   fontWeight: FontWeight.w700,
                                   color: const Color(0xFF222222),
                                   letterSpacing: 2.0,
@@ -510,6 +511,11 @@ class _DrawingScreenState extends State<DrawingScreen>
                                   icon: Icons.photo_library_rounded,
                                   assetName: 'assets/images/photo.png',
                                   onPressed: () async {
+                                    await (context as Element)
+                                        .findAncestorStateOfType<
+                                            DrawingScreenState>()
+                                        ?.persistHistorySnapshot(
+                                            captureThumbnail: true);
                                     await persistHistorySnapshot(
                                         captureThumbnail: true);
                                     if (context.mounted) {
@@ -938,8 +944,9 @@ class _LevelBadge extends StatelessWidget {
             child: Text(
               title,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.fredoka(
+              style: TextStyle(
                 fontSize: 16,
+                fontFamily: "Regular",
                 fontWeight: FontWeight.bold,
                 color: const Color(0xFF222222),
               ),
@@ -1271,8 +1278,9 @@ class _EvaluationDialogContentState extends State<_EvaluationDialogContent>
                     widget.isSuccess
                         ? (accuracyPercent >= 90 ? 'EXCELLENT!' : 'GOOD!')
                         : 'KEEP TRYING!',
-                    style: GoogleFonts.fredoka(
+                    style: TextStyle(
                       fontSize: 28,
+                      fontFamily: "Regular",
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
                       letterSpacing: 1.5,
@@ -1295,8 +1303,9 @@ class _EvaluationDialogContentState extends State<_EvaluationDialogContent>
                       ? 'Awesome work! You scored $accuracyPercent% correctly!'
                       : 'You scored $accuracyPercent%! Try again to match all colors!',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.fredoka(
+                  style: TextStyle(
                     fontSize: 20,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.w600,
                     color: const Color(0xFF333333),
                   ),
@@ -1389,8 +1398,9 @@ class _EvaluationDialogContentState extends State<_EvaluationDialogContent>
                           _showGuide
                               ? "Target Guide Image! 🌟"
                               : "Click image to see how to color!",
-                          style: GoogleFonts.fredoka(
+                          style: TextStyle(
                             fontSize: 13,
+                            fontFamily: "Regular",
                             fontWeight: FontWeight.w600,
                             color: const Color(0xFFE65100),
                           ),
@@ -1490,8 +1500,9 @@ class _EvaluationDialogContentState extends State<_EvaluationDialogContent>
         alignment: Alignment.center,
         child: Text(
           text,
-          style: GoogleFonts.fredoka(
+          style: TextStyle(
             fontSize: 20,
+            fontFamily: "Regular",
             fontWeight: FontWeight.w800,
             color: Colors.white,
             shadows: const [
@@ -1564,8 +1575,8 @@ void _showColoringGuideDialog(BuildContext context, LevelModel level) {
                     ),
                     child: Text(
                       'COLOR GUIDE!',
-                      style: GoogleFonts.fredoka(
-                        fontSize: 26,
+                      style: TextStyle(
+                        fontSize: 26, fontFamily: "Regular",
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                         letterSpacing: 1.5,
@@ -1626,8 +1637,9 @@ void _showColoringGuideDialog(BuildContext context, LevelModel level) {
                   Text(
                     'Color your picture like this to score 100%!',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.fredoka(
+                    style: TextStyle(
                       fontSize: 18,
+                      fontFamily: "Regular",
                       fontWeight: FontWeight.w600,
                       color: const Color(0xFF555555),
                     ),
@@ -1655,8 +1667,9 @@ void _showColoringGuideDialog(BuildContext context, LevelModel level) {
                       alignment: Alignment.center,
                       child: Text(
                         'GOT IT!',
-                        style: GoogleFonts.fredoka(
+                        style: TextStyle(
                           fontSize: 18,
+                          fontFamily: "Regular",
                           fontWeight: FontWeight.w800,
                           color: Colors.white,
                         ),

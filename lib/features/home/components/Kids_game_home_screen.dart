@@ -166,8 +166,9 @@ class CustomGameAppBar extends StatelessWidget {
                 // Text Outer Border/Shadow effect
                 Text(
                   title,
-                  style: GoogleFonts.fredoka(
+                  style: TextStyle(
                     fontSize: 44,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.5,
                     foreground: Paint()
@@ -179,8 +180,9 @@ class CustomGameAppBar extends StatelessWidget {
                 // Core Display Text
                 Text(
                   title,
-                  style: GoogleFonts.fredoka(
+                  style: TextStyle(
                     fontSize: 44,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.5,
                     color: const Color(0xFFFFFEE4),
@@ -316,8 +318,9 @@ class GameLevelCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     title,
-                    style: GoogleFonts.fredoka(
+                    style: TextStyle(
                       fontSize: 18,
+                      fontFamily: "Regular",
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -445,59 +448,59 @@ class KidsSettingsDialog extends StatelessWidget {
                                 label: "PRIVACY POLICY"),
                           ),
                           const SizedBox(height: 18),
-                          const SizedBox(height: 10),
+                          // const SizedBox(height: 10),
 
-                          GestureDetector(
-                            onTap: () async {
-                              final shouldLogout = await showDialog<bool>(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('Logout'),
-                                  content: const Text(
-                                    'Are you sure you want to logout?',
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, false),
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, true),
-                                      child: const Text('Logout'),
-                                    ),
-                                  ],
-                                ),
-                              );
+                          // GestureDetector(
+                          //   onTap: () async {
+                          //     final shouldLogout = await showDialog<bool>(
+                          //       context: context,
+                          //       builder: (context) => AlertDialog(
+                          //         title: const Text('Logout'),
+                          //         content: const Text(
+                          //           'Are you sure you want to logout?',
+                          //         ),
+                          //         actions: [
+                          //           TextButton(
+                          //             onPressed: () =>
+                          //                 Navigator.pop(context, false),
+                          //             child: const Text('Cancel'),
+                          //           ),
+                          //           TextButton(
+                          //             onPressed: () =>
+                          //                 Navigator.pop(context, true),
+                          //             child: const Text('Logout'),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     );
 
-                              if (shouldLogout == true) {
-                                await Supabase.instance.client.auth.signOut();
+                          //     if (shouldLogout == true) {
+                          //       await Supabase.instance.client.auth.signOut();
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const LoginScreen()));
-                                // pushNamedAndRemoveUntil(
-                                //   context,
-                                //   AppRoutes.login,
-                                //   (route) => false,
-                                // );
-                              }
-                            },
-                            // onTap: () async {
-                            //   await Supabase.instance.client.auth.signOut();
+                          //       Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //               builder: (_) => const LoginScreen()));
+                          //       // pushNamedAndRemoveUntil(
+                          //       //   context,
+                          //       //   AppRoutes.login,
+                          //       //   (route) => false,
+                          //       // );
+                          //     }
+                          //   },
+                          //   // onTap: () async {
+                          //   //   await Supabase.instance.client.auth.signOut();
 
-                            //   Navigator.pushNamedAndRemoveUntil(
-                            //     context,
-                            //     AppRoutes.login,
-                            //     (route) => false,
-                            //   );
-                            // },
-                            // child: const GameMenuActionButton(
-                            //   label: "LOGOUT",
-                            // ),
-                          ),
+                          //   //   Navigator.pushNamedAndRemoveUntil(
+                          //   //     context,
+                          //   //     AppRoutes.login,
+                          //   //     (route) => false,
+                          //   //   );
+                          //   // },
+                          //   // child: const GameMenuActionButton(
+                          //   //   label: "LOGOUT",
+                          //   // ),
+                          // ),
                         ],
                       );
                     },
@@ -547,8 +550,9 @@ class DialogHeaderBanner extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: GoogleFonts.fredoka(
+        style: TextStyle(
           fontSize: 24,
+          fontFamily: "Regular",
           fontWeight: FontWeight.w900,
           color: const Color(0xFF8B6747),
           letterSpacing: 1.0,
@@ -628,9 +632,10 @@ class GameMenuActionButton extends StatelessWidget {
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: GoogleFonts.fredoka(
+            style: TextStyle(
               color: Colors.white,
               fontSize: 16,
+              fontFamily: "Regular",
               fontWeight: FontWeight.w900,
               letterSpacing: 0.5,
             ),

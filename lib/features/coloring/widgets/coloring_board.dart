@@ -147,17 +147,32 @@ class _ColoringBoardState extends State<ColoringBoard> {
                     ),
                   ],
                 ),
-                child: IconButton(
-                  onPressed: provider.canUndo ? () => provider.undo() : null,
-                  icon: Icon(
-                    Icons.undo_rounded,
-                    // color: provider.canUndo
-                    //     ? AppColors.primaryPurple
-                    //     : Colors.grey,
-                  ),
-                  tooltip: 'Undo',
-                ),
+                child: InkWell(
+                    onTap: provider.canUndo ? () => provider.undo() : null,
+                    child: Image.asset(
+                      "assets/images/undo.webp",
+                      width: 60,
+                      height: 60,
+                    )),
+                //  IconButton(
+                //   onPressed: provider.canUndo ? () => provider.undo() : null,
+                //   icon: Icon(
+                //     Icons.undo_rounded,
+                //     // color: provider.canUndo
+                //     //     ? AppColors.primaryPurple
+                //     //     : Colors.grey,
+                //   ),
+                //   tooltip: 'Undo',
+                // ),
               ),
+
+              // InkWell(
+              //     onTap: provider.canUndo ? () => provider.undo() : null,
+              //     child: Image.asset(
+              //       "assets/images/undo.webp",
+              //       width: 60,
+              //       height: 60,
+              //     )),
               const SizedBox(width: 12),
 
               // Brush Size Slider
@@ -217,26 +232,33 @@ class _ColoringBoardState extends State<ColoringBoard> {
 
               // Clear Button
               Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: () => provider.retry(),
-                  icon: const Icon(
-                    Icons.delete_sweep_rounded,
-                    // color: AppColors.smartRed,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
-                  tooltip: 'Clear All',
-                ),
-              ),
+                  child: InkWell(
+                      onTap: () => provider.retry(),
+                      child: Image.asset(
+                        "assets/images/delete.webp",
+                        width: 60,
+                        height: 60,
+                      ))
+                  //  IconButton(
+                  //   onPressed: () => provider.retry(),
+                  //   icon: const Icon(
+                  //     Icons.delete_sweep_rounded,
+                  //     // color: AppColors.smartRed,
+                  //   ),
+                  //   tooltip: 'Clear All',
+                  // ),
+                  ),
             ],
           ),
         ),

@@ -90,6 +90,7 @@ class _LevelScreenState extends State<LevelScreen> {
                                                           TextAlign.center,
                                                       style: TextStyle(
                                                         fontSize: 50,
+                                                        fontFamily: "Regular",
                                                         fontWeight:
                                                             FontWeight.w900,
                                                         color: Colors.black
@@ -108,6 +109,7 @@ class _LevelScreenState extends State<LevelScreen> {
                                                           TextAlign.center,
                                                       style: const TextStyle(
                                                         fontSize: 50,
+                                                        fontFamily: "Regular",
                                                         fontWeight:
                                                             FontWeight.w900,
                                                         color:
@@ -123,6 +125,7 @@ class _LevelScreenState extends State<LevelScreen> {
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
                                                       fontSize: 50,
+                                                      fontFamily: "Regular",
                                                       fontWeight:
                                                           FontWeight.w900,
                                                       color: Colors.white,
@@ -161,7 +164,7 @@ class _LevelScreenState extends State<LevelScreen> {
                         // Expanded(
                         //   child: Text(
                         //     'Drawing History',
-                        //     style: GoogleFonts.fredoka(
+                        //     style: TextStyle(
                         //       fontSize: 28,
                         //       fontWeight: FontWeight.w700,
                         //       color: const Color(0xFF1F2A44),
@@ -287,8 +290,9 @@ class _EmptyHistoryState extends StatelessWidget {
               const SizedBox(height: 18),
               Text(
                 'No drawings yet',
-                style: GoogleFonts.fredoka(
+                style: TextStyle(
                   fontSize: 24,
+                  fontFamily: "Regular",
                   fontWeight: FontWeight.w700,
                   color: const Color(0xFF1F2A44),
                 ),
@@ -297,8 +301,9 @@ class _EmptyHistoryState extends StatelessWidget {
               Text(
                 'Start drawing and your saved progress will appear here automatically.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.fredoka(
+                style: TextStyle(
                   fontSize: 16,
+                  fontFamily: "Regular",
                   fontWeight: FontWeight.w500,
                   color: const Color(0xFF65738A),
                 ),
@@ -380,8 +385,9 @@ class _HistoryCard extends StatelessWidget {
                             entry.levelTitle,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.fredoka(
+                            style: TextStyle(
                               fontSize: 22,
+                              fontFamily: "Regular",
                               fontWeight: FontWeight.w700,
                               color: const Color(0xFF1E2742),
                             ),
@@ -399,8 +405,9 @@ class _HistoryCard extends StatelessWidget {
                           ),
                           child: Text(
                             entry.status.label,
-                            style: GoogleFonts.fredoka(
+                            style: TextStyle(
                               fontSize: 12,
+                              fontFamily: "Regular",
                               fontWeight: FontWeight.w700,
                               color: badgeColor,
                             ),
@@ -416,8 +423,9 @@ class _HistoryCard extends StatelessWidget {
                             entry.levelNumber == null
                                 ? 'Saved drawing'
                                 : 'Level ${entry.levelNumber}',
-                            style: GoogleFonts.fredoka(
+                            style: TextStyle(
                               fontSize: 16,
+                              fontFamily: "Regular",
                               fontWeight: FontWeight.w500,
                               color: const Color(0xFF6A768E),
                             ),
@@ -435,8 +443,9 @@ class _HistoryCard extends StatelessWidget {
                             ),
                             child: Text(
                               '${_ordinal(completionCount!)} Time',
-                              style: GoogleFonts.fredoka(
+                              style: TextStyle(
                                 fontSize: 12,
+                                fontFamily: "Regular",
                                 fontWeight: FontWeight.w600,
                                 color: const Color(0xFF5A667E),
                               ),
@@ -464,8 +473,9 @@ class _HistoryCard extends StatelessWidget {
                         const SizedBox(width: 14),
                         Text(
                           progressLabel,
-                          style: GoogleFonts.fredoka(
+                          style: TextStyle(
                             fontSize: 18,
+                            fontFamily: "Regular",
                             fontWeight: FontWeight.w700,
                             color: const Color(0xFF22304B),
                           ),
@@ -478,8 +488,9 @@ class _HistoryCard extends StatelessWidget {
                       children: [
                         Text(
                           _formatLastEdited(entry.lastEditedAt),
-                          style: GoogleFonts.fredoka(
+                          style: TextStyle(
                             fontSize: 14,
+                            fontFamily: "Regular",
                             fontWeight: FontWeight.w500,
                             color: const Color(0xFF7D879C),
                           ),

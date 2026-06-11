@@ -74,6 +74,7 @@ class TracingSummaryScreen extends StatelessWidget {
                               'You did it!',
                               style: TextStyle(
                                 fontSize: 32,
+                                fontFamily: "Regular",
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primaryPurple,
                               ),
@@ -194,6 +195,7 @@ class TracingSummaryScreen extends StatelessWidget {
                                   'Next',
                                   style: TextStyle(
                                     fontSize: 18,
+                                    fontFamily: "Regular",
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 0.5,
                                   ),
@@ -248,6 +250,7 @@ class TracingSummaryScreen extends StatelessWidget {
                     title,
                     style: TextStyle(
                       fontSize: 12,
+                      fontFamily: "Regular",
                       fontWeight: FontWeight.bold,
                       color: AppColors.black.withValues(alpha: 0.6),
                     ),
@@ -259,6 +262,7 @@ class TracingSummaryScreen extends StatelessWidget {
                     value,
                     style: const TextStyle(
                       fontSize: 18,
+                      fontFamily: "Regular",
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryPurple,
                     ),

@@ -5,8 +5,7 @@ class AnimatedLoadingText extends StatefulWidget {
   const AnimatedLoadingText({super.key});
 
   @override
-  State<AnimatedLoadingText> createState() =>
-      _AnimatedLoadingTextState();
+  State<AnimatedLoadingText> createState() => _AnimatedLoadingTextState();
 }
 
 class _AnimatedLoadingTextState extends State<AnimatedLoadingText>
@@ -55,8 +54,9 @@ class _AnimatedLoadingTextState extends State<AnimatedLoadingText>
           ),
           child: Text(
             'LOADING...',
-            style: GoogleFonts.fredoka(
+            style: TextStyle(
               fontSize: 48,
+              fontFamily: "Regular",
               fontWeight: FontWeight.w900,
               color: Colors.white,
               letterSpacing: 4.0,

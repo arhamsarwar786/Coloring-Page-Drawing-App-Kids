@@ -1063,6 +1063,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                                         message,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
+                                          fontFamily: "Regular",
                                           fontSize: 28 * scaleFactor,
                                           fontWeight: FontWeight.bold,
                                           color: const Color(0xFF333333),
@@ -1118,6 +1119,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                                                 _show3DMessage!.split('!')[0] +
                                                     '!',
                                                 style: TextStyle(
+                                                  fontFamily: "Regular",
                                                   fontSize: 52 * scaleFactor,
                                                   fontWeight: FontWeight.bold,
                                                   color: _show3DMessage!
@@ -1156,6 +1158,7 @@ class _CanvasWidgetState extends State<CanvasWidget>
                                                       Text(
                                                         '+100',
                                                         style: TextStyle(
+                                                          fontFamily: "Regular",
                                                           fontSize:
                                                               36 * scaleFactor,
                                                           fontWeight:
@@ -1315,6 +1318,7 @@ class _MultiStepTutorialDialogState extends State<_MultiStepTutorialDialog>
                               style: const TextStyle(
                                 color: Color(0xFF242424),
                                 fontSize: 25,
+                                fontFamily: "Regular",
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -1339,6 +1343,7 @@ class _MultiStepTutorialDialogState extends State<_MultiStepTutorialDialog>
                               style: const TextStyle(
                                 color: Color(0xFF242424),
                                 fontSize: 18,
+                                fontFamily: "Regular",
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

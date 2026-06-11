@@ -1,10 +1,7 @@
-
-
 import 'package:flutter/material.dart';
 
-
 Widget AppBottomBar({
-  required IconData icon,
+  required Widget child,
   required Color topColor,
   required Color bottomColor,
   required VoidCallback onTap,
@@ -28,10 +25,9 @@ Widget AppBottomBar({
         // 2. Agar click hoga (isSelected true hoga) toh border mota aur prominent ho jayega
         border: Border.all(
           color: isSelected
-              ? Color(0xff3F9798)
+              ? const Color.fromARGB(255, 253, 235, 68)
               // Selected button ka border color (e.g., White ya koi aur sharp color)
-              : const Color.fromARGB(
-                  255, 51, 37, 27), // Normal button ka border color
+              : Colors.white,
           width: isSelected
               ? 4.0
               : 1.8, // Click hone par border mota (4.0) ho jayega
@@ -70,18 +66,12 @@ Widget AppBottomBar({
           ),
 
           // icon
-          Icon(
-            icon,
-            color: Colors.white,
-            size: 31,
-            shadows: [
-              Shadow(
-                color: Colors.black.withOpacity(0.25),
-                offset: const Offset(0, 2),
-                blurRadius: 3,
-              ),
-            ],
-          ),
+
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: child,
+          )
         ],
       ),
     ),

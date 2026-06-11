@@ -141,7 +141,7 @@ class HomeViewModel extends BaseViewModel {
     if (previousLevel.isCompleted) {
       return false;
     }
-    
+
     if (levelProgressFor(previousLevel.id) >= unlockProgressThreshold) {
       return false;
     }
@@ -233,13 +233,14 @@ class HomeViewModel extends BaseViewModel {
   /// Returns the amount of bonus points awarded (0 if already claimed).
   Future<int> addDailyBonusPoints() async {
     final today = DateTime.now();
-    final todayStr = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+    final todayStr =
+        '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
     final lastBonusStr = await _repository.getLastDailyBonusDate();
-    
+
     if (lastBonusStr == todayStr) return 0; // already claimed today
 
     int streak = await _repository.getCurrentStreak();
-    
+
     if (lastBonusStr != null) {
       try {
         final lastBonusDate = DateTime.parse(lastBonusStr);
@@ -257,9 +258,12 @@ class HomeViewModel extends BaseViewModel {
     }
 
     int pointsToAdd = 0;
-    if (streak == 1) pointsToAdd += 10;
-    else if (streak == 2) pointsToAdd += 15;
-    else pointsToAdd += 20; // Day 3+
+    if (streak == 1)
+      pointsToAdd += 10;
+    else if (streak == 2)
+      pointsToAdd += 15;
+    else
+      pointsToAdd += 20; // Day 3+
 
     if (streak == 7) pointsToAdd += 50; // 7 days streak
     if (streak == 30) pointsToAdd += 200; // 30 days streak
@@ -350,6 +354,7 @@ class CategorySelectionBar extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
+                      fontFamily: "Regular",
                       letterSpacing: 0.5,
                       color: isSelected
                           ? const Color(0xff1A1C29)

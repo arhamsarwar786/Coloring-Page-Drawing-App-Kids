@@ -31,8 +31,8 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(
-            color: Colors.white,
-            fontFamily: "Poppins",
+            color: Colors.black,
+            fontFamily: "Regular",
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
@@ -43,7 +43,7 @@ class CustomTextField extends StatelessWidget {
               ? IconButton(
                   icon: Icon(
                     obscure ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.white,
+                    color: Color(0xFF1EA7C7),
                   ),
                   onPressed: onToggleVisibility,
                 )

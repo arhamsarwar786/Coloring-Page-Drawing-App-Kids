@@ -189,6 +189,7 @@ class SuccessOverlay extends StatelessWidget {
             _message,
             style: const TextStyle(
               fontSize: 20,
+              fontFamily: "Regular",
               fontWeight: FontWeight.bold,
               color: AppColors.successText,
             ),
@@ -285,6 +286,7 @@ class FailureOverlay extends StatelessWidget {
             'Oops! You went off the path!',
             style: TextStyle(
               fontSize: 19,
+              fontFamily: "Regular",
               fontWeight: FontWeight.bold,
               color: AppColors.errorText,
             ),
@@ -295,6 +297,7 @@ class FailureOverlay extends StatelessWidget {
             'Try to follow the dotted blue guide.\nThe red marks show where you went wrong.',
             style: TextStyle(
               fontSize: 13,
+              fontFamily: "Regular",
               color: AppColors.black.withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
@@ -307,6 +310,7 @@ class FailureOverlay extends StatelessWidget {
                 'Covered:',
                 style: TextStyle(
                   fontSize: 13,
+                  fontFamily: "Regular",
                   color: AppColors.black.withValues(alpha: 0.6),
                 ),
               ),
@@ -331,6 +335,7 @@ class FailureOverlay extends StatelessWidget {
                 '${(coverageRatio * 100).toInt()}%',
                 style: const TextStyle(
                   fontSize: 13,
+                  fontFamily: "Regular",
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -396,6 +401,7 @@ class PausedHintBanner extends StatelessWidget {
             style: const TextStyle(
               color: AppColors.smartBlue,
               fontSize: 13,
+              fontFamily: "Regular",
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -433,6 +439,7 @@ class TracingProgressBar extends StatelessWidget {
               'Progress',
               style: TextStyle(
                 fontSize: 13,
+                fontFamily: "Regular",
                 fontWeight: FontWeight.w600,
                 color: AppColors.black.withValues(alpha: 0.7),
               ),
@@ -441,6 +448,7 @@ class TracingProgressBar extends StatelessWidget {
               '${(progress * 100).toInt()}%',
               style: TextStyle(
                 fontSize: 13,
+                fontFamily: "Regular",
                 fontWeight: FontWeight.bold,
                 color: barColor,
               ),
@@ -462,6 +470,7 @@ class TracingProgressBar extends StatelessWidget {
           'Lift your finger and continue — it\'s okay!',
           style: TextStyle(
             fontSize: 11,
+            fontFamily: "Regular",
             color: AppColors.black.withOpacity(0.5),
           ),
         ),

@@ -232,6 +232,7 @@ class TracingPainter extends CustomPainter {
         style: const TextStyle(
           color: Colors.white,
           fontSize: 18,
+          fontFamily: "Regular",
           fontWeight: FontWeight.w900,
         ),
       ),

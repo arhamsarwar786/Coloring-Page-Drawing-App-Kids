@@ -175,8 +175,9 @@ class _ColoringScreenState extends State<ColoringScreen> {
                                   const SizedBox(width: 4),
                                   Text(
                                     '$coins',
-                                    style: GoogleFonts.fredoka(
+                                    style: TextStyle(
                                       fontSize: 16,
+                                      fontFamily: "Regular",
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
                                       shadows: const [
@@ -265,7 +266,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
 
                         // Text(
                         //   'LEVEL ${provider ?? 1}',
-                        //   style: GoogleFonts.fredoka(
+                        //   style: TextStyle(
                         //     fontSize: 30,
                         //     fontWeight: FontWeight.w700,
                         //     color: const Color(0xFF222222),
@@ -746,8 +747,9 @@ class _PreviewImageDialogState extends State<PreviewImageDialog>
                 const SizedBox(height: 8),
                 Text(
                   "LOOK & COLOR!",
-                  style: GoogleFonts.fredoka(
+                  style: TextStyle(
                     fontSize: 24,
+                    fontFamily: "Regular",
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
                     letterSpacing: 1.2,

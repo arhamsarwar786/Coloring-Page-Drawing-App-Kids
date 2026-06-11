@@ -145,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontSize: 50,
+                                                      fontFamily: "Regular",
                                                       fontWeight:
                                                           FontWeight.w900,
                                                       color: Colors.black
@@ -164,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
                                                       fontSize: 50,
+                                                      fontFamily: "Regular",
                                                       fontWeight:
                                                           FontWeight.w900,
                                                       color: Color(0xFFFF4FA3),
@@ -180,6 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                     fontSize: 50,
+                                                    fontFamily: "Regular",
                                                     fontWeight: FontWeight.w900,
                                                     color: Colors.white,
                                                     letterSpacing: 1,
@@ -623,8 +626,9 @@ class LevelCardState extends State<LevelCard> {
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.fredoka(
+                            style: TextStyle(
                               fontSize: 16,
+                              fontFamily: "Regular",
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.5,
                               color: Colors
@@ -641,8 +645,9 @@ class LevelCardState extends State<LevelCard> {
                           const SizedBox(height: 2),
                           Text(
                             widget.difficulty,
-                            style: GoogleFonts.fredoka(
+                            style: TextStyle(
                               fontSize: 16,
+                              fontFamily: "Regular",
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.5,
                               color: Colors
@@ -1274,7 +1279,7 @@ class _CardPalette {
 //                             maxLines: 1,
 //                             textAlign: TextAlign.center,
 //                             overflow: TextOverflow.ellipsis,
-//                             style: GoogleFonts.fredoka(
+//                             style: TextStyle(
 //                               fontSize: 16,
 //                               fontWeight: FontWeight.w900,
 //                               letterSpacing: 0.5,

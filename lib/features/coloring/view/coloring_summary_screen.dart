@@ -71,6 +71,7 @@ class ColoringSummaryScreen extends StatelessWidget {
                               child: Text(
                                 'You did it!',
                                 style: TextStyle(
+                                  fontFamily: "Regular",
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
                                   // color: AppColors.primaryPurple,
@@ -122,7 +123,8 @@ class ColoringSummaryScreen extends StatelessWidget {
                             flex: 3,
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.of(context).popUntil((route) => route.isFirst);
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
                               },
                               style: ElevatedButton.styleFrom(
                                 // backgroundColor: AppColors.smartBlue,
@@ -193,6 +195,7 @@ class ColoringSummaryScreen extends StatelessWidget {
                                     'Done',
                                     style: TextStyle(
                                       fontSize: 18,
+                                      fontFamily: "Regular",
                                       fontWeight: FontWeight.w900,
                                       letterSpacing: 0.5,
                                     ),
@@ -248,6 +251,7 @@ class ColoringSummaryScreen extends StatelessWidget {
                     title,
                     style: TextStyle(
                       fontSize: 12,
+                      fontFamily: "Regular",
                       fontWeight: FontWeight.bold,
                       // color: AppColors.black.withValues(alpha: 0.6),
                     ),
@@ -259,6 +263,7 @@ class ColoringSummaryScreen extends StatelessWidget {
                     value,
                     style: const TextStyle(
                       fontSize: 18,
+                      fontFamily: "Regular",
                       fontWeight: FontWeight.bold,
                       // color: AppColors.primaryPurple,
                     ),

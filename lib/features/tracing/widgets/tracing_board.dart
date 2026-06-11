@@ -34,7 +34,8 @@ class TracingBoard extends StatelessWidget {
               height: 150,
               fit: BoxFit.contain,
             )
-          : Text(item.display, style: const TextStyle(fontSize: 80));
+          : Text(item.display,
+              style: const TextStyle(fontFamily: "Regular", fontSize: 80));
     } else if (provider.activityType == ActivityType.animals) {
       final info = LetterInfo.getInfo(currentLetter);
       word = info.word;
@@ -45,7 +46,8 @@ class TracingBoard extends StatelessWidget {
               height: 150,
               fit: BoxFit.contain,
             )
-          : Text(info.animal, style: const TextStyle(fontSize: 80));
+          : Text(info.animal,
+              style: const TextStyle(fontFamily: "Regular", fontSize: 80));
     } else {
       final info = ColorInfo.getInfo(currentLetter);
       word = info.word;
@@ -218,6 +220,7 @@ class TracingBoard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 27,
                       height: 1.2,
+                      fontFamily: "Regular",
                       color: AppColors.titlePurple,
                       fontWeight: FontWeight.w700,
                     ),
@@ -226,6 +229,7 @@ class TracingBoard extends StatelessWidget {
                       TextSpan(
                         text: word,
                         style: const TextStyle(
+                          fontFamily: "Regular",
                           color: AppColors.butterflyPink, // Playful pink
                           fontWeight: FontWeight.w900,
                         ),
