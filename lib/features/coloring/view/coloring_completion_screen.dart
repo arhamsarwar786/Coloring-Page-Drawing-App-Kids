@@ -85,7 +85,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     final homeVM = context.read<HomeViewModel>();
 
     final coverage = provider.overallCoveragePercent;
-    final passed = coverage >= 70;
+    final passed = coverage >= 70 && provider.hasSignificantColorVariety;
 
     int baseCoins = 10;
     final difficulty = provider.currentLevel?.difficulty?.toLowerCase() ?? 'easy';
@@ -194,7 +194,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
           final coins = _earnedCoins;
 
           final coverage = provider.overallCoveragePercent;
-          final passed = coverage >= 70;
+          final passed = coverage >= 70 && provider.hasSignificantColorVariety;
 
           return Container(
             decoration: const BoxDecoration(

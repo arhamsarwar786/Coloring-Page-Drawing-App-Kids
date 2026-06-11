@@ -185,6 +185,36 @@ class ColoringProvider extends ChangeNotifier {
     return ((correctCount / coverable) * 100).round().clamp(0, 100);
   }
 
+  bool get hasSignificantColorVariety {
+    final inside = _isInside;
+    final painted = _paintedPixels;
+    final pixels = _pixels;
+    if (inside == null || painted == null || pixels == null || inside.isEmpty) return false;
+
+    final colorCounts = <int, int>{};
+    int totalPainted = 0;
+
+    for (int i = 0; i < inside.length; i++) {
+      if (inside[i] == 1 && painted[i] == 1) {
+        final color = pixels[i];
+        colorCounts[color] = (colorCounts[color] ?? 0) + 1;
+        totalPainted++;
+      }
+    }
+
+    if (totalPainted == 0) return true; // Let overall coverage handle the 0 case
+    if (colorCounts.length < 2) return false;
+
+    int maxCount = 0;
+    for (final count in colorCounts.values) {
+      if (count > maxCount) maxCount = count;
+    }
+
+    final double maxColorRatio = maxCount / totalPainted;
+    // Ensure no single color is overwhelming (e.g. > 85% of the painting)
+    return maxColorRatio <= 0.85;
+  }
+
   bool _isColorMatch(int paintedRgba, int refRgba) {
     // Check alpha of reference image. If it's transparent, we don't penalize the child 
     // (this happens if the colored asset doesn't perfectly fill the uncolored outline).
