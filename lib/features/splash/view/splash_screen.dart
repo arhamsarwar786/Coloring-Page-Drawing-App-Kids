@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/constants/app_colors.dart';
 import '../../settings/viewmodel/settings_viewmodel.dart';
 import '../../sound/services/sound_service.dart';
 import '../viewmodel/splash_viewmodel.dart';
@@ -64,14 +65,55 @@ class _SplashScreenState extends State<SplashScreen>
         systemNavigationBarContrastEnforced: false,
       ),
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF0D1B6E), // deep navy matching logo outline
         body: Stack(
           fit: StackFit.expand,
           children: <Widget>[
+            // Background artwork
             Image.asset(
               'assets/images/splash.png',
               fit: BoxFit.cover,
+              color: const Color(0xFF0D1B6E).withValues(alpha: 0.18),
+              colorBlendMode: BlendMode.srcOver,
             ),
+            // Dark gradient overlay so logo & bar are legible
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0x00000000),
+                    Color(0xCC0D1B6E),
+                  ],
+                  stops: [0.45, 1.0],
+                ),
+              ),
+            ),
+            // Logo centred in the upper area
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 200,
+              child: Center(
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween<double>(begin: 0.7, end: 1.0),
+                  duration: const Duration(milliseconds: 900),
+                  curve: Curves.elasticOut,
+                  builder: (context, scale, _) => Transform.scale(
+                    scale: scale,
+                    child: Image.asset(
+                      'assets/images/app_icon.png',
+                      width: 220,
+                      height: 220,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Loading bar at bottom
             Positioned(
               left: 0,
               right: 0,
@@ -124,16 +166,15 @@ class _SplashLoadingAnimation extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: <Color>[
-                              Color(0xFFDFFF00),
-                              Color(0xFF90EE90),
+                              AppColors.yellow,  // logo "Play" yellow
+                              AppColors.pink,    // logo "Kids" pink
                             ],
                           ),
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                              color: const Color(0xFFDFFF00)
-                                  .withValues(alpha: 0.4),
-                              blurRadius: 10,
+                              color: AppColors.yellow.withValues(alpha: 0.5),
+                              blurRadius: 12,
                               offset: const Offset(0, 0),
                             ),
                           ],
