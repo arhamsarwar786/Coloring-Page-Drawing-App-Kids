@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:play_craft_kids/core/constants/app_colors.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
 import 'package:play_craft_kids/features/coloring/widgets/canvas_widget.dart';
+import 'package:play_craft_kids/features/coloring/widgets/delete_dialog.dart';
 
 class ColoringBoard extends StatefulWidget {
   final ColoringProvider provider;
@@ -148,7 +149,21 @@ class _ColoringBoardState extends State<ColoringBoard> {
                   ],
                 ),
                 child: InkWell(
-                    onTap: provider.canUndo ? () => provider.undo() : null,
+                    onTap: provider.canUndo
+                        ? () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => UndoDialog(
+                                onConfirm: () {
+                                  provider.undo(); // Yahan undo trigger hoga
+                                },
+                              ),
+                            );
+                          }
+                        : null, // Agar canUndo false hai, toh button disable rahega
+
+                    // onTap: provider.canUndo ? () => provider.undo() : null,
                     child: Image.asset(
                       "assets/images/undo.webp",
                       width: 60,
@@ -244,7 +259,38 @@ class _ColoringBoardState extends State<ColoringBoard> {
                     ],
                   ),
                   child: InkWell(
-                      onTap: () => provider.retry(),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => DeleteDialog(
+                            onConfirm:
+                                () {}, // Khali rakh dein agar zaroorat nahi
+                            ontap: () {
+                              provider
+                                  .retry(); // Sirf tab chalega jab "YES" dabaenge
+                            },
+                          ),
+                        );
+                      },
+                      // onTap: () {
+                      // onTap: () {
+                      //   provider.retry();
+                      //   showDialog(
+                      //     context: context,
+                      //     // BarrierDismissible false karne se bahar click karne par dialog band nahi hoga
+                      //     barrierDismissible: false,
+                      //     builder: (context) => DeleteDialog(
+                      //         onConfirm: () {
+                      //           // --- YAHAN AAPKA ASLI DELETE KA LOGIC AAYEGA ---
+                      //           // Jaise: viewModel.deleteHistory();
+                      //           // Ya: provider.clearCanvas();
+                      //           print("Delete action confirm ho gaya!");
+                      //         },
+                      //         ontap: provider.retry),
+                      //   );
+                      // },
+                      // // },
                       child: Image.asset(
                         "assets/images/delete.webp",
                         width: 60,

@@ -29,9 +29,11 @@ class SplashViewModel extends BaseViewModel {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) =>
-            session != null ? MainHomeScreen() : const LoginScreen(),
-      ),
+          builder: (_) =>
+              // session != null ?
+              MainHomeScreen()
+          // : const LoginScreen(),
+          ),
     );
 
     // Navigator.pushReplacement(
