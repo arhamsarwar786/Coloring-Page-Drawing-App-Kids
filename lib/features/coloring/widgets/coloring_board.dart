@@ -311,57 +311,59 @@ class _ColoringBoardState extends State<ColoringBoard> {
         const SizedBox(height: 16),
 
         // ── Color palette ────────────────────────────────────────────────────
-        Container(
-          height: 58,
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          // decoration: BoxDecoration(
-          //   color: Colors.white.withValues(alpha: 0.5),
-          //   borderRadius: BorderRadius.circular(24),
-          // ),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            itemCount: provider.palette.length,
-            itemBuilder: (context, index) {
-              final color = provider.palette[index];
-              final isSelected = provider.activeColor == color;
-              return GestureDetector(
-                onTap: () => provider.changeColor(color),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeOutBack,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  width: isSelected ? 56 : 46, // Bigger selected color
-                  height: isSelected ? 56 : 46,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isSelected ? Colors.white : Colors.white70,
-                      width: isSelected ? 4 : 2,
+        SafeArea(
+          child: Container(
+            height: 58,
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            // decoration: BoxDecoration(
+            //   color: Colors.white.withValues(alpha: 0.5),
+            //   borderRadius: BorderRadius.circular(24),
+            // ),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              itemCount: provider.palette.length,
+              itemBuilder: (context, index) {
+                final color = provider.palette[index];
+                final isSelected = provider.activeColor == color;
+                return GestureDetector(
+                  onTap: () => provider.changeColor(color),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOutBack,
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
                     ),
-                    boxShadow: [
-                      if (isSelected)
-                        BoxShadow(
-                          color: color.withValues(alpha: 0.6),
-                          blurRadius: 12,
-                          spreadRadius: 2,
-                          offset: const Offset(0, 4),
-                        )
-                      else
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                    ],
+                    width: isSelected ? 56 : 46, // Bigger selected color
+                    height: isSelected ? 56 : 46,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isSelected ? Colors.white : Colors.white70,
+                        width: isSelected ? 4 : 2,
+                      ),
+                      boxShadow: [
+                        if (isSelected)
+                          BoxShadow(
+                            color: color.withValues(alpha: 0.6),
+                            blurRadius: 12,
+                            spreadRadius: 2,
+                            offset: const Offset(0, 4),
+                          )
+                        else
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
         const SizedBox(height: 8),

@@ -132,6 +132,10 @@ class HomeViewModel extends BaseViewModel {
       await fetchDatabaseCoins();
 
       // ... baki ka code waisa hi rahe
+
+      await checkAndApplyDailyBonus();
+
+      // setLoading(false);
     } catch (_) {
       setError(AppStrings.loadError);
     }
@@ -139,22 +143,50 @@ class HomeViewModel extends BaseViewModel {
   }
 
 // 3. Ye function add karein jo Supabase se sum uthaye
+  // Future<void> fetchDatabaseCoins() async {
+  //   final userId = Supabase.instance.client.auth.currentUser?.id;
+  //   if (userId == null) return;
+
+  //   final response = await Supabase.instance.client
+  //       .from('user_coins')
+  //       .select('coins')
+  //       .eq('user_id', userId);
+
+  //   final List<dynamic> data = response as List<dynamic>;
+  //   int total = 0;
+  //   for (var item in data) {
+  //     total += (item['coins'] as int);
+  //   }
+  //   _databaseCoins = total;
+  //   notifyListeners();
+  // }
+
   Future<void> fetchDatabaseCoins() async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
 
-    final response = await Supabase.instance.client
-        .from('user_coins')
-        .select('coins')
-        .eq('user_id', userId);
+    try {
+      // 1. Supabase se response lein
+      final List<dynamic> data = await Supabase.instance.client
+          .from('user_coins')
+          .select('coins')
+          .eq('user_id', userId);
 
-    final List<dynamic> data = response as List<dynamic>;
-    int total = 0;
-    for (var item in data) {
-      total += (item['coins'] as int);
+      // 2. Total calculate karein (Safety ke sath)
+      int total = 0;
+      for (var item in data) {
+        // 'coins' ko int mein convert karein, agar null ho toh 0 lein
+        total += (item['coins'] as int? ?? 0);
+      }
+
+      _databaseCoins = total;
+      print("Database total coins updated: $_databaseCoins");
+
+      // 3. UI refresh karein
+      notifyListeners();
+    } catch (e) {
+      print("Error fetching coins: $e");
     }
-    _databaseCoins = total;
-    notifyListeners();
   }
 
   void selectCategory(String categoryId) {
@@ -271,11 +303,24 @@ class HomeViewModel extends BaseViewModel {
   // }
 
   Future<void> addCompletionPoints(int points) async {
-    _databaseCoins += points; // Local variable update
-    await _repository.savePoints(
-        _databaseCoins, "Level Completion", "level"); // DB save
-    notifyListeners(); // UI Refresh
+    // 1. Pehle current balance mein naye points add karein
+    int newTotal = _databaseCoins + points;
+
+    // 2. Repository ko bolen ke DB update kare aur history mein add kare
+    await _repository.savePoints(newTotal, "Level Completion", "level");
+
+    // 3. Local state update karein
+    _databaseCoins = newTotal;
+
+    // 4. UI refresh karein
+    notifyListeners();
   }
+  // Future<void> addCompletionPoints(int points) async {
+  //   _databaseCoins += points; // Local variable update
+  //   await _repository.savePoints(
+  //       _databaseCoins, "Level Completion", "level"); // DB save
+  //   notifyListeners(); // UI Refresh
+  // }
 
   Future<void> addColorMatchPoints() async {
     _totalPoints += _colorMatchPointsValue;
@@ -396,30 +441,91 @@ class HomeViewModel extends BaseViewModel {
   }
 
   // ── Level-unlock refresh ──────────
+
   Future<void> fetchCoinHistory() async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
 
     final response = await Supabase.instance.client
-        .from('user_coins')
+        .from('coin_history')
         .select()
         .eq('user_id', userId)
-        .order('updated_at', ascending: false);
+        .order('created_at', ascending: false);
 
-    setHistory(response as List<dynamic>);
+    // Yahan conversion zaroori hai
+    final List<dynamic> data = response as List<dynamic>;
+
+    // Map se CoinHistory object banayein
+    final List<CoinHistory> historyObjects = data.map((json) {
+      return CoinHistory.fromJson(json as Map<String, dynamic>);
+    }).toList();
+
+    setHistory(historyObjects);
   }
 
-  List<CoinHistory> _coinHistoryList = [];
+  // Future<void> fetchCoinHistory() async {
+  //   final userId = Supabase.instance.client.auth.currentUser?.id;
+  //   if (userId == null) return;
 
-  List<CoinHistory> get coinHistoryList => _coinHistoryList;
+  //   final response = await Supabase.instance.client
+  //       .from('coin_history')
+  //       .select()
+  //       .eq('user_id', userId)
+  //       .order('created_at', ascending: false);
+
+  //   // Yahan conversion karein:
+  //   final List<dynamic> data = response as List<dynamic>;
+  //   final historyObjects =
+  //       data.map((item) => CoinHistory.fromJson(item)).toList();
+
+  //   setHistory(historyObjects); // Ab ye List<CoinHistory> hai
+  // }
+
+  // Future<void> fetchCoinHistory() async {
+  //   final userId = Supabase.instance.client.auth.currentUser?.id;
+  //   if (userId == null) return;
+
+  //   final response = await Supabase.instance.client
+  //       .from('coin_history')
+  //       .select()
+  //       .eq('user_id', userId)
+  //       .order('created_at', ascending: false);
+  //   print("Supabase se aya data: $response");
+
+  //   setHistory(response as List<dynamic>);
+  // }
+
+  // ViewModel mein ye list variable hona chahiye
+  // List<CoinHistory> _historyList = [];
+  // List<CoinHistory> get historyList => _historyList;
+
+  // void setHistory(List<CoinHistory> newList) {
+  //   _historyList = newList;
+  //   notifyListeners();
+  // }
+
+  // ViewModel mein ye change karein
+  List<CoinHistory> _historyList = [];
+
+// Isay 'coinHistoryList' kar dein
+  List<CoinHistory> get coinHistoryList => _historyList;
+
+  void setHistory(List<CoinHistory> newList) {
+    _historyList = newList;
+    notifyListeners();
+  }
+
+  // List<CoinHistory> _coinHistoryList = [];
+
+  // List<CoinHistory> get coinHistoryList => _coinHistoryList;
 
   // Jab database se data aaye:
 
-  void setHistory(List<dynamic> data) {
-    _coinHistoryList = data.map((item) => CoinHistory.fromJson(item)).toList();
+  // void setHistory(List<dynamic> data) {
+  //   _coinHistoryList = data.map((item) => CoinHistory.fromJson(item)).toList();
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   /// Lightweight refresh: reloads level-progress data and notifies the UI
   /// to redraw lock states. Much cheaper than a full [load()] since it does
@@ -431,103 +537,233 @@ class HomeViewModel extends BaseViewModel {
     _levelProgress = await _loadLevelProgress();
     notifyListeners();
   }
-}
 
-class CategorySelectionBar extends StatelessWidget {
-  const CategorySelectionBar({Key? key}) : super(key: key);
+// ── Automatic Daily Bonus (Single Function) ──────────────────────────────
 
-  @override
-  Widget build(BuildContext context) {
-    // Aapke isi same class wale HomeViewModel ko listen kar raha hai
-    final viewModel = context.watch<HomeViewModel>();
+  Future<void> checkAndApplyDailyBonus() async {
+    // Aaj ki date (Format: 2026-06-12)
+    final String today = DateTime.now().toIso8601String().split('T')[0];
 
-    final List<CategoryModel> categories = viewModel.categories;
-    final String? selectedId = viewModel.selectedCategory?.id;
+    // Database se last date layein
+    final lastClaimed = await _repository.getLastClaimedDate();
 
-    if (categories.isEmpty) {
-      return const SizedBox.shrink();
+    print("Aaj ki date: $today");
+    print("DB ki last date: $lastClaimed");
+
+    // LOGIC: Agar aaj ki date aur DB ki date barabar hai, to kuch na karein
+    if (lastClaimed == today) {
+      print("Bonus pehle hi claim ho chuka hai.");
+      return; // Yahan se ruk jayega, aage nahi badhega
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xffE2E5F8), // Outer pill bar background
-        borderRadius: BorderRadius.circular(40),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: categories.map((CategoryModel category) {
-          final isSelected = selectedId == category.id;
+    // Agar date alag hai, to bonus dein
+    int streak = await _repository.getCurrentStreak();
+    int bonus = 10; // Apna logic yahan rakhein
 
-          return GestureDetector(
-            // Bina kisi change ke aapka native view model function call ho raha hai
-            onTap: () => viewModel.selectCategory(category.id),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeInOut,
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color(0xffFFF3DC)
-                    : Colors.transparent, // Active yellow capsule
-                borderRadius: BorderRadius.circular(30),
-                border: isSelected
-                    ? Border.all(color: const Color(0xffF9DFB7), width: 1.5)
-                    : null,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    _getCategoryIcon(category.title),
-                    size: 32,
-                    // Active state par CategoryModel ke andar ka exact accentColor select hoga
-                    color: isSelected
-                        ? category.accentColor
-                        : const Color(0xff6C728E),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    category.title.toUpperCase(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      fontFamily: "Regular",
-                      letterSpacing: 0.5,
-                      color: isSelected
-                          ? const Color(0xff1A1C29)
-                          : const Color(0xff6C728E),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
+    _databaseCoins += bonus;
+
+    // 1. Coins save karein
+    await _repository.savePoints(
+        _databaseCoins, "Automatic Daily Bonus", "bonus");
+
+    // 2. Date update karein taake dobara na mile
+    await _repository.saveDailyBonus(today, streak + 1);
+
+    notifyListeners();
+    print("Bonus successfully diya gaya!");
   }
 
-  // Dynamic system icons mapper based on your Category title
-  IconData _getCategoryIcon(String title) {
-    switch (title.toLowerCase()) {
-      case 'fruits':
-        return Icons.apple;
-      case 'animals':
-        return Icons.pets;
-      case 'vegetables':
-        return Icons.grass;
-      case 'wild animals':
-      case 'wild_animals':
-        return Icons.pets;
-      case 'colors':
-        return Icons.color_lens;
-      case 'alphabets':
-        return Icons.abc;
-      case 'drawing':
-        return Icons.brush;
-      default:
-        return Icons.grid_view_rounded;
-    }
-  }
+//   Future<void> checkAndApplyDailyBonus() async {
+//     final String today =
+//         DateTime.now().toIso8601String().split('T')[0]; // Format: 2026-06-12
+
+//     // 1. Pehle database se check karein ke kya aaj bonus mila hai
+//     final lastClaimed = await _repository.getLastClaimedDate();
+
+//     // Agar lastClaimed aaj ki date hai, to kuch mat karein
+//     if (lastClaimed == today) {
+//       print("Aaj bonus mil chuka hai, dubara nahi denge.");
+//       return;
+//     }
+
+//     // 2. Agar nahi mila, to bonus dein
+//     int streak = await _repository.getCurrentStreak();
+//     int bonus = 10;
+
+//     await _repository.savePoints(
+//         _databaseCoins + bonus, "Automatic Daily Bonus", "bonus");
+//     await _repository.saveDailyBonus(today, streak + 1);
+
+//     print("Bonus successfully applied!");
+//   }
+
+//   Future<int> claimDailyBonus() async {
+//   final String today = DateTime.now().toIso8601String().split('T')[0];
+//   final lastClaimed = await _repository.getLastClaimedDate();
+
+//   if (lastClaimed == today) {
+//     return 0; // No bonus if already claimed
+//   }
+
+//   int streak = await _repository.getCurrentStreak();
+//   int bonus = (streak >= 7) ? 50 : 10;
+
+//   // Update total coins
+//   _databaseCoins += bonus;
+
+//   // Save to database (using the CORRECT function name from repository)
+//   await _repository.savePoints(_databaseCoins, "Automatic Daily Bonus", "bonus");
+
+//   // Update streak in database
+//   await _repository.saveDailyBonus(today, streak + 1);
+
+//   return bonus; // Return the amount of bonus given
+// }
+  // Future<void> checkAndApplyDailyBonus() async {
+  //   final String today = _todayDateString();
+  //   final lastClaimed = await _repository.getLastClaimedDate();
+
+  //   if (lastClaimed == null || lastClaimed != today) {
+  //     int streak = await _repository.getCurrentStreak();
+
+  //     // Streak logic fix: Agar last claim kal thi, to streak barhao, warna reset karo
+  //     // (Aapke repository ke logic ke hisaab se)
+  //     int bonus = (streak >= 7) ? 50 : 10;
+
+  //     _databaseCoins += bonus;
+
+  //     // Save points (Ensure karein ke ye function repository mein moujood hai)
+  //     await _repository.savePoints(
+  //         _databaseCoins, "Automatic Daily Bonus", "bonus");
+
+  //     // Streak ko bhi update karein
+  //     await _repository.saveDailyBonus(today, streak + 1);
+
+  //     notifyListeners();
+  //   }
+  // }
+
+// Future<void> checkAndApplyDailyBonus() async {
+//   final String today = _todayDateString(); // Aapka purana helper use kiya
+
+//   // 1. Database se check karein
+//   final lastClaimed = await _repository.getLastClaimedDate();
+
+//   // 2. Agar bonus nahi mila (null hai ya aaj ki date nahi hai)
+//   if (lastClaimed == null || lastClaimed != today) {
+//     int streak = await _repository.getCurrentStreak();
+
+//     // Streak logic update (agar kal bonus nahi liya to streak 1 ho jaye)
+//     // Ye aapke purane logic se sync hai
+//     int bonus = (streak >= 7) ? 50 : 10;
+
+//     // Point update
+//     _databaseCoins += bonus; // Aapne coins ke liye _databaseCoins use kiya hai
+
+//     // Save to DB
+//     await _repository.savePoints(_databaseCoins, "Automatic Daily Bonus", "bonus");
+//     await _repository.saveDailyBonus(today, streak + 1);
+
+//     notifyListeners();
+//   }
+// }
 }
+
+// class CategorySelectionBar extends StatelessWidget {
+//   const CategorySelectionBar({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Aapke isi same class wale HomeViewModel ko listen kar raha hai
+//     final viewModel = context.watch<HomeViewModel>();
+
+//     final List<CategoryModel> categories = viewModel.categories;
+//     final String? selectedId = viewModel.selectedCategory?.id;
+
+//     if (categories.isEmpty) {
+//       return const SizedBox.shrink();
+//     }
+
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+//       decoration: BoxDecoration(
+//         color: const Color(0xffE2E5F8), // Outer pill bar background
+//         borderRadius: BorderRadius.circular(40),
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: categories.map((CategoryModel category) {
+//           final isSelected = selectedId == category.id;
+
+//           return GestureDetector(
+//             // Bina kisi change ke aapka native view model function call ho raha hai
+//             onTap: () => viewModel.selectCategory(category.id),
+//             child: AnimatedContainer(
+//               duration: const Duration(milliseconds: 250),
+//               curve: Curves.easeInOut,
+//               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+//               decoration: BoxDecoration(
+//                 color: isSelected
+//                     ? const Color(0xffFFF3DC)
+//                     : Colors.transparent, // Active yellow capsule
+//                 borderRadius: BorderRadius.circular(30),
+//                 border: isSelected
+//                     ? Border.all(color: const Color(0xffF9DFB7), width: 1.5)
+//                     : null,
+//               ),
+//               child: Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: [
+//                   Icon(
+//                     _getCategoryIcon(category.title),
+//                     size: 32,
+//                     // Active state par CategoryModel ke andar ka exact accentColor select hoga
+//                     color: isSelected
+//                         ? category.accentColor
+//                         : const Color(0xff6C728E),
+//                   ),
+//                   const SizedBox(height: 4),
+//                   Text(
+//                     category.title.toUpperCase(),
+//                     style: TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 12,
+//                       fontFamily: "Regular",
+//                       letterSpacing: 0.5,
+//                       color: isSelected
+//                           ? const Color(0xff1A1C29)
+//                           : const Color(0xff6C728E),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           );
+//         }).toList(),
+//       ),
+//     );
+//   }
+
+//   // Dynamic system icons mapper based on your Category title
+//   IconData _getCategoryIcon(String title) {
+//     switch (title.toLowerCase()) {
+//       case 'fruits':
+//         return Icons.apple;
+//       case 'animals':
+//         return Icons.pets;
+//       case 'vegetables':
+//         return Icons.grass;
+//       case 'wild animals':
+//       case 'wild_animals':
+//         return Icons.pets;
+//       case 'colors':
+//         return Icons.color_lens;
+//       case 'alphabets':
+//         return Icons.abc;
+//       case 'drawing':
+//         return Icons.brush;
+//       default:
+//         return Icons.grid_view_rounded;
+//     }
+//   }
+// }

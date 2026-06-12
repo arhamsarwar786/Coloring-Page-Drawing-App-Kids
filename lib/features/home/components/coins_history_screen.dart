@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
+import 'package:play_craft_kids/features/home/components/coins_history.dart';
 
 import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
 
@@ -313,42 +314,161 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                 ],
               ),
             ),
+
             Consumer<HomeViewModel>(
               builder: (context, homeVM, _) {
-                final historyList =
-                    homeVM.coinHistoryList; // Apne ViewModel se data lein
+                final historyList = homeVM.coinHistoryList;
 
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: historyList.length,
-                  itemBuilder: (context, index) {
-                    final item = historyList[index];
+                if (historyList.isEmpty) {
+                  return Center(child: Text("Koi history nahi hai"));
+                }
 
-                    return ListTile(
-                      leading: Icon(
-                        Icons.monetization_on,
-                        color: Colors.amber,
-                        size: 30,
-                      ),
+                return Expanded(
+                  // Yahan Expanded lagana zaroori hai
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: historyList.length,
+                    itemBuilder: (context, index) {
+                      final item =
+                          historyList[index]; // Ab ye 'CoinHistory' object hai
 
-                      title: Text(
-                        item.description,
-                        style: TextStyle(
-                            fontFamily: "Regular",
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16),
-                      ), // "Level 1", "Bonus"
-
-                      trailing: Text("+${item.amount}",
+                      return ListTile(
+                        leading: Icon(Icons.monetization_on,
+                            color: Colors.amber, size: 30),
+                        title: Text(
+                          item.description,
+                          style: TextStyle(
+                              fontFamily: "Regular",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16),
+                        ),
+                        trailing: Text(
+                          "+${item.amount}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: "Regular",
-                              fontSize: 18)),
-                    );
-                  },
+                              fontSize: 18),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
-            ),
+            )
+
+            //   Consumer<HomeViewModel>(
+            //     builder: (context, homeVM, _) {
+            //       final historyList =
+            //           homeVM.coinHistoryList; // Apne ViewModel se data lein
+
+            //       return ListView.builder(
+            //         shrinkWrap: true,
+            //         itemCount: historyList.length,
+            //         itemBuilder: (context, index) {
+            //           final item =
+            //               historyList[index]; // Yeh ab 'CoinHistory' type ka hai
+
+            //           return ListTile(
+            //             leading: Icon(Icons.monetization_on,
+            //                 color: Colors.amber, size: 30),
+            //             title: Text(item.description,
+            //                 style: TextStyle(
+            //                     fontFamily: "Regular",
+            //                     fontWeight: FontWeight.w600,
+            //                     fontSize: 16)),
+            //             trailing: Text("+${item.amount}",
+            //                 style: TextStyle(
+            //                     fontWeight: FontWeight.bold,
+            //                     fontFamily: "Regular",
+            //                     fontSize: 18)), // Ab yahan sahi value aayegi
+            //           );
+            //         },
+            //       );
+            //       // ListView.builder(
+            //       //   shrinkWrap: true, // Overflow fix karne ke liye
+            //       //   physics:
+            //       //       BouncingScrollPhysics(), // Scroll smooth karne ke liye
+            //       //   itemCount: historyList.length,
+            //       //   itemBuilder: (context, index) {
+            //       //     // Yahan type cast ki zaroorat nahi hai agar aap list mein objects store kar rahi hain
+            //       //     final CoinHistory item = historyList[index];
+
+            //       //     return ListTile(
+            //       //       leading: Icon(Icons.monetization_on,
+            //       //           color: Colors.amber, size: 30),
+            //       //       title: Text(item.description,
+            //       //           style: TextStyle(
+            //       //               fontFamily: "Regular",
+            //       //               fontWeight: FontWeight.w600,
+            //       //               fontSize: 16)),
+            //       //       trailing: Text("+${item.amount}",
+            //       //           style: TextStyle(
+            //       //               fontWeight: FontWeight.bold,
+            //       //               fontFamily: "Regular",
+            //       //               fontSize: 18)),
+            //       //     );
+            //       //   },
+            //       // );
+            //       // //  ListView.builder(
+            //       //   shrinkWrap: true,
+            //       //   itemCount: historyList.length,
+            //       //   itemBuilder: (context, index) {
+            //       //     // Ye line important hai: item ab ek Map hai
+            //       //     final Map<String, dynamic> item =
+            //       //         historyList[index] as Map<String, dynamic>;
+
+            //       //     return ListTile(
+            //       //       leading: Icon(Icons.monetization_on,
+            //       //           color: Colors.amber, size: 30),
+            //       //       title: Text(
+            //       //         item['description'] ??
+            //       //             "No Description", // Map se string uthayein
+            //       //         style: TextStyle(
+            //       //             fontFamily: "Regular",
+            //       //             fontWeight: FontWeight.w600,
+            //       //             fontSize: 16),
+            //       //       ),
+            //       //       trailing: Text(
+            //       //         "+${item['amount'] ?? 0}", // Map se amount uthayein
+            //       //         style: TextStyle(
+            //       //             fontWeight: FontWeight.bold,
+            //       //             fontFamily: "Regular",
+            //       //             fontSize: 18),
+            //       //       ),
+            //       //     );
+            //       //   },
+            //       // );
+            //       // ListView.builder(
+            //       //   shrinkWrap: true,
+            //       //   itemCount: historyList.length,
+            //       //   itemBuilder: (context, index) {
+            //       //     final item = historyList[index];
+
+            //       //     return ListTile(
+            //       //       leading: Icon(
+            //       //         Icons.monetization_on,
+            //       //         color: Colors.amber,
+            //       //         size: 30,
+            //       //       ),
+
+            //       //       title: Text(
+            //       //         item.description,
+            //       //         style: TextStyle(
+            //       //             fontFamily: "Regular",
+            //       //             fontWeight: FontWeight.w600,
+            //       //             fontSize: 16),
+            //       //       ), // "Level 1", "Bonus"
+
+            //       //       trailing: Text("+${item.amount}",
+            //       //           style: TextStyle(
+            //       //               fontWeight: FontWeight.bold,
+            //       //               fontFamily: "Regular",
+            //       //               fontSize: 18)),
+            //       //     );
+            //       //   },
+            //       // );
+            //     },
+            //   ),
           ],
         ),
       ),

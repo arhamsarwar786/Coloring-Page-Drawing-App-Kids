@@ -380,17 +380,20 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                   physics: const BouncingScrollPhysics(),
                                   slivers: [
                                     // ── Coin counter badge ─────────────────────────────────────────
+
                                     SliverToBoxAdapter(
                                       child: Align(
                                         alignment: Alignment.topLeft,
                                         child: Consumer<HomeViewModel>(
                                           builder: (context, homeVM, _) {
-                                            // Session check
                                             final session = Supabase.instance
                                                 .client.auth.currentSession;
                                             final bool isLoggedIn =
                                                 session != null;
-                                            // final coins = homeVM.earnedCoins;
+
+                                            // Yahan hum check kar rahe hain ke kya loading chal rahi hai
+                                            final bool isLoading =
+                                                homeVM.isLoading;
                                             final coins = homeVM.databaseCoins;
 
                                             return GestureDetector(
@@ -401,56 +404,31 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                                       MaterialPageRoute(
                                                           builder: (_) =>
                                                               LoginScreen()));
-                                                } else {
-                                                  // Logged in hai, toh apna modal ya action yahan call karo
-                                                  print(
-                                                      "User logged in, coins: $coins");
                                                 }
                                               },
                                               child: AnimatedContainer(
+                                                margin:
+                                                    EdgeInsets.only(left: 20),
                                                 duration: const Duration(
                                                     milliseconds: 400),
-                                                curve: Curves.easeOutBack,
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 12,
                                                         vertical: 6),
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 12,
-                                                        vertical: 0),
                                                 decoration: BoxDecoration(
                                                   gradient:
                                                       const LinearGradient(
-                                                    colors: [
-                                                      Color(0xFFFFD700),
-                                                      Color(0xFFFF9100)
-                                                    ],
-                                                    begin: Alignment.topLeft,
-                                                    end: Alignment.bottomRight,
-                                                  ),
+                                                          colors: [
+                                                        Color(0xFFFFD700),
+                                                        Color(0xFFFF9100)
+                                                      ]),
                                                   borderRadius:
                                                       BorderRadius.circular(25),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: const Color(
-                                                              0xFFFFD700)
-                                                          .withOpacity(0.45),
-                                                      blurRadius: 8,
-                                                      offset:
-                                                          const Offset(0, 3),
-                                                    ),
-                                                  ],
                                                 ),
-
-                                                // duration: const Duration(
-                                                //     milliseconds: 400),
-                                                // Style waisa hi rakhein
                                                 child: Row(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-                                                    // Logic: Agar logged in hai toh Coin icon, warna Person/Lock icon
                                                     Text(
                                                         isLoggedIn
                                                             ? '🪙'
@@ -459,153 +437,147 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                                             fontSize: 20)),
                                                     const SizedBox(width: 4),
 
-                                                    // Logic: Agar logged in hai toh coins count, warna 'Login' text
-                                                    Text(
-                                                      isLoggedIn
-                                                          ? '$coins'
-                                                          : 'Login',
-                                                      style: const TextStyle(
-                                                        fontSize: 20,
-                                                        fontFamily: "Regular",
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w700,
+                                                    // Yahan Spinner ka logic hai
+                                                    if (isLoggedIn && isLoading)
+                                                      const SizedBox(
+                                                        width: 15,
+                                                        height: 15,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: Colors.white,
+                                                          strokeWidth: 2,
+                                                        ),
+                                                      )
+                                                    else
+                                                      Text(
+                                                        isLoggedIn
+                                                            ? '$coins'
+                                                            : 'Login',
+                                                        style: const TextStyle(
+                                                          fontSize: 20,
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
                                                       ),
-                                                    ),
                                                   ],
                                                 ),
                                               ),
                                             );
                                           },
                                         ),
-
-                                        // Consumer<HomeViewModel>(
-                                        //   builder: (context, homeVM, _) {
-                                        //     final coins = homeVM.earnedCoins;
-
-                                        //     // GestureDetector wrap kiya tap handle karne ke liye
-                                        //     return GestureDetector(
-                                        //       onTap: () {
-                                        //         // Supabase check
-                                        //         final session = Supabase
-                                        //             .instance
-                                        //             .client
-                                        //             .auth
-                                        //             .currentSession;
-
-                                        //         if (session == null) {
-                                        //           // Agar login nahi hai, login screen par bhejo
-                                        //           Navigator.pushNamed(context,
-                                        //               '/login'); // Apne route ka naam check kar lena
-                                        //         } else {
-                                        //           // Agar logged in hai, toh coins show karo (ya jo bhi action chahiye)
-                                        //           print(
-                                        //               "User logged in, coins: $coins");
-                                        //           // Yahan apna showModal ya jo bhi logic hai wo call karo
-                                        //         }
-                                        //       },
-                                        //       child: AnimatedContainer(
-                                        //         // Tumhara baaki code waisa hi rahega...
-                                        //         duration: const Duration(
-                                        //             milliseconds: 400),
-                                        //         // ... baki properties yahan ...
-                                        //         child: Row(
-                                        //           mainAxisSize:
-                                        //               MainAxisSize.min,
-                                        //           children: [
-                                        //             const Text('🪙',
-                                        //                 style: TextStyle(
-                                        //                     fontSize: 16)),
-                                        //             const SizedBox(width: 4),
-                                        //             Text(
-                                        //               '$coins',
-                                        //               style: const TextStyle(
-                                        //                   fontSize: 16,
-                                        //                   color: Colors.white,
-                                        //                   fontWeight:
-                                        //                       FontWeight.w700),
-                                        //             ),
-                                        //           ],
-                                        //         ),
-                                        //       ),
-                                        //     );
-                                        //   },
-                                        // ),
-
-                                        // Consumer<HomeViewModel>(
-                                        //   builder: (context, homeVM, _) {
-                                        //     final coins = homeVM.earnedCoins;
-                                        //     return AnimatedContainer(
-                                        //       // width: 200,
-                                        //       duration: const Duration(
-                                        //           milliseconds: 400),
-                                        //       curve: Curves.easeOutBack,
-                                        //       padding:
-                                        //           const EdgeInsets.symmetric(
-                                        //               horizontal: 12,
-                                        //               vertical: 6),
-                                        //       margin:
-                                        //           const EdgeInsets.symmetric(
-                                        //               horizontal: 12,
-                                        //               vertical: 0),
-                                        //       decoration: BoxDecoration(
-                                        //         gradient: const LinearGradient(
-                                        //           colors: [
-                                        //             Color(0xFFFFD700),
-                                        //             Color(0xFFFF9100)
-                                        //           ],
-                                        //           begin: Alignment.topLeft,
-                                        //           end: Alignment.bottomRight,
-                                        //         ),
-                                        //         borderRadius:
-                                        //             BorderRadius.circular(25),
-                                        //         boxShadow: [
-                                        //           BoxShadow(
-                                        //             color:
-                                        //                 const Color(0xFFFFD700)
-                                        //                     .withOpacity(0.45),
-                                        //             blurRadius: 8,
-                                        //             offset: const Offset(0, 3),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //       child: Row(
-                                        //         mainAxisSize: MainAxisSize.min,
-                                        //         children: [
-                                        //           const Text('🪙',
-                                        //               style: TextStyle(
-                                        //                   fontSize: 16)),
-                                        //           const SizedBox(width: 4),
-                                        //           Text(
-                                        //             '$coins',
-                                        //             style: TextStyle(
-                                        //               fontSize: 25,
-                                        //               fontFamily: "Regular",
-                                        //               fontWeight:
-                                        //                   FontWeight.w700,
-                                        //               color: Colors.white,
-                                        //               shadows: const [
-                                        //                 Shadow(
-                                        //                     color:
-                                        //                         Colors.black26,
-                                        //                     blurRadius: 3,
-                                        //                     offset:
-                                        //                         Offset(0, 1)),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //         ],
-                                        //       ),
-                                        //     );
-                                        //   },
-                                        // ),
                                       ),
                                     ),
+
+                                    // SliverToBoxAdapter(
+                                    //   child: Align(
+                                    //       alignment: Alignment.topLeft,
+                                    //       child: Consumer<HomeViewModel>(
+                                    //         builder: (context, homeVM, _) {
+                                    //           // Session check
+                                    //           final session = Supabase.instance
+                                    //               .client.auth.currentSession;
+                                    //           final bool isLoggedIn =
+                                    //               session != null;
+                                    //           // final coins = homeVM.earnedCoins;
+                                    //           final coins =
+                                    //               homeVM.databaseCoins;
+
+                                    //           return GestureDetector(
+                                    //             onTap: () {
+                                    //               if (!isLoggedIn) {
+                                    //                 Navigator.push(
+                                    //                     context,
+                                    //                     MaterialPageRoute(
+                                    //                         builder: (_) =>
+                                    //                             LoginScreen()));
+                                    //               } else {
+                                    //                 // Logged in hai, toh apna modal ya action yahan call karo
+                                    //                 print(
+                                    //                     "User logged in, coins: $coins");
+                                    //               }
+                                    //             },
+                                    //             child: AnimatedContainer(
+                                    //               duration: const Duration(
+                                    //                   milliseconds: 400),
+                                    //               curve: Curves.easeOutBack,
+                                    //               padding: const EdgeInsets
+                                    //                   .symmetric(
+                                    //                   horizontal: 12,
+                                    //                   vertical: 6),
+                                    //               margin: const EdgeInsets
+                                    //                   .symmetric(
+                                    //                   horizontal: 12,
+                                    //                   vertical: 0),
+                                    //               decoration: BoxDecoration(
+                                    //                 gradient:
+                                    //                     const LinearGradient(
+                                    //                   colors: [
+                                    //                     Color(0xFFFFD700),
+                                    //                     Color(0xFFFF9100)
+                                    //                   ],
+                                    //                   begin: Alignment.topLeft,
+                                    //                   end:
+                                    //                       Alignment.bottomRight,
+                                    //                 ),
+                                    //                 borderRadius:
+                                    //                     BorderRadius.circular(
+                                    //                         25),
+                                    //                 boxShadow: [
+                                    //                   BoxShadow(
+                                    //                     color: const Color(
+                                    //                             0xFFFFD700)
+                                    //                         .withOpacity(0.45),
+                                    //                     blurRadius: 8,
+                                    //                     offset:
+                                    //                         const Offset(0, 3),
+                                    //                   ),
+                                    //                 ],
+                                    //               ),
+
+                                    //               // duration: const Duration(
+                                    //               //     milliseconds: 400),
+                                    //               // Style waisa hi rakhein
+                                    //               child: Row(
+                                    //                 mainAxisSize:
+                                    //                     MainAxisSize.min,
+                                    //                 children: [
+                                    //                   // Logic: Agar logged in hai toh Coin icon, warna Person/Lock icon
+                                    //                   Text(
+                                    //                       isLoggedIn
+                                    //                           ? '🪙'
+                                    //                           : '👤',
+                                    //                       style:
+                                    //                           const TextStyle(
+                                    //                               fontSize:
+                                    //                                   20)),
+                                    //                   const SizedBox(width: 4),
+
+                                    //                   // Logic: Agar logged in hai toh coins count, warna 'Login' text
+                                    //                   Text(
+                                    //                     isLoggedIn
+                                    //                         ? '$coins'
+                                    //                         : 'Login',
+                                    //                     style: const TextStyle(
+                                    //                       fontSize: 20,
+                                    //                       fontFamily: "Regular",
+                                    //                       color: Colors.white,
+                                    //                       fontWeight:
+                                    //                           FontWeight.w700,
+                                    //                     ),
+                                    //                   ),
+                                    //                 ],
+                                    //               ),
+                                    //             ),
+                                    //           );
+                                    //         },
+                                    //       )),
+                                    // ),
 
                                     SliverToBoxAdapter(
                                       child: Image.asset(
                                           "assets/images/logo.png",
-                                          height: 250),
+                                          height: 200),
                                     ),
 
                                     // SliverPadding(
@@ -633,7 +605,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                     //   ),
                                     // ),
                                     SliverPadding(
-                                      padding: const EdgeInsets.all(10.0),
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
                                       sliver: SliverGrid(
                                         gridDelegate:
                                             const SliverGridDelegateWithFixedCrossAxisCount(
