@@ -12,6 +12,7 @@ import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
 import 'package:play_craft_kids/features/levels/model/level_model.dart';
 import 'package:play_craft_kids/features/tracing/viewmodel/activity_item.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ColoringCompletionScreen extends StatefulWidget {
   /// The exact pixel image the child painted — pass from PixelColoringCanvas.
@@ -99,23 +100,35 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
       extraCoins = 10;
     }
 
-    _earnedCoins = baseCoins + extraCoins;
+    // --- LOGIC CHANGE START ---
+    // Check karein kya user logged in hai?
+    final session = Supabase.instance.client.auth.currentSession;
 
-    // 1. DATA SAVING LOGIC (Supabase + Local)
+    if (session != null) {
+      // Agar logged in hai, tabhi coins calculate aur add karo
+      _earnedCoins = baseCoins + extraCoins;
+    } else {
+      // Agar guest hai, toh 0 coins
+      _earnedCoins = 0;
+    }
+    // --- LOGIC CHANGE END ---
+
+    // 1. DATA SAVING LOGIC
     if (passed) {
       final currentLevel = provider.currentLevel;
       if (currentLevel != null) {
         final drawingRepo = context.read<DrawingRepository>();
 
-        // Level complete mark karein
         await drawingRepo.markLevelCompleted(
           levelId: currentLevel.id,
           stars: 3,
           rewardCoins: currentLevel.rewardCoins,
         );
 
-        // Points save karein (Supabase connection)
-        await homeVM.addCompletionPoints(_earnedCoins);
+        // Agar session valid hai, tabhi points add honge
+        if (session != null) {
+          await homeVM.addCompletionPoints(_earnedCoins);
+        }
 
         if (mounted) {
           homeVM.refreshProgress();
@@ -124,7 +137,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
       }
     }
 
-    // 2. ANIMATION LOGIC (Image display aur effect ke liye)
+    // ... baki animation logic waisi hi rahegi ...
     await Future.delayed(const Duration(milliseconds: 150));
     if (!mounted) return;
 
@@ -132,25 +145,98 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
       _confettiController.play();
     }
 
-    // Card animation chalayein taake image show ho
     _cardController.forward();
 
     await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
 
     if (passed) {
-      // Stars aur Coins animation
       for (int i = 1; i <= 3; i++) {
         await Future.delayed(const Duration(milliseconds: 280));
         if (!mounted) return;
         setState(() => _visibleStars = i);
       }
 
-      await Future.delayed(const Duration(milliseconds: 200));
-      if (!mounted) return;
-      _coinsController.forward();
+      // Sirf tab slide animation dikhao agar coins mile hain
+      if (_earnedCoins > 0) {
+        await Future.delayed(const Duration(milliseconds: 200));
+        if (!mounted) return;
+        _coinsController.forward();
+      }
     }
   }
+
+  // Future<void> _startSequence() async {
+  //   final provider = context.read<ColoringProvider>();
+  //   final homeVM = context.read<HomeViewModel>();
+
+  //   final coverage = provider.overallCoveragePercent;
+  //   final passed = coverage >= 70 && provider.hasSignificantColorVariety;
+
+  //   int baseCoins = 10;
+  //   final difficulty =
+  //       provider.currentLevel?.difficulty?.toLowerCase() ?? 'easy';
+  //   if (difficulty == 'medium')
+  //     baseCoins = 20;
+  //   else if (difficulty == 'hard' || difficulty == 'difficult') baseCoins = 30;
+
+  //   int extraCoins = 0;
+  //   if (coverage >= 90) {
+  //     extraCoins = 10;
+  //   }
+
+  //   _earnedCoins = baseCoins + extraCoins;
+
+  //   // 1. DATA SAVING LOGIC (Supabase + Local)
+  //   if (passed) {
+  //     final currentLevel = provider.currentLevel;
+  //     if (currentLevel != null) {
+  //       final drawingRepo = context.read<DrawingRepository>();
+
+  //       // Level complete mark karein
+  //       await drawingRepo.markLevelCompleted(
+  //         levelId: currentLevel.id,
+  //         stars: 3,
+  //         rewardCoins: currentLevel.rewardCoins,
+  //       );
+
+  //       // Points save karein (Supabase connection)
+  //       await homeVM.addCompletionPoints(_earnedCoins);
+
+  //       if (mounted) {
+  //         homeVM.refreshProgress();
+  //         homeVM.load();
+  //       }
+  //     }
+  //   }
+
+  //   // 2. ANIMATION LOGIC (Image display aur effect ke liye)
+  //   await Future.delayed(const Duration(milliseconds: 150));
+  //   if (!mounted) return;
+
+  //   if (passed) {
+  //     _confettiController.play();
+  //   }
+
+  //   // Card animation chalayein taake image show ho
+  //   _cardController.forward();
+
+  //   await Future.delayed(const Duration(milliseconds: 500));
+  //   if (!mounted) return;
+
+  //   if (passed) {
+  //     // Stars aur Coins animation
+  //     for (int i = 1; i <= 3; i++) {
+  //       await Future.delayed(const Duration(milliseconds: 280));
+  //       if (!mounted) return;
+  //       setState(() => _visibleStars = i);
+  //     }
+
+  //     await Future.delayed(const Duration(milliseconds: 200));
+  //     if (!mounted) return;
+  //     _coinsController.forward();
+  //   }
+  // }
 
   @override
   void dispose() {

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/features/home/components/coins_history.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/base/base_viewmodel.dart';
@@ -283,6 +284,15 @@ class HomeViewModel extends BaseViewModel {
 
   // ── Level-unlock refresh ───────────────────────────────────────────────────
 
+  List<CoinHistory> _coinHistoryList = [];
+  List<CoinHistory> get coinHistoryList => _coinHistoryList;
+
+  // Jab database se data aaye:
+  void setHistory(List<dynamic> data) {
+    _coinHistoryList = data.map((item) => CoinHistory.fromJson(item)).toList();
+    notifyListeners();
+  }
+
   /// Lightweight refresh: reloads level-progress data and notifies the UI
   /// to redraw lock states. Much cheaper than a full [load()] since it does
   /// not re-parse content assets.
@@ -293,6 +303,8 @@ class HomeViewModel extends BaseViewModel {
     _levelProgress = await _loadLevelProgress();
     notifyListeners();
   }
+
+  Future<void> fetchCoinHistory(String userId) async {}
 }
 
 class CategorySelectionBar extends StatelessWidget {

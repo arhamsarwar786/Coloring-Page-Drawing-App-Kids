@@ -262,8 +262,11 @@ import 'package:play_craft_kids/core/utils/app_bottom_bar.dart';
 import 'package:play_craft_kids/features/drawing/viewmodel/drawing_viewmodel.dart';
 import 'package:play_craft_kids/features/history/viewmodel/history_viewmodel.dart';
 import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
+import 'package:play_craft_kids/features/home/components/coins_history_screen.dart';
+import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
 import 'package:play_craft_kids/shared/utils/interaction_feedback.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CustomBar extends StatefulWidget {
   const CustomBar({super.key});
@@ -345,7 +348,17 @@ class _CustomBarState extends State<CustomBar> {
             topColor: const Color.fromARGB(255, 72, 228, 67),
             bottomColor: const Color.fromARGB(255, 130, 219, 79),
             isSelected: selectedIndex == 2,
-            onTap: () {
+            onTap: () async {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => CoinHistoryScreen()));
+              // await context.read<HomeViewModel>().load();
+              // final viewModel = context.read<HomeViewModel>();
+              // final session = Supabase.instance.client.auth.currentSession;
+              // final userId = session?.user?.id ?? '';
+              // if (userId.isNotEmpty) {
+              //   await viewModel.fetchCoinHistory(userId);
+              // }
+
               handleTapAction(context, () {});
               setState(() => selectedIndex = 2);
               // showDialog(
