@@ -4,6 +4,7 @@ import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/coloring/view/coloring_completion_screen.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
 import 'package:play_craft_kids/features/coloring/widgets/coloring_board.dart';
+import 'package:play_craft_kids/features/coloring/widgets/delete_dialog.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
 import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
@@ -135,9 +136,16 @@ class _ColoringScreenState extends State<ColoringScreen> {
                         SidebarIcon(
                           icon: Icons.arrow_back_rounded,
                           assetName: 'assets/images/pop-button.png',
+                          // onPressed: () {
                           onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  BackNavigationDialog(screenContext: context),
+                            );
+                            // };
                             // Pop back to home levels screen (not all the way to root)
-                            Navigator.of(context).pop();
+                            // Navigator.of(context).pop();
                           },
                         ),
 
@@ -150,7 +158,8 @@ class _ColoringScreenState extends State<ColoringScreen> {
                             final session =
                                 Supabase.instance.client.auth.currentSession;
                             final bool isLoggedIn = session != null;
-                            final coins = homeVM.earnedCoins;
+                            final coins = homeVM.databaseCoins;
+                            // final coins = homeVM.earnedCoins;
 
                             return GestureDetector(
                               onTap: () {

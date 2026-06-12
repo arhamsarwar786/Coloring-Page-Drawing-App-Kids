@@ -390,7 +390,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                                 .client.auth.currentSession;
                                             final bool isLoggedIn =
                                                 session != null;
-                                            final coins = homeVM.earnedCoins;
+                                            // final coins = homeVM.earnedCoins;
+                                            final coins = homeVM.databaseCoins;
 
                                             return GestureDetector(
                                               onTap: () {

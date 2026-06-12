@@ -658,13 +658,26 @@ class _SignupScreenState extends State<SignupScreen> {
                         controller: passwordController,
                         hint: "Password",
                         obscure: !_isPasswordVisible,
-                        validator: (val) =>
-                            val!.isNotEmpty ? null : "Password required",
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return "Password required";
+                          } else if (val.length < 8) {
+                            return "Password must be at least 8 characters";
+                          }
+                          return null; // Sab theek hai
+                        },
                         onToggleVisibility: () {
                           setState(() {
                             _isPasswordVisible = !_isPasswordVisible;
                           });
                         },
+                        // validator: (val) =>
+                        //     val!.isNotEmpty ? null : "Password required",
+                        // onToggleVisibility: () {
+                        //   setState(() {
+                        //     _isPasswordVisible = !_isPasswordVisible;
+                        //   });
+                        // },
                       ),
 
                       CustomTextField(

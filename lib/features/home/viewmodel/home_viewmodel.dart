@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:play_craft_kids/features/home/components/coins_history.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/base/base_viewmodel.dart';
 import '../../../core/constants/app_strings.dart';
@@ -51,6 +52,9 @@ class HomeViewModel extends BaseViewModel {
     );
   }
 
+  int _databaseCoins = 0;
+  int get databaseCoins => _databaseCoins;
+
   List<LevelModel> get levelsForSelectedCategory {
     return selectedCategory?.levels ?? const <LevelModel>[];
   }
@@ -96,25 +100,61 @@ class HomeViewModel extends BaseViewModel {
 
   get error => null;
 
+  // Future<void> load() async {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     _content = await _repository.loadHomeContent();
+  //     _lastPlayedLevelId = await _repository.getLastPlayedLevelId();
+  //     _levelProgress = await _loadLevelProgress();
+  //     _totalPoints = await _repository.getPoints();
+  //     if (_content!.categories.isNotEmpty) {
+  //       final hasCurrentSelection = _content!.categories
+  //           .any((category) => category.id == _selectedCategoryId);
+  //       _selectedCategoryId = hasCurrentSelection
+  //           ? _selectedCategoryId
+  //           : _content!.categories.first.id;
+  //     }
+  //   } catch (_) {
+  //     setError(AppStrings.loadError);
+  //   }
+  //   setLoading(false);
+  // }
+
   Future<void> load() async {
     setLoading(true);
-    setError(null);
     try {
       _content = await _repository.loadHomeContent();
       _lastPlayedLevelId = await _repository.getLastPlayedLevelId();
       _levelProgress = await _loadLevelProgress();
-      _totalPoints = await _repository.getPoints();
-      if (_content!.categories.isNotEmpty) {
-        final hasCurrentSelection = _content!.categories
-            .any((category) => category.id == _selectedCategoryId);
-        _selectedCategoryId = hasCurrentSelection
-            ? _selectedCategoryId
-            : _content!.categories.first.id;
-      }
+
+      // Yahan database se real coins fetch karein
+      await fetchDatabaseCoins();
+
+      // ... baki ka code waisa hi rahe
     } catch (_) {
       setError(AppStrings.loadError);
     }
     setLoading(false);
+  }
+
+// 3. Ye function add karein jo Supabase se sum uthaye
+  Future<void> fetchDatabaseCoins() async {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (userId == null) return;
+
+    final response = await Supabase.instance.client
+        .from('user_coins')
+        .select('coins')
+        .eq('user_id', userId);
+
+    final List<dynamic> data = response as List<dynamic>;
+    int total = 0;
+    for (var item in data) {
+      total += (item['coins'] as int);
+    }
+    _databaseCoins = total;
+    notifyListeners();
   }
 
   void selectCategory(String categoryId) {
@@ -217,31 +257,44 @@ class HomeViewModel extends BaseViewModel {
   // ── Points system ─────────────────────────────────────────────────────────
 
   /// Adds points when a level is fully completed.
+  // Future<void> addCompletionPoints(int points) async {
+  //   _totalPoints += points;
+  //   await _repository.savePoints(_totalPoints);
+  //   notifyListeners();
+  // }
+
+  // Future<void> addCompletionPoints(int points) async {
+  //   _totalPoints += points;
+  //   // Yahan 3 arguments pass karein
+  //   await _repository.savePoints(_totalPoints, "Level Completion", "level");
+  //   notifyListeners();
+  // }
+
   Future<void> addCompletionPoints(int points) async {
-    _totalPoints += points;
-    await _repository.savePoints(_totalPoints);
-    notifyListeners();
+    _databaseCoins += points; // Local variable update
+    await _repository.savePoints(
+        _databaseCoins, "Level Completion", "level"); // DB save
+    notifyListeners(); // UI Refresh
   }
 
-  /// Adds 10 points when the child picks the correct colour for a region.
   Future<void> addColorMatchPoints() async {
     _totalPoints += _colorMatchPointsValue;
-    await _repository.savePoints(_totalPoints);
+    // Yahan 3 arguments pass karein
+    await _repository.savePoints(_totalPoints, "Color Match Reward", "game");
     notifyListeners();
   }
 
-  /// Adds daily and streak bonus points.
-  /// Returns the amount of bonus points awarded (0 if already claimed).
   Future<int> addDailyBonusPoints() async {
     final today = DateTime.now();
     final todayStr =
         '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
     final lastBonusStr = await _repository.getLastDailyBonusDate();
 
-    if (lastBonusStr == todayStr) return 0; // already claimed today
+    if (lastBonusStr == todayStr) return 0; // Already claimed today
 
     int streak = await _repository.getCurrentStreak();
 
+    // Streak Calculation Logic
     if (lastBonusStr != null) {
       try {
         final lastBonusDate = DateTime.parse(lastBonusStr);
@@ -258,38 +311,113 @@ class HomeViewModel extends BaseViewModel {
       streak = 1;
     }
 
+    // Points calculation
     int pointsToAdd = 0;
-    if (streak == 1)
-      pointsToAdd += 10;
-    else if (streak == 2)
-      pointsToAdd += 15;
-    else
-      pointsToAdd += 20; // Day 3+
+    if (streak == 1) {
+      pointsToAdd = 10;
+    } else if (streak == 2) {
+      pointsToAdd = 15;
+    } else {
+      pointsToAdd = 20; // Day 3+
+    }
 
     if (streak == 7) pointsToAdd += 50; // 7 days streak
     if (streak == 30) pointsToAdd += 200; // 30 days streak
 
     _totalPoints += pointsToAdd;
-    await _repository.savePoints(_totalPoints);
+
+    // Save points to Supabase with description and type
+    await _repository.savePoints(_totalPoints, "Daily Bonus Reward", "bonus");
+
     await _repository.saveLastDailyBonusDate(todayStr);
     await _repository.saveCurrentStreak(streak);
+
     notifyListeners();
     return pointsToAdd;
   }
+
+  // /// Adds 10 points when the child picks the correct colour for a region.
+  // Future<void> addColorMatchPoints() async {
+  //   _totalPoints += _colorMatchPointsValue;
+  //   await _repository.savePoints(_totalPoints);
+  //   notifyListeners();
+  // }
+
+  // /// Adds daily and streak bonus points.
+  // /// Returns the amount of bonus points awarded (0 if already claimed).
+  // Future<int> addDailyBonusPoints() async {
+  //   final today = DateTime.now();
+  //   final todayStr =
+  //       '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+  //   final lastBonusStr = await _repository.getLastDailyBonusDate();
+
+  //   if (lastBonusStr == todayStr) return 0; // already claimed today
+
+  //   int streak = await _repository.getCurrentStreak();
+
+  //   if (lastBonusStr != null) {
+  //     try {
+  //       final lastBonusDate = DateTime.parse(lastBonusStr);
+  //       final diff = today.difference(lastBonusDate).inDays;
+  //       if (diff == 1) {
+  //         streak += 1;
+  //       } else if (diff > 1) {
+  //         streak = 1; // Streak broken
+  //       }
+  //     } catch (_) {
+  //       streak = 1;
+  //     }
+  //   } else {
+  //     streak = 1;
+  //   }
+
+  //   int pointsToAdd = 0;
+  //   if (streak == 1)
+  //     pointsToAdd += 10;
+  //   else if (streak == 2)
+  //     pointsToAdd += 15;
+  //   else
+  //     pointsToAdd += 20; // Day 3+
+
+  //   if (streak == 7) pointsToAdd += 50; // 7 days streak
+  //   if (streak == 30) pointsToAdd += 200; // 30 days streak
+
+  //   _totalPoints += pointsToAdd;
+  //   await _repository.savePoints(_totalPoints);
+  //   await _repository.saveLastDailyBonusDate(todayStr);
+  //   await _repository.saveCurrentStreak(streak);
+  //   notifyListeners();
+  //   return pointsToAdd;
+  // }
 
   String _todayDateString() {
     final now = DateTime.now();
     return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
   }
 
-  // ── Level-unlock refresh ───────────────────────────────────────────────────
+  // ── Level-unlock refresh ──────────
+  Future<void> fetchCoinHistory() async {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (userId == null) return;
+
+    final response = await Supabase.instance.client
+        .from('user_coins')
+        .select()
+        .eq('user_id', userId)
+        .order('updated_at', ascending: false);
+
+    setHistory(response as List<dynamic>);
+  }
 
   List<CoinHistory> _coinHistoryList = [];
+
   List<CoinHistory> get coinHistoryList => _coinHistoryList;
 
   // Jab database se data aaye:
+
   void setHistory(List<dynamic> data) {
     _coinHistoryList = data.map((item) => CoinHistory.fromJson(item)).toList();
+
     notifyListeners();
   }
 
@@ -303,8 +431,6 @@ class HomeViewModel extends BaseViewModel {
     _levelProgress = await _loadLevelProgress();
     notifyListeners();
   }
-
-  Future<void> fetchCoinHistory(String userId) async {}
 }
 
 class CategorySelectionBar extends StatelessWidget {

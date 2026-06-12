@@ -1,0 +1,357 @@
+import 'package:flutter/material.dart';
+
+import 'package:play_craft_kids/features/auth/view/login_screen.dart';
+import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
+import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
+
+import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
+
+import 'package:provider/provider.dart';
+
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class CoinHistoryScreen extends StatefulWidget {
+  @override
+  State<CoinHistoryScreen> createState() => _CoinHistoryScreenState();
+}
+
+class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Screen khulte hi data fetch karein
+    Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
+  }
+
+  Widget build(BuildContext context) {
+    final session = Supabase.instance.client.auth.currentSession;
+
+    final bool isLoggedIn = session != null;
+
+    if (!isLoggedIn) {
+      return Scaffold(
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 18, 0, 12),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
+                        height: 140,
+                        // width: double.infinity,
+                        child: Stack(
+                          children: [
+                            ClipPath(
+                              clipper: AppBarClipper(),
+                              child: Container(
+                                height: 140,
+                                color: const Color(0xff3b9499),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SidebarIcon(
+                                        icon: Icons.arrow_back_rounded,
+                                        assetName:
+                                            'assets/images/pop-button.png',
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ),
+
+                                    // Title
+                                    Expanded(
+                                      child: Center(
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              // Shadow Layer
+                                              Transform.translate(
+                                                offset: const Offset(6, 6),
+                                                child: Text(
+                                                  "Coins History",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 50,
+                                                    fontFamily: "Regular",
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.black
+                                                        .withOpacity(0.35),
+                                                    letterSpacing: 1,
+                                                  ),
+                                                ),
+                                              ),
+
+                                              // Pink 3D Layer
+                                              Transform.translate(
+                                                offset: const Offset(3, 3),
+                                                child: Text(
+                                                  "Coins History",
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontSize: 50,
+                                                    fontFamily: "Regular",
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Color(0xFFFF4FA3),
+                                                    letterSpacing: 1,
+                                                  ),
+                                                ),
+                                              ),
+
+                                              // Main White Text
+                                              Text(
+                                                "Coins History",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontSize: 50,
+                                                  fontFamily: "Regular",
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Colors.white,
+                                                  letterSpacing: 1,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(width: 60),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // SidebarIcon(
+                    //   icon: Icons.arrow_back_rounded,
+                    //   assetName: 'assets/images/pop-button.png',
+                    //   onPressed: () {
+                    //     Navigator.pop(context);
+                    //   },
+                    // ),
+
+                    // // _HistoryIconButton(
+                    // //   icon: Icons.arrow_back_rounded,
+                    // //   onTap: () => Navigator.pop(context),
+                    // // ),
+                    // const SizedBox(width: 14),
+                    // Expanded(
+                    //   child: Text(
+                    //     'Drawing History',
+                    //     style: TextStyle(
+                    //       fontSize: 28,
+                    //       fontWeight: FontWeight.w700,
+                    //       color: const Color(0xFF1F2A44),
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
+              Text(
+                "Coins history dekhne ke liye login karein",
+                style: TextStyle(
+                    fontFamily: "Regular",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => LoginScreen())),
+                child: Text(
+                  "Login",
+                  style: TextStyle(
+                      fontFamily: "Regular",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Agar logged in hai, toh ListView show karo
+
+    return Scaffold(
+      // appBar: AppBar(title: Text("Coins History")),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 18, 0, 12),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: SizedBox(
+                      height: 140,
+                      // width: double.infinity,
+                      child: Stack(
+                        children: [
+                          ClipPath(
+                            clipper: AppBarClipper(),
+                            child: Container(
+                              height: 140,
+                              color: const Color(0xff3b9499),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SidebarIcon(
+                                      icon: Icons.arrow_back_rounded,
+                                      assetName: 'assets/images/pop-button.png',
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
+
+                                  // Title
+                                  Expanded(
+                                    child: Center(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            // Shadow Layer
+                                            Transform.translate(
+                                              offset: const Offset(6, 6),
+                                              child: Text(
+                                                "Coins History",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 50,
+                                                  fontFamily: "Regular",
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Colors.black
+                                                      .withOpacity(0.35),
+                                                  letterSpacing: 1,
+                                                ),
+                                              ),
+                                            ),
+
+                                            // Pink 3D Layer
+                                            Transform.translate(
+                                              offset: const Offset(3, 3),
+                                              child: Text(
+                                                "Coins History",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontSize: 50,
+                                                  fontFamily: "Regular",
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Color(0xFFFF4FA3),
+                                                  letterSpacing: 1,
+                                                ),
+                                              ),
+                                            ),
+
+                                            // Main White Text
+                                            Text(
+                                              "Coins History",
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 50,
+                                                fontFamily: "Regular",
+                                                fontWeight: FontWeight.w900,
+                                                color: Colors.white,
+                                                letterSpacing: 1,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 60),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // SidebarIcon(
+                  //   icon: Icons.arrow_back_rounded,
+                  //   assetName: 'assets/images/pop-button.png',
+                  //   onPressed: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  // ),
+
+                  // // _HistoryIconButton(
+                  // //   icon: Icons.arrow_back_rounded,
+                  // //   onTap: () => Navigator.pop(context),
+                  // // ),
+                  // const SizedBox(width: 14),
+                  // Expanded(
+                  //   child: Text(
+                  //     'Drawing History',
+                  //     style: TextStyle(
+                  //       fontSize: 28,
+                  //       fontWeight: FontWeight.w700,
+                  //       color: const Color(0xFF1F2A44),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+            Consumer<HomeViewModel>(
+              builder: (context, homeVM, _) {
+                final historyList =
+                    homeVM.coinHistoryList; // Apne ViewModel se data lein
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: historyList.length,
+                  itemBuilder: (context, index) {
+                    final item = historyList[index];
+
+                    return ListTile(
+                      leading: Icon(
+                        Icons.monetization_on,
+                        color: Colors.amber,
+                        size: 30,
+                      ),
+
+                      title: Text(
+                        item.description,
+                        style: TextStyle(
+                            fontFamily: "Regular",
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16),
+                      ), // "Level 1", "Bonus"
+
+                      trailing: Text("+${item.amount}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Regular",
+                              fontSize: 18)),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -107,7 +107,8 @@ class LocalContentService {
 
 // 1. Updated savePoints method (Clean)
 
-  Future<void> savePoints(int points) async {
+  Future<void> savePoints(int points, String description, String type) async {
+    // Yahan 2 parameters extra add kiye
     print("--- STEP 2: LocalContentService.savePoints REACHED! ---");
     await _ensureStateLoaded();
     _totalPoints = points;
@@ -118,18 +119,45 @@ class LocalContentService {
     if (user != null) {
       print("--- DEBUG: User ID is: ${user.id} ---");
       try {
-        // UPDATE ki jagah UPSERT use karein
+        // Yahan ab description aur type bhej rahe hain
         await Supabase.instance.client.from('user_coins').upsert({
           'user_id': user.id,
           'coins': points,
-          'updated_at': DateTime.now().toIso8601String(), // Optional
+          'description': description, // Naya column
+          'type': type, // Naya column
+          'updated_at': DateTime.now().toIso8601String(),
         });
-        print("--- DEBUG: Saved successfully! ---");
+        print("--- DEBUG: Saved successfully with $description! ---");
       } catch (e) {
         print("--- DEBUG: ERROR! $e ---");
       }
     }
   }
+
+  // Future<void> savePoints(int points) async {
+  //   print("--- STEP 2: LocalContentService.savePoints REACHED! ---");
+  //   await _ensureStateLoaded();
+  //   _totalPoints = points;
+  //   await _persistState();
+
+  //   final user = Supabase.instance.client.auth.currentUser;
+
+  //   if (user != null) {
+  //     print("--- DEBUG: User ID is: ${user.id} ---");
+  //     try {
+  //       // UPDATE ki jagah UPSERT use karein
+  //       await Supabase.instance.client.from('user_coins').upsert({
+  //         'user_id': user.id,
+  //         'coins': points,
+  //         'updated_at': DateTime.now().toIso8601String(), // Optional
+  //       });
+  //       print("--- DEBUG: Saved successfully! ---");
+  //     } catch (e) {
+  //       print("--- DEBUG: ERROR! $e ---");
+  //     }
+  //   }
+  // }
+
   // Future<void> savePoints(int points) async {
   //   print("--- STEP 2: LocalContentService.savePoints REACHED! ---");
   //   await _ensureStateLoaded();

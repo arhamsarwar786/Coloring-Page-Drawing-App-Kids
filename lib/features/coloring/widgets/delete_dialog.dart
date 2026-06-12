@@ -359,3 +359,157 @@ class UndoDialog extends StatelessWidget {
     );
   }
 }
+
+class BackNavigationDialog extends StatelessWidget {
+  final BuildContext screenContext;
+
+  const BackNavigationDialog({super.key, required this.screenContext});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context), // Bahar click karne par band
+      child: Material(
+        color: Colors.transparent,
+        child: Center(
+          child: GestureDetector(
+            onTap: () {}, // Dialog ke andar click karne par band na ho
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 300,
+                  height: 220,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFC7A885),
+                    borderRadius: BorderRadius.circular(36.0),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1E4CE),
+                      borderRadius: BorderRadius.circular(26.0),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "GO BACK?",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontFamily: "Regular",
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF7B3FE4),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // NO Button
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("NO"),
+                            ),
+                            // YES Button
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context); // Dialog band
+                                Navigator.pop(screenContext); // Screen back
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green),
+                              child: const Text("YES"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // Close button (UndoDialog jaisa)
+                Positioned(
+                  top: -10,
+                  right: -10,
+                  child: StickerIconButton(
+                    icon: Icons.close,
+                    assetName: 'assets/images/close.png',
+                    size: 48,
+                    backgroundColor: Colors.white,
+                    iconColor: Colors.red,
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+// class BackNavigationDialog extends StatelessWidget {
+//   final BuildContext screenContext; // Screen ka context jahan back jana hai
+
+//   const BackNavigationDialog({super.key, required this.screenContext});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Dialog(
+//       backgroundColor: Colors.transparent,
+//       child: Container(
+//         width: 300,
+//         height: 200,
+//         padding: const EdgeInsets.all(20),
+//         decoration: BoxDecoration(
+//           color: const Color(0xFFC7A885), // Theme color
+//           borderRadius: BorderRadius.circular(36.0),
+//         ),
+//         child: Container(
+//           decoration: BoxDecoration(
+//             color: const Color(0xFFF1E4CE), // Inner box color
+//             borderRadius: BorderRadius.circular(26.0),
+//           ),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               const Text(
+//                 "GO BACK?",
+//                 style: TextStyle(
+//                   fontSize: 22,
+//                   fontFamily: "Regular",
+//                   fontWeight: FontWeight.bold,
+//                   color: Color(0xFF7B3FE4),
+//                 ),
+//               ),
+//               const SizedBox(height: 20),
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                 children: [
+//                   // NO Button
+//                   ElevatedButton(
+//                     onPressed: () =>
+//                         Navigator.pop(context), // Sirf dialog band karein
+//                     style: ElevatedButton.styleFrom(
+//                         backgroundColor: Colors.redAccent),
+//                     child: const Text("NO"),
+//                   ),
+//                   // YES Button
+//                   ElevatedButton(
+//                     onPressed: () {
+//                       Navigator.pop(context); // Dialog band karein
+//                       Navigator.pop(screenContext); // Screen se back jayen
+//                     },
+//                     style:
+//                         ElevatedButton.styleFrom(backgroundColor: Colors.green),
+//                     child: const Text("YES"),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
