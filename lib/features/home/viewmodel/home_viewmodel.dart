@@ -414,6 +414,34 @@ class HomeViewModel extends BaseViewModel {
     return pointsToAdd;
   }
 
+  Future<void> addWelcomeBonus(String userId) async {
+    try {
+      await Supabase.instance.client.from('coin_history').insert({
+        // Table name change
+        'user_id': userId,
+        'amount': 50, // Column name is 'amount' in your table
+        'description': 'Welcome Bonus',
+        'created_at': DateTime.now().toIso8601String(),
+      });
+      print("Welcome bonus added to coin_history!");
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+  // Future<void> addWelcomeBonus(String userId) async {
+  //   try {
+  //     await Supabase.instance.client.from('user_coins').insert({
+  //       'user_id': userId,
+  //       'coins': 50,
+  //       'description': 'Welcome Bonus',
+  //       'created_at': DateTime.now().toIso8601String(),
+  //     });
+  //     print("Welcome bonus added!");
+  //   } catch (e) {
+  //     print("Bonus add karne mein error: $e");
+  //   }
+  // }
+
   // /// Adds 10 points when the child picks the correct colour for a region.
   // Future<void> addColorMatchPoints() async {
   //   _totalPoints += _colorMatchPointsValue;
@@ -475,26 +503,88 @@ class HomeViewModel extends BaseViewModel {
 
   // ── Level-unlock refresh ──────────
 
+  // Future<void> fetchCoinHistory() async {
+  //   final userId = Supabase.instance.client.auth.currentUser?.id;
+  //   if (userId == null) return;
+
+  //   final response = await Supabase.instance.client
+  //       .from('coin_history')
+  //       .select()
+  //       .eq('user_id', userId)
+  //       .order('created_at', ascending: false);
+
+  //   // Yahan conversion zaroori hai
+  //   final List<dynamic> data = response as List<dynamic>;
+
+  //   // Map se CoinHistory object banayein
+  //   final List<CoinHistory> historyObjects = data.map((json) {
+  //     return CoinHistory.fromJson(json as Map<String, dynamic>);
+  //   }).toList();
+
+  //   setHistory(historyObjects);
+  // }
+
   Future<void> fetchCoinHistory() async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
 
-    final response = await Supabase.instance.client
-        .from('coin_history')
-        .select()
-        .eq('user_id', userId)
-        .order('created_at', ascending: false);
+    try {
+      final response = await Supabase.instance.client
+          .from('coin_history')
+          .select()
+          .eq('user_id', userId)
+          .order('created_at', ascending: false);
 
-    // Yahan conversion zaroori hai
-    final List<dynamic> data = response as List<dynamic>;
+      final List<dynamic> data = response as List<dynamic>;
 
-    // Map se CoinHistory object banayein
-    final List<CoinHistory> historyObjects = data.map((json) {
-      return CoinHistory.fromJson(json as Map<String, dynamic>);
-    }).toList();
+      // 1. History items convert karein
+      final List<CoinHistory> historyObjects = data.map((json) {
+        return CoinHistory.fromJson(json as Map<String, dynamic>);
+      }).toList();
 
-    setHistory(historyObjects);
+      // --- YE NAYA KAAM HAI ---
+      // 2. Total balance calculate karein
+      int total = 0;
+      for (var item in historyObjects) {
+        total += item.amount; // Har item ka amount total mein add karein
+      }
+
+      _databaseCoins = total; // Total balance ko update karein
+      // ------------------------
+
+      setHistory(historyObjects); // Aapka purana function
+      notifyListeners(); // UI ko batayein ke ab coins update ho gaye hain
+
+      print(
+          "History fetch successful: ${historyObjects.length} items, Total: $total");
+    } catch (e) {
+      print("History fetch error: $e");
+    }
   }
+  // Future<void> fetchCoinHistory() async {
+  //   final userId = Supabase.instance.client.auth.currentUser?.id;
+  //   if (userId == null) return;
+
+  //   try {
+  //     final response = await Supabase.instance.client
+  //         .from('coin_history')
+  //         .select()
+  //         .eq('user_id', userId)
+  //         .order('created_at', ascending: false);
+
+  //     // Supabase v2 mein response directly list hota hai
+  //     final List<dynamic> data = response as List<dynamic>;
+
+  //     final List<CoinHistory> historyObjects = data.map((json) {
+  //       return CoinHistory.fromJson(json as Map<String, dynamic>);
+  //     }).toList();
+
+  //     setHistory(historyObjects);
+  //     print("History fetch successful: ${historyObjects.length} items");
+  //   } catch (e) {
+  //     print("History fetch error: $e");
+  //   }
+  // }
 
   // Future<void> fetchCoinHistory() async {
   //   final userId = Supabase.instance.client.auth.currentUser?.id;

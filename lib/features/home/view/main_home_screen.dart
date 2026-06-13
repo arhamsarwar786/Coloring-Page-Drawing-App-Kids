@@ -25,6 +25,12 @@ class MainHomeScreen extends StatefulWidget {
 class _MainHomeScreenState extends State<MainHomeScreen> {
   int selectedIndex = 0;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Jab bhi user wapas is screen par aayega, ye data refresh karega
+    Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
+  }
 //   @override
 //   void initState() {
 //     super.initState();
@@ -340,6 +346,19 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 //     );
 //   }
 // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Screen load hote hi ye kaam karega
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     final userId = Supabase.instance.client.auth.currentUser?.id;
+  //     if (userId != null) {
+  //       Provider.of<HomeViewModel>(context, listen: false)
+  //           .addDailyBonusPoints();
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

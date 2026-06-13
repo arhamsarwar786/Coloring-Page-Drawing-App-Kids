@@ -1,432 +1,10 @@
-// // import 'package:flutter/material.dart';
-// // import 'package:supabase_flutter/supabase_flutter.dart';
-
-// // class SignupScreen extends StatefulWidget {
-// //   const SignupScreen({super.key});
-
-// //   @override
-// //   State<SignupScreen> createState() => _SignupScreenState();
-// // }
-
-// // class _SignupScreenState extends State<SignupScreen> {
-// //   final emailController = TextEditingController();
-// //   final passwordController = TextEditingController();
-
-// //   bool loading = false;
-
-// //   Future<void> signUp() async {
-// //     try {
-// //       setState(() => loading = true);
-
-// //       await Supabase.instance.client.auth.signUp(
-// //         email: emailController.text.trim(),
-// //         password: passwordController.text.trim(),
-// //       );
-
-// //       ScaffoldMessenger.of(context).showSnackBar(
-// //         const SnackBar(content: Text('Signup Successful')),
-// //       );
-// //     } catch (e) {
-// //       ScaffoldMessenger.of(context).showSnackBar(
-// //         SnackBar(content: Text(e.toString())),
-// //       );
-// //     }
-
-// //     setState(() => loading = false);
-// //   }
-
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       appBar: AppBar(title: const Text("Signup")),
-// //       body: Padding(
-// //         padding: const EdgeInsets.all(20),
-// //         child: Column(
-// //           children: [
-// //             TextField(
-// //               controller: emailController,
-// //               decoration: const InputDecoration(
-// //                 hintText: "Email",
-// //               ),
-// //             ),
-// //             const SizedBox(height: 20),
-// //             TextField(
-// //               controller: passwordController,
-// //               obscureText: true,
-// //               decoration: const InputDecoration(
-// //                 hintText: "Password",
-// //               ),
-// //             ),
-// //             const SizedBox(height: 20),
-// //             ElevatedButton(
-// //               onPressed: loading ? null : signUp,
-// //               child: const Text("Signup"),
-// //             ),
-// //           ],
-// //         ),
-// //       ),
-// //     );
-// //   }
-// // }
-
-// import 'package:flutter/material.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
-
-// final supabase = Supabase.instance.client;
-
-// class SignupScreen extends StatefulWidget {
-//   const SignupScreen({super.key});
-
-//   @override
-//   State<SignupScreen> createState() => _SignupScreenState();
-// }
-
-// class _SignupScreenState extends State<SignupScreen> {
-//   final _formKey = GlobalKey<FormState>();
-
-//   final nameController = TextEditingController();
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
-//   final confirmPasswordController = TextEditingController();
-
-//   bool loading = false;
-
-//   Future<void> signup() async {
-//     if (!_formKey.currentState!.validate()) return;
-
-//     setState(() => loading = true);
-
-//     final res = await supabase.auth.signUp(
-//       email: emailController.text.trim(),
-//       password: passwordController.text.trim(),
-//     );
-
-//     if (res.user != null) {
-//       // optional: save extra data (name) in table
-//       await supabase.from('profiles').insert({
-//         'id': res.user!.id,
-//         'name': nameController.text.trim(),
-//         'email': emailController.text.trim(),
-//       });
-
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text("Signup Successful")),
-//       );
-//     }
-
-//     setState(() => loading = false);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Padding(
-//         padding: const EdgeInsets.all(20),
-//         child: Form(
-//           key: _formKey,
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               /// NAME
-//               TextFormField(
-//                 controller: nameController,
-//                 decoration: const InputDecoration(labelText: "Name"),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return "Name is required";
-//                   }
-//                   return null;
-//                 },
-//               ),
-
-//               /// EMAIL
-//               TextFormField(
-//                 controller: emailController,
-//                 decoration: const InputDecoration(labelText: "Email"),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return "Email is required";
-//                   }
-//                   if (!value.contains("@")) {
-//                     return "Enter valid email";
-//                   }
-//                   return null;
-//                 },
-//               ),
-
-//               /// PASSWORD
-//               TextFormField(
-//                 controller: passwordController,
-//                 obscureText: true,
-//                 decoration: const InputDecoration(labelText: "Password"),
-//                 validator: (value) {
-//                   if (value == null || value.isEmpty) {
-//                     return "Password is required";
-//                   }
-//                   if (value.length < 6) {
-//                     return "Password must be at least 6 characters";
-//                   }
-//                   return null;
-//                 },
-//               ),
-
-//               /// CONFIRM PASSWORD
-//               TextFormField(
-//                 controller: confirmPasswordController,
-//                 obscureText: true,
-//                 decoration:
-//                     const InputDecoration(labelText: "Confirm Password"),
-//                 validator: (value) {
-//                   if (value != passwordController.text) {
-//                     return "Passwords do not match";
-//                   }
-//                   return null;
-//                 },
-//               ),
-
-//               const SizedBox(height: 20),
-
-//               loading
-//                   ? const CircularProgressIndicator()
-//                   : ElevatedButton(
-//                       onPressed: signup,
-//                       child: const Text("Signup"),
-//                     ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// import 'package:flutter/material.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
-
-// final supabase = Supabase.instance.client;
-
-// class SignupScreen extends StatefulWidget {
-//   const SignupScreen({super.key});
-
-//   @override
-//   State<SignupScreen> createState() => _SignupScreenState();
-// }
-
-// class _SignupScreenState extends State<SignupScreen> {
-//   final _formKey = GlobalKey<FormState>();
-
-//   final nameController = TextEditingController();
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
-//   final confirmPasswordController = TextEditingController();
-
-//   bool loading = false;
-
-//   Future<void> signup() async {
-//     if (!_formKey.currentState!.validate()) return;
-
-//     setState(() => loading = true);
-
-//     final res = await supabase.auth.signUp(
-//       email: emailController.text.trim(),
-//       password: passwordController.text.trim(),
-//     );
-
-//     if (res.user != null) {
-//       await supabase.from('profiles').insert({
-//         'id': res.user!.id,
-//         'name': nameController.text.trim(),
-//         'email': emailController.text.trim(),
-//       });
-
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text("Signup Successful")),
-//       );
-//     }
-
-//     setState(() => loading = false);
-//   }
-
-//   Widget customField({
-//     required String hint,
-//     required TextEditingController controller,
-//     bool obscure = false,
-//     String? Function(String?)? validator,
-//   }) {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(vertical: 8),
-//       padding: const EdgeInsets.symmetric(horizontal: 14),
-//       decoration: BoxDecoration(
-//         color: const Color(0xffF2B24A), // light orange style
-//         borderRadius: BorderRadius.circular(30),
-//       ),
-//       child: TextFormField(
-//         controller: controller,
-//         obscureText: obscure,
-//         decoration: InputDecoration(
-//           hintText: hint,
-//           border: InputBorder.none,
-//         ),
-//         validator: validator,
-//       ),
-//     );
-//   }
-
-//   Widget actionButton(String text, Color color, VoidCallback onTap) {
-//     return SizedBox(
-//       width: double.infinity,
-//       child: ElevatedButton(
-//         style: ElevatedButton.styleFrom(
-//           backgroundColor: color,
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(30),
-//           ),
-//           padding: const EdgeInsets.symmetric(vertical: 14),
-//         ),
-//         onPressed: onTap,
-//         child: Text(text),
-//       ),
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Padding(
-//             padding: const EdgeInsets.all(20),
-//             child: Form(
-//               key: _formKey,
-//               child: Column(
-//                 children: [
-//                   const SizedBox(height: 20),
-
-//                   /// TITLE
-//                   const Text(
-//                     "CREATE YOUR ADVENTURE!",
-//                     style: TextStyle(
-//                       fontSize: 20,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-
-//                   const SizedBox(height: 25),
-
-//                   /// EMAIL
-//                   customField(
-//                     hint: "Parent's Email",
-//                     controller: emailController,
-//                     validator: (value) =>
-//                         value!.isEmpty ? "Email required" : null,
-//                   ),
-
-//                   /// PASSWORD
-//                   customField(
-//                     hint: "Set a Password",
-//                     controller: passwordController,
-//                     obscure: true,
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return "Password required";
-//                       }
-//                       if (value.length < 6) {
-//                         return "Min 6 characters";
-//                       }
-//                       return null;
-//                     },
-//                   ),
-
-//                   /// CONFIRM PASSWORD
-//                   customField(
-//                     hint: "Confirm Password",
-//                     controller: confirmPasswordController,
-//                     obscure: true,
-//                     validator: (value) {
-//                       if (value != passwordController.text) {
-//                         return "Password not match";
-//                       }
-//                       return null;
-//                     },
-//                   ),
-
-//                   const SizedBox(height: 15),
-
-//                   /// SIGN UP BUTTON
-//                   loading
-//                       ? const CircularProgressIndicator()
-//                       : actionButton(
-//                           "SIGN UP!",
-//                           const Color(0xff1DA7C7), // blue button
-//                           signup,
-//                         ),
-
-//                   const SizedBox(height: 15),
-
-//                   /// OR
-//                   const Row(
-//                     children: [
-//                       Expanded(child: Divider()),
-//                       Padding(
-//                         padding: EdgeInsets.symmetric(horizontal: 8),
-//                         child: Text("OR"),
-//                       ),
-//                       Expanded(child: Divider()),
-//                     ],
-//                   ),
-
-//                   const SizedBox(height: 15),
-
-//                   /// GOOGLE BUTTON
-//                   actionButton(
-//                     "Continue with Google",
-//                     Colors.white,
-//                     () {},
-//                   ),
-
-//                   const SizedBox(height: 10),
-
-//                   /// APPLE BUTTON
-//                   actionButton(
-//                     "Continue with Apple",
-//                     Colors.black,
-//                     () {},
-//                   ),
-
-//                   const SizedBox(height: 20),
-
-//                   /// LOGIN TEXT
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       const Text("Already an Explorer? "),
-//                       GestureDetector(
-//                         onTap: () {},
-//                         child: const Text(
-//                           "LOGIN",
-//                           style: TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                             color: Colors.blue,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/auth/components/custom_textfield.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/home/view/main_home_screen.dart';
+import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -527,7 +105,7 @@ class _SignupScreenState extends State<SignupScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => loading = true);
-
+// await Provider.of<HomeViewModel>(context, listen: false).addWelcomeBonus(res.user!.id);
     try {
       final res = await supabase.auth.signUp(
         email: emailController.text.trim(),
@@ -541,6 +119,24 @@ class _SignupScreenState extends State<SignupScreen> {
           'name': nameController.text.trim(),
           'email': emailController.text.trim(),
         });
+
+        // await Provider.of<HomeViewModel>(context, listen: false)
+        //     .addWelcomeBonus(res.user!.id);
+
+        // print("Bonus function call ho gaya!");
+
+        try {
+          await supabase.from('coin_history').insert({
+            'user_id': res.user!.id,
+            'amount': 50,
+            'description': 'Welcome Bonus',
+            'created_at': DateTime.now().toIso8601String(),
+          });
+          print("Welcome Bonus successfully added!");
+        } catch (e) {
+          print(
+              "Bonus add karne mein issue aaya, lekin user create ho gaya: $e");
+        }
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -646,7 +242,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             return "Email is required";
                           }
 
-                          if (!val.contains("@")) {
+                          if (!val.contains("@gmail.com")) {
                             return "Enter valid email";
                           }
 

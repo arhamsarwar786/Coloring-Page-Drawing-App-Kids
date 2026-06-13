@@ -17,11 +17,20 @@ class CoinHistoryScreen extends StatefulWidget {
 }
 
 class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
-  @override
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Screen khulte hi data fetch karein
+  //   Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
+  //   // Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
+  // }
+
   void initState() {
     super.initState();
-    // Screen khulte hi data fetch karein
-    Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
+    // Screen open hote hi fetch chalayein
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
+    });
   }
 
   Widget build(BuildContext context) {
@@ -159,28 +168,66 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                   ],
                 ),
               ),
-              Center(
-                child: Text(
-                  "Login to view coins history",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: "Regular",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => LoginScreen())),
-                child: Text(
-                  "Login",
-                  style: TextStyle(
-                      fontFamily: "Regular",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16),
-                ),
-              ),
+
+              // Login section ko replacement
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.lock_outline_rounded,
+                      size: 80, color: Colors.grey.shade300),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Oops! Sign in to see your coins",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "Regular",
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black54),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff3b9499),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                      ),
+                      onPressed: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => LoginScreen())),
+                      child: const Text("Login Now",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: "Regular",
+                              color: Colors.white)),
+                    ),
+                  ),
+                ],
+              )
+
+              // Center(
+              //   child: Text(
+              //     "Login to view coins history",
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(
+              //         fontFamily: "Regular",
+              //         fontWeight: FontWeight.w600,
+              //         fontSize: 20),
+              //   ),
+              // ),
+              // SizedBox(height: 20),
+              // ElevatedButton(
+              //   onPressed: () => Navigator.push(
+              //       context, MaterialPageRoute(builder: (_) => LoginScreen())),
+              //   child: Text(
+              //     "Login",
+              //     style: TextStyle(
+              //         fontFamily: "Regular",
+              //         fontWeight: FontWeight.w600,
+              //         fontSize: 16),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -323,34 +370,70 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                 final historyList = homeVM.coinHistoryList;
 
                 if (historyList.isEmpty) {
-                  return Center(child: Text("No History Available"));
+                  return const Center(
+                      child: Text(
+                    "No History Available",
+                    style: const TextStyle(
+                        fontFamily: "Regular",
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16),
+                  ));
                 }
 
                 return Expanded(
-                  // Yahan Expanded lagana zaroori hai
                   child: ListView.builder(
-                    shrinkWrap: true,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     itemCount: historyList.length,
                     itemBuilder: (context, index) {
-                      final item =
-                          historyList[index]; // Ab ye 'CoinHistory' object hai
+                      final item = historyList[index];
+                      // Check karein ke kya ye Welcome Bonus hai
+                      final bool isBonus = item.description.contains(
+                        "Welcome Bonus",
+                      );
 
-                      return ListTile(
-                        leading: Icon(Icons.monetization_on,
-                            color: Colors.amber, size: 30),
-                        title: Text(
-                          item.description,
-                          style: TextStyle(
-                              fontFamily: "Regular",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16),
-                        ),
-                        trailing: Text(
-                          "+${item.amount}",
-                          style: TextStyle(
+                      return Card(
+                        elevation: 2,
+                        margin: const EdgeInsets.only(bottom: 12),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          leading: CircleAvatar(
+                            backgroundColor: isBonus
+                                ? Colors.amber.withOpacity(0.2)
+                                : Colors.blue.withOpacity(0.1),
+                            child: Icon(
+                              isBonus
+                                  ? Icons.celebration
+                                  : Icons.monetization_on,
+                              color: isBonus ? Colors.amber : Colors.blue,
+                            ),
+                          ),
+                          title: Text(
+                            item.description,
+                            style: const TextStyle(
+                                fontFamily: "Regular",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16),
+                          ),
+                          subtitle: Text(
+                            "${item.date.day}/${item.date.month}/${item.date.year}",
+                            style: const TextStyle(
+                                fontFamily: "Regular",
+                                fontSize: 12,
+                                color: Colors.grey),
+                          ),
+                          trailing: Text(
+                            "+${item.amount}",
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: "Regular",
-                              fontSize: 18),
+                              fontSize: 18,
+                              color: isBonus ? Colors.amber[800] : Colors.green,
+                            ),
+                          ),
                         ),
                       );
                     },
@@ -358,6 +441,47 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                 );
               },
             )
+
+            // Consumer<HomeViewModel>(
+            //   builder: (context, homeVM, _) {
+            //     final historyList = homeVM.coinHistoryList;
+
+            //     if (historyList.isEmpty) {
+            //       return Center(child: Text("No History Available"));
+            //     }
+
+            //     return Expanded(
+            //       // Yahan Expanded lagana zaroori hai
+            //       child: ListView.builder(
+            //         shrinkWrap: true,
+            //         itemCount: historyList.length,
+            //         itemBuilder: (context, index) {
+            //           final item =
+            //               historyList[index]; // Ab ye 'CoinHistory' object hai
+
+            //           return ListTile(
+            //             leading: Icon(Icons.monetization_on,
+            //                 color: Colors.amber, size: 30),
+            //             title: Text(
+            //               item.description,
+            //               style: TextStyle(
+            //                   fontFamily: "Regular",
+            //                   fontWeight: FontWeight.w600,
+            //                   fontSize: 16),
+            //             ),
+            //             trailing: Text(
+            //               "+${item.amount}",
+            //               style: TextStyle(
+            //                   fontWeight: FontWeight.bold,
+            //                   fontFamily: "Regular",
+            //                   fontSize: 18),
+            //             ),
+            //           );
+            //         },
+            //       ),
+            //     );
+            //   },
+            // )
 
             //   Consumer<HomeViewModel>(
             //     builder: (context, homeVM, _) {

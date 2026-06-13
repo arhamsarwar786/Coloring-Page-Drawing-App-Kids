@@ -39,25 +39,24 @@ class CoinHistory {
       required this.type,
       required this.date});
 
-  factory CoinHistory.fromJson(Map<String, dynamic> json) {
-    return CoinHistory(
-      description: json['description'] ?? 'No Description',
-      amount: json['amount'] ?? 0, // 'coins' ki jagah 'amount' karein
-      type: json['type'] ?? 'general',
-      date: DateTime.parse(json['created_at'] ??
-          DateTime.now()
-              .toIso8601String()), // 'updated_at' ki jagah 'created_at'
-    );
-  }
-
   // factory CoinHistory.fromJson(Map<String, dynamic> json) {
   //   return CoinHistory(
   //     description: json['description'] ?? 'No Description',
-  //     amount: json['coins'] ??
-  //         0, // Database column 'coins' ko 'amount' variable mein map kiya
+  //     amount: json['amount'] ?? 0, // 'coins' ki jagah 'amount' karein
   //     type: json['type'] ?? 'general',
-  //     date: DateTime.parse(
-  //         json['updated_at'] ?? DateTime.now().toIso8601String()),
+  //     date: DateTime.parse(json['created_at'] ??
+  //         DateTime.now()
+  //             .toIso8601String()), // 'updated_at' ki jagah 'created_at'
   //   );
   // }
+
+  factory CoinHistory.fromJson(Map<String, dynamic> json) {
+    return CoinHistory(
+      description: json['description'] ?? 'No Description',
+      amount: json['amount'] ?? 0, // Table mein column 'amount' hai
+      type: json['type'] ?? 'general',
+      date: DateTime.parse(json['created_at'] ??
+          DateTime.now().toIso8601String()), // 'created_at' use karein
+    );
+  }
 }
