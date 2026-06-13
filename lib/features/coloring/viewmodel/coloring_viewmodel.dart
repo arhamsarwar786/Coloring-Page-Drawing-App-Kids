@@ -161,11 +161,12 @@ class ColoringProvider extends ChangeNotifier {
     final painted = _paintedPixels;
     final pixels = _pixels;
     final refPixels = _referencePixels;
-    if (inside == null || painted == null || pixels == null || inside.isEmpty) return 0;
-    
+    if (inside == null || painted == null || pixels == null || inside.isEmpty)
+      return 0;
+
     int coverable = 0;
     int correctCount = 0;
-    
+
     for (int i = 0; i < inside.length; i++) {
       if (inside[i] != 1) continue;
       coverable++;
@@ -189,7 +190,8 @@ class ColoringProvider extends ChangeNotifier {
     final inside = _isInside;
     final painted = _paintedPixels;
     final pixels = _pixels;
-    if (inside == null || painted == null || pixels == null || inside.isEmpty) return false;
+    if (inside == null || painted == null || pixels == null || inside.isEmpty)
+      return false;
 
     final colorCounts = <int, int>{};
     int totalPainted = 0;
@@ -202,7 +204,8 @@ class ColoringProvider extends ChangeNotifier {
       }
     }
 
-    if (totalPainted == 0) return true; // Let overall coverage handle the 0 case
+    if (totalPainted == 0)
+      return true; // Let overall coverage handle the 0 case
     if (colorCounts.length < 2) return false;
 
     int maxCount = 0;
@@ -216,7 +219,7 @@ class ColoringProvider extends ChangeNotifier {
   }
 
   bool _isColorMatch(int paintedRgba, int refRgba) {
-    // Check alpha of reference image. If it's transparent, we don't penalize the child 
+    // Check alpha of reference image. If it's transparent, we don't penalize the child
     // (this happens if the colored asset doesn't perfectly fill the uncolored outline).
     final refAlpha = (refRgba >> 24) & 0xFF;
     if (refAlpha < 50) {
@@ -236,11 +239,12 @@ class ColoringProvider extends ChangeNotifier {
     final dg = pg - rg;
     final db = pb - rb;
     final distSq = dr * dr + dg * dg + db * db;
-    
-    // Tighter threshold to ensure accurate colors.
-    // 15000 allows similar shades but rejects distinct colors like blue vs red.
-    return distSq < 15000;
+
+    // Tighter threshold to ensure accurate colors, but increased to 12000
+    // to allow children to use lighter or darker shades of the same color.
+    return distSq < 12000;
   }
+
   _ColoringPart? get _activePart => _activeRegionIndex < _orderedParts.length
       ? _orderedParts[_activeRegionIndex]
       : null;
@@ -333,28 +337,34 @@ class ColoringProvider extends ChangeNotifier {
         difficulty: level.difficulty as String,
         rewardCoins: level.rewardCoins as int,
         recommendedBrushSize: (level.recommendedBrushSize as num).toDouble(),
-        palette: (level.palette as List<dynamic>).map((p) => DrawingColorModel(
-          id: p.id as String,
-          label: p.label as String,
-          color: p.color as Color,
-        )).toList(),
-        regions: (level.regions as List<dynamic>).map((r) => LevelRegionModel(
-          id: r.id as String,
-          label: r.label as String,
-          shapeType: RegionShapeType.values.firstWhere(
-            (e) => e.toString().split('.').last == r.shapeType.toString().split('.').last,
-            orElse: () => RegionShapeType.path,
-          ),
-          cx: (r.cx as num?)?.toDouble(),
-          cy: (r.cy as num?)?.toDouble(),
-          radius: (r.radius as num?)?.toDouble(),
-          rx: (r.rx as num?)?.toDouble(),
-          ry: (r.ry as num?)?.toDouble(),
-          svgPath: r.svgPath as String?,
-          viewBoxSize: (r.viewBoxSize as num?)?.toDouble(),
-          targetColorId: r.targetColorId as String?,
-          points: List<Offset>.from(r.points as List<dynamic>),
-        )).toList(),
+        palette: (level.palette as List<dynamic>)
+            .map((p) => DrawingColorModel(
+                  id: p.id as String,
+                  label: p.label as String,
+                  color: p.color as Color,
+                ))
+            .toList(),
+        regions: (level.regions as List<dynamic>)
+            .map((r) => LevelRegionModel(
+                  id: r.id as String,
+                  label: r.label as String,
+                  shapeType: RegionShapeType.values.firstWhere(
+                    (e) =>
+                        e.toString().split('.').last ==
+                        r.shapeType.toString().split('.').last,
+                    orElse: () => RegionShapeType.path,
+                  ),
+                  cx: (r.cx as num?)?.toDouble(),
+                  cy: (r.cy as num?)?.toDouble(),
+                  radius: (r.radius as num?)?.toDouble(),
+                  rx: (r.rx as num?)?.toDouble(),
+                  ry: (r.ry as num?)?.toDouble(),
+                  svgPath: r.svgPath as String?,
+                  viewBoxSize: (r.viewBoxSize as num?)?.toDouble(),
+                  targetColorId: r.targetColorId as String?,
+                  points: List<Offset>.from(r.points as List<dynamic>),
+                ))
+            .toList(),
         guideAsset: level.guideAsset as String?,
         isCompleted: level.isCompleted as bool? ?? false,
         stars: level.stars as int? ?? 0,
@@ -441,12 +451,14 @@ class ColoringProvider extends ChangeNotifier {
         targetHeight: kCanvasSize,
       );
       final refFrame = await refCodec.getNextFrame();
-      final refBd = await refFrame.image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      final refBd =
+          await refFrame.image.toByteData(format: ui.ImageByteFormat.rawRgba);
       if (refBd != null) {
         _referencePixels = refBd.buffer.asUint32List();
       }
     } catch (_) {
-      _referencePixels = null; // Ignore errors if a colored version doesn't exist
+      _referencePixels =
+          null; // Ignore errors if a colored version doesn't exist
     }
 
     try {
@@ -521,6 +533,7 @@ class ColoringProvider extends ChangeNotifier {
         }
       }
       _isInside = insideMask;
+      _extractPaletteFromReference();
       _orderedParts = _buildExactPartsFromImage(insideMask, w, h);
 
       // ── Step 4: Build clean white canvas (transparent bg, white inside) ──
@@ -547,6 +560,76 @@ class ColoringProvider extends ChangeNotifier {
   }
 
   /// Creates a fallback white circle image when the asset fails to load
+  void _extractPaletteFromReference() {
+    final refPixels = _referencePixels;
+    final insideMask = _isInside;
+    if (refPixels == null || insideMask == null) return;
+
+    final colorClusters =
+        <int, int>{}; // store RGB (0xRRGGBB) as key, count as value
+
+    for (int i = 0; i < insideMask.length; i++) {
+      if (insideMask[i] == 1) {
+        final rgba = refPixels[i];
+        final a = (rgba >> 24) & 0xFF;
+        if (a < 100) continue;
+
+        final r = rgba & 0xFF;
+        final g = (rgba >> 8) & 0xFF;
+        final b = (rgba >> 16) & 0xFF;
+
+        final rgb = (r << 16) | (g << 8) | b;
+
+        bool foundCluster = false;
+        for (final key in colorClusters.keys) {
+          final kr = (key >> 16) & 0xFF;
+          final kg = (key >> 8) & 0xFF;
+          final kb = key & 0xFF;
+
+          final dr = kr - r;
+          final dg = kg - g;
+          final db = kb - b;
+          final distSq = dr * dr + dg * dg + db * db;
+
+          if (distSq < 2500) {
+            colorClusters[key] = colorClusters[key]! + 1;
+            foundCluster = true;
+            break;
+          }
+        }
+
+        if (!foundCluster) {
+          colorClusters[rgb] = 1;
+        }
+      }
+    }
+
+    final entries = colorClusters.entries.toList();
+    entries.sort((a, b) => b.value.compareTo(a.value));
+
+    final newPalette = <Color>[];
+    for (final entry in entries) {
+      if (entry.value > 100) {
+        // Require at least 100 pixels
+        final r = (entry.key >> 16) & 0xFF;
+        final g = (entry.key >> 8) & 0xFF;
+        final b = entry.key & 0xFF;
+        newPalette.add(Color.fromARGB(255, r, g, b));
+      }
+      if (newPalette.length >= 16) break;
+    }
+    
+    // Always add white color to the palette for corrections or highlights
+    if (!newPalette.contains(Colors.white)) {
+      newPalette.add(Colors.white);
+    }
+
+    if (newPalette.isNotEmpty) {
+      _palette = newPalette;
+      _activeColor = _palette.first;
+    }
+  }
+
   Future<void> _createFallbackImage() async {
     const kCanvasSize = 640;
     const kRadius = kCanvasSize / 2.5;
@@ -856,8 +939,11 @@ class ColoringProvider extends ChangeNotifier {
     final mask = _activeRegionMask;
     final painted = _paintedPixels;
     final region = _activePart;
-    if (mask == null || painted == null || region == null ||
-        imgWidth == 0 || imgHeight == 0) {
+    if (mask == null ||
+        painted == null ||
+        region == null ||
+        imgWidth == 0 ||
+        imgHeight == 0) {
       return 0.0;
     }
 

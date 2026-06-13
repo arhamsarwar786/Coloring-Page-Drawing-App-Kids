@@ -727,8 +727,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     final homeVM = context.read<HomeViewModel>();
 
     final coverage = provider.overallCoveragePercent;
-    // Level tab pass hoga jab 85% coverage ho AND image ke saath match hoti colors ho
-    final passed = coverage >= 85 && provider.hasSignificantColorVariety;
+    final passed = coverage >= 70;
 
     // Hamesha fixed 20 coins level complete karne par
     const int levelCompletionCoins = 20;
@@ -938,7 +937,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
           final coins = _earnedCoins;
 
           final coverage = provider.overallCoveragePercent;
-          final passed = coverage >= 85 && provider.hasSignificantColorVariety;
+          final passed = coverage >= 70;
 
           return Container(
             decoration: const BoxDecoration(
@@ -1205,7 +1204,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
                           ),
                         ),
 
-                      const SizedBox(height: 50),
+                      const SizedBox(height: 80),
 
                       // ── Action buttons ────────────────────────────────────
                       Padding(
