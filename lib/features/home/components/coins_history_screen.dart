@@ -25,6 +25,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
   //   // Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
   // }
 
+  @override
   void initState() {
     super.initState();
     // Screen open hote hi fetch chalayein
@@ -381,62 +382,109 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                 }
 
                 return Expanded(
-                  child: ListView.builder(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    itemCount: historyList.length,
-                    itemBuilder: (context, index) {
-                      final item = historyList[index];
-                      // Check karein ke kya ye Welcome Bonus hai
-                      final bool isBonus = item.description.contains(
-                        "Welcome Bonus",
-                      );
-
-                      return Card(
-                        elevation: 2,
-                        margin: const EdgeInsets.only(bottom: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          leading: CircleAvatar(
-                            backgroundColor: isBonus
-                                ? Colors.amber.withOpacity(0.2)
-                                : Colors.blue.withOpacity(0.1),
-                            child: Icon(
-                              isBonus
-                                  ? Icons.celebration
-                                  : Icons.monetization_on,
-                              color: isBonus ? Colors.amber : Colors.blue,
+                  child: Column(
+                    children: [
+                      // Total coins summary bar
+                      Consumer<HomeViewModel>(
+                        builder: (context, hm, _) => Container(
+                          margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFFD700), Color(0xFFFF9100)],
                             ),
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                          title: Text(
-                            item.description,
-                            style: const TextStyle(
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16),
-                          ),
-                          subtitle: Text(
-                            "${item.date.day}/${item.date.month}/${item.date.year}",
-                            style: const TextStyle(
-                                fontFamily: "Regular",
-                                fontSize: 12,
-                                color: Colors.grey),
-                          ),
-                          trailing: Text(
-                            "+${item.amount}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Regular",
-                              fontSize: 18,
-                              color: isBonus ? Colors.amber[800] : Colors.green,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Total Coins',
+                                  style: TextStyle(
+                                      fontFamily: "Regular",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                      color: Colors.white)),
+                              Text('🪙 ${hm.databaseCoins}',
+                                  style: const TextStyle(
+                                      fontFamily: "Regular",
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 22,
+                                      color: Colors.white)),
+                            ],
                           ),
                         ),
-                      );
-                    },
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          itemCount: historyList.length,
+                          itemBuilder: (context, index) {
+                            final item = historyList[index];
+
+                            // Transaction type ke hisab se icon/color
+                            IconData icon;
+                            Color iconColor;
+                            Color bgColor;
+                            if (item.description.contains('Welcome')) {
+                              icon = Icons.celebration;
+                              iconColor = Colors.orange;
+                              bgColor = Colors.orange.withOpacity(0.15);
+                            } else if (item.description.contains('Daily') ||
+                                item.description.contains('Bonus')) {
+                              icon = Icons.calendar_today_rounded;
+                              iconColor = Colors.purple;
+                              bgColor = Colors.purple.withOpacity(0.1);
+                            } else if (item.description.contains('Level')) {
+                              icon = Icons.star_rounded;
+                              iconColor = Colors.green;
+                              bgColor = Colors.green.withOpacity(0.1);
+                            } else {
+                              icon = Icons.monetization_on;
+                              iconColor = Colors.amber;
+                              bgColor = Colors.amber.withOpacity(0.1);
+                            }
+
+                            return Card(
+                              elevation: 2,
+                              margin: const EdgeInsets.only(bottom: 12),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 4),
+                                leading: CircleAvatar(
+                                  backgroundColor: bgColor,
+                                  child: Icon(icon, color: iconColor),
+                                ),
+                                title: Text(
+                                  item.description,
+                                  style: const TextStyle(
+                                      fontFamily: "Regular",
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16),
+                                ),
+                                subtitle: Text(
+                                  "${item.date.day}/${item.date.month}/${item.date.year}",
+                                  style: const TextStyle(
+                                      fontFamily: "Regular",
+                                      fontSize: 12,
+                                      color: Colors.grey),
+                                ),
+                                trailing: Text(
+                                  "+${item.amount} 🪙",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Regular",
+                                    fontSize: 18,
+                                    color: iconColor,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },

@@ -226,6 +226,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
                             );
                           },
                         ),
+
                         // Consumer<HomeViewModel>(
                         //   builder: (context, homeVM, _) {
                         //     final coins = homeVM.earnedCoins;

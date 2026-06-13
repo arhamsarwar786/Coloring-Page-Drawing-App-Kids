@@ -726,40 +726,34 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     final provider = context.read<ColoringProvider>();
     final homeVM = context.read<HomeViewModel>();
 
-    // ... (Yahan wo logic hai jo points calculate karti hai)
     final coverage = provider.overallCoveragePercent;
-    final passed = coverage >= 70 && provider.hasSignificantColorVariety;
+    // Level tab pass hoga jab 85% coverage ho AND image ke saath match hoti colors ho
+    final passed = coverage >= 85 && provider.hasSignificantColorVariety;
 
-    int baseCoins = 10;
-    final difficulty =
-        provider.currentLevel?.difficulty?.toLowerCase() ?? 'easy';
-    if (difficulty == 'medium')
-      baseCoins = 20;
-    else if (difficulty == 'hard' || difficulty == 'difficult') baseCoins = 30;
-
-    int extraCoins = (coverage >= 90) ? 10 : 0;
+    // Hamesha fixed 20 coins level complete karne par
+    const int levelCompletionCoins = 20;
     final session = Supabase.instance.client.auth.currentSession;
 
     setState(() {
-      _earnedCoins = (session != null) ? (baseCoins + extraCoins) : 0;
+      _earnedCoins = (session != null && passed) ? levelCompletionCoins : 0;
     });
 
-    // --- LOGIC CHANGE END ---
-
-    // 1. DATA SAVING LOGIC
+    // DATA SAVING - sirf tab jab passed ho
     if (passed) {
       final currentLevel = provider.currentLevel;
       if (currentLevel != null) {
         final drawingRepo = context.read<DrawingRepository>();
 
+        // Level ko completed mark karo
         await drawingRepo.markLevelCompleted(
           levelId: currentLevel.id,
           stars: 3,
-          rewardCoins: currentLevel.rewardCoins,
+          rewardCoins: levelCompletionCoins,
         );
 
+        // Logged in ho toh 20 coins database mein add karo
         if (session != null) {
-          await homeVM.addCompletionPoints(_earnedCoins);
+          await homeVM.addCompletionPoints(levelCompletionCoins);
         }
 
         if (mounted) {
@@ -944,7 +938,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
           final coins = _earnedCoins;
 
           final coverage = provider.overallCoveragePercent;
-          final passed = coverage >= 70 && provider.hasSignificantColorVariety;
+          final passed = coverage >= 85 && provider.hasSignificantColorVariety;
 
           return Container(
             decoration: const BoxDecoration(

@@ -51,12 +51,25 @@ class CoinHistory {
   // }
 
   factory CoinHistory.fromJson(Map<String, dynamic> json) {
+    int rawAmount = json['amount'] ?? 0;
+    String desc = json['description'] ?? 'No Description';
+
+    // Auto-fix purane galat amounts jo total sum save ho gaye the
+    int sanitizedAmount = rawAmount;
+    if (desc.contains('Welcome')) {
+      sanitizedAmount = 50;
+    } else if (desc.contains('Level')) {
+      sanitizedAmount = 20;
+    } else if (desc.contains('Daily') || desc.contains('Bonus')) {
+      sanitizedAmount = 10;
+    }
+
     return CoinHistory(
-      description: json['description'] ?? 'No Description',
-      amount: json['amount'] ?? 0, // Table mein column 'amount' hai
+      description: desc,
+      amount: sanitizedAmount, // Sahi amount use karein
       type: json['type'] ?? 'general',
-      date: DateTime.parse(json['created_at'] ??
-          DateTime.now().toIso8601String()), // 'created_at' use karein
+      date: DateTime.parse(
+          json['created_at'] ?? DateTime.now().toIso8601String()),
     );
   }
 }

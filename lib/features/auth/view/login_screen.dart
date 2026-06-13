@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             return "Email is required";
                           }
 
-                          if (!val.contains("@")) {
+                          if (!val.contains("@gmail.com")) {
                             return "Enter valid email";
                           }
 
@@ -151,13 +151,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: passwordController,
                         hint: "Password",
                         obscure: !_isPasswordVisible,
-                        validator: (val) =>
-                            val!.isNotEmpty ? null : "Password required",
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return "Password required";
+                          } else if (val.length < 8) {
+                            return "Password must be at least 8 characters";
+                          }
+                          return null; // Sab theek hai
+                        },
                         onToggleVisibility: () {
                           setState(() {
                             _isPasswordVisible = !_isPasswordVisible;
                           });
                         },
+                        // validator: (val) =>
+                        //     val!.isNotEmpty ? null : "Password required",
+                        // onToggleVisibility: () {
+                        //   setState(() {
+                        //     _isPasswordVisible = !_isPasswordVisible;
+                        //   });
+                        // },
                       ),
 
 // CustomTextField(
