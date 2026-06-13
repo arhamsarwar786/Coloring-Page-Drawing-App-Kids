@@ -343,72 +343,72 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  _CardPalette _paletteFor(int index) {
-    const palettes = <_CardPalette>[
-      _CardPalette(
+  CardPalette _paletteFor(int index) {
+    const palettes = <CardPalette>[
+      CardPalette(
         outerTop: Color(0xFF66BAF9),
         outerBottom: Color(0xFF2F8BDB),
         innerTop: Color(0xFF95D8FF),
         innerBottom: Color(0xFF66BDF4),
         edge: Color(0xFF2674C3),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFFFFD34D),
         outerBottom: Color(0xFFF0B52B),
         innerTop: Color(0xFFFFE27B),
         innerBottom: Color(0xFFFFCF49),
         edge: Color(0xFFD39B16),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFF63DDD7),
         outerBottom: Color(0xFF27B7B6),
         innerTop: Color(0xFF96F0E4),
         innerBottom: Color(0xFF59D3CF),
         edge: Color(0xFF219795),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFFB6ED64),
         outerBottom: Color(0xFF7DC83B),
         innerTop: Color(0xFFD4F68F),
         innerBottom: Color(0xFFB0E45D),
         edge: Color(0xFF69AB2A),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFFFFB156),
         outerBottom: Color(0xFFF37A22),
         innerTop: Color(0xFFFFCB82),
         innerBottom: Color(0xFFFFA14A),
         edge: Color(0xFFD36A18),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFFFFAE58),
         outerBottom: Color(0xFFF18832),
         innerTop: Color(0xFFFFD295),
         innerBottom: Color(0xFFFFA550),
         edge: Color(0xFFD26A21),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFFBC86FF),
         outerBottom: Color(0xFF8B52DF),
         innerTop: Color(0xFFD9B0FF),
         innerBottom: Color(0xFFB67BF8),
         edge: Color(0xFF7542C9),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFFA7DEFF),
         outerBottom: Color(0xFF65BEEB),
         innerTop: Color(0xFFCDEEFF),
         innerBottom: Color(0xFF99D6F8),
         edge: Color(0xFF529FC9),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFFFFA6C8),
         outerBottom: Color(0xFFEC6796),
         innerTop: Color(0xFFFFCBDF),
         innerBottom: Color(0xFFFF96BE),
         edge: Color(0xFFD55282),
       ),
-      _CardPalette(
+      CardPalette(
         outerTop: Color(0xFFFF7FD0),
         outerBottom: Color(0xFFD93FAE),
         innerTop: Color(0xFFFFA8E2),
@@ -708,14 +708,14 @@ class LevelCardState extends State<LevelCard> {
   }
 }
 
-class _CardPalette {
+class CardPalette {
   final Color outerTop;
   final Color outerBottom;
   final Color innerTop;
   final Color innerBottom;
   final Color edge;
 
-  const _CardPalette({
+  const CardPalette({
     required this.outerTop,
     required this.outerBottom,
     required this.innerTop,

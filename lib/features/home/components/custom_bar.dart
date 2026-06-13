@@ -343,6 +343,7 @@ class _CustomBarState extends State<CustomBar> {
                     Navigator.pushNamed(context, AppRoutes.levels);
                   }
                 }),
+
             AppBottomBar(
               child: Text('🪙', style: TextStyle(fontSize: 30)),
               // const SizedBox(width: 4),

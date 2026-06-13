@@ -1,17 +1,17 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
-import 'package:play_craft_kids/features/drawing/viewmodel/drawing_viewmodel.dart';
-import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
 import 'package:provider/provider.dart';
 
-import '../../../app/routes/app_routes.dart';
+import '../../drawing/view/drawing_screen.dart';
 import '../../../shared/components/app_gradient_background.dart';
 import '../../../shared/widgets/loader.dart';
-import '../../history/model/drawing_history_entry.dart';
-import '../../history/viewmodel/history_viewmodel.dart';
+import '../../home/components/app_bar_clipper.dart';
+import '../../home/viewmodel/home_viewmodel.dart';
+import '../../home/view/home_screen.dart';
+import '../../levels/model/level_model.dart';
+import '../../coloring/viewmodel/coloring_viewmodel.dart';
+import '../../coloring/view/coloring_screen.dart';
+import '../../tracing/viewmodel/activity_item.dart';
+import '../../../shared/utils/interaction_feedback.dart';
 
 class LevelScreen extends StatefulWidget {
   const LevelScreen({super.key});
@@ -21,14 +21,146 @@ class LevelScreen extends StatefulWidget {
 }
 
 class _LevelScreenState extends State<LevelScreen> {
+  bool _isOpeningLevel = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<HistoryViewModel>().load();
+        context.read<HomeViewModel>().load();
       }
     });
+  }
+
+  int _columnCountForWidth(double width) {
+    if (width >= 900) return 5;
+    if (width >= 700) return 4;
+    if (width >= 520) return 3;
+    return 2;
+  }
+
+  double _aspectRatioForWidth(double width, int columns) {
+    if (columns >= 5) return 0.76;
+    if (columns == 4) return 0.75;
+    if (columns == 3) return 0.74;
+    return 0.73;
+  }
+
+  CardPalette _paletteFor(int index) {
+    const palettes = <CardPalette>[
+      CardPalette(
+        outerTop: Color(0xFF66BAF9),
+        outerBottom: Color(0xFF2F8BDB),
+        innerTop: Color(0xFF95D8FF),
+        innerBottom: Color(0xFF66BDF4),
+        edge: Color(0xFF2674C3),
+      ),
+      CardPalette(
+        outerTop: Color(0xFFFFD34D),
+        outerBottom: Color(0xFFF0B52B),
+        innerTop: Color(0xFFFFE27B),
+        innerBottom: Color(0xFFFFCF49),
+        edge: Color(0xFFD39B16),
+      ),
+      CardPalette(
+        outerTop: Color(0xFF63DDD7),
+        outerBottom: Color(0xFF27B7B6),
+        innerTop: Color(0xFF96F0E4),
+        innerBottom: Color(0xFF59D3CF),
+        edge: Color(0xFF219795),
+      ),
+      CardPalette(
+        outerTop: Color(0xFFB6ED64),
+        outerBottom: Color(0xFF7DC83B),
+        innerTop: Color(0xFFD4F68F),
+        innerBottom: Color(0xFFB0E45D),
+        edge: Color(0xFF69AB2A),
+      ),
+      CardPalette(
+        outerTop: Color(0xFFFFB156),
+        outerBottom: Color(0xFFF37A22),
+        innerTop: Color(0xFFFFCB82),
+        innerBottom: Color(0xFFFFA14A),
+        edge: Color(0xFFD36A18),
+      ),
+      CardPalette(
+        outerTop: Color(0xFFFFAE58),
+        outerBottom: Color(0xFFF18832),
+        innerTop: Color(0xFFFFD295),
+        innerBottom: Color(0xFFFFA550),
+        edge: Color(0xFFD26A21),
+      ),
+      CardPalette(
+        outerTop: Color(0xFFBC86FF),
+        outerBottom: Color(0xFF8B52DF),
+        innerTop: Color(0xFFD9B0FF),
+        innerBottom: Color(0xFFB67BF8),
+        edge: Color(0xFF7542C9),
+      ),
+      CardPalette(
+        outerTop: Color(0xFFA7DEFF),
+        outerBottom: Color(0xFF65BEEB),
+        innerTop: Color(0xFFCDEEFF),
+        innerBottom: Color(0xFF99D6F8),
+        edge: Color(0xFF529FC9),
+      ),
+      CardPalette(
+        outerTop: Color(0xFFFFA6C8),
+        outerBottom: Color(0xFFEC6796),
+        innerTop: Color(0xFFFFCBDF),
+        innerBottom: Color(0xFFFF96BE),
+        edge: Color(0xFFD55282),
+      ),
+      CardPalette(
+        outerTop: Color(0xFFFF7FD0),
+        outerBottom: Color(0xFFD93FAE),
+        innerTop: Color(0xFFFFA8E2),
+        innerBottom: Color(0xFFFF74CF),
+        edge: Color(0xFFBA2C91),
+      ),
+    ];
+
+    return palettes[index % palettes.length];
+  }
+
+  Future<void> _openLevel(
+    BuildContext context,
+    HomeViewModel viewModel,
+    LevelModel level,
+  ) async {
+    if (_isOpeningLevel) return;
+
+    setState(() {
+      _isOpeningLevel = true;
+    });
+
+    try {
+      final isReady = await viewModel.prepareLevel(level.id);
+      if (!context.mounted) return;
+
+      if (!isReady) {
+        return;
+      }
+
+      String assetPath = level.imagePath ?? 'assets/images/apple.webp';
+
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ColoringScreen(imagePath: assetPath)),
+      );
+
+      if (!context.mounted) return;
+      await context.read<HomeViewModel>().refreshProgress();
+      if (context.mounted) await context.read<HomeViewModel>().load();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isOpeningLevel = false;
+        });
+      }
+    }
   }
 
   @override
@@ -36,11 +168,16 @@ class _LevelScreenState extends State<LevelScreen> {
     return Scaffold(
       body: AppGradientBackground(
         child: SafeArea(
-          child: Consumer<HistoryViewModel>(
+          child: Consumer<HomeViewModel>(
             builder: (context, viewModel, _) {
-              if (viewModel.isLoading) {
+              if (viewModel.isLoading && viewModel.content == null) {
                 return const Loader();
               }
+
+              final completedLevels = viewModel.categories
+                  .expand((c) => c.levels)
+                  .where((l) => l.isCompleted)
+                  .toList();
 
               return Column(
                 children: <Widget>[
@@ -51,7 +188,6 @@ class _LevelScreenState extends State<LevelScreen> {
                         Expanded(
                           child: SizedBox(
                             height: 140,
-                            // width: double.infinity,
                             child: Stack(
                               children: [
                                 ClipPath(
@@ -85,7 +221,7 @@ class _LevelScreenState extends State<LevelScreen> {
                                                   Transform.translate(
                                                     offset: const Offset(6, 6),
                                                     child: Text(
-                                                      "Drawing History",
+                                                      "Color History",
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: TextStyle(
@@ -104,7 +240,7 @@ class _LevelScreenState extends State<LevelScreen> {
                                                   Transform.translate(
                                                     offset: const Offset(3, 3),
                                                     child: Text(
-                                                      "Drawing History",
+                                                      "Color History",
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: const TextStyle(
@@ -121,7 +257,7 @@ class _LevelScreenState extends State<LevelScreen> {
 
                                                   // Main White Text
                                                   Text(
-                                                    "Drawing History",
+                                                    "Color History",
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
                                                       fontSize: 50,
@@ -147,69 +283,75 @@ class _LevelScreenState extends State<LevelScreen> {
                             ),
                           ),
                         ),
-
-                        // SidebarIcon(
-                        //   icon: Icons.arrow_back_rounded,
-                        //   assetName: 'assets/images/pop-button.png',
-                        //   onPressed: () {
-                        //     Navigator.pop(context);
-                        //   },
-                        // ),
-
-                        // // _HistoryIconButton(
-                        // //   icon: Icons.arrow_back_rounded,
-                        // //   onTap: () => Navigator.pop(context),
-                        // // ),
-                        // const SizedBox(width: 14),
-                        // Expanded(
-                        //   child: Text(
-                        //     'Drawing History',
-                        //     style: TextStyle(
-                        //       fontSize: 28,
-                        //       fontWeight: FontWeight.w700,
-                        //       color: const Color(0xFF1F2A44),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: viewModel.load,
-                      child: viewModel.isEmpty
+                      child: completedLevels.isEmpty
                           ? const _EmptyHistoryState()
-                          : ListView.separated(
-                              padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
-                              itemCount: viewModel.entries.length,
-                              separatorBuilder: (_, __) =>
-                                  const SizedBox(height: 14),
-                              itemBuilder: (context, index) {
-                                final entry = viewModel.entries[index];
-                                int? completionCount;
-                                if (entry.isCompleted) {
-                                  final sameLevelCompleted = viewModel.entries
-                                      .where((e) =>
-                                          e.levelId == entry.levelId &&
-                                          e.isCompleted)
-                                      .toList();
-                                  sameLevelCompleted.sort((a, b) =>
-                                      a.lastEditedAt.compareTo(b.lastEditedAt));
-                                  final order = sameLevelCompleted
-                                          .indexWhere((e) => e.id == entry.id) +
-                                      1;
-                                  if (order > 1) {
-                                    completionCount = order;
-                                  }
-                                }
+                          : CustomScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              slivers: <Widget>[
+                                SliverPadding(
+                                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                                  sliver: SliverLayoutBuilder(
+                                    builder: (context, constraints) {
+                                      final columns = _columnCountForWidth(
+                                          constraints.crossAxisExtent);
+                                      return SliverGrid(
+                                        delegate: SliverChildBuilderDelegate(
+                                          (context, index) {
+                                            final level = completedLevels[index];
+                                            final levelNumber = viewModel.levelNumberFor(level.id) ?? (index + 1);
+                                            return LevelCard(
+                                              key: ValueKey(level.id),
+                                              level: level,
+                                              levelNumber: levelNumber,
+                                              palette: _paletteFor(index),
+                                              isLocked: false,
+                                              isBusy: _isOpeningLevel,
+                                              onTap: () {
+                                                debugPrint("History Level: ${level.title}");
+                                                final coloringProvider =
+                                                    Provider.of<ColoringProvider>(
+                                                        context,
+                                                        listen: false);
+                                                final activity = level.activityItem ??
+                                                    ActivityItem(
+                                                      id: level.id,
+                                                      label: level.title,
+                                                      display: level.title,
+                                                      color: Colors.red,
+                                                      imagePath: level.imagePath ??
+                                                          'assets/images/un_border_apple.webp',
+                                                    );
+                                                coloringProvider.setItem(activity, 1,
+                                                    level: level);
 
-                                return _HistoryCard(
-                                  entry: entry,
-                                  completionCount: completionCount,
-                                  onTap: () =>
-                                      _openHistoryEntry(context, entry),
-                                );
-                              },
+                                                handleTapAction(context, () {});
+                                                _openLevel(context, viewModel, level);
+                                              },
+                                            );
+                                          },
+                                          childCount: completedLevels.length,
+                                        ),
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: columns,
+                                          mainAxisSpacing: 12,
+                                          crossAxisSpacing: 12,
+                                          childAspectRatio: _aspectRatioForWidth(
+                                            constraints.crossAxisExtent,
+                                            columns,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                     ),
                   ),
@@ -220,33 +362,6 @@ class _LevelScreenState extends State<LevelScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _openHistoryEntry(
-    BuildContext context,
-    DrawingHistoryEntry entry,
-  ) async {
-    final drawingVm = context.read<DrawingViewModel>();
-
-    // If the drawing screen is already active for this level, just pop back to it
-    // to avoid duplicated listeners and singleton state conflicts.
-    if (drawingVm.isActive && drawingVm.level?.id == entry.levelId) {
-      Navigator.pop(context);
-      return;
-    }
-
-    await Navigator.pushNamed(
-      context,
-      AppRoutes.drawing,
-      arguments: DrawingRouteArgs(
-        levelId: entry.levelId,
-        levelTitle: entry.levelTitle,
-        levelNumber: entry.levelNumber,
-        drawingSessionId: entry.id,
-      ),
-    );
-    if (!context.mounted) return;
-    await context.read<HistoryViewModel>().load();
   }
 }
 
@@ -282,14 +397,14 @@ class _EmptyHistoryState extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
-                  Icons.photo_library_outlined,
+                  Icons.palette_outlined,
                   size: 40,
                   color: Color(0xFFF28B1D),
                 ),
               ),
               const SizedBox(height: 18),
               Text(
-                'No drawings yet',
+                'No levels colored yet',
                 style: TextStyle(
                   fontSize: 24,
                   fontFamily: "Regular",
@@ -299,7 +414,7 @@ class _EmptyHistoryState extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Start drawing and your saved progress will appear here automatically.',
+                'Start coloring and your completed levels will appear here automatically.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -312,281 +427,6 @@ class _EmptyHistoryState extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _HistoryCard extends StatelessWidget {
-  const _HistoryCard({
-    required this.entry,
-    this.completionCount,
-    required this.onTap,
-  });
-
-  final DrawingHistoryEntry entry;
-  final int? completionCount;
-  final VoidCallback onTap;
-
-  String _ordinal(int n) {
-    if (n >= 11 && n <= 13) return '${n}th';
-    switch (n % 10) {
-      case 1:
-        return '${n}st';
-      case 2:
-        return '${n}nd';
-      case 3:
-        return '${n}rd';
-      default:
-        return '${n}th';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final thumbnailBytes = entry.decodeThumbnail();
-    final progressLabel = '${(entry.progress * 100).round()}%';
-    final badgeColor =
-        entry.isCompleted ? const Color(0xFF2FB36D) : const Color(0xFFF29A2E);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(28),
-        onTap: onTap,
-        child: Ink(
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.98),
-            borderRadius: BorderRadius.circular(32),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: const Color(0x120F2A50),
-                blurRadius: 30,
-                offset: const Offset(0, 16),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              _HistoryThumbnail(
-                bytes: thumbnailBytes == null
-                    ? null
-                    : Uint8List.fromList(thumbnailBytes),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            entry.levelTitle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontFamily: "Regular",
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF1E2742),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: badgeColor.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          child: Text(
-                            entry.status.label,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Regular",
-                              fontWeight: FontWeight.w700,
-                              color: badgeColor,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            entry.levelNumber == null
-                                ? 'Saved drawing'
-                                : 'Level ${entry.levelNumber}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "Regular",
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFF6A768E),
-                            ),
-                          ),
-                        ),
-                        if (completionCount != null &&
-                            completionCount! > 1) ...[
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF0F4F8),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              '${_ordinal(completionCount!)} Time',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: "Regular",
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF5A667E),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(999),
-                            child: LinearProgressIndicator(
-                              value: entry.progress.clamp(0.0, 1.0),
-                              minHeight: 12,
-                              backgroundColor: const Color(0xFFF2F5FA),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                badgeColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 14),
-                        Text(
-                          progressLabel,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: "Regular",
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF22304B),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _formatLastEdited(entry.lastEditedAt),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: "Regular",
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xFF7D879C),
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 14,
-                          color: const Color(0xFFBDC5D1),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  static String _formatLastEdited(DateTime value) {
-    final now = DateTime.now();
-    final difference = now.difference(value);
-    if (difference.inMinutes < 1) {
-      return 'Edited just now';
-    }
-    if (difference.inHours < 1) {
-      return 'Edited ${difference.inMinutes} min ago';
-    }
-    if (difference.inDays < 1) {
-      return 'Edited ${difference.inHours} hr ago';
-    }
-    return 'Edited ${value.day}/${value.month}/${value.year}';
-  }
-}
-
-class _HistoryThumbnail extends StatelessWidget {
-  const _HistoryThumbnail({required this.bytes});
-
-  final Uint8List? bytes;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 200,
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFEFB),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: bytes == null || bytes!.isEmpty
-          ? const Center(
-              child: Icon(
-                Icons.brush_outlined,
-                size: 48,
-                color: Color(0xFFBDC5D1),
-              ),
-            )
-          : Image.memory(
-              bytes!,
-              fit: BoxFit.contain,
-              gaplessPlayback: true,
-            ),
-    );
-  }
-}
-
-class _HistoryIconButton extends StatelessWidget {
-  const _HistoryIconButton({
-    required this.icon,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white.withValues(alpha: 0.95),
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: SizedBox(
-          width: 48,
-          height: 48,
-          child: Icon(
-            icon,
-            color: const Color(0xFF25314B),
-            size: 26,
-          ),
-        ),
-      ),
     );
   }
 }
