@@ -21,6 +21,9 @@ dependencies:
   lottie: ^3.3.0
   confetti: ^0.8.0
   supabase_flutter: ^2.0.0
+  sizer: ^3.0.5
+  flutter_screenutil: ^5.9.3
+
 
 dev_dependencies:
   flutter_test:

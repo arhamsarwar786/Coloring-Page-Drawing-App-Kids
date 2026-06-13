@@ -52,8 +52,16 @@ class HomeViewModel extends BaseViewModel {
     );
   }
 
+  bool _isLoading = false;
+
   int _databaseCoins = 0;
   int get databaseCoins => _databaseCoins;
+  bool get isLoading => _isLoading;
+
+  void setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
 
   List<LevelModel> get levelsForSelectedCategory {
     return selectedCategory?.levels ?? const <LevelModel>[];
@@ -162,32 +170,57 @@ class HomeViewModel extends BaseViewModel {
   // }
 
   Future<void> fetchDatabaseCoins() async {
-    final userId = Supabase.instance.client.auth.currentUser?.id;
-    if (userId == null) return;
+    setLoading(true); // Data fetch shuru hone se pehle true karein
 
     try {
-      // 1. Supabase se response lein
-      final List<dynamic> data = await Supabase.instance.client
-          .from('user_coins')
-          .select('coins')
-          .eq('user_id', userId);
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+      if (userId != null) {
+        final List<dynamic> data = await Supabase.instance.client
+            .from('user_coins')
+            .select('coins')
+            .eq('user_id', userId);
 
-      // 2. Total calculate karein (Safety ke sath)
-      int total = 0;
-      for (var item in data) {
-        // 'coins' ko int mein convert karein, agar null ho toh 0 lein
-        total += (item['coins'] as int? ?? 0);
+        int total = 0;
+        for (var item in data) {
+          total += (item['coins'] as int? ?? 0);
+        }
+        _databaseCoins = total;
       }
-
-      _databaseCoins = total;
-      print("Database total coins updated: $_databaseCoins");
-
-      // 3. UI refresh karein
-      notifyListeners();
     } catch (e) {
-      print("Error fetching coins: $e");
+      print("Error: $e");
+    } finally {
+      setLoading(
+          false); // Data fetch ho jaye ya error aaye, loading band kar dein
     }
   }
+
+  // Future<void> fetchDatabaseCoins() async {
+  //   final userId = Supabase.instance.client.auth.currentUser?.id;
+  //   if (userId == null) return;
+
+  //   try {
+  //     // 1. Supabase se response lein
+  //     final List<dynamic> data = await Supabase.instance.client
+  //         .from('user_coins')
+  //         .select('coins')
+  //         .eq('user_id', userId);
+
+  //     // 2. Total calculate karein (Safety ke sath)
+  //     int total = 0;
+  //     for (var item in data) {
+  //       // 'coins' ko int mein convert karein, agar null ho toh 0 lein
+  //       total += (item['coins'] as int? ?? 0);
+  //     }
+
+  //     _databaseCoins = total;
+  //     print("Database total coins updated: $_databaseCoins");
+
+  //     // 3. UI refresh karein
+  //     notifyListeners();
+  //   } catch (e) {
+  //     print("Error fetching coins: $e");
+  //   }
+  // }
 
   void selectCategory(String categoryId) {
     if (_selectedCategoryId == categoryId) return;

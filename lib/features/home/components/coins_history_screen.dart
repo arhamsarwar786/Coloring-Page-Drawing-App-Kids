@@ -159,12 +159,15 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                   ],
                 ),
               ),
-              Text(
-                "Coins history dekhne ke liye login karein",
-                style: TextStyle(
-                    fontFamily: "Regular",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16),
+              Center(
+                child: Text(
+                  "Login to view coins history",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: "Regular",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20),
+                ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -320,7 +323,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                 final historyList = homeVM.coinHistoryList;
 
                 if (historyList.isEmpty) {
-                  return Center(child: Text("Koi history nahi hai"));
+                  return Center(child: Text("No History Available"));
                 }
 
                 return Expanded(
