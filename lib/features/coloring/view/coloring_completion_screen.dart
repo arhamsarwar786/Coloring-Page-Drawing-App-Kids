@@ -85,14 +85,45 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     double matchPercent = 0.0;
 
     try {
-      final coverage = provider.overallCoveragePercent;
-      matchPercent = coverage.toDouble();
-      passed = coverage >= 70;
+      if (widget.coloredImage != null &&
+          provider.currentItem?.imagePath != null) {
+        final outlinePath = provider.currentItem!.imagePath;
+        final coloredPath = getColoredImagePath(outlinePath!);
+        final coloredData = await rootBundle.load(coloredPath);
+        final targetImg = img.decodeImage(coloredData.buffer.asUint8List());
+
+        final paintedImg = await _uiImageToImgImage(widget.coloredImage!);
+
+        if (targetImg != null && paintedImg != null) {
+          final coloredResized = img.copyResize(paintedImg,
+              width: targetImg.width, height: targetImg.height);
+          final diffResult = DiffImage.compareFromMemory(
+            coloredResized,
+            targetImg,
+            asPercentage: true,
+          );
+
+          // diffValue is the percentage of DIFFERENT pixels (0 = perfect match).
+          // We calculate match percentage correctly as 100 - diff.
+          matchPercent = 100.0 - diffResult.diffValue;
+          passed = matchPercent >= 40;
+          debugPrint("Diff: ${diffResult.diffValue}");
+          debugPrint("Match: $matchPercent");
+        } else {
+          final coverage = provider.overallCoveragePercent;
+          matchPercent = coverage.toDouble();
+          passed = coverage >= 40;
+        }
+      } else {
+        final coverage = provider.overallCoveragePercent;
+        matchPercent = coverage.toDouble();
+        passed = coverage >= 40;
+      }
     } catch (e) {
-      debugPrint("Error getting coverage: $e");
+      debugPrint("Error comparing images: $e");
       final coverage = provider.overallCoveragePercent;
       matchPercent = coverage.toDouble();
-      passed = coverage >= 70;
+      passed = coverage >= 40;
     }
 
     if (!mounted) return;

@@ -766,12 +766,6 @@ class ColoringProvider extends ChangeNotifier {
         ..clear()
         ..add(start);
       visited[start] = 1;
-
-      final startRefColor = _referencePixels != null ? _referencePixels![start] : null;
-      final int? sr = startRefColor != null ? (startRefColor & 0xFF) : null;
-      final int? sg = startRefColor != null ? ((startRefColor >> 8) & 0xFF) : null;
-      final int? sb = startRefColor != null ? ((startRefColor >> 16) & 0xFF) : null;
-
       final pixels = <int>[];
       var minX = width - 1;
       var maxX = 0;
@@ -792,17 +786,6 @@ class ColoringProvider extends ChangeNotifier {
           if (nx < 0 || ny < 0 || nx >= width || ny >= height) return;
           final ni = ny * width + nx;
           if (visited[ni] == 1 || insideMask[ni] != 1) return;
-
-          if (sr != null && sg != null && sb != null && _referencePixels != null) {
-             final neighborColor = _referencePixels![ni];
-             final nr = neighborColor & 0xFF;
-             final ng = (neighborColor >> 8) & 0xFF;
-             final nb = (neighborColor >> 16) & 0xFF;
-             final distSq = (sr-nr)*(sr-nr) + (sg-ng)*(sg-ng) + (sb-nb)*(sb-nb);
-             // If distance is > 6000, it's considered a different colored part
-             if (distSq > 6000) return; 
-          }
-
           visited[ni] = 1;
           stack.add(ni);
         }
