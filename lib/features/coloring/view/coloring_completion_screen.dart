@@ -85,37 +85,11 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     double matchPercent = 0.0;
 
     try {
-      if (widget.coloredImage != null &&
-          provider.currentItem?.imagePath != null) {
-        final outlinePath = provider.currentItem!.imagePath;
-        final coloredPath = getColoredImagePath(outlinePath!);
-        final coloredData = await rootBundle.load(coloredPath);
-        final targetImg = img.decodeImage(coloredData.buffer.asUint8List());
-
-        final paintedImg = await _uiImageToImgImage(widget.coloredImage!);
-
-        if (targetImg != null && paintedImg != null) {
-          final coloredResized = img.copyResize(paintedImg,
-              width: targetImg.width, height: targetImg.height);
-          final diffResult = DiffImage.compareFromMemory(
-            coloredResized,
-            targetImg,
-            asPercentage: true,
-          );
-          matchPercent = 70.0 - diffResult.diffValue;
-          passed = matchPercent >= 70;
-        } else {
-          final coverage = provider.overallCoveragePercent;
-          matchPercent = coverage.toDouble();
-          passed = coverage >= 70;
-        }
-      } else {
-        final coverage = provider.overallCoveragePercent;
-        matchPercent = coverage.toDouble();
-        passed = coverage >= 70;
-      }
+      final coverage = provider.overallCoveragePercent;
+      matchPercent = coverage.toDouble();
+      passed = coverage >= 70;
     } catch (e) {
-      debugPrint("Error comparing images: $e");
+      debugPrint("Error getting coverage: $e");
       final coverage = provider.overallCoveragePercent;
       matchPercent = coverage.toDouble();
       passed = coverage >= 70;

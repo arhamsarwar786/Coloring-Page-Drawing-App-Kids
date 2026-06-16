@@ -226,7 +226,6 @@ class ColoringProvider extends ChangeNotifier {
       return true;
     }
 
-    // Both are little-endian rgba8888 -> (A << 24) | (B << 16) | (G << 8) | R
     final pr = paintedRgba & 0xFF;
     final pg = (paintedRgba >> 8) & 0xFF;
     final pb = (paintedRgba >> 16) & 0xFF;
@@ -235,14 +234,21 @@ class ColoringProvider extends ChangeNotifier {
     final rg = (refRgba >> 8) & 0xFF;
     final rb = (refRgba >> 16) & 0xFF;
 
-    final dr = pr - rr;
-    final dg = pg - rg;
-    final db = pb - rb;
-    final distSq = dr * dr + dg * dg + db * db;
+    final paintedHsv = HSVColor.fromColor(Color.fromARGB(255, pr, pg, pb));
+    final refHsv = HSVColor.fromColor(Color.fromARGB(255, rr, rg, rb));
 
-    // Tighter threshold to ensure accurate colors, but increased to 12000
-    // to allow children to use lighter or darker shades of the same color.
-    return distSq < 12000;
+    // Hue difference
+    double hueDiff = (paintedHsv.hue - refHsv.hue).abs();
+    if (hueDiff > 180) hueDiff = 360 - hueDiff;
+
+    // We allow large variations in value (lightness/darkness) and saturation,
+    // but hue should be reasonably close (e.g. within 60 degrees).
+    // If the reference is grayscale (very low saturation or very bright/dark)
+    if (refHsv.saturation < 0.15 || refHsv.value < 0.15 || refHsv.value > 0.95) {
+      return true;
+    }
+
+    return hueDiff < 60.0;
   }
 
   _ColoringPart? get _activePart => _activeRegionIndex < _orderedParts.length
@@ -289,30 +295,7 @@ class ColoringProvider extends ChangeNotifier {
     // _brushScale = (levelData.recommendedBrushSize / 28.0).clamp(0.65, 1.7);
 
     // final fromLevel = levelData.palette.map((e) => e.color).toList();
-    final extras = <Color>[
-      Color(0xff7d4729),
-      Color(0xffdf4b3d),
-      Color(0xff69842e),
-      Color(0xff69842e),
-      Color(0xff69842e),
-      Color(0xff69842e),
-      Colors.cyan,
-      Colors.teal,
-      Colors.green,
-      Colors.lightGreen,
-      Colors.lime,
-      Colors.yellow,
-      Colors.amber,
-      Colors.orange,
-      Colors.deepOrange,
-      Colors.brown,
-      Colors.grey,
-      Colors.blueGrey,
-      Colors.black,
-      Colors.white,
-    ];
-
-    // _palette = <Color>{...fromLevel, ...extras}.toList();
+    // removed extras array
 
     if (_palette.isNotEmpty) {
       _activeColor = _palette.first;
@@ -376,63 +359,7 @@ class ColoringProvider extends ChangeNotifier {
       _completedRegionIds.clear();
 
       final fromLevel = _currentLevel!.palette.map((e) => e.color).toList();
-      final extras = <Color>[
-        Color(0xff7d4729),
-        Color(0xffdf4b3d),
-        Color(0xff69842e),
-        Color(0xff69842e),
-        Color(0xff69842e),
-        Color(0xff69842e),
-        Color(0xfff58f20),
-        Color(0xff699929),
-        Color(0xffedb113),
-        Color(0xff678b31),
-        Color(0xff9c201e),
-        Color(0xff70923e),
-        Color(0xffde942b),
-        Color(0xff26683b),
-        Color(0xffa1c348),
-        Color(0xff689b34),
-        Color(0xff648415),
-        Color(0xff594a1d),
-        Color(0xff568b30),
-        Color(0xffe47940),
-        Color(0xff694e25),
-        Color(0xff588a29),
-        Color(0xff774465),
-        Color(0xff5d3a1e),
-        Color(0xfff59c06),
-        Color(0xff6a7823),
-        Color(0xff852319),
-        Color(0xff9a4b34),
-        Color(0xff975527),
-        Color(0xffa95802),
-        Color(0xffb9c737),
-        Color(0xff92622b),
-        Color(0xffeebb7a),
-        Color(0xfff5952a),
-        Color(0xfffa0009),
-        Color(0xff80c005),
-        Color(0xff9d5d31),
-        Color(0xfff9fcf8),
-        Color(0xff4a3328),
-        Color(0xffe2de50),
-        Color(0xffa04114),
-        Color(0xff0e3060),
-        Color(0xff342344),
-        Color(0xffc52642),
-        Color(0xff54741c),
-        Color(0xff74261c),
-        Color(0xffe1c5ba),
-        Color(0xff692311),
-        Color(0xff9a2124),
-        Color(0xffbcdb38),
-        Color(0xff843f6b),
-        Color(0xffab463c),
-        Color(0xff746639),
-      ];
-
-      _palette = <Color>{...fromLevel, ...extras}.toList();
+      _palette = <Color>{...fromLevel}.toList();
 
       if (_palette.isNotEmpty) {
         _activeColor = _palette.first;
@@ -624,7 +551,7 @@ class ColoringProvider extends ChangeNotifier {
           final db = kb - b;
           final distSq = dr * dr + dg * dg + db * db;
 
-          if (distSq < 2500) {
+          if (distSq < 10000) {
             colorClusters[key] = colorClusters[key]! + 1;
             foundCluster = true;
             break;
@@ -839,6 +766,12 @@ class ColoringProvider extends ChangeNotifier {
         ..clear()
         ..add(start);
       visited[start] = 1;
+
+      final startRefColor = _referencePixels != null ? _referencePixels![start] : null;
+      final int? sr = startRefColor != null ? (startRefColor & 0xFF) : null;
+      final int? sg = startRefColor != null ? ((startRefColor >> 8) & 0xFF) : null;
+      final int? sb = startRefColor != null ? ((startRefColor >> 16) & 0xFF) : null;
+
       final pixels = <int>[];
       var minX = width - 1;
       var maxX = 0;
@@ -859,6 +792,17 @@ class ColoringProvider extends ChangeNotifier {
           if (nx < 0 || ny < 0 || nx >= width || ny >= height) return;
           final ni = ny * width + nx;
           if (visited[ni] == 1 || insideMask[ni] != 1) return;
+
+          if (sr != null && sg != null && sb != null && _referencePixels != null) {
+             final neighborColor = _referencePixels![ni];
+             final nr = neighborColor & 0xFF;
+             final ng = (neighborColor >> 8) & 0xFF;
+             final nb = (neighborColor >> 16) & 0xFF;
+             final distSq = (sr-nr)*(sr-nr) + (sg-ng)*(sg-ng) + (sb-nb)*(sb-nb);
+             // If distance is > 6000, it's considered a different colored part
+             if (distSq > 6000) return; 
+          }
+
           visited[ni] = 1;
           stack.add(ni);
         }
