@@ -810,16 +810,21 @@ class ColoringProvider extends ChangeNotifier {
     _paintedPixels = Uint8List(kCanvasSize * kCanvasSize);
     imgWidth = kCanvasSize;
     imgHeight = kCanvasSize;
-    _orderedParts = [
-      _ColoringPart(
-        id: 'circle_main',
-        label: 'Circle',
-        targetColorId: 'main_color',
-        sequenceIndex: 0,
-        bounds: const Rect.fromLTWH(0.2, 0.2, 0.6, 0.6),
-        pixels: pixels,
-      ),
-    ];
+    // Build precise region parts from the inside mask for accurate region validation.
+    _orderedParts = _buildExactPartsFromImage(_isInside!, imgWidth, imgHeight);
+    // If the image has no defined regions, fallback to a single full‑canvas part.
+    if (_orderedParts.isEmpty) {
+      _orderedParts = [
+        _ColoringPart(
+          id: 'full_canvas',
+          label: 'Full',
+          targetColorId: null,
+          sequenceIndex: 0,
+          bounds: const Rect.fromLTWH(0, 0, 1, 1),
+          pixels: Uint32List.fromList(pixels),
+        ),
+      ];
+    }
     _activeRegionIndex = 0;
     _completedRegionIds.clear();
 
@@ -1386,20 +1391,99 @@ class ColoringProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Returns the bucket index for the given target color ID, or null if none.
+  /// Returns the bucket index for the given target color ID, or null if none.
+  int? _getColorBucket(String? targetColorId) {
+    if (targetColorId == null) return null;
+    // Safe lookup without throwing if not found
+    DrawingColorModel? targetColor;
+    // Look up the color model from the current level's palette (which includes ids)
+    final models = _currentLevel?.palette ?? [];
+    for (final model in models) {
+      if (model.id == targetColorId) {
+        targetColor = model;
+        break;
+      }
+    }
+    if (targetColor == null) return null;
+    // Use the actual Color from the model for conversion.
+    final targetRgba = _colorToRgba(targetColor!.color, 255);
+    final r = targetRgba & 0xFF;
+    final g = (targetRgba >> 8) & 0xFF;
+    final b = (targetRgba >> 16) & 0xFF;
+    final hsl = _rgbToHsl(r, g, b);
+    return _classifyChildColor(hsl[0], hsl[1], hsl[2]);
+  }
+
   // ── Score ─────────────────────────────────────────────────────────────────
 
   void calculateScore() {
+    print("======= calculateScore CALLED =======");
     _stopwatch.stop();
     final secs = _stopwatch.elapsed.inSeconds;
+
+    int timeStars;
     if (secs >= 30) {
-      _stars = 3;
-      _scorePercentage = 100;
+      timeStars = 3;
     } else if (secs >= 15) {
-      _stars = 2;
-      _scorePercentage = 80;
+      timeStars = 2;
     } else {
-      _stars = 1;
-      _scorePercentage = 60;
+      timeStars = 1;
+    }
+
+    // Region‑based validation: each region must reach at least 80% coverage.
+    bool allRegionsPass = true;
+    if (_paintedPixels != null) {
+      for (final part in _orderedParts) {
+        int correctPainted = 0;
+        // Determine target bucket for this region (if any)
+        int? targetBucket = _getColorBucket(part.targetColorId);
+
+        print(
+          "Part: ${part.label}, Target: ${part.targetColorId}, Bucket: $targetBucket",
+        );
+
+        for (final idx in part.pixels) {
+          if (_paintedPixels![idx] == 1) {
+            if (targetBucket == null) {
+              // No specific target – any painted pixel counts
+              correctPainted++;
+            } else {
+              final paintedRgba = _pixels![idx];
+              final pr = paintedRgba & 0xFF;
+              final pg = (paintedRgba >> 8) & 0xFF;
+              final pb = (paintedRgba >> 16) & 0xFF;
+              final phsl = _rgbToHsl(pr, pg, pb);
+              if (_classifyChildColor(phsl[0], phsl[1], phsl[2]) ==
+                  targetBucket) {
+                correctPainted++;
+              }
+            }
+          }
+        }
+        final total = part.pixels.length;
+        final coverage = total == 0 ? 1.0 : correctPainted / total;
+        if (coverage < 0.8) {
+          allRegionsPass = false;
+          break;
+        }
+      }
+    } else {
+      allRegionsPass = false;
+    }
+
+    if (allRegionsPass) {
+      _stars = timeStars;
+      if (_stars == 3) {
+        _scorePercentage = 100;
+      } else if (_stars == 2) {
+        _scorePercentage = 80;
+      } else {
+        _scorePercentage = 60;
+      }
+    } else {
+      _stars = 0;
+      _scorePercentage = 0;
     }
     notifyListeners();
   }
