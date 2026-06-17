@@ -218,11 +218,41 @@ class ColoringProvider extends ChangeNotifier {
     return maxColorRatio <= 0.85;
   }
 
+  /// Convert RGB (0–255 each) to HSL. Returns [h, s, l] where
+  // /// h is in degrees (0–360), s and l are 0.0–1.0.
+  // List<double> _rgbToHsl(int r, int g, int b) {
+  //   final rr = r / 255.0;
+  //   final gg = g / 255.0;
+  //   final bb = b / 255.0;
+  //   final maxC = math.max(rr, math.max(gg, bb));
+  //   final minC = math.min(rr, math.min(gg, bb));
+  //   final delta = maxC - minC;
+  //   final l = (maxC + minC) / 2.0;
+
+  //   if (delta < 0.0001) return [0.0, 0.0, l]; // achromatic (gray)
+
+  //   final s = l > 0.5 ? delta / (2.0 - maxC - minC) : delta / (maxC + minC);
+
+  //   double h;
+  //   if (maxC == rr) {
+  //     h = ((gg - bb) / delta) % 6.0;
+  //   } else if (maxC == gg) {
+  //     h = (bb - rr) / delta + 2.0;
+  //   } else {
+  //     h = (rr - gg) / delta + 4.0;
+  //   }
+  //   h *= 60.0;
+  //   if (h < 0) h += 360.0;
+
+  //   return [h, s, l];
+  // }
+
   bool _isColorMatch(int paintedRgba, int refRgba) {
     // Check alpha of reference image. If it's transparent, we don't penalize the child
     // (this happens if the colored asset doesn't perfectly fill the uncolored outline).
     final refAlpha = (refRgba >> 24) & 0xFF;
     if (refAlpha < 50) {
+      print("Hue match result: $refAlpha");
       return true;
     }
 
@@ -235,14 +265,50 @@ class ColoringProvider extends ChangeNotifier {
     final rg = (refRgba >> 8) & 0xFF;
     final rb = (refRgba >> 16) & 0xFF;
 
-    final dr = pr - rr;
-    final dg = pg - rg;
-    final db = pb - rb;
-    final distSq = dr * dr + dg * dg + db * db;
+    // ── HSL-based comparison ─────────────────────────────────────────────────
+    // RGB distance penalises light/dark shades heavily (e.g. dark-red vs red).
+    // HSL isolates the *hue* (colour identity) from lightness/saturation,
+    // so a child using a lighter or darker shade still gets credit.
 
-    // Tighter threshold to ensure accurate colors, but increased to 12000
-    // to allow children to use lighter or darker shades of the same color.
-    return distSq < 12000;
+    final pHsl = _rgbToHsl(pr, pg, pb);
+    final rHsl = _rgbToHsl(rr, rg, rb);
+
+    final double pH = pHsl[0], pS = pHsl[1], pL = pHsl[2];
+    final double rH = rHsl[0], rS = rHsl[1], rL = rHsl[2];
+
+    // ── Special cases: near-white / near-black / gray ────────────────────────
+    // When lightness is extreme or saturation is very low, hue is unreliable.
+    final bool refIsNearWhite = rL > 0.90;
+    final bool refIsNearBlack = rL < 0.10;
+    final bool refIsGray = rS < 0.12;
+    final bool paintedIsNearWhite = pL > 0.90;
+    final bool paintedIsNearBlack = pL < 0.10;
+    final bool paintedIsGray = pS < 0.12;
+
+    // White matches white, black matches black, gray matches gray
+    if (refIsNearWhite) return paintedIsNearWhite || pL > 0.75;
+    if (refIsNearBlack) return paintedIsNearBlack || pL < 0.25;
+    if (refIsGray) return paintedIsGray || pS < 0.20;
+
+    // If the child painted near-white/black but the reference is a vivid colour → mismatch
+    if (paintedIsNearWhite || paintedIsNearBlack) return false;
+
+    // ── Hue comparison (circular, wraps at 360°) ─────────────────────────────
+    double hueDiff = (pH - rH).abs();
+    if (hueDiff > 180.0) hueDiff = 360.0 - hueDiff;
+
+    // Generous hue tolerance: 40° allows light-green ↔ green, sky-blue ↔ blue, etc.
+    if (hueDiff > 40.0) return false;
+
+    // ── Saturation: allow desaturated / more vivid versions ──────────────────
+    final satDiff = (pS - rS).abs();
+    if (satDiff > 0.55) return false;
+
+    // ── Lightness: allow light and dark shades freely ────────────────────────
+    // This is the key change — we do NOT reject based on lightness difference.
+    // A dark-red and a light-red both have hue ≈ 0°, so they match.
+
+    return true;
   }
 
   _ColoringPart? get _activePart => _activeRegionIndex < _orderedParts.length
@@ -260,6 +326,49 @@ class ColoringProvider extends ChangeNotifier {
     final region = _activePart;
     if (region == null) return null;
     return _fractionalBoundsFor(region);
+  }
+
+  Offset? get activeRegionCenterFraction {
+    final region = _activePart;
+    if (region == null ||
+        imgWidth == 0 ||
+        imgHeight == 0 ||
+        region.pixels.isEmpty) return null;
+
+    // Calculate the center of mass
+    double sumX = 0;
+    double sumY = 0;
+    for (final idx in region.pixels) {
+      sumX += (idx % imgWidth);
+      sumY += (idx ~/ imgWidth);
+    }
+
+    int cx = (sumX / region.pixels.length).round();
+    int cy = (sumY / region.pixels.length).round();
+
+    // If the center of mass is outside the region (e.g., crescent shape),
+    // find the closest actual pixel inside the region.
+    if (!_isPixelInActiveRegion(cx, cy)) {
+      int bestDistSq = 999999999;
+      int bestX = cx;
+      int bestY = cy;
+      for (final idx in region.pixels) {
+        final px = idx % imgWidth;
+        final py = idx ~/ imgWidth;
+        final dx = px - cx;
+        final dy = py - cy;
+        final distSq = dx * dx + dy * dy;
+        if (distSq < bestDistSq) {
+          bestDistSq = distSq;
+          bestX = px;
+          bestY = py;
+        }
+      }
+      cx = bestX;
+      cy = bestY;
+    }
+
+    return Offset(cx / imgWidth, cy / imgHeight);
   }
 
   String get formattedTime {
@@ -286,37 +395,9 @@ class ColoringProvider extends ChangeNotifier {
     _orderedParts = const [];
     _activeRegionIndex = 0;
     _completedRegionIds.clear();
-    // _brushScale = (levelData.recommendedBrushSize / 28.0).clamp(0.65, 1.7);
-
-    // final fromLevel = levelData.palette.map((e) => e.color).toList();
-    final extras = <Color>[
-      Color(0xff7d4729),
-      Color(0xffdf4b3d),
-      Color(0xff69842e),
-      Color(0xff69842e),
-      Color(0xff69842e),
-      Color(0xff69842e),
-      Colors.cyan,
-      Colors.teal,
-      Colors.green,
-      Colors.lightGreen,
-      Colors.lime,
-      Colors.yellow,
-      Colors.amber,
-      Colors.orange,
-      Colors.deepOrange,
-      Colors.brown,
-      Colors.grey,
-      Colors.blueGrey,
-      Colors.black,
-      Colors.white,
-    ];
-
-    // _palette = <Color>{...fromLevel, ...extras}.toList();
-
-    if (_palette.isNotEmpty) {
-      _activeColor = _palette.first;
-    }
+    // Palette will be extracted from the reference image in _extractPaletteFromReference()
+    // called during _loadImage(). Only image-accurate colors + white will be shown.
+    _palette = const [];
 
     _stopwatch
       ..reset()
@@ -375,64 +456,9 @@ class ColoringProvider extends ChangeNotifier {
       _activeRegionIndex = 0;
       _completedRegionIds.clear();
 
-      final fromLevel = _currentLevel!.palette.map((e) => e.color).toList();
-      final extras = <Color>[
-        Color(0xff7d4729),
-        Color(0xffdf4b3d),
-        Color(0xff69842e),
-        Color(0xff69842e),
-        Color(0xff69842e),
-        Color(0xff69842e),
-        Color(0xfff58f20),
-        Color(0xff699929),
-        Color(0xffedb113),
-        Color(0xff678b31),
-        Color(0xff9c201e),
-        Color(0xff70923e),
-        Color(0xffde942b),
-        Color(0xff26683b),
-        Color(0xffa1c348),
-        Color(0xff689b34),
-        Color(0xff648415),
-        Color(0xff594a1d),
-        Color(0xff568b30),
-        Color(0xffe47940),
-        Color(0xff694e25),
-        Color(0xff588a29),
-        Color(0xff774465),
-        Color(0xff5d3a1e),
-        Color(0xfff59c06),
-        Color(0xff6a7823),
-        Color(0xff852319),
-        Color(0xff9a4b34),
-        Color(0xff975527),
-        Color(0xffa95802),
-        Color(0xffb9c737),
-        Color(0xff92622b),
-        Color(0xffeebb7a),
-        Color(0xfff5952a),
-        Color(0xfffa0009),
-        Color(0xff80c005),
-        Color(0xff9d5d31),
-        Color(0xfff9fcf8),
-        Color(0xff4a3328),
-        Color(0xffe2de50),
-        Color(0xffa04114),
-        Color(0xff0e3060),
-        Color(0xff342344),
-        Color(0xffc52642),
-        Color(0xff54741c),
-        Color(0xff74261c),
-        Color(0xffe1c5ba),
-        Color(0xff692311),
-        Color(0xff9a2124),
-        Color(0xffbcdb38),
-        Color(0xff843f6b),
-        Color(0xffab463c),
-        Color(0xff746639),
-      ];
-
-      _palette = <Color>{...fromLevel, ...extras}.toList();
+      // Palette will be extracted from the reference image in _extractPaletteFromReference()
+      // called during _loadImage(). Only image-accurate colors + white will be shown.
+      _palette = const [];
 
       if (_palette.isNotEmpty) {
         _activeColor = _palette.first;
@@ -567,6 +593,8 @@ class ColoringProvider extends ChangeNotifier {
       }
       _isInside = insideMask;
       _extractPaletteFromReference();
+      // Duplicate palette extraction block removed; palette is built inside _extractPaletteFromReference()
+
       _orderedParts = _buildExactPartsFromImage(insideMask, w, h);
 
       // ── Step 4: Build clean white canvas (transparent bg, white inside) ──
@@ -592,67 +620,133 @@ class ColoringProvider extends ChangeNotifier {
     }
   }
 
-  /// Creates a fallback white circle image when the asset fails to load
+  /// Classifies an HSL color into one of 11 basic child-friendly color categories.
+  int _classifyChildColor(double h, double s, double l) {
+    if (l > 0.85) return 0; // White
+    if (l < 0.15) return 1; // Black
+    if (s < 0.15) return 2; // Gray
+    if (h >= 10 && h <= 50 && l < 0.50) return 3; // Brown
+    if (h < 15 || h >= 345) return 4; // Red
+    if (h >= 15 && h < 45) return 5; // Orange
+    if (h >= 45 && h < 75) return 6; // Yellow
+    if (h >= 75 && h < 165) return 7; // Green
+    if (h >= 165 && h < 255) return 8; // Blue
+    if (h >= 255 && h < 300) return 9; // Purple
+    return 10; // Pink
+  }
+
+  /// Converts RGB (0-255) to HSL ([0-360, 0-1, 0-1])
+  List<double> _rgbToHsl(int r, int g, int b) {
+    final double rNorm = r / 255.0;
+    final double gNorm = g / 255.0;
+    final double bNorm = b / 255.0;
+
+    final double max = math.max(rNorm, math.max(gNorm, bNorm));
+    final double min = math.min(rNorm, math.min(gNorm, bNorm));
+
+    double h = 0;
+    double s = 0;
+    final double l = (max + min) / 2.0;
+
+    if (max != min) {
+      final double d = max - min;
+      s = l > 0.5 ? d / (2.0 - max - min) : d / (max + min);
+      if (max == rNorm) {
+        h = (gNorm - bNorm) / d + (gNorm < bNorm ? 6.0 : 0.0);
+      } else if (max == gNorm) {
+        h = (bNorm - rNorm) / d + 2.0;
+      } else {
+        h = (rNorm - gNorm) / d + 4.0;
+      }
+      h /= 6.0;
+    }
+
+    return [h * 360.0, s, l];
+  }
+
+  /// Extracts a child-friendly color palette from the reference (colored) image.
+  /// Groups pixels into basic color categories (Red, Blue, Yellow, etc.)
+  /// to ensure we don't get multiple shades of the same color (e.g., light yellow and dark yellow).
   void _extractPaletteFromReference() {
     final refPixels = _referencePixels;
     final insideMask = _isInside;
     if (refPixels == null || insideMask == null) return;
 
-    final colorClusters =
-        <int, int>{}; // store RGB (0xRRGGBB) as key, count as value
+    final Map<int, int> bucketCounts = {};
+    final Map<int, Map<int, int>> bucketColorFrequencies = {};
 
     for (int i = 0; i < insideMask.length; i++) {
-      if (insideMask[i] == 1) {
-        final rgba = refPixels[i];
-        final a = (rgba >> 24) & 0xFF;
-        if (a < 100) continue;
+      if (insideMask[i] != 1) continue;
+      final rgba = refPixels[i];
+      final a = (rgba >> 24) & 0xFF;
+      if (a < 100) continue; // ignore transparent pixels
 
-        final r = rgba & 0xFF;
-        final g = (rgba >> 8) & 0xFF;
-        final b = (rgba >> 16) & 0xFF;
+      final r = rgba & 0xFF;
+      final g = (rgba >> 8) & 0xFF;
+      final b = (rgba >> 16) & 0xFF;
+      final rgb = (r << 16) | (g << 8) | b;
 
-        final rgb = (r << 16) | (g << 8) | b;
+      final hsl = _rgbToHsl(r, g, b);
+      final double hue = hsl[0];
+      final double sat = hsl[1];
+      final double lit = hsl[2];
 
-        bool foundCluster = false;
-        for (final key in colorClusters.keys) {
-          final kr = (key >> 16) & 0xFF;
-          final kg = (key >> 8) & 0xFF;
-          final kb = key & 0xFF;
+      final bestBucket = _classifyChildColor(hue, sat, lit);
 
-          final dr = kr - r;
-          final dg = kg - g;
-          final db = kb - b;
-          final distSq = dr * dr + dg * dg + db * db;
+      bucketCounts[bestBucket] = (bucketCounts[bestBucket] ?? 0) + 1;
 
-          if (distSq < 2500) {
-            colorClusters[key] = colorClusters[key]! + 1;
-            foundCluster = true;
-            break;
-          }
+      // Track exact color frequencies within this bucket
+      bucketColorFrequencies[bestBucket] ??= {};
+      final freqMap = bucketColorFrequencies[bestBucket]!;
+      freqMap[rgb] = (freqMap[rgb] ?? 0) + 1;
+    }
+
+    // Sort buckets by pixel count descending.
+    final sortedBuckets = bucketCounts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    const int maxMainColors = 6; // 4-6 main colors for child-friendly palette
+    final List<Color> newPalette = [];
+
+    for (final entry in sortedBuckets) {
+      if (entry.value < 15) continue; // skip extremely rare buckets (noise)
+      if (newPalette.length >= maxMainColors) break;
+
+      final bestBucketIndex = entry.key;
+      final freqMap = bucketColorFrequencies[bestBucketIndex]!;
+
+      // Find the most frequent exact RGB color in this bucket
+      int bestRgb = freqMap.keys.first;
+      int maxFreq = -1;
+      for (final kv in freqMap.entries) {
+        if (kv.value > maxFreq) {
+          maxFreq = kv.value;
+          bestRgb = kv.key;
         }
+      }
 
-        if (!foundCluster) {
-          colorClusters[rgb] = 1;
+      final int r = (bestRgb >> 16) & 0xFF;
+      final int g = (bestRgb >> 8) & 0xFF;
+      final int b = bestRgb & 0xFF;
+      final color = Color.fromARGB(255, r, g, b);
+
+      // Prevent adding multiple extremely similar colors even if from different buckets (fallback safety)
+      bool tooSimilar = false;
+      for (final existingColor in newPalette) {
+        final dr = color.red - existingColor.red;
+        final dg = color.green - existingColor.green;
+        final db = color.blue - existingColor.blue;
+        if (dr * dr + dg * dg + db * db < 2000) {
+          tooSimilar = true;
+          break;
         }
+      }
+      if (!tooSimilar) {
+        newPalette.add(color);
       }
     }
 
-    final entries = colorClusters.entries.toList();
-    entries.sort((a, b) => b.value.compareTo(a.value));
-
-    final newPalette = <Color>[];
-    for (final entry in entries) {
-      if (entry.value > 100) {
-        // Require at least 100 pixels
-        final r = (entry.key >> 16) & 0xFF;
-        final g = (entry.key >> 8) & 0xFF;
-        final b = entry.key & 0xFF;
-        newPalette.add(Color.fromARGB(255, r, g, b));
-      }
-      if (newPalette.length >= 16) break;
-    }
-
-    // Always add white color to the palette for corrections or highlights
+    // Always include white for highlights/corrections.
     if (!newPalette.contains(Colors.white)) {
       newPalette.add(Colors.white);
     }

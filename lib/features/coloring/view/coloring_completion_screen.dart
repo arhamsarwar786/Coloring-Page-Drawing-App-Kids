@@ -77,6 +77,96 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
     return img.decodeImage(byteData.buffer.asUint8List());
   }
 
+  // Future<void> _startSequence() async {
+  //   final provider = context.read<ColoringProvider>();
+  //   final homeVM = context.read<HomeViewModel>();
+
+  //   bool passed = false;
+  //   double matchPercent = 0.0;
+
+  //   try {
+  //     // HSL-based coverage check
+  //     final coverage = provider.overallCoveragePercent;
+  //     matchPercent = coverage.toDouble();
+  //     passed = coverage >= 50;
+  //   } catch (e) {
+  //     debugPrint("Error calculating score: $e");
+  //     matchPercent = 0;
+  //     passed = false;
+  //   }
+
+  //   if (!mounted) return;
+
+  //   setState(() {
+  //     _matchPercent = matchPercent;
+  //     _passed = passed;
+  //     _isCalculatingScore = false;
+  //   });
+
+  //   const int levelCompletionCoins = 20;
+  //   final session = Supabase.instance.client.auth.currentSession;
+
+  //   setState(() {
+  //     _isLoggedIn = session != null;
+  //     _earnedCoins = (session != null && passed) ? levelCompletionCoins : 0;
+  //   });
+
+  //   if (passed) {
+  //     final currentLevel = provider.currentLevel;
+
+  //     if (currentLevel != null) {
+  //       final drawingRepo = context.read<DrawingRepository>();
+
+  //       await drawingRepo.markLevelCompleted(
+  //         levelId: currentLevel.id,
+  //         stars: 3,
+  //         rewardCoins: levelCompletionCoins,
+  //       );
+
+  //       if (session != null) {
+  //         await homeVM.addCompletionPoints(levelCompletionCoins);
+  //       }
+
+  //       if (mounted) {
+  //         homeVM.refreshProgress();
+  //         homeVM.load();
+  //       }
+  //     }
+  //   }
+
+  //   await Future.delayed(const Duration(milliseconds: 150));
+  //   if (!mounted) return;
+
+  //   if (passed) {
+  //     _confettiController.play();
+  //   }
+
+  //   _cardController.forward();
+
+  //   await Future.delayed(const Duration(milliseconds: 500));
+  //   if (!mounted) return;
+
+  //   if (passed) {
+  //     for (int i = 1; i <= 3; i++) {
+  //       await Future.delayed(const Duration(milliseconds: 280));
+
+  //       if (!mounted) return;
+
+  //       setState(() {
+  //         _visibleStars = i;
+  //       });
+  //     }
+
+  //     if (_earnedCoins > 0) {
+  //       await Future.delayed(const Duration(milliseconds: 200));
+
+  //       if (mounted) {
+  //         _coinsController.forward();
+  //       }
+  //     }
+  //   }
+  // }
+
   Future<void> _startSequence() async {
     final provider = context.read<ColoringProvider>();
     final homeVM = context.read<HomeViewModel>();
@@ -95,15 +185,18 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
         final paintedImg = await _uiImageToImgImage(widget.coloredImage!);
 
         if (targetImg != null && paintedImg != null) {
-          final coloredResized = img.copyResize(paintedImg,
-              width: targetImg.width, height: targetImg.height);
-          final diffResult = DiffImage.compareFromMemory(
-            coloredResized,
-            targetImg,
-            asPercentage: true,
-          );
-          matchPercent = 70.0 - diffResult.diffValue;
-          passed = matchPercent >= 70;
+          final coverage = provider.overallCoveragePercent;
+          matchPercent = coverage.toDouble();
+          passed = coverage >= 70;
+          // final coloredResized = img.copyResize(paintedImg,
+          //     width: targetImg.width, height: targetImg.height);
+          // final diffResult = DiffImage.compareFromMemory(
+          //   coloredResized,
+          //   targetImg,
+          //   asPercentage: true,
+          // );
+          // matchPercent = 100.0 - diffResult.diffValue;
+          // passed = matchPercent >= 50;
         } else {
           final coverage = provider.overallCoveragePercent;
           matchPercent = coverage.toDouble();

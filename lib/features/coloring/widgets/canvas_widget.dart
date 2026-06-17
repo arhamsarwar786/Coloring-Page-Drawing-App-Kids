@@ -307,12 +307,12 @@ class _CanvasWidgetState extends State<CanvasWidget>
                           Positioned(
                             left: provider.imageDisplayRect.left +
                                 (provider
-                                        .activeRegionBoundsFraction!.center.dx *
+                                        .activeRegionCenterFraction!.dx *
                                     provider.imageDisplayRect.width) -
                                 24,
                             top: provider.imageDisplayRect.top +
                                 (provider
-                                        .activeRegionBoundsFraction!.center.dy *
+                                        .activeRegionCenterFraction!.dy *
                                     provider.imageDisplayRect.height) -
                                 24,
                             // left:
