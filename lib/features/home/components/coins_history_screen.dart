@@ -17,14 +17,6 @@ class CoinHistoryScreen extends StatefulWidget {
 }
 
 class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Screen khulte hi data fetch karein
-  //   Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
-  //   // Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -41,195 +33,221 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
 
     if (!isLoggedIn) {
       return Scaffold(
+        backgroundColor: Color(0xffFFF5E9),
         body: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 18, 0, 12),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: SizedBox(
-                        height: 140,
-                        // width: double.infinity,
-                        child: Stack(
-                          children: [
-                            ClipPath(
-                              clipper: AppBarClipper(),
-                              child: Container(
-                                height: 140,
-                                color: const Color(0xff3b9499),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SidebarIcon(
-                                        icon: Icons.arrow_back_rounded,
-                                        assetName:
-                                            'assets/images/pop-button.png',
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 18, 0, 12),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 140,
+                          // width: double.infinity,
+                          child: Stack(
+                            children: [
+                              ClipPath(
+                                clipper: AppBarClipper(),
+                                child: Container(
+                                  height: 140,
+                                  color: const Color(0xff3b9499),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SidebarIcon(
+                                          icon: Icons.arrow_back_rounded,
+                                          assetName:
+                                              'assets/images/pop-button.png',
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
                                       ),
-                                    ),
 
-                                    // Title
-                                    Expanded(
-                                      child: Center(
-                                        child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              // Shadow Layer
-                                              Transform.translate(
-                                                offset: const Offset(6, 6),
-                                                child: Text(
-                                                  "Coins History",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize: 50,
-                                                    fontFamily: "Regular",
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.black
-                                                        .withOpacity(0.35),
-                                                    letterSpacing: 1,
+                                      // Title
+                                      Expanded(
+                                        child: Center(
+                                          child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                // Shadow Layer
+                                                Transform.translate(
+                                                  offset: const Offset(6, 6),
+                                                  child: Text(
+                                                    "Coins History",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 50,
+                                                      fontFamily: "Regular",
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Colors.black
+                                                          .withOpacity(0.35),
+                                                      letterSpacing: 1,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
 
-                                              // Pink 3D Layer
-                                              Transform.translate(
-                                                offset: const Offset(3, 3),
-                                                child: Text(
+                                                // Pink 3D Layer
+                                                Transform.translate(
+                                                  offset: const Offset(3, 3),
+                                                  child: Text(
+                                                    "Coins History",
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      fontSize: 50,
+                                                      fontFamily: "Regular",
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Color(0xFFFF4FA3),
+                                                      letterSpacing: 1,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                // Main White Text
+                                                Text(
                                                   "Coins History",
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                     fontSize: 50,
                                                     fontFamily: "Regular",
                                                     fontWeight: FontWeight.w900,
-                                                    color: Color(0xFFFF4FA3),
+                                                    color: Colors.white,
                                                     letterSpacing: 1,
                                                   ),
                                                 ),
-                                              ),
-
-                                              // Main White Text
-                                              Text(
-                                                "Coins History",
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  fontSize: 50,
-                                                  fontFamily: "Regular",
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.white,
-                                                  letterSpacing: 1,
-                                                ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
 
-                                    const SizedBox(width: 60),
-                                  ],
+                                      const SizedBox(width: 60),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Login section ko replacement
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/coinss.png',
+                      scale: 0.8,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 5),
+                    // Icon(Icons.lock_outline_rounded,
+                    //     size: 80, color: Colors.grey.shade300),
+                    // const SizedBox(height: 20),
+                    // const Text(
+                    //   "Oops! Sign in to see your coins",
+                    //   style: TextStyle(
+                    //       fontSize: 20,
+                    //       fontFamily: "Regular",
+                    //       fontWeight: FontWeight.bold,
+                    //       color: Colors.black54),
+                    // ),
+                    // const SizedBox(height: 10),
+                    SizedBox(
+                      width: 200,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff3b9499),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                        ),
+                        onPressed: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => LoginScreen())),
+                        child: const Text("Login Now",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: "Regular",
+                                color: Colors.white)),
                       ),
                     ),
 
-                    // SidebarIcon(
-                    //   icon: Icons.arrow_back_rounded,
-                    //   assetName: 'assets/images/pop-button.png',
-                    //   onPressed: () {
-                    //     Navigator.pop(context);
-                    //   },
-                    // ),
+                    // ... existing code ...
 
-                    // // _HistoryIconButton(
-                    // //   icon: Icons.arrow_back_rounded,
-                    // //   onTap: () => Navigator.pop(context),
-                    // // ),
-                    // const SizedBox(width: 14),
-                    // Expanded(
-                    //   child: Text(
-                    //     'Drawing History',
-                    //     style: TextStyle(
-                    //       fontSize: 28,
-                    //       fontWeight: FontWeight.w700,
-                    //       color: const Color(0xFF1F2A44),
+                    // SizedBox(
+                    //   width: 200,
+                    //   height: 50,
+                    //   child: ElevatedButton(
+                    //     style: ElevatedButton.styleFrom(
+                    //       // updated background color to match the original image
+                    //       backgroundColor: const Color(
+                    //           0xff3b9499), // exactly as in image_6.png
+                    //       elevation:
+                    //           5, // optional: adds a light shadow like the original
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(30)),
+                    //     ),
+                    //     onPressed: () => Navigator.push(context,
+                    //         MaterialPageRoute(builder: (_) => LoginScreen())),
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         Text(
+                    //           "Login Now!", // Text updated to include '!' like image_7.png
+                    //           style: TextStyle(
+                    //               fontSize: 18,
+                    //               fontFamily:
+                    //                   "Regular", // ensures "Regular" font is used
+                    //               color: Colors.white),
+                    //         ),
+                    //         // adding the coins icon to complete the look
+                    //         SizedBox(width: 8), // spacing between text and icon
+                    //         // for icons, use an existing pack or a custom one
+                    //         Icon(Icons.monetization_on,
+                    //             color: Colors
+                    //                 .amber[600]), // gold colored coin icon
+                    //       ],
                     //     ),
                     //   ),
                     // ),
-                  ],
-                ),
-              ),
 
-              // Login section ko replacement
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.lock_outline_rounded,
-                      size: 80, color: Colors.grey.shade300),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Oops! Sign in to see your coins",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: "Regular",
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black54),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff3b9499),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                      ),
-                      onPressed: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => LoginScreen())),
-                      child: const Text("Login Now",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: "Regular",
-                              color: Colors.white)),
+                    // ... rest of your code ...
+
+                    const SizedBox(height: 10),
+                    Image.asset(
+                      height: 100,
+                      'assets/images/coin.webp',
+                      scale: 0.8,
+                      fit: BoxFit.contain,
                     ),
-                  ),
-                ],
-              )
 
-              // Center(
-              //   child: Text(
-              //     "Login to view coins history",
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(
-              //         fontFamily: "Regular",
-              //         fontWeight: FontWeight.w600,
-              //         fontSize: 20),
-              //   ),
-              // ),
-              // SizedBox(height: 20),
-              // ElevatedButton(
-              //   onPressed: () => Navigator.push(
-              //       context, MaterialPageRoute(builder: (_) => LoginScreen())),
-              //   child: Text(
-              //     "Login",
-              //     style: TextStyle(
-              //         fontFamily: "Regular",
-              //         fontWeight: FontWeight.w600,
-              //         fontSize: 16),
-              //   ),
-              // ),
-            ],
+                    // const Text("Get 50 coins when you log in! ",
+                    //     style: TextStyle(
+                    //         fontWeight: FontWeight.bold,
+                    //         fontSize: 16,
+                    //         fontFamily: "Regular",
+                    //         color: Colors.black54)),
+                    // Text('🪙🪙🪙🪙',
+                    //     style: const TextStyle(
+                    //         fontFamily: "Regular",
+                    //         fontWeight: FontWeight.bold,
+                    //         fontSize: 22,
+                    //         color: Colors.white)),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       );
@@ -388,7 +406,8 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                       Consumer<HomeViewModel>(
                         builder: (context, hm, _) => Container(
                           margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                               colors: [Color(0xFFFFD700), Color(0xFFFF9100)],
@@ -416,7 +435,8 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                       ),
                       Expanded(
                         child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
                           itemCount: historyList.length,
                           itemBuilder: (context, index) {
                             final item = historyList[index];
