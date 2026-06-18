@@ -525,7 +525,7 @@ class KidsSettingsDialog extends StatelessWidget {
                                 ),
                               );
                             },
-                            child: const GameMenuActionButton(label: "LogOut"),
+                            child: const GameMenuActionButton(label: "Log Out"),
                           ),
                         ],
                       );

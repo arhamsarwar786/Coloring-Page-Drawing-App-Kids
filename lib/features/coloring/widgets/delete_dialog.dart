@@ -485,7 +485,7 @@ class LogoutDialog extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        DialogHeaderBanner(text: "LOGOUT?".toUpperCase()),
+                        DialogHeaderBanner(text: "LOG OUT?".toUpperCase()),
                         // const Text(
                         //   "LOGOUT?",
                         //   textAlign: TextAlign.center,
@@ -498,7 +498,7 @@ class LogoutDialog extends StatelessWidget {
                         // ),
                         SizedBox(height: 10),
                         const Text(
-                          "Do you really want to logout?",
+                          "Do you really want to log out?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "Regular",
@@ -529,7 +529,7 @@ class LogoutDialog extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red,
                               ),
-                              child: const Text("Logout"),
+                              child: const Text("Log out"),
                             ),
                           ],
                         ),
