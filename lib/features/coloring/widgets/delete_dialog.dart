@@ -1,182 +1,5 @@
-// import 'package:flutter/material.dart';
-// import 'package:play_craft_kids/core/constants/app_strings.dart';
-// import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
-// import 'package:play_craft_kids/features/settings/viewmodel/settings_viewmodel.dart';
-// import 'package:play_craft_kids/shared/components/sticker_icon_button.dart';
-// import 'package:provider/provider.dart';
-
-// class DeleteDialog extends StatelessWidget {
-//   const DeleteDialog({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: () =>
-//           Navigator.pop(context), // Background tap karne par dialog close hoga
-//       child: Material(
-//         borderRadius: BorderRadius.circular(36),
-//         color: Colors.transparent,
-//         child: GestureDetector(
-//           onTap: () {}, // Dialog ke andar tap karne par dialog band nahi hoga
-//           child: Stack(
-//             clipBehavior: Clip.none,
-//             children: [
-//               // Main Clay Styled Box Structure Container
-//               Container(
-//                 width: 290,
-//                 height: 290,
-//                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
-//                 decoration: BoxDecoration(
-//                   color:
-//                       const Color(0xFFC7A885), // Outer darker clay base plate
-//                   borderRadius: BorderRadius.circular(36.0),
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: Colors.black.withOpacity(0.3),
-//                       blurRadius: 12,
-//                       offset: const Offset(0, 8),
-//                     ),
-//                   ],
-//                 ),
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     color: const Color(
-//                         0xFFF1E4CE), // Inner main smooth clay body surface
-//                     borderRadius: BorderRadius.circular(26.0),
-//                   ),
-//                   child: Consumer<SettingsViewModel>(
-//                     builder: (_, viewModel, __) {
-//                       return Column(
-//                         children: [
-//                           const SizedBox(height: 16),
-//                           // Heading Banner Header
-//                           DialogHeaderBanner(
-//                               text: AppStrings.settingsTitle.toUpperCase()),
-//                           const SizedBox(height: 28),
-
-//                           // // Core Utility Options Configuration Row (Logic + Image Assets Added!)
-//                           // Row(
-//                           //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                           //   children: [
-//                           //     // Music Icon Tile Button
-//                           //     CustomVolumeDialIcon(
-//                           //       assetName: viewModel.musicEnabled
-//                           //           ? 'assets/images/music.png'
-//                           //           : 'assets/images/music-off.png',
-//                           //       onTap: viewModel.toggleMusic,
-//                           //     ),
-
-//                           //     // Sound Effects Icon Tile Button
-//                           //     // CustomVolumeDialIcon(
-//                           //     //   assetName: viewModel.soundEnabled
-//                           //     //       ? 'assets/images/sound.png'
-//                           //     //       : 'assets/images/sound-off.png',
-//                           //     //   onTap: viewModel.toggleSound,
-//                           //     // ),
-//                           //   ],
-//                           // ),
-
-//                           const Spacer(),
-
-//                           // Embedded Action Button Action Layer (Privacy Policy Logic Triggered)
-//                           // GestureDetector(
-//                           //   onTap: tapActionCallback(context, () {
-//                           //     return Navigator.pushNamed(
-//                           //       context,
-//                           //       AppRoutes.privacy,
-//                           //     );
-//                           //   }),
-//                           //   child: const GameMenuActionButton(
-//                           //       label: "PRIVACY POLICY"),
-//                           // ),
-//                           const SizedBox(height: 18),
-//                           // const SizedBox(height: 10),
-
-//                           // GestureDetector(
-//                           //   onTap: () async {
-//                           //     final shouldLogout = await showDialog<bool>(
-//                           //       context: context,
-//                           //       builder: (context) => AlertDialog(
-//                           //         title: const Text('Logout'),
-//                           //         content: const Text(
-//                           //           'Are you sure you want to logout?',
-//                           //         ),
-//                           //         actions: [
-//                           //           TextButton(
-//                           //             onPressed: () =>
-//                           //                 Navigator.pop(context, false),
-//                           //             child: const Text('Cancel'),
-//                           //           ),
-//                           //           TextButton(
-//                           //             onPressed: () =>
-//                           //                 Navigator.pop(context, true),
-//                           //             child: const Text('Logout'),
-//                           //           ),
-//                           //         ],
-//                           //       ),
-//                           //     );
-
-//                           //     if (shouldLogout == true) {
-//                           //       await Supabase.instance.client.auth.signOut();
-
-//                           //       Navigator.push(
-//                           //           context,
-//                           //           MaterialPageRoute(
-//                           //               builder: (_) => const LoginScreen()));
-//                           //       // pushNamedAndRemoveUntil(
-//                           //       //   context,
-//                           //       //   AppRoutes.login,
-//                           //       //   (route) => false,
-//                           //       // );
-//                           //     }
-//                           //   },
-//                           //   // onTap: () async {
-//                           //   //   await Supabase.instance.client.auth.signOut();
-
-//                           //   //   Navigator.pushNamedAndRemoveUntil(
-//                           //   //     context,
-//                           //   //     AppRoutes.login,
-//                           //   //     (route) => false,
-//                           //   //   );
-//                           //   // },
-//                           //   // child: const GameMenuActionButton(
-//                           //   //   label: "LOGOUT",
-//                           //   // ),
-//                           // ),
-//                         ],
-//                       );
-//                     },
-//                   ),
-//                 ),
-//               ),
-
-//               // Circular External Close Frame Controller (Top Right Cross Button Logic)
-//               Positioned(
-//                 top: -10,
-//                 right: -10,
-//                 child: StickerIconButton(
-//                   icon: Icons.arrow_back_rounded,
-//                   assetName: 'assets/images/close.png',
-//                   size: 48,
-//                   backgroundColor: Colors.white,
-//                   iconColor: const Color(0xFF17A7F2),
-//                   onPressed: () => Navigator.pop(context),
-//                 ),
-//                 // GestureDetector(
-//                 //   onTap: () => Navigator.pop(
-//                 //       context), // Click karne par pop out/close hoga
-//                 //   child: const DialogDismissButton(),
-//                 // ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
 import 'package:play_craft_kids/shared/components/sticker_icon_button.dart';
 
 class DeleteDialog extends StatelessWidget {
@@ -203,7 +26,7 @@ class DeleteDialog extends StatelessWidget {
                   height: 220,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFC7A885),
+                    color: const Color(0xff6EC6D0),
                     borderRadius: BorderRadius.circular(36.0),
                   ),
                   child: Container(
@@ -214,15 +37,30 @@ class DeleteDialog extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        DialogHeaderBanner(text: "DELETE ?".toUpperCase()),
+
+                        SizedBox(height: 10),
                         const Text(
-                          "DELETE ?",
+                          "Do you really want to Delete ?",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 24,
                             fontFamily: "Regular",
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF7B3FE4),
+                            fontSize: 16,
+                            color: Colors.black,
                           ),
                         ),
+
+                        // const Text(
+                        //   "DELETE ?",
+                        //   style: TextStyle(
+                        //     fontSize: 24,
+                        //     fontFamily: "Regular",
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Color(0xFF7B3FE4),
+                        //   ),
+                        // ),
+
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -231,7 +69,8 @@ class DeleteDialog extends StatelessWidget {
                             ElevatedButton(
                               onPressed: () => Navigator.pop(context),
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.redAccent),
+                                backgroundColor: Color(0xff3b9499),
+                              ),
                               child: const Text(
                                 "NO",
                               ),
@@ -244,7 +83,7 @@ class DeleteDialog extends StatelessWidget {
                                 Navigator.pop(context); // Dialog close
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green),
+                                  backgroundColor: Colors.red),
                               child: const Text("YES"),
                             ),
                           ],
@@ -296,7 +135,7 @@ class UndoDialog extends StatelessWidget {
                   height: 220,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFC7A885),
+                    color: const Color(0xff6EC6D0),
                     borderRadius: BorderRadius.circular(36.0),
                   ),
                   child: Container(
@@ -307,14 +146,28 @@ class UndoDialog extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        DialogHeaderBanner(text: "UNDO ?".toUpperCase()),
+
+                        SizedBox(height: 10),
                         const Text(
-                          "UNDO?", // Yahan Undo likha hai
+                          "Do you really want to Undo?",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 24,
+                            fontFamily: "Regular",
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF7B3FE4),
+                            fontSize: 16,
+                            color: Colors.black,
                           ),
                         ),
+
+                        // const Text(
+                        //   "UNDO?", // Yahan Undo likha hai
+                        //   style: TextStyle(
+                        //     fontSize: 24,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Color(0xFF7B3FE4),
+                        //   ),
+                        // ),
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -322,6 +175,9 @@ class UndoDialog extends StatelessWidget {
                             ElevatedButton(
                               onPressed: () => Navigator.pop(context),
                               child: const Text("NO"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff3b9499),
+                              ),
                             ),
                             ElevatedButton(
                               onPressed: () {
@@ -329,7 +185,7 @@ class UndoDialog extends StatelessWidget {
                                 Navigator.pop(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green),
+                                  backgroundColor: Colors.red),
                               child: const Text("YES"),
                             ),
                           ],
@@ -382,7 +238,7 @@ class BackNavigationDialog extends StatelessWidget {
                   height: 220,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFC7A885),
+                    color: const Color(0xff6EC6D0),
                     borderRadius: BorderRadius.circular(36.0),
                   ),
                   child: Container(
@@ -393,15 +249,28 @@ class BackNavigationDialog extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        DialogHeaderBanner(text: "GO BACK?".toUpperCase()),
+                        SizedBox(height: 10),
                         const Text(
-                          "GO BACK?",
+                          "Do you really want to go back?",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 24,
                             fontFamily: "Regular",
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF7B3FE4),
+                            fontSize: 16,
+                            color: Colors.black,
                           ),
                         ),
+
+                        // const Text(
+                        //   "GO BACK?",
+                        //   style: TextStyle(
+                        //     fontSize: 24,
+                        //     fontFamily: "Regular",
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Color(0xFF7B3FE4),
+                        //   ),
+                        // ),
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -410,6 +279,9 @@ class BackNavigationDialog extends StatelessWidget {
                             ElevatedButton(
                               onPressed: () => Navigator.pop(context),
                               child: const Text("NO"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff3b9499),
+                              ),
                             ),
                             // YES Button
                             ElevatedButton(
@@ -418,7 +290,7 @@ class BackNavigationDialog extends StatelessWidget {
                                 Navigator.pop(screenContext); // Screen back
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green),
+                                  backgroundColor: Colors.red),
                               child: const Text("YES"),
                             ),
                           ],
@@ -448,68 +320,242 @@ class BackNavigationDialog extends StatelessWidget {
     );
   }
 }
-// class BackNavigationDialog extends StatelessWidget {
-//   final BuildContext screenContext; // Screen ka context jahan back jana hai
 
-//   const BackNavigationDialog({super.key, required this.screenContext});
+class DeleteAccountDialog extends StatelessWidget {
+  final BuildContext screenContext;
+  final Future<void> Function() onDelete;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Dialog(
-//       backgroundColor: Colors.transparent,
-//       child: Container(
-//         width: 300,
-//         height: 200,
-//         padding: const EdgeInsets.all(20),
-//         decoration: BoxDecoration(
-//           color: const Color(0xFFC7A885), // Theme color
-//           borderRadius: BorderRadius.circular(36.0),
-//         ),
-//         child: Container(
-//           decoration: BoxDecoration(
-//             color: const Color(0xFFF1E4CE), // Inner box color
-//             borderRadius: BorderRadius.circular(26.0),
-//           ),
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               const Text(
-//                 "GO BACK?",
-//                 style: TextStyle(
-//                   fontSize: 22,
-//                   fontFamily: "Regular",
-//                   fontWeight: FontWeight.bold,
-//                   color: Color(0xFF7B3FE4),
-//                 ),
-//               ),
-//               const SizedBox(height: 20),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   // NO Button
-//                   ElevatedButton(
-//                     onPressed: () =>
-//                         Navigator.pop(context), // Sirf dialog band karein
-//                     style: ElevatedButton.styleFrom(
-//                         backgroundColor: Colors.redAccent),
-//                     child: const Text("NO"),
-//                   ),
-//                   // YES Button
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       Navigator.pop(context); // Dialog band karein
-//                       Navigator.pop(screenContext); // Screen se back jayen
-//                     },
-//                     style:
-//                         ElevatedButton.styleFrom(backgroundColor: Colors.green),
-//                     child: const Text("YES"),
-//                   ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  const DeleteAccountDialog({
+    super.key,
+    required this.screenContext,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Material(
+        color: Colors.transparent,
+        child: Center(
+          child: GestureDetector(
+            onTap: () {},
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 300,
+                  height: 240,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff6EC6D0),
+                    borderRadius: BorderRadius.circular(36.0),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1E4CE),
+                      borderRadius: BorderRadius.circular(26.0),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DialogHeaderBanner(text: "DELETE ?".toUpperCase()),
+
+                        SizedBox(height: 10),
+                        const Text(
+                          "Do you really want to Delete Account?",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: "Regular",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+
+                        // const Text(
+                        //   "DELETE ACCOUNT?",
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //     fontSize: 22,
+                        //     fontFamily: "Regular",
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.red,
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 10),
+                        // const Text(
+                        //   "This action cannot be undone. Are you sure to Delete Account ?",
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //     fontSize: 12,
+                        //     fontFamily: "Regular",
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.black,
+                        //   ),
+                        // ),
+                        const SizedBox(height: 25),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // CANCEL
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("Cancel"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff3b9499),
+                              ),
+                            ),
+
+                            // DELETE
+                            ElevatedButton(
+                              onPressed: () async {
+                                Navigator.pop(context); // close dialog
+                                await onDelete(); // delete account
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
+                              child: const Text("Delete"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Close button
+                Positioned(
+                  top: -10,
+                  right: -10,
+                  child: StickerIconButton(
+                    icon: Icons.close,
+                    assetName: 'assets/images/close.png',
+                    size: 48,
+                    backgroundColor: Colors.white,
+                    iconColor: Colors.red,
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LogoutDialog extends StatelessWidget {
+  final BuildContext screenContext;
+  final Future<void> Function() onLogout;
+
+  const LogoutDialog({
+    super.key,
+    required this.screenContext,
+    required this.onLogout,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Material(
+        color: Colors.transparent,
+        child: Center(
+          child: GestureDetector(
+            onTap: () {},
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 300,
+                  height: 220,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff6EC6D0),
+                    borderRadius: BorderRadius.circular(36.0),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1E4CE),
+                      borderRadius: BorderRadius.circular(26.0),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DialogHeaderBanner(text: "LOGOUT?".toUpperCase()),
+                        // const Text(
+                        //   "LOGOUT?",
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //     fontSize: 22,
+                        //     fontFamily: "Regular",
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.red,
+                        //   ),
+                        // ),
+                        SizedBox(height: 10),
+                        const Text(
+                          "Do you really want to logout?",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: "Regular",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 25),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // CANCEL
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("Cancel"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff3b9499),
+                              ),
+                            ),
+
+                            // LOGOUT
+                            ElevatedButton(
+                              onPressed: () async {
+                                Navigator.pop(context); // close dialog
+                                await onLogout(); // perform logout
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
+                              child: const Text("Logout"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Close button
+                Positioned(
+                  top: -10,
+                  right: -10,
+                  child: StickerIconButton(
+                    icon: Icons.close,
+                    assetName: 'assets/images/close.png',
+                    size: 48,
+                    backgroundColor: Colors.white,
+                    iconColor: Colors.red,
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
+import 'package:play_craft_kids/features/coloring/widgets/delete_dialog.dart';
 import 'package:play_craft_kids/features/settings/viewmodel/settings_viewmodel.dart';
 import 'package:play_craft_kids/shared/components/sticker_icon_button.dart';
 import 'package:provider/provider.dart';
@@ -382,12 +383,12 @@ class KidsSettingsDialog extends StatelessWidget {
             children: [
               // Main Clay Styled Box Structure Container
               Container(
-                width: 290,
-                height: 290,
+                width: 320,
+                height: 350,
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
                 decoration: BoxDecoration(
                   color:
-                      const Color(0xFFC7A885), // Outer darker clay base plate
+                      const Color(0xff6EC6D0), // Outer darker clay base plate
                   borderRadius: BorderRadius.circular(36.0),
                   boxShadow: [
                     BoxShadow(
@@ -432,9 +433,55 @@ class KidsSettingsDialog extends StatelessWidget {
                                     : 'assets/images/sound-off.png',
                                 onTap: viewModel.toggleSound,
                               ),
+                              CustomVolumeDialIcon(
+                                assetName: "assets/images/deletes.png",
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (_) => DeleteAccountDialog(
+                                      screenContext: context,
+                                      onDelete: () async {
+                                        final user = Supabase
+                                            .instance.client.auth.currentUser;
+
+                                        if (user != null) {
+                                          await Supabase
+                                              .instance.client.functions
+                                              .invoke(
+                                            'delete_user',
+                                            body: {'user_id': user.id},
+                                          );
+
+                                          await Supabase.instance.client.auth
+                                              .signOut();
+
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    const LoginScreen()),
+                                            (route) => false,
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  );
+                                },
+                              )
+
+                              // CustomVolumeDialIcon(
+                              //   assetName: "assets/images/deletes.png",
+                              //   onTap: () {},
+                              //   // assetName: viewModel.soundEnabled
+                              //   //     ? 'assets/images/sound.png'
+                              //   //     : 'assets/images/sound-off.png',
+                              //   // onTap: viewModel.toggleSound,
+                              // ),
                             ],
                           ),
-                          const Spacer(),
+                          // const Spacer(),
+                          const SizedBox(height: 10),
 
                           // Embedded Action Button Action Layer (Privacy Policy Logic Triggered)
                           GestureDetector(
@@ -447,60 +494,39 @@ class KidsSettingsDialog extends StatelessWidget {
                             child: const GameMenuActionButton(
                                 label: "PRIVACY POLICY"),
                           ),
-                          const SizedBox(height: 18),
-                          // const SizedBox(height: 10),
 
-                          // GestureDetector(
-                          //   onTap: () async {
-                          //     final shouldLogout = await showDialog<bool>(
-                          //       context: context,
-                          //       builder: (context) => AlertDialog(
-                          //         title: const Text('Logout'),
-                          //         content: const Text(
-                          //           'Are you sure you want to logout?',
-                          //         ),
-                          //         actions: [
-                          //           TextButton(
-                          //             onPressed: () =>
-                          //                 Navigator.pop(context, false),
-                          //             child: const Text('Cancel'),
-                          //           ),
-                          //           TextButton(
-                          //             onPressed: () =>
-                          //                 Navigator.pop(context, true),
-                          //             child: const Text('Logout'),
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     );
+                          const SizedBox(height: 10),
 
-                          //     if (shouldLogout == true) {
-                          //       await Supabase.instance.client.auth.signOut();
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (_) => LogoutDialog(
+                                  screenContext: context,
+                                  onLogout: () async {
+                                    try {
+                                      await Supabase.instance.client.auth
+                                          .signOut();
 
-                          //       Navigator.push(
-                          //           context,
-                          //           MaterialPageRoute(
-                          //               builder: (_) => const LoginScreen()));
-                          //       // pushNamedAndRemoveUntil(
-                          //       //   context,
-                          //       //   AppRoutes.login,
-                          //       //   (route) => false,
-                          //       // );
-                          //     }
-                          //   },
-                          //   // onTap: () async {
-                          //   //   await Supabase.instance.client.auth.signOut();
+                                      if (!context.mounted) return;
 
-                          //   //   Navigator.pushNamedAndRemoveUntil(
-                          //   //     context,
-                          //   //     AppRoutes.login,
-                          //   //     (route) => false,
-                          //   //   );
-                          //   // },
-                          //   // child: const GameMenuActionButton(
-                          //   //   label: "LOGOUT",
-                          //   // ),
-                          // ),
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const LoginScreen(),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                            child: const GameMenuActionButton(label: "LogOut"),
+                          ),
                         ],
                       );
                     },
@@ -544,9 +570,9 @@ class DialogHeaderBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFDCC19D),
+        color: const Color(0xff6EC6D0),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFC1A27E), width: 4),
+        border: Border.all(color: const Color(0xff3b9499), width: 4),
       ),
       child: Text(
         text,
@@ -554,7 +580,8 @@ class DialogHeaderBanner extends StatelessWidget {
           fontSize: 24,
           fontFamily: "Regular",
           fontWeight: FontWeight.w900,
-          color: const Color(0xFF8B6747),
+          color: Colors.white,
+          // color: const Color(0xFF8B6747),
           letterSpacing: 1.0,
         ),
       ),
@@ -584,7 +611,7 @@ class CustomVolumeDialIcon extends StatelessWidget {
         height: 75,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
-          color: Color(0xFFBCA68D), // Outer base layer
+          color: Color(0xff3b9499), // Outer base layer
         ),
         child: Container(
           margin: const EdgeInsets.all(4),
@@ -618,14 +645,14 @@ class GameMenuActionButton extends StatelessWidget {
       height: 52,
       width: 190,
       decoration: BoxDecoration(
-        color: const Color(0xFF0F6338), // Outer deep base rim ring
+        color: const Color(0xff3b9499), // Outer deep base rim ring
         borderRadius: BorderRadius.circular(26),
       ),
       child: Container(
         margin: const EdgeInsets.only(bottom: 5.0),
         decoration: BoxDecoration(
           color: const Color(
-              0xFF1B8A4C), // High vibrant primary active surface green
+              0xff3b9499), // High vibrant primary active surface green
           borderRadius: BorderRadius.circular(26),
         ),
         child: Center(
