@@ -166,7 +166,13 @@ class _LevelScreenState extends State<LevelScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppGradientBackground(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/color.png"),
+            fit: BoxFit.fill,
+          ),
+        ),
         child: SafeArea(
           child: Consumer<HomeViewModel>(
             builder: (context, viewModel, _) {
@@ -182,7 +188,7 @@ class _LevelScreenState extends State<LevelScreen> {
               return Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 18, 0, 12),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
                     child: Row(
                       children: <Widget>[
                         Expanded(
@@ -295,7 +301,8 @@ class _LevelScreenState extends State<LevelScreen> {
                               physics: const AlwaysScrollableScrollPhysics(),
                               slivers: <Widget>[
                                 SliverPadding(
-                                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(12, 8, 12, 24),
                                   sliver: SliverLayoutBuilder(
                                     builder: (context, constraints) {
                                       final columns = _columnCountForWidth(
@@ -303,8 +310,11 @@ class _LevelScreenState extends State<LevelScreen> {
                                       return SliverGrid(
                                         delegate: SliverChildBuilderDelegate(
                                           (context, index) {
-                                            final level = completedLevels[index];
-                                            final levelNumber = viewModel.levelNumberFor(level.id) ?? (index + 1);
+                                            final level =
+                                                completedLevels[index];
+                                            final levelNumber = viewModel
+                                                    .levelNumberFor(level.id) ??
+                                                (index + 1);
                                             return LevelCard(
                                               key: ValueKey(level.id),
                                               level: level,
@@ -313,25 +323,31 @@ class _LevelScreenState extends State<LevelScreen> {
                                               isLocked: false,
                                               isBusy: _isOpeningLevel,
                                               onTap: () {
-                                                debugPrint("History Level: ${level.title}");
+                                                debugPrint(
+                                                    "History Level: ${level.title}");
                                                 final coloringProvider =
-                                                    Provider.of<ColoringProvider>(
+                                                    Provider.of<
+                                                            ColoringProvider>(
                                                         context,
                                                         listen: false);
-                                                final activity = level.activityItem ??
-                                                    ActivityItem(
-                                                      id: level.id,
-                                                      label: level.title,
-                                                      display: level.title,
-                                                      color: Colors.red,
-                                                      imagePath: level.imagePath ??
-                                                          'assets/images/un_border_apple.webp',
-                                                    );
-                                                coloringProvider.setItem(activity, 1,
+                                                final activity =
+                                                    level.activityItem ??
+                                                        ActivityItem(
+                                                          id: level.id,
+                                                          label: level.title,
+                                                          display: level.title,
+                                                          color: Colors.red,
+                                                          imagePath: level
+                                                                  .imagePath ??
+                                                              'assets/images/un_border_apple.webp',
+                                                        );
+                                                coloringProvider.setItem(
+                                                    activity, 1,
                                                     level: level);
 
                                                 handleTapAction(context, () {});
-                                                _openLevel(context, viewModel, level);
+                                                _openLevel(
+                                                    context, viewModel, level);
                                               },
                                             );
                                           },
@@ -342,7 +358,8 @@ class _LevelScreenState extends State<LevelScreen> {
                                           crossAxisCount: columns,
                                           mainAxisSpacing: 12,
                                           crossAxisSpacing: 12,
-                                          childAspectRatio: _aspectRatioForWidth(
+                                          childAspectRatio:
+                                              _aspectRatioForWidth(
                                             constraints.crossAxisExtent,
                                             columns,
                                           ),
@@ -370,62 +387,68 @@ class _EmptyHistoryState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.sizeOf(context);
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+      // padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
       children: <Widget>[
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.94),
-            borderRadius: BorderRadius.circular(28),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: const Color(0x1A16325C),
-                blurRadius: 24,
-                offset: const Offset(0, 14),
-              ),
-            ],
-          ),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: 88,
-                height: 88,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFF1D8),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.palette_outlined,
-                  size: 40,
-                  color: Color(0xFFF28B1D),
-                ),
-              ),
-              const SizedBox(height: 18),
-              Text(
-                'No levels colored yet',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontFamily: "Regular",
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF1F2A44),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Start coloring and your completed levels will appear here automatically.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: "Regular",
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF65738A),
-                ),
-              ),
-            ],
-          ),
-        ),
+        Image.asset(
+          "assets/images/colors.png",
+          width: size.width * .5,
+          height: size.height * .5,
+        )
+        // Container(
+        //   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+        //   decoration: BoxDecoration(
+        //     color: Colors.white.withValues(alpha: 0.94),
+        //     borderRadius: BorderRadius.circular(28),
+        //     boxShadow: <BoxShadow>[
+        //       BoxShadow(
+        //         color: const Color(0x1A16325C),
+        //         blurRadius: 24,
+        //         offset: const Offset(0, 14),
+        //       ),
+        //     ],
+        //   ),
+        //   child: Column(
+        //     children: <Widget>[
+        //       Container(
+        //         width: 88,
+        //         height: 88,
+        //         decoration: const BoxDecoration(
+        //           color: Color(0xFFFFF1D8),
+        //           shape: BoxShape.circle,
+        //         ),
+        //         child: const Icon(
+        //           Icons.palette_outlined,
+        //           size: 40,
+        //           color: Color(0xFFF28B1D),
+        //         ),
+        //       ),
+        //       const SizedBox(height: 18),
+        //       Text(
+        //         'No levels colored yet',
+        //         style: TextStyle(
+        //           fontSize: 24,
+        //           fontFamily: "Regular",
+        //           fontWeight: FontWeight.w700,
+        //           color: const Color(0xFF1F2A44),
+        //         ),
+        //       ),
+        //       const SizedBox(height: 8),
+        //       Text(
+        //         'Start coloring and your completed levels will appear here automatically.',
+        //         textAlign: TextAlign.center,
+        //         style: TextStyle(
+        //           fontSize: 16,
+        //           fontFamily: "Regular",
+        //           fontWeight: FontWeight.w500,
+        //           color: const Color(0xFF65738A),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }

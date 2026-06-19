@@ -9,6 +9,7 @@ import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
 import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
 import 'package:play_craft_kids/features/levels/model/level_model.dart';
+import 'package:play_craft_kids/shared/components/sticker_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -809,17 +810,18 @@ class _PreviewImageDialogState extends State<PreviewImageDialog>
         alignment: Alignment.center,
         children: [
           Container(
-            width: 300,
-            height: 340,
+            width: 260,
+            height: 300,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF81C784), Color(0xFF4CAF50)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: Color(0xff6EC6D0),
+              // gradient: const LinearGradient(
+              //   colors: [Color(0xFF81C784), Color(0xFF4CAF50)],
+              //   begin: Alignment.topLeft,
+              //   end: Alignment.bottomRight,
+              // ),
               borderRadius: BorderRadius.circular(32),
-              border: Border.all(color: Colors.white, width: 5),
+              border: Border.all(color: Color(0xff3b9499), width: 5),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -865,7 +867,7 @@ class _PreviewImageDialogState extends State<PreviewImageDialog>
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                            color: const Color(0xFFFFEB3B), width: 4),
+                            color: const Color(0xff3b9499), width: 4),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.12),
@@ -885,33 +887,47 @@ class _PreviewImageDialogState extends State<PreviewImageDialog>
               ],
             ),
           ),
+
           Positioned(
-            top: 2,
-            right: 2,
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE57373),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
-                      blurRadius: 5,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.close_rounded,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
+            top: -3,
+            right: 3,
+            child: StickerIconButton(
+              icon: Icons.close,
+              assetName: 'assets/images/close.png',
+              size: 48,
+              backgroundColor: Colors.white,
+              iconColor: Colors.red,
+              onPressed: () => Navigator.pop(context),
             ),
           ),
+
+          // Positioned(
+          //   top: 2,
+          //   right: 2,
+          //   child: GestureDetector(
+          //     onTap: () => Navigator.pop(context),
+          //     child: Container(
+          //       padding: const EdgeInsets.all(6),
+          //       decoration: BoxDecoration(
+          //         color: const Color(0xFFE57373),
+          //         shape: BoxShape.circle,
+          //         border: Border.all(color: Colors.white, width: 3),
+          //         boxShadow: [
+          //           BoxShadow(
+          //             color: Colors.black.withOpacity(0.15),
+          //             blurRadius: 5,
+          //             offset: const Offset(0, 2),
+          //           ),
+          //         ],
+          //       ),
+          //       child: const Icon(
+          //         Icons.close_rounded,
+          //         color: Colors.white,
+          //         size: 20,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

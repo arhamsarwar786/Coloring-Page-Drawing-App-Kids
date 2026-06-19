@@ -31,7 +31,7 @@ class PrivacyScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 18, 0, 12),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
                 child: Row(
                   children: <Widget>[
                     Expanded(
