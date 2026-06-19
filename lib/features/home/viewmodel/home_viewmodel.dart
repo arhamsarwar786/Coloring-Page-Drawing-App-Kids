@@ -57,7 +57,8 @@ class HomeViewModel extends BaseViewModel {
   int _databaseCoins = 0;
   int get databaseCoins => _databaseCoins;
   bool get isLoading => _isLoading;
-
+// ViewModel mein ye line add karein
+  int get userCoins => _databaseCoins;
   void setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
@@ -150,25 +151,6 @@ class HomeViewModel extends BaseViewModel {
     setLoading(false);
   }
 
-// 3. Ye function add karein jo Supabase se sum uthaye
-  // Future<void> fetchDatabaseCoins() async {
-  //   final userId = Supabase.instance.client.auth.currentUser?.id;
-  //   if (userId == null) return;
-
-  //   final response = await Supabase.instance.client
-  //       .from('user_coins')
-  //       .select('coins')
-  //       .eq('user_id', userId);
-
-  //   final List<dynamic> data = response as List<dynamic>;
-  //   int total = 0;
-  //   for (var item in data) {
-  //     total += (item['coins'] as int);
-  //   }
-  //   _databaseCoins = total;
-  //   notifyListeners();
-  // }
-
   Future<void> fetchDatabaseCoins() async {
     try {
       final userId = Supabase.instance.client.auth.currentUser?.id;
@@ -192,34 +174,6 @@ class HomeViewModel extends BaseViewModel {
       print("fetchDatabaseCoins error: $e");
     }
   }
-
-  // Future<void> fetchDatabaseCoins() async {
-  //   final userId = Supabase.instance.client.auth.currentUser?.id;
-  //   if (userId == null) return;
-
-  //   try {
-  //     // 1. Supabase se response lein
-  //     final List<dynamic> data = await Supabase.instance.client
-  //         .from('user_coins')
-  //         .select('coins')
-  //         .eq('user_id', userId);
-
-  //     // 2. Total calculate karein (Safety ke sath)
-  //     int total = 0;
-  //     for (var item in data) {
-  //       // 'coins' ko int mein convert karein, agar null ho toh 0 lein
-  //       total += (item['coins'] as int? ?? 0);
-  //     }
-
-  //     _databaseCoins = total;
-  //     print("Database total coins updated: $_databaseCoins");
-
-  //     // 3. UI refresh karein
-  //     notifyListeners();
-  //   } catch (e) {
-  //     print("Error fetching coins: $e");
-  //   }
-  // }
 
   void selectCategory(String categoryId) {
     if (_selectedCategoryId == categoryId) return;
@@ -416,17 +370,16 @@ class HomeViewModel extends BaseViewModel {
         'created_at': DateTime.now().toIso8601String(),
       });
       print("Welcome bonus added to coin_history!");
-      
+
       // Update user_coins as well
       await Supabase.instance.client.from('user_coins').upsert({
         'user_id': userId,
         'coins': 50,
         'updated_at': DateTime.now().toIso8601String(),
       }, onConflict: 'user_id');
-      
+
       _databaseCoins = 50;
       notifyListeners();
-      
     } catch (e) {
       print("Welcome bonus error: $e");
     }
@@ -476,7 +429,8 @@ class HomeViewModel extends BaseViewModel {
 
       notifyListeners();
 
-      print("History fetch: ${historyObjects.length} transactions. Corrected Total: $calculatedTotal");
+      print(
+          "History fetch: ${historyObjects.length} transactions. Corrected Total: $calculatedTotal");
     } catch (e) {
       print("fetchCoinHistory error: $e");
     }
@@ -552,300 +506,3 @@ class HomeViewModel extends BaseViewModel {
     }
   }
 }
-
-
-
-
-//
-
-// Future<void> addCompletionPoints(int points) async {
-  //   _databaseCoins += points; // Local variable update
-  //   await _repository.savePoints(
-  //       _databaseCoins, "Level Completion", "level"); // DB save
-  //   notifyListeners(); // UI Refresh
-  // }
-
-  /// Adds points when a level is fully completed.
-  // Future<void> addCompletionPoints(int points) async {
-  //   _totalPoints += points;
-  //   await _repository.savePoints(_totalPoints);
-  //   notifyListeners();
-  // }
-
-  // Future<void> addCompletionPoints(int points) async {
-  //   _totalPoints += points;
-  //   // Yahan 3 arguments pass karein
-  //   await _repository.savePoints(_totalPoints, "Level Completion", "level");
-  //   notifyListeners();
-  // }
-
-  // Future<void> fetchCoinHistory() async {
-  //   final userId = Supabase.instance.client.auth.currentUser?.id;
-  //   if (userId == null) return;
-
-  //   final response = await Supabase.instance.client
-  //       .from('coin_history')
-  //       .select()
-  //       .eq('user_id', userId)
-  //       .order('created_at', ascending: false);
-
-  //   // Yahan conversion zaroori hai
-  //   final List<dynamic> data = response as List<dynamic>;
-
-  //   // Map se CoinHistory object banayein
-  //   final List<CoinHistory> historyObjects = data.map((json) {
-  //     return CoinHistory.fromJson(json as Map<String, dynamic>);
-  //   }).toList();
-
-  //   setHistory(historyObjects);
-  // }
-//   Future<void> checkAndApplyDailyBonus() async {
-//     final String today =
-//         DateTime.now().toIso8601String().split('T')[0]; // Format: 2026-06-12
-
-//     // 1. Pehle database se check karein ke kya aaj bonus mila hai
-//     final lastClaimed = await _repository.getLastClaimedDate();
-
-//     // Agar lastClaimed aaj ki date hai, to kuch mat karein
-//     if (lastClaimed == today) {
-//       print("Aaj bonus mil chuka hai, dubara nahi denge.");
-//       return;
-//     }
-
-//     // 2. Agar nahi mila, to bonus dein
-//     int streak = await _repository.getCurrentStreak();
-//     int bonus = 10;
-
-//     await _repository.savePoints(
-//         _databaseCoins + bonus, "Automatic Daily Bonus", "bonus");
-//     await _repository.saveDailyBonus(today, streak + 1);
-
-//     print("Bonus successfully applied!");
-//   }
-
-//   Future<int> claimDailyBonus() async {
-//   final String today = DateTime.now().toIso8601String().split('T')[0];
-//   final lastClaimed = await _repository.getLastClaimedDate();
-
-//   if (lastClaimed == today) {
-//     return 0; // No bonus if already claimed
-//   }
-
-//   int streak = await _repository.getCurrentStreak();
-//   int bonus = (streak >= 7) ? 50 : 10;
-
-//   // Update total coins
-//   _databaseCoins += bonus;
-
-//   // Save to database (using the CORRECT function name from repository)
-//   await _repository.savePoints(_databaseCoins, "Automatic Daily Bonus", "bonus");
-
-//   // Update streak in database
-//   await _repository.saveDailyBonus(today, streak + 1);
-
-//   return bonus; // Return the amount of bonus given
-// }
-  // Future<void> checkAndApplyDailyBonus() async {
-  //   final String today = _todayDateString();
-  //   final lastClaimed = await _repository.getLastClaimedDate();
-
-  //   if (lastClaimed == null || lastClaimed != today) {
-  //     int streak = await _repository.getCurrentStreak();
-
-  //     // Streak logic fix: Agar last claim kal thi, to streak barhao, warna reset karo
-  //     // (Aapke repository ke logic ke hisaab se)
-  //     int bonus = (streak >= 7) ? 50 : 10;
-
-  //     _databaseCoins += bonus;
-
-  //     // Save points (Ensure karein ke ye function repository mein moujood hai)
-  //     await _repository.savePoints(
-  //         _databaseCoins, "Automatic Daily Bonus", "bonus");
-
-  //     // Streak ko bhi update karein
-  //     await _repository.saveDailyBonus(today, streak + 1);
-
-  //     notifyListeners();
-  //   }
-  // }
-
-// Future<void> checkAndApplyDailyBonus() async {
-//   final String today = _todayDateString(); // Aapka purana helper use kiya
-
-//   // 1. Database se check karein
-//   final lastClaimed = await _repository.getLastClaimedDate();
-
-//   // 2. Agar bonus nahi mila (null hai ya aaj ki date nahi hai)
-//   if (lastClaimed == null || lastClaimed != today) {
-//     int streak = await _repository.getCurrentStreak();
-
-//     // Streak logic update (agar kal bonus nahi liya to streak 1 ho jaye)
-//     // Ye aapke purane logic se sync hai
-//     int bonus = (streak >= 7) ? 50 : 10;
-
-//     // Point update
-//     _databaseCoins += bonus; // Aapne coins ke liye _databaseCoins use kiya hai
-
-//     // Save to DB
-//     await _repository.savePoints(_databaseCoins, "Automatic Daily Bonus", "bonus");
-//     await _repository.saveDailyBonus(today, streak + 1);
-
-//     notifyListeners();
-//   }
-// }
-
-  // Future<void> addWelcomeBonus(String userId) async {
-  //   try {
-  //     await Supabase.instance.client.from('user_coins').insert({
-  //       'user_id': userId,
-  //       'coins': 50,
-  //       'description': 'Welcome Bonus',
-  //       'created_at': DateTime.now().toIso8601String(),
-  //     });
-  //     print("Welcome bonus added!");
-  //   } catch (e) {
-  //     print("Bonus add karne mein error: $e");
-  //   }
-  // }
-
-  // /// Adds 10 points when the child picks the correct colour for a region.
-  // Future<void> addColorMatchPoints() async {
-  //   _totalPoints += _colorMatchPointsValue;
-  //   await _repository.savePoints(_totalPoints);
-  //   notifyListeners();
-  // }
-
-  // /// Adds daily and streak bonus points.
-  // /// Returns the amount of bonus points awarded (0 if already claimed).
-  // Future<int> addDailyBonusPoints() async {
-  //   final today = DateTime.now();
-  //   final todayStr =
-  //       '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
-  //   final lastBonusStr = await _repository.getLastDailyBonusDate();
-
-  //   if (lastBonusStr == todayStr) return 0; // already claimed today
-
-  //   int streak = await _repository.getCurrentStreak();
-
-  //   if (lastBonusStr != null) {
-  //     try {
-  //       final lastBonusDate = DateTime.parse(lastBonusStr);
-  //       final diff = today.difference(lastBonusDate).inDays;
-  //       if (diff == 1) {
-  //         streak += 1;
-  //       } else if (diff > 1) {
-  //         streak = 1; // Streak broken
-  //       }
-  //     } catch (_) {
-  //       streak = 1;
-  //     }
-  //   } else {
-  //     streak = 1;
-  //   }
-
-  //   int pointsToAdd = 0;
-  //   if (streak == 1)
-  //     pointsToAdd += 10;
-  //   else if (streak == 2)
-  //     pointsToAdd += 15;
-  //   else
-  //     pointsToAdd += 20; // Day 3+
-
-  //   if (streak == 7) pointsToAdd += 50; // 7 days streak
-  //   if (streak == 30) pointsToAdd += 200; // 30 days streak
-
-  //   _totalPoints += pointsToAdd;
-  //   await _repository.savePoints(_totalPoints);
-  //   await _repository.saveLastDailyBonusDate(todayStr);
-  //   await _repository.saveCurrentStreak(streak);
-  //   notifyListeners();
-  //   return pointsToAdd;
-  // }
-
-// Future<void> fetchCoinHistory() async {
-  //   final userId = Supabase.instance.client.auth.currentUser?.id;
-  //   if (userId == null) return;
-
-  //   try {
-  //     final response = await Supabase.instance.client
-  //         .from('coin_history')
-  //         .select()
-  //         .eq('user_id', userId)
-  //         .order('created_at', ascending: false);
-
-  //     // Supabase v2 mein response directly list hota hai
-  //     final List<dynamic> data = response as List<dynamic>;
-
-  //     final List<CoinHistory> historyObjects = data.map((json) {
-  //       return CoinHistory.fromJson(json as Map<String, dynamic>);
-  //     }).toList();
-
-  //     setHistory(historyObjects);
-  //     print("History fetch successful: ${historyObjects.length} items");
-  //   } catch (e) {
-  //     print("History fetch error: $e");
-  //   }
-  // }
-
-  // Future<void> fetchCoinHistory() async {
-  //   final userId = Supabase.instance.client.auth.currentUser?.id;
-  //   if (userId == null) return;
-
-  //   final response = await Supabase.instance.client
-  //       .from('coin_history')
-  //       .select()
-  //       .eq('user_id', userId)
-  //       .order('created_at', ascending: false);
-
-  //   // Yahan conversion karein:
-  //   final List<dynamic> data = response as List<dynamic>;
-  //   final historyObjects =
-  //       data.map((item) => CoinHistory.fromJson(item)).toList();
-
-  //   setHistory(historyObjects); // Ab ye List<CoinHistory> hai
-  // }
-
-  // Future<void> fetchCoinHistory() async {
-  //   final userId = Supabase.instance.client.auth.currentUser?.id;
-  //   if (userId == null) return;
-
-  //   final response = await Supabase.instance.client
-  //       .from('coin_history')
-  //       .select()
-  //       .eq('user_id', userId)
-  //       .order('created_at', ascending: false);
-  //   print("Supabase se aya data: $response");
-
-  //   setHistory(response as List<dynamic>);
-  // }
-
-  // ViewModel mein ye list variable hona chahiye
-  // List<CoinHistory> _historyList = [];
-  // List<CoinHistory> get historyList => _historyList;
-
-  // void setHistory(List<CoinHistory> newList) {
-  //   _historyList = newList;
-  //   notifyListeners();
-  // }
-
-  // ViewModel mein ye change karein
-  
-  
-
-
-// List<CoinHistory> _coinHistoryList = [];
-
-  // List<CoinHistory> get coinHistoryList => _coinHistoryList;
-
-  // Jab database se data aaye:
-
-  // void setHistory(List<dynamic> data) {
-  //   _coinHistoryList = data.map((item) => CoinHistory.fromJson(item)).toList();
-
-  //   notifyListeners();
-  // }
-
-  /// Lightweight refresh: reloads level-progress data and notifies the UI
-  /// to redraw lock states. Much cheaper than a full [load()] since it does
-  /// not re-parse content assets.
-  

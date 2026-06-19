@@ -542,3 +542,189 @@ class _ActionTileButton extends StatelessWidget {
     );
   }
 }
+
+// import 'dart:io';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:play_craft_kids/features/rewards/view/reward_store_screen.dart';
+// import 'package:provider/provider.dart';
+// import 'package:share_plus/share_plus.dart';
+// import '../../../app/routes/app_routes.dart';
+// import '../../../shared/utils/interaction_feedback.dart';
+// import '../../../features/skins/viewmodel/skins_viewmodel.dart';
+
+// class RewardScreen extends StatefulWidget {
+//   const RewardScreen({super.key, required this.args});
+//   final RewardRouteArgs args;
+
+//   @override
+//   State<RewardScreen> createState() => _RewardScreenState();
+// }
+
+// class _RewardScreenState extends State<RewardScreen> {
+//   bool _isSharing = false;
+//   RewardRouteArgs get args => widget.args;
+
+//   void _openReplay(BuildContext context) {
+//     Navigator.pushReplacementNamed(context, AppRoutes.drawing,
+//         arguments: DrawingRouteArgs(levelId: args.levelId));
+//   }
+
+//   void _openNext(BuildContext context) {
+//     context.read<SkinsViewModel>().unlockByLevel(args.levelNumber);
+//     final nextLevelId = args.nextLevelId;
+//     if (nextLevelId != null) {
+//       Navigator.pushReplacementNamed(context, AppRoutes.drawing,
+//           arguments: DrawingRouteArgs(levelId: nextLevelId));
+//       return;
+//     }
+//     Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (_) => false);
+//   }
+
+//   Future<void> _shareArtwork() async {
+//     final bytes = args.completedImageBytes;
+//     if (bytes == null || bytes.isEmpty || _isSharing) return;
+//     setState(() => _isSharing = true);
+//     try {
+//       final tempDir = await getTemporaryDirectory();
+//       final file = File('${tempDir.path}/drawing_${args.levelNumber}.png');
+//       await file.writeAsBytes(bytes, flush: true);
+//       await Share.shareXFiles([XFile(file.path)],
+//           text: 'I completed ${args.levelTitle}!');
+//     } finally {
+//       if (mounted) setState(() => _isSharing = false);
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: const Color(0xFFD7EFFB),
+//       body: SafeArea(
+//         child: SingleChildScrollView(
+//           padding: const EdgeInsets.all(20),
+//           child: Column(
+//             children: [
+//               _RewardPostCard(
+//                   args: args, onShare: _shareArtwork, isSharing: _isSharing),
+//               const SizedBox(height: 30),
+//               Wrap(
+//                 alignment: WrapAlignment.center,
+//                 spacing: 18,
+//                 children: [
+//                   _ActionTileButton(
+//                     onTap: () => _openReplay(context),
+//                     child: const Icon(Icons.replay_rounded,
+//                         size: 50, color: Colors.white),
+//                     backgroundColor: const Color(0xFF5AA6FF),
+//                     borderColor: const Color(0xFF2D64C8),
+//                   ),
+//                   _ActionTileButton(
+//                     onTap: () => _openNext(context),
+//                     child: Text(args.nextLevelId != null ? 'NEXT' : 'HOME',
+//                         style: const TextStyle(
+//                             fontSize: 30,
+//                             color: Colors.white,
+//                             fontWeight: FontWeight.bold)),
+//                     backgroundColor: const Color(0xFF7DE952),
+//                     borderColor: const Color(0xFF45A92B),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class _RewardPostCard extends StatelessWidget {
+//   final RewardRouteArgs args;
+//   final VoidCallback onShare;
+//   final bool isSharing;
+
+//   const _RewardPostCard(
+//       {required this.args, required this.onShare, required this.isSharing});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.all(18),
+//       decoration: BoxDecoration(
+//           color: Colors.white,
+//           borderRadius: BorderRadius.circular(20),
+//           border: Border.all(color: Colors.grey.shade300)),
+//       child: Column(
+//         children: [
+//           // Drawing Preview
+//           Container(
+//               height: 250,
+//               color: Colors.grey.shade100,
+//               child: Center(child: Text(args.levelTitle))),
+//           const SizedBox(height: 15),
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const Text('EXCELLENT!',
+//                       style:
+//                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+//                   Text(
+//                       'Level ${args.levelNumber} completed - +${args.coins} coins'),
+//                 ],
+//               ),
+//               IconButton(
+//                   onPressed: onShare, icon: const Icon(Icons.share_rounded)),
+//             ],
+//           ),
+//           const Divider(),
+//           // Reward Store Button
+//           TextButton.icon(
+//             onPressed: () => Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                     builder: (_) =>
+//                         RewardStoreScreen())), // Yahan apni route set karein
+//             icon: const Icon(Icons.shopping_bag_outlined, color: Colors.blue),
+//             label: const Text("Go to Reward Store",
+//                 style:
+//                     TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class _ActionTileButton extends StatelessWidget {
+//   final VoidCallback onTap;
+//   final Widget child;
+//   final Color backgroundColor;
+//   final Color borderColor;
+
+//   const _ActionTileButton(
+//       {required this.onTap,
+//       required this.child,
+//       required this.backgroundColor,
+//       required this.borderColor});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: onTap,
+//       child: Container(
+//         width: 140,
+//         height: 90,
+//         decoration: BoxDecoration(
+//             color: backgroundColor,
+//             borderRadius: BorderRadius.circular(20),
+//             border: Border.all(color: borderColor, width: 3)),
+//         child: Center(child: child),
+//       ),
+//     );
+//   }
+// }

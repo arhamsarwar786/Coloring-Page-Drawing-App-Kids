@@ -152,18 +152,6 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 5),
-                    // Icon(Icons.lock_outline_rounded,
-                    //     size: 80, color: Colors.grey.shade300),
-                    // const SizedBox(height: 20),
-                    // const Text(
-                    //   "Oops! Sign in to see your coins",
-                    //   style: TextStyle(
-                    //       fontSize: 20,
-                    //       fontFamily: "Regular",
-                    //       fontWeight: FontWeight.bold,
-                    //       color: Colors.black54),
-                    // ),
-                    // const SizedBox(height: 10),
                     SizedBox(
                       width: 200,
                       height: 50,
