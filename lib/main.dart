@@ -70,3 +70,30 @@ class MyApp extends StatelessWidget {
 //     );
 //   }
 // }
+
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Ye listener handle karega jab user email link click karke wapis app mein aayega
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      final event = data.event;
+      if (event == AuthChangeEvent.signedIn) {
+        print("User successfully verified and signed in!");
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const AsmrDrawingApp();
+  }
+}

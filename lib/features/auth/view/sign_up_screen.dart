@@ -28,84 +28,11 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
-  // Future<void> signup() async {
-  //   if (!_formKey.currentState!.validate()) return;
-
-  //   setState(() => loading = true);
-
-  //   final res = await supabase.auth.signUp(
-  //     email: emailController.text.trim(),
-  //     password: passwordController.text.trim(),
-  //   );
-
-  //   if (res.user != null) {
-  //     await supabase.from('profiles').insert({
-  //       'id': res.user!.id,
-  //       'name': nameController.text.trim(),
-  //       'email': emailController.text.trim(),
-  //     });
-
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text("Signup Successful")),
-  //     );
-  //   }
-
-  //   setState(() => loading = false);
-  // }
-
-  // Future<void> signup() async {
-  //   if (!_formKey.currentState!.validate()) return;
-
-  //   setState(() => loading = true);
-
-  //   try {
-  //     final res = await supabase.auth.signUp(
-  //       email: emailController.text.trim(),
-  //       password: passwordController.text.trim(),
-  //     );
-
-  //     // 🔥 TOKEN AUR USER CHECK
-  //     if (res.session != null) {
-  //       print("✅ Token mil gaya: ${res.session!.accessToken}");
-  //       print("👤 User ID: ${res.user!.id}");
-  //     }
-
-  //     if (res.user != null) {
-  //       await supabase.from('profiles').insert({
-  //         'id': res.user!.id,
-  //         'name': nameController.text.trim(),
-  //         'email': emailController.text.trim(),
-  //       });
-
-  //       if (mounted) {
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           const SnackBar(content: Text("Signup Successful")),
-  //         );
-
-  //         // 🚀 NEXT SCREEN PAR MOVE KAREIN
-  //         Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(
-  //               builder: (context) =>
-  //                   MainHomeScreen()), // Yahan apni HomeScreen ka naam likhein
-  //         );
-  //       }
-  //     }
-  //   } catch (e) {
-  //     print("❌ Error: $e"); // Agar error aaya toh console mein dikh jayega
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text("Error: ${e.toString()}")),
-  //     );
-  //   }
-
-  //   setState(() => loading = false);
-  // }
-
   Future<void> signup() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => loading = true);
-// await Provider.of<HomeViewModel>(context, listen: false).addWelcomeBonus(res.user!.id);
+
     try {
       final res = await supabase.auth.signUp(
         email: emailController.text.trim(),
@@ -113,18 +40,14 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       if (res.user != null) {
-        // Profile insert
+        // 1. Profile insert
         await supabase.from('profiles').insert({
           'id': res.user!.id,
           'name': nameController.text.trim(),
           'email': emailController.text.trim(),
         });
 
-        // await Provider.of<HomeViewModel>(context, listen: false)
-        //     .addWelcomeBonus(res.user!.id);
-
-        // print("Bonus function call ho gaya!");
-
+        // 2. Welcome Bonus
         try {
           await supabase.from('coin_history').insert({
             'user_id': res.user!.id,
@@ -132,42 +55,33 @@ class _SignupScreenState extends State<SignupScreen> {
             'description': 'Welcome Bonus',
             'created_at': DateTime.now().toIso8601String(),
           });
-          print("Welcome Bonus successfully added!");
         } catch (e) {
-          print(
-              "Bonus add karne mein issue aaya, lekin user create ho gaya: $e");
+          print("Bonus add error: $e");
         }
 
         if (mounted) {
+          // 3. SUCCESS MESSAGE - User ko app ke andar mat bhejein
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Signup Successful!")),
+            const SnackBar(
+              content:
+                  Text("Signup Successful! Please verify your email to login."),
+              duration: Duration(seconds: 5),
+            ),
           );
 
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (_) => MainHomeScreen(),
-            ),
-            (route) => false,
-          );
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => MainHomeScreen()),
-          // );
+          // 4. Wapas Login screen par bhej dein
+          Navigator.pop(context);
         }
       }
     } on AuthException catch (e) {
-      // Ye Auth (Login/Signup) ke errors hain (e.g., Email already exists)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Auth Error: ${e.message}")),
       );
     } on PostgrestException catch (e) {
-      // Ye Database (profiles table) ke errors hain
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Data Error: ${e.message}")),
       );
     } catch (e) {
-      // Network ya baki koi bhi random error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: ${e.toString()}")),
       );
@@ -175,6 +89,80 @@ class _SignupScreenState extends State<SignupScreen> {
 
     setState(() => loading = false);
   }
+//   Future<void> signup() async {
+//     if (!_formKey.currentState!.validate()) return;
+
+//     setState(() => loading = true);
+// // await Provider.of<HomeViewModel>(context, listen: false).addWelcomeBonus(res.user!.id);
+//     try {
+//       final res = await supabase.auth.signUp(
+//         email: emailController.text.trim(),
+//         password: passwordController.text.trim(),
+//       );
+
+//       if (res.user != null) {
+//         // Profile insert
+//         await supabase.from('profiles').insert({
+//           'id': res.user!.id,
+//           'name': nameController.text.trim(),
+//           'email': emailController.text.trim(),
+//         });
+
+//         // await Provider.of<HomeViewModel>(context, listen: false)
+//         //     .addWelcomeBonus(res.user!.id);
+
+//         // print("Bonus function call ho gaya!");
+
+//         try {
+//           await supabase.from('coin_history').insert({
+//             'user_id': res.user!.id,
+//             'amount': 50,
+//             'description': 'Welcome Bonus',
+//             'created_at': DateTime.now().toIso8601String(),
+//           });
+//           print("Welcome Bonus successfully added!");
+//         } catch (e) {
+//           print(
+//               "Bonus add karne mein issue aaya, lekin user create ho gaya: $e");
+//         }
+
+//         if (mounted) {
+//           ScaffoldMessenger.of(context).showSnackBar(
+//             const SnackBar(content: Text("Signup Successful!")),
+//           );
+
+//           Navigator.pushAndRemoveUntil(
+//             context,
+//             MaterialPageRoute(
+//               builder: (_) => MainHomeScreen(),
+//             ),
+//             (route) => false,
+//           );
+//           // Navigator.pushReplacement(
+//           //   context,
+//           //   MaterialPageRoute(builder: (context) => MainHomeScreen()),
+//           // );
+//         }
+//       }
+//     } on AuthException catch (e) {
+//       // Ye Auth (Login/Signup) ke errors hain (e.g., Email already exists)
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text("Auth Error: ${e.message}")),
+//       );
+//     } on PostgrestException catch (e) {
+//       // Ye Database (profiles table) ke errors hain
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text("Data Error: ${e.message}")),
+//       );
+//     } catch (e) {
+//       // Network ya baki koi bhi random error
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text("Error: ${e.toString()}")),
+//       );
+//     }
+
+//     setState(() => loading = false);
+//   }
 
   @override
   Widget build(BuildContext context) {

@@ -185,194 +185,198 @@ class _LevelScreenState extends State<LevelScreen> {
                   .where((l) => l.isCompleted)
                   .toList();
 
-              return Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: SizedBox(
-                            height: 140,
-                            child: Stack(
-                              children: [
-                                ClipPath(
-                                  clipper: AppBarClipper(),
-                                  child: Container(
-                                    height: 140,
-                                    color: const Color(0xff3b9499),
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SidebarIcon(
-                                            icon: Icons.arrow_back_rounded,
-                                            assetName:
-                                                'assets/images/pop-button.png',
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-
-                                        // Title
-                                        Expanded(
-                                          child: Center(
-                                            child: FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  // Shadow Layer
-                                                  Transform.translate(
-                                                    offset: const Offset(6, 6),
-                                                    child: Text(
-                                                      "Color History",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontSize: 50,
-                                                        fontFamily: "Regular",
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color: Colors.black
-                                                            .withOpacity(0.35),
-                                                        letterSpacing: 1,
-                                                      ),
-                                                    ),
-                                                  ),
-
-                                                  // Pink 3D Layer
-                                                  Transform.translate(
-                                                    offset: const Offset(3, 3),
-                                                    child: Text(
-                                                      "Color History",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                        fontSize: 50,
-                                                        fontFamily: "Regular",
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color:
-                                                            Color(0xFFFF4FA3),
-                                                        letterSpacing: 1,
-                                                      ),
-                                                    ),
-                                                  ),
-
-                                                  // Main White Text
-                                                  Text(
-                                                    "Color History",
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontSize: 50,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Colors.white,
-                                                      letterSpacing: 1,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-
-                                        const SizedBox(width: 60),
-                                      ],
+              return RefreshIndicator(
+                onRefresh: viewModel.load,
+                // CustomScrollView ab root par hai
+                child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: <Widget>[
+                    // 1. Header ko SliverToBoxAdapter mein rakha
+                    // SliverToBoxAdapter(
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                    //     child: Row(
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(8.0),
+                    //           child: SidebarIcon(
+                    //             icon: Icons.arrow_back_rounded,
+                    //             assetName: 'assets/images/pop-button.png',
+                    //             onPressed: () => Navigator.pop(context),
+                    //           ),
+                    //         ),
+                    //         Expanded(
+                    //           child: Center(
+                    //             child: Text(
+                    //               "Color History",
+                    //               style: const TextStyle(
+                    //                 fontSize: 40,
+                    //                 fontWeight: FontWeight.w900,
+                    //                 color: Colors.white,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         const SizedBox(width: 60),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 140,
+                        width: double.infinity,
+                        child: Stack(
+                          children: [
+                            ClipPath(
+                              clipper: AppBarClipper(),
+                              child: Container(
+                                height: 140,
+                                color: const Color(0xff3b9499),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SidebarIcon(
+                                        icon: Icons.arrow_back_rounded,
+                                        assetName:
+                                            'assets/images/pop-button.png',
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: viewModel.load,
-                      child: completedLevels.isEmpty
-                          ? const _EmptyHistoryState()
-                          : CustomScrollView(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              slivers: <Widget>[
-                                SliverPadding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(12, 8, 12, 24),
-                                  sliver: SliverLayoutBuilder(
-                                    builder: (context, constraints) {
-                                      final columns = _columnCountForWidth(
-                                          constraints.crossAxisExtent);
-                                      return SliverGrid(
-                                        delegate: SliverChildBuilderDelegate(
-                                          (context, index) {
-                                            final level =
-                                                completedLevels[index];
-                                            final levelNumber = viewModel
-                                                    .levelNumberFor(level.id) ??
-                                                (index + 1);
-                                            return LevelCard(
-                                              key: ValueKey(level.id),
-                                              level: level,
-                                              levelNumber: levelNumber,
-                                              palette: _paletteFor(index),
-                                              isLocked: false,
-                                              isBusy: _isOpeningLevel,
-                                              onTap: () {
-                                                debugPrint(
-                                                    "History Level: ${level.title}");
-                                                final coloringProvider =
-                                                    Provider.of<
-                                                            ColoringProvider>(
-                                                        context,
-                                                        listen: false);
-                                                final activity =
-                                                    level.activityItem ??
-                                                        ActivityItem(
-                                                          id: level.id,
-                                                          label: level.title,
-                                                          display: level.title,
-                                                          color: Colors.red,
-                                                          imagePath: level
-                                                                  .imagePath ??
-                                                              'assets/images/un_border_apple.webp',
-                                                        );
-                                                coloringProvider.setItem(
-                                                    activity, 1,
-                                                    level: level);
 
-                                                handleTapAction(context, () {});
-                                                _openLevel(
-                                                    context, viewModel, level);
-                                              },
-                                            );
-                                          },
-                                          childCount: completedLevels.length,
-                                        ),
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: columns,
-                                          mainAxisSpacing: 12,
-                                          crossAxisSpacing: 12,
-                                          childAspectRatio:
-                                              _aspectRatioForWidth(
-                                            constraints.crossAxisExtent,
-                                            columns,
+                                    // Title
+                                    Expanded(
+                                      child: Center(
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              // Shadow Layer
+                                              Transform.translate(
+                                                offset: const Offset(6, 6),
+                                                child: Text(
+                                                  "Color History",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 50,
+                                                    fontFamily: "Regular",
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.black
+                                                        .withOpacity(0.35),
+                                                    letterSpacing: 1,
+                                                  ),
+                                                ),
+                                              ),
+
+                                              // Pink 3D Layer
+                                              Transform.translate(
+                                                offset: const Offset(3, 3),
+                                                child: Text(
+                                                  "Color History",
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontSize: 50,
+                                                    fontFamily: "Regular",
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Color(0xFFFF4FA3),
+                                                    letterSpacing: 1,
+                                                  ),
+                                                ),
+                                              ),
+
+                                              // Main White Text
+                                              Text(
+                                                "Color History",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontSize: 50,
+                                                  fontFamily: "Regular",
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Colors.white,
+                                                  letterSpacing: 1,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(width: 60),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+
+                    // 2. Body: Grid ya Empty State
+                    if (completedLevels.isEmpty)
+                      const SliverFillRemaining(
+                        child: _EmptyHistoryState(),
+                      )
+                    else
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                        sliver: SliverLayoutBuilder(
+                          builder: (context, constraints) {
+                            final columns = _columnCountForWidth(
+                                constraints.crossAxisExtent);
+                            return SliverGrid(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  final level = completedLevels[index];
+                                  return LevelCard(
+                                    key: ValueKey(level.id),
+                                    level: level,
+                                    levelNumber:
+                                        viewModel.levelNumberFor(level.id) ??
+                                            (index + 1),
+                                    palette: _paletteFor(index),
+                                    isLocked: false,
+                                    isBusy: _isOpeningLevel,
+                                    onTap: () {
+                                      final coloringProvider =
+                                          Provider.of<ColoringProvider>(context,
+                                              listen: false);
+                                      final activity = level.activityItem ??
+                                          ActivityItem(
+                                            id: level.id,
+                                            label: level.title,
+                                            display: level.title,
+                                            color: Colors.red,
+                                            imagePath: level.imagePath ??
+                                                'assets/images/un_border_apple.webp',
+                                          );
+                                      coloringProvider.setItem(activity, 1,
+                                          level: level);
+                                      handleTapAction(context, () {});
+                                      _openLevel(context, viewModel, level);
+                                    },
+                                  );
+                                },
+                                childCount: completedLevels.length,
+                              ),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: columns,
+                                mainAxisSpacing: 12,
+                                crossAxisSpacing: 12,
+                                childAspectRatio: _aspectRatioForWidth(
+                                    constraints.crossAxisExtent, columns),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
               );
             },
           ),
@@ -380,6 +384,225 @@ class _LevelScreenState extends State<LevelScreen> {
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: Container(
+  //       decoration: const BoxDecoration(
+  //         image: DecorationImage(
+  //           image: AssetImage("assets/images/color.png"),
+  //           fit: BoxFit.fill,
+  //         ),
+  //       ),
+  //       child: SafeArea(
+  //         child: Consumer<HomeViewModel>(
+  //           builder: (context, viewModel, _) {
+  //             if (viewModel.isLoading && viewModel.content == null) {
+  //               return const Loader();
+  //             }
+
+  //             final completedLevels = viewModel.categories
+  //                 .expand((c) => c.levels)
+  //                 .where((l) => l.isCompleted)
+  //                 .toList();
+
+  //             return CustomScrollView(
+  //               physics: const AlwaysScrollableScrollPhysics(),
+  //               slivers: <Widget>[
+  //                 SliverToBoxAdapter(
+  //                   child: Row(
+  //                     children: <Widget>[
+  //                       Expanded(
+  //                         child: SizedBox(
+  //                           height: 140,
+  //                           child: Stack(
+  //                             children: [
+  //                               ClipPath(
+  //                                 clipper: AppBarClipper(),
+  //                                 child: Container(
+  //                                   height: 140,
+  //                                   color: const Color(0xff3b9499),
+  //                                   child: Row(
+  //                                     children: [
+  //                                       Padding(
+  //                                         padding: const EdgeInsets.all(8.0),
+  //                                         child: SidebarIcon(
+  //                                           icon: Icons.arrow_back_rounded,
+  //                                           assetName:
+  //                                               'assets/images/pop-button.png',
+  //                                           onPressed: () {
+  //                                             Navigator.pop(context);
+  //                                           },
+  //                                         ),
+  //                                       ),
+
+  //                                       // Title
+  //                                       Expanded(
+  //                                         child: Center(
+  //                                           child: FittedBox(
+  //                                             fit: BoxFit.scaleDown,
+  //                                             child: Stack(
+  //                                               alignment: Alignment.center,
+  //                                               children: [
+  //                                                 // Shadow Layer
+  //                                                 Transform.translate(
+  //                                                   offset: const Offset(6, 6),
+  //                                                   child: Text(
+  //                                                     "Color History",
+  //                                                     textAlign:
+  //                                                         TextAlign.center,
+  //                                                     style: TextStyle(
+  //                                                       fontSize: 50,
+  //                                                       fontFamily: "Regular",
+  //                                                       fontWeight:
+  //                                                           FontWeight.w900,
+  //                                                       color: Colors.black
+  //                                                           .withOpacity(0.35),
+  //                                                       letterSpacing: 1,
+  //                                                     ),
+  //                                                   ),
+  //                                                 ),
+
+  //                                                 // Pink 3D Layer
+  //                                                 Transform.translate(
+  //                                                   offset: const Offset(3, 3),
+  //                                                   child: Text(
+  //                                                     "Color History",
+  //                                                     textAlign:
+  //                                                         TextAlign.center,
+  //                                                     style: const TextStyle(
+  //                                                       fontSize: 50,
+  //                                                       fontFamily: "Regular",
+  //                                                       fontWeight:
+  //                                                           FontWeight.w900,
+  //                                                       color:
+  //                                                           Color(0xFFFF4FA3),
+  //                                                       letterSpacing: 1,
+  //                                                     ),
+  //                                                   ),
+  //                                                 ),
+
+  //                                                 // Main White Text
+  //                                                 Text(
+  //                                                   "Color History",
+  //                                                   textAlign: TextAlign.center,
+  //                                                   style: const TextStyle(
+  //                                                     fontSize: 50,
+  //                                                     fontFamily: "Regular",
+  //                                                     fontWeight:
+  //                                                         FontWeight.w900,
+  //                                                     color: Colors.white,
+  //                                                     letterSpacing: 1,
+  //                                                   ),
+  //                                                 ),
+  //                                               ],
+  //                                             ),
+  //                                           ),
+  //                                         ),
+  //                                       ),
+
+  //                                       const SizedBox(width: 60),
+  //                                     ],
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 Expanded(
+  //                   child: RefreshIndicator(
+  //                     onRefresh: viewModel.load,
+  //                     child: completedLevels.isEmpty
+  //                         ? const _EmptyHistoryState()
+  //                         : CustomScrollView(
+  //                             physics: const AlwaysScrollableScrollPhysics(),
+  //                             slivers: <Widget>[
+  //                               SliverPadding(
+  //                                 padding:
+  //                                     const EdgeInsets.fromLTRB(12, 8, 12, 24),
+  //                                 sliver: SliverLayoutBuilder(
+  //                                   builder: (context, constraints) {
+  //                                     final columns = _columnCountForWidth(
+  //                                         constraints.crossAxisExtent);
+  //                                     return SliverGrid(
+  //                                       delegate: SliverChildBuilderDelegate(
+  //                                         (context, index) {
+  //                                           final level =
+  //                                               completedLevels[index];
+  //                                           final levelNumber = viewModel
+  //                                                   .levelNumberFor(level.id) ??
+  //                                               (index + 1);
+  //                                           return LevelCard(
+  //                                             key: ValueKey(level.id),
+  //                                             level: level,
+  //                                             levelNumber: levelNumber,
+  //                                             palette: _paletteFor(index),
+  //                                             isLocked: false,
+  //                                             isBusy: _isOpeningLevel,
+  //                                             onTap: () {
+  //                                               debugPrint(
+  //                                                   "History Level: ${level.title}");
+  //                                               final coloringProvider =
+  //                                                   Provider.of<
+  //                                                           ColoringProvider>(
+  //                                                       context,
+  //                                                       listen: false);
+  //                                               final activity =
+  //                                                   level.activityItem ??
+  //                                                       ActivityItem(
+  //                                                         id: level.id,
+  //                                                         label: level.title,
+  //                                                         display: level.title,
+  //                                                         color: Colors.red,
+  //                                                         imagePath: level
+  //                                                                 .imagePath ??
+  //                                                             'assets/images/un_border_apple.webp',
+  //                                                       );
+  //                                               coloringProvider.setItem(
+  //                                                   activity, 1,
+  //                                                   level: level);
+
+  //                                               handleTapAction(context, () {});
+  //                                               _openLevel(
+  //                                                   context, viewModel, level);
+  //                                             },
+  //                                           );
+  //                                         },
+  //                                         childCount: completedLevels.length,
+  //                                       ),
+  //                                       gridDelegate:
+  //                                           SliverGridDelegateWithFixedCrossAxisCount(
+  //                                         crossAxisCount: columns,
+  //                                         mainAxisSpacing: 12,
+  //                                         crossAxisSpacing: 12,
+  //                                         childAspectRatio:
+  //                                             _aspectRatioForWidth(
+  //                                           constraints.crossAxisExtent,
+  //                                           columns,
+  //                                         ),
+  //                                       ),
+  //                                     );
+  //                                   },
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                   ),
+  //                 ),
+
+  //               ],
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 class _EmptyHistoryState extends StatelessWidget {
