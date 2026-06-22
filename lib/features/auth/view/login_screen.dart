@@ -66,10 +66,18 @@ class _LoginScreenState extends State<LoginScreen> {
           );
 
           // 🚀 SUCCESS: HomeScreen par bhejein
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => MainHomeScreen()),
-          );
+
+          if (Navigator.canPop(context)) {
+            Navigator.pop(
+                context); // Ye wapis us screen par le jayega jahan se login button click hua tha
+          } else {
+            // Agar app ka root login hai, to home screen par bhejein
+            Navigator.pushReplacementNamed(context, '/home');
+          }
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => MainHomeScreen()),
+          // );
         }
       }
     } on AuthException catch (e) {

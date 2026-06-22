@@ -28,6 +28,8 @@ dependencies:
   image_compare_2: ^1.1.7
   diff_image2: ^1.3.0
   image: ^4.1.7
+  pdf: 
+  printing: 
 
 dev_dependencies:
   flutter_test:

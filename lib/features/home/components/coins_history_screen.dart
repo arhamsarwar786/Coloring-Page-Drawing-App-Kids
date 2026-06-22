@@ -40,24 +40,26 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                   child: Row(
                     children: <Widget>[
                       Expanded(
                         child: SizedBox(
-                          height: 140,
+                          height: 90,
                           // width: double.infinity,
                           child: Stack(
                             children: [
                               ClipPath(
                                 clipper: AppBarClipper(),
                                 child: Container(
-                                  height: 140,
+                                  height: 120,
+                                  margin: EdgeInsets.only(bottom: 10),
                                   color: const Color(0xff3b9499),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(20.0),
                                         child: SidebarIcon(
                                           icon: Icons.arrow_back_rounded,
                                           assetName:
@@ -68,6 +70,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                                         ),
                                       ),
 
+                                      // Title
                                       // Title
                                       Expanded(
                                         child: Center(
@@ -83,7 +86,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                                                     "Coins History",
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                      fontSize: 50,
+                                                      fontSize: 30,
                                                       fontFamily: "Regular",
                                                       fontWeight:
                                                           FontWeight.w900,
@@ -101,7 +104,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                                                     "Coins History",
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
-                                                      fontSize: 50,
+                                                      fontSize: 30,
                                                       fontFamily: "Regular",
                                                       fontWeight:
                                                           FontWeight.w900,
@@ -116,7 +119,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                                                   "Coins History",
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
-                                                    fontSize: 50,
+                                                    fontSize: 30,
                                                     fontFamily: "Regular",
                                                     fontWeight: FontWeight.w900,
                                                     color: Colors.white,
@@ -249,24 +252,26 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 18, 0, 12),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
               child: Row(
                 children: <Widget>[
                   Expanded(
                     child: SizedBox(
-                      height: 140,
+                      height: 90,
                       // width: double.infinity,
                       child: Stack(
                         children: [
                           ClipPath(
                             clipper: AppBarClipper(),
                             child: Container(
-                              height: 140,
+                              height: 120,
+                              margin: EdgeInsets.only(bottom: 10),
                               color: const Color(0xff3b9499),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(20.0),
                                     child: SidebarIcon(
                                       icon: Icons.arrow_back_rounded,
                                       assetName: 'assets/images/pop-button.png',
@@ -276,6 +281,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                                     ),
                                   ),
 
+                                  // Title
                                   // Title
                                   Expanded(
                                     child: Center(
@@ -291,7 +297,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                                                 "Coins History",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  fontSize: 50,
+                                                  fontSize: 30,
                                                   fontFamily: "Regular",
                                                   fontWeight: FontWeight.w900,
                                                   color: Colors.black
@@ -308,7 +314,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                                                 "Coins History",
                                                 textAlign: TextAlign.center,
                                                 style: const TextStyle(
-                                                  fontSize: 50,
+                                                  fontSize: 30,
                                                   fontFamily: "Regular",
                                                   fontWeight: FontWeight.w900,
                                                   color: Color(0xFFFF4FA3),
@@ -322,7 +328,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                                               "Coins History",
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
-                                                fontSize: 50,
+                                                fontSize: 30,
                                                 fontFamily: "Regular",
                                                 fontWeight: FontWeight.w900,
                                                 color: Colors.white,
@@ -344,34 +350,9 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                       ),
                     ),
                   ),
-
-                  // SidebarIcon(
-                  //   icon: Icons.arrow_back_rounded,
-                  //   assetName: 'assets/images/pop-button.png',
-                  //   onPressed: () {
-                  //     Navigator.pop(context);
-                  //   },
-                  // ),
-
-                  // // _HistoryIconButton(
-                  // //   icon: Icons.arrow_back_rounded,
-                  // //   onTap: () => Navigator.pop(context),
-                  // // ),
-                  // const SizedBox(width: 14),
-                  // Expanded(
-                  //   child: Text(
-                  //     'Drawing History',
-                  //     style: TextStyle(
-                  //       fontSize: 28,
-                  //       fontWeight: FontWeight.w700,
-                  //       color: const Color(0xFF1F2A44),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
-
             Consumer<HomeViewModel>(
               builder: (context, homeVM, _) {
                 final historyList = homeVM.coinHistoryList;
@@ -421,6 +402,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                           ),
                         ),
                       ),
+
                       Expanded(
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(

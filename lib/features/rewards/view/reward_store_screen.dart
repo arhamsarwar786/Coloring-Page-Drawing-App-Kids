@@ -59,113 +59,6 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: SizedBox(
-                            height: 140,
-                            // width: double.infinity,
-                            child: Stack(
-                              children: [
-                                ClipPath(
-                                  clipper: AppBarClipper(),
-                                  child: Container(
-                                    height: 140,
-                                    color: const Color(0xff3b9499),
-                                    child: Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SidebarIcon(
-                                            icon: Icons.arrow_back_rounded,
-                                            assetName:
-                                                'assets/images/pop-button.png',
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-
-                                        // Title
-                                        Expanded(
-                                          child: Center(
-                                            child: FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  // Shadow Layer
-                                                  Transform.translate(
-                                                    offset: const Offset(6, 6),
-                                                    child: Text(
-                                                      "Reward Store",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontSize: 50,
-                                                        fontFamily: "Regular",
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color: Colors.black
-                                                            .withOpacity(0.35),
-                                                        letterSpacing: 1,
-                                                      ),
-                                                    ),
-                                                  ),
-
-                                                  // Pink 3D Layer
-                                                  Transform.translate(
-                                                    offset: const Offset(3, 3),
-                                                    child: Text(
-                                                      "Reward Store",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                        fontSize: 50,
-                                                        fontFamily: "Regular",
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color:
-                                                            Color(0xFFFF4FA3),
-                                                        letterSpacing: 1,
-                                                      ),
-                                                    ),
-                                                  ),
-
-                                                  // Main White Text
-                                                  Text(
-                                                    "Reward Store",
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontSize: 50,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Colors.white,
-                                                      letterSpacing: 1,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-
-                                        const SizedBox(width: 60),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
                   // Login section ko replacement
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -206,6 +99,20 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
 
     // 2. Agar login hai, toh GridView dikhao
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (context) =>
+      //               const RewardTrackingHistory()), // Apni History class ka naam yahan likhein
+      //     );
+      //   },
+      //   // onPressed: () => Navigator.pop(context),
+      //   backgroundColor: const Color(0xff3b9499),
+      //   child: Image.asset("assets/images/photo.png"),
+      // ),
+
       backgroundColor: Colors.transparent,
       // appBar: AppBar(title: const Text("Reward Store")),
       body: Container(
@@ -231,19 +138,21 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                     children: <Widget>[
                       Expanded(
                         child: SizedBox(
-                          height: 140,
+                          height: 90,
                           // width: double.infinity,
                           child: Stack(
                             children: [
                               ClipPath(
                                 clipper: AppBarClipper(),
                                 child: Container(
-                                  height: 140,
+                                  height: 120,
+                                  margin: EdgeInsets.only(bottom: 10),
                                   color: const Color(0xff3b9499),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(20.0),
                                         child: SidebarIcon(
                                           icon: Icons.arrow_back_rounded,
                                           assetName:
@@ -254,6 +163,7 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                         ),
                                       ),
 
+                                      // Title
                                       // Title
                                       Expanded(
                                         child: Center(
@@ -269,7 +179,7 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                     "Reward Store",
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                      fontSize: 50,
+                                                      fontSize: 30,
                                                       fontFamily: "Regular",
                                                       fontWeight:
                                                           FontWeight.w900,
@@ -287,7 +197,7 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                     "Reward Store",
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
-                                                      fontSize: 50,
+                                                      fontSize: 30,
                                                       fontFamily: "Regular",
                                                       fontWeight:
                                                           FontWeight.w900,
@@ -302,7 +212,7 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                   "Reward Store",
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
-                                                    fontSize: 50,
+                                                    fontSize: 30,
                                                     fontFamily: "Regular",
                                                     fontWeight: FontWeight.w900,
                                                     color: Colors.white,
@@ -327,88 +237,78 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Consumer<HomeViewModel>(
-                      builder: (context, homeVM, _) {
-                        // Current session ko ek variable mein lein
-                        final session =
-                            Supabase.instance.client.auth.currentSession;
-                        final bool isLoggedIn = session != null;
-                        final bool isLoading = homeVM.isLoading;
-                        final String displayCoins =
-                            homeVM.databaseCoins.toString();
 
-                        return GestureDetector(
-                          onTap: () {
-                            if (!isLoggedIn) {
-                              // Navigator ko function ke andar rakhein
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (_) => const LoginScreen()),
-                              );
-                            }
-                          },
-                          child: AnimatedContainer(
-                            margin: const EdgeInsets.only(left: 20),
-                            duration: const Duration(milliseconds: 400),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(colors: [
-                                Color(0xFFFFD700),
-                                Color(0xFFFF9100)
-                              ]),
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(isLoggedIn ? '🪙' : '👤',
-                                    style: const TextStyle(fontSize: 20)),
-                                const SizedBox(width: 4),
-
-                                // Ternary operator se code ko clean rakhein
-                                isLoading
-                                    ? const SizedBox(
-                                        width: 15,
-                                        height: 15,
-                                        child: CircularProgressIndicator(
-                                            color: Colors.white,
-                                            strokeWidth: 2))
-                                    : Text(
-                                        isLoggedIn ? displayCoins : 'Login',
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                Consumer<HomeViewModel>(
+                  builder: (context, hm, _) => Container(
+                    margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFFFD700), Color(0xFFFF9100)],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    SizedBox(
-                      width: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Total Coins',
+                            style: TextStyle(
+                                fontFamily: "Regular",
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                                color: Colors.white)),
+                        Text('🪙 ${hm.databaseCoins}',
+                            style: const TextStyle(
+                                fontFamily: "Regular",
+                                fontWeight: FontWeight.w900,
+                                fontSize: 22,
+                                color: Colors.white)),
+                      ],
                     ),
-                    SidebarIcon(
-                      icon: Icons.settings_rounded,
-                      assetName: 'assets/images/photo.png',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const RewardTrackingHistory()), // Apni History class ka naam yahan likhein
-                        );
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-                SizedBox(height: 10),
+
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return RewardTrackingHistory();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xff3b9499),
+                          Color.fromARGB(255, 114, 208, 212)
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('View Reward History',
+                            style: TextStyle(
+                                fontFamily: "Regular",
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                                color: Colors.white)),
+                        Image.asset(
+                          "assets/images/photo.png",
+                          height: 40,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // SizedBox(height: 10),
                 FutureBuilder(
                   future: RewardStoreRepository().getRewards(),
                   builder: (context, snapshot) {
@@ -435,7 +335,7 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: 0.66, crossAxisCount: 2),
+                              childAspectRatio: 0.80, crossAxisCount: 2),
                       itemCount: rewards.length,
                       itemBuilder: (context, index) {
                         final reward = rewards[index];
@@ -484,6 +384,9 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                   ),
                                 ),
 
+                                SizedBox(
+                                  height: 5,
+                                ),
                                 // Icon ki jagah ye block use karein
                                 reward.imageUrl != null &&
                                         reward.imageUrl.isNotEmpty
@@ -492,6 +395,9 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                             80, // Apni marzi se size adjust karein
                                         width: 80,
                                         decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 2,
+                                              color: Color(0xff3b9499)),
                                           borderRadius:
                                               BorderRadius.circular(15),
                                           image: DecorationImage(
@@ -499,12 +405,15 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                             colorFilter: null,
                                             image:
                                                 NetworkImage(reward.imageUrl),
-                                            fit: BoxFit.contain,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                       )
                                     : Icon(Icons.palette,
                                         size: 60, color: Colors.orange),
+                                SizedBox(
+                                  height: 5,
+                                ),
                                 Text(
                                   "${reward.requiredCoins} Coins",
                                   style: TextStyle(
@@ -523,77 +432,6 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                         .read<HomeViewModel>()
                                         .databaseCoins;
                                     if (canAfford) {
-                                      // showDialog(
-                                      //   context: context,
-                                      //   builder: (ctx) => Dialog(
-                                      //     backgroundColor: Colors.transparent,
-                                      //     child: Container(
-                                      //       width: 280,
-                                      //       padding: const EdgeInsets.all(20),
-                                      //       decoration: BoxDecoration(
-                                      //         color: const Color(0xff6EC6D0),
-                                      //         borderRadius:
-                                      //             BorderRadius.circular(32),
-                                      //         border: Border.all(
-                                      //             color:
-                                      //                 const Color(0xff3b9499),
-                                      //             width: 5),
-                                      //       ),
-                                      //       child: Column(
-                                      //         mainAxisSize: MainAxisSize.min,
-                                      //         children: [
-                                      //           const Text("CONFIRM!",
-                                      //               style: TextStyle(
-                                      //                   fontSize: 24,
-                                      //                   fontWeight:
-                                      //                       FontWeight.w900,
-                                      //                   color: Colors.white)),
-                                      //           const SizedBox(height: 15),
-                                      //           Text(
-                                      //             "Are you sure you want to spend $currentCoins to purchase $requiredCoins ? After seven days, you will receive this $reward.",
-                                      //             textAlign: TextAlign.center,
-                                      //             style: TextStyle(
-                                      //                 color: Colors.white,
-                                      //                 fontSize: 16),
-                                      //           ),
-                                      //           const SizedBox(height: 20),
-                                      //           Row(
-                                      //             mainAxisAlignment:
-                                      //                 MainAxisAlignment
-                                      //                     .spaceAround,
-                                      //             children: [
-                                      //               TextButton(
-                                      //                 onPressed: () =>
-                                      //                     Navigator.pop(ctx),
-                                      //                 child: const Text(
-                                      //                     "Cancel",
-                                      //                     style: TextStyle(
-                                      //                         color: Colors
-                                      //                             .white)),
-                                      //               ),
-                                      //               ElevatedButton(
-                                      //                 onPressed: () {
-                                      //                   Navigator.pop(ctx);
-                                      //                   // Yahan se ab TrackingScreen khulega jahan address lena hai
-                                      //                   Navigator.push(
-                                      //                     context,
-                                      //                     MaterialPageRoute(
-                                      //                         builder: (context) =>
-                                      //                             TrackingScreen(
-                                      //                                 reward:
-                                      //                                     reward)),
-                                      //                   );
-                                      //                 },
-                                      //                 child: const Text("Yes"),
-                                      //               ),
-                                      //             ],
-                                      //           ),
-                                      //         ],
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // );
-
                                       showDialog(
                                         context: context,
                                         builder: (ctx) => Dialog(
@@ -602,7 +440,7 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                             width: 280,
                                             padding: const EdgeInsets.all(20),
                                             decoration: BoxDecoration(
-                                              color: const Color(0xff6EC6D0),
+                                              color: const Color(0xFFF1E4CE),
                                               borderRadius:
                                                   BorderRadius.circular(32),
                                               border: Border.all(
@@ -616,17 +454,29 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                 // 1. Reward Image (Yahan image show hogi)
                                                 if (reward.imageUrl != null &&
                                                     reward.imageUrl.isNotEmpty)
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                    child: Image.network(
-                                                      reward.imageUrl,
-                                                      height: 100,
-                                                      width: 100,
-                                                      fit: BoxFit.cover,
+                                                  Container(
+                                                    height: 100,
+                                                    width: 100,
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: NetworkImage(
+                                                          reward.imageUrl,
+                                                          // height: 100,
+                                                          // width: 100,
+                                                        ),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      border: Border.all(
+                                                          color:
+                                                              Color(0xff3b9499),
+                                                          width:
+                                                              2), // Agar border chahiye
                                                     ),
                                                   ),
+
                                                 const SizedBox(height: 15),
 
                                                 // 2. Reward Title
@@ -635,12 +485,15 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                       .title, // Yahan reward ka naam show hoga
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
-                                                      fontSize: 20,
+                                                      fontFamily: "Regular",
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: Colors.white),
+                                                      color: Color(0xff3b9499)
+                                                      //  Colors.white
+                                                      ),
                                                 ),
-                                                const SizedBox(height: 15),
+                                                const SizedBox(height: 5),
 
                                                 // 3. Confirmation Message
                                                 Text(
@@ -648,10 +501,13 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontFamily: "Regular",
-                                                      color: Colors.white,
-                                                      fontSize: 16),
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: Color(0xff3b9499),
+                                                      //  Colors.white,
+                                                      fontSize: 15),
                                                 ),
-                                                const SizedBox(height: 20),
+                                                const SizedBox(height: 10),
 
                                                 // 4. Buttons
                                                 Row(
@@ -671,6 +527,11 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                       ),
                                                     ),
                                                     ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                      ),
                                                       onPressed: () {
                                                         Navigator.pop(ctx);
                                                         // Tracking screen ka push logic

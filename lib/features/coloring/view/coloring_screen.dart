@@ -134,21 +134,34 @@ class _ColoringScreenState extends State<ColoringScreen> {
                       // crossAxisAlignment: CrossAxisAlignment.,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SidebarIcon(
-                          icon: Icons.arrow_back_rounded,
-                          assetName: 'assets/images/pop-button.png',
-                          // onPressed: () {
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  BackNavigationDialog(screenContext: context),
-                            );
-                            // };
-                            // Pop back to home levels screen (not all the way to root)
-                            // Navigator.of(context).pop();
+                        GestureDetector(
+                          onTap: () {
+                            // PopScope handles the final capture
+                            Navigator.pop(context);
                           },
+                          child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: Image.asset(
+                                "assets/images/pop-button.png",
+                                fit: BoxFit.contain,
+                              )),
                         ),
+                        // SidebarIcon(
+                        //   icon: Icons.arrow_back_rounded,
+                        //   assetName: 'assets/images/pop-button.png',
+                        //   // onPressed: () {
+                        //   onPressed: () {
+                        //     showDialog(
+                        //       context: context,
+                        //       builder: (context) =>
+                        //           BackNavigationDialog(screenContext: context),
+                        //     );
+                        //     // };
+                        //     // Pop back to home levels screen (not all the way to root)
+                        //     // Navigator.of(context).pop();
+                        //   },
+                        // ),
 
                         // // ── Coin counter badge ─────────────────────────────────────────
 
@@ -228,60 +241,6 @@ class _ColoringScreenState extends State<ColoringScreen> {
                           },
                         ),
 
-                        // Consumer<HomeViewModel>(
-                        //   builder: (context, homeVM, _) {
-                        //     final coins = homeVM.earnedCoins;
-                        //     return AnimatedContainer(
-                        //       duration: const Duration(milliseconds: 400),
-                        //       curve: Curves.easeOutBack,
-                        //       padding: const EdgeInsets.symmetric(
-                        //           horizontal: 12, vertical: 6),
-                        //       decoration: BoxDecoration(
-                        //         gradient: const LinearGradient(
-                        //           colors: [
-                        //             Color(0xFFFFD700),
-                        //             Color(0xFFFF9100)
-                        //           ],
-                        //           begin: Alignment.topLeft,
-                        //           end: Alignment.bottomRight,
-                        //         ),
-                        //         borderRadius: BorderRadius.circular(20),
-                        //         boxShadow: [
-                        //           BoxShadow(
-                        //             color: const Color(0xFFFFD700)
-                        //                 .withOpacity(0.45),
-                        //             blurRadius: 8,
-                        //             offset: const Offset(0, 3),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //       child: Row(
-                        //         mainAxisSize: MainAxisSize.min,
-                        //         children: [
-                        //           const Text('🪙',
-                        //               style: TextStyle(fontSize: 16)),
-                        //           const SizedBox(width: 4),
-                        //           Text(
-                        //             '$coins',
-                        //             style: TextStyle(
-                        //               fontSize: 16,
-                        //               fontFamily: "Regular",
-                        //               fontWeight: FontWeight.w700,
-                        //               color: Colors.white,
-                        //               shadows: const [
-                        //                 Shadow(
-                        //                     color: Colors.black26,
-                        //                     blurRadius: 3,
-                        //                     offset: Offset(0, 1)),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
-
                         AnimatedPreviewButton(
                           onPressed: () {
                             final coloredPath =
@@ -314,320 +273,28 @@ class _ColoringScreenState extends State<ColoringScreen> {
                             );
                           },
                         ),
-
-                        SidebarIcon(
-                          icon: Icons.settings_rounded,
-                          assetName: 'assets/images/setting.png',
-                          onPressed: () {
-                            // showGeneralDialog(
-                            //   context: context,
-                            //   barrierDismissible: true,
-                            //   barrierLabel: "Settings",
-                            //   barrierColor: Colors.transparent,
-                            //   transitionDuration:
-                            //       const Duration(milliseconds: 250),
-                            //   pageBuilder: (_, __, ___) =>
-                            //       const SettingsDialog(),
-                            //   transitionBuilder:
-                            //       (_, animation, __, child) {
-                            //     return FadeTransition(
-                            //       opacity: animation,
-                            //       child: ScaleTransition(
-                            //         scale: CurvedAnimation(
-                            //           parent: animation,
-                            //           curve: Curves.easeOutBack,
-                            //         ),
+                        GestureDetector(
+                          onTap: () {
+                            // PopScope handles the final capture
                             showDialog(
-                              context: context,
-                              barrierColor: Colors.black.withOpacity(
-                                  0.45), // Piche ka area dark karne ke liye
-                              builder: (BuildContext context) {
-                                return const Center(
-                                  child:
-                                      KidsSettingsDialog(), // Humara naya settings dialog widget
-                                );
-                              },
-                            );
+                                context: context,
+                                barrierColor: Colors.black.withOpacity(
+                                    0.45), // Piche ka area dark karne ke liye
+                                builder: (BuildContext context) {
+                                  return const Center(
+                                    child:
+                                        KidsSettingsDialog(), // Humara naya settings dialog widget
+                                  );
+                                });
                           },
+                          child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: Image.asset(
+                                "assets/images/setting.png",
+                                fit: BoxFit.contain,
+                              )),
                         ),
-                        
-                        
-                        // const SizedBox(height: 16),
-
-                        // Text(
-                        //   'LEVEL ${provider ?? 1}',
-                        //   style: TextStyle(
-                        //     fontSize: 30,
-                        //     fontWeight: FontWeight.w700,
-                        //     color: const Color(0xFF222222),
-                        //     letterSpacing: 2.0,
-                        //   ),
-                        // ),
-                        // Column(
-                        //   children: [
-                        //     SidebarIcon(
-                        //       icon: Icons.settings_rounded,
-                        //       assetName: 'assets/images/setting.png',
-                        //       onPressed: () {
-                        //         // showGeneralDialog(
-                        //         //   context: context,
-                        //         //   barrierDismissible: true,
-                        //         //   barrierLabel: "Settings",
-                        //         //   barrierColor: Colors.transparent,
-                        //         //   transitionDuration:
-                        //         //       const Duration(milliseconds: 250),
-                        //         //   pageBuilder: (_, __, ___) =>
-                        //         //       const SettingsDialog(),
-                        //         //   transitionBuilder:
-                        //         //       (_, animation, __, child) {
-                        //         //     return FadeTransition(
-                        //         //       opacity: animation,
-                        //         //       child: ScaleTransition(
-                        //         //         scale: CurvedAnimation(
-                        //         //           parent: animation,
-                        //         //           curve: Curves.easeOutBack,
-                        //         //         ),
-                        //         showDialog(
-                        //           context: context,
-                        //           barrierColor: Colors.black.withOpacity(
-                        //               0.45), // Piche ka area dark karne ke liye
-                        //           builder: (BuildContext context) {
-                        //             return const Center(
-                        //               child:
-                        //                   KidsSettingsDialog(), // Humara naya settings dialog widget
-                        //             );
-                        //           },
-                        //         );
-                        //       },
-                        //     ),
-                        //     const SizedBox(height: 16),
-
-                        //     InkWell(
-                        //         onTap: () {
-                        //           final coloredPath = getColoredImagePath(
-                        //               widget.imagePath ?? '');
-                        //           showGeneralDialog(
-                        //             context: context,
-                        //             barrierDismissible: true,
-                        //             barrierLabel: "Preview",
-                        //             barrierColor:
-                        //                 Colors.black.withOpacity(0.55),
-                        //             transitionDuration:
-                        //                 const Duration(milliseconds: 400),
-                        //             pageBuilder: (dialogContext, animation,
-                        //                 secondaryAnimation) {
-                        //               return PreviewImageDialog(
-                        //                   imagePath: coloredPath);
-                        //             },
-                        //             transitionBuilder: (ctx, animation,
-                        //                 secondaryAnimation, child) {
-                        //               return FadeTransition(
-                        //                 opacity: animation,
-                        //                 child: ScaleTransition(
-                        //                   scale: CurvedAnimation(
-                        //                     parent: animation,
-                        //                     curve: Curves.elasticOut,
-                        //                   ),
-                        //                   child: child,
-                        //                 ),
-                        //               );
-                        //             },
-                        //           );
-                        //         },
-                        //         child: Container(
-                        //           child: Image.asset("assets/images/star.webp"),
-                        //           height: 50,
-                        //         )),
-                        //     // AnimatedPreviewButton(
-                        //     //   onPressed: () {
-                        //     //     final coloredPath =
-                        //     //         getColoredImagePath(widget.imagePath ?? '');
-                        //     //     showGeneralDialog(
-                        //     //       context: context,
-                        //     //       barrierDismissible: true,
-                        //     //       barrierLabel: "Preview",
-                        //     //       barrierColor: Colors.black.withOpacity(0.55),
-                        //     //       transitionDuration:
-                        //     //           const Duration(milliseconds: 400),
-                        //     //       pageBuilder: (dialogContext, animation,
-                        //     //           secondaryAnimation) {
-                        //     //         return PreviewImageDialog(
-                        //     //             imagePath: coloredPath);
-                        //     //       },
-                        //     //       transitionBuilder: (ctx, animation,
-                        //     //           secondaryAnimation, child) {
-                        //     //         return FadeTransition(
-                        //     //           opacity: animation,
-                        //     //           child: ScaleTransition(
-                        //     //             scale: CurvedAnimation(
-                        //     //               parent: animation,
-                        //     //               curve: Curves.elasticOut,
-                        //     //             ),
-                        //     //             child: child,
-                        //     //           ),
-                        //     //         );
-                        //     //       },
-                        //     //     );
-                        //     //   },
-
-                        //     // ),
-                        //     // const SizedBox(height: 16),
-                        //     // SidebarIcon(
-                        //     //   icon: Icons.edit_rounded,
-                        //     //   assetName: 'assets/images/pen.png',
-                        //     //   onPressed: () =>
-                        //     //       Navigator.pushNamed(context, AppRoutes.skins),
-                        //     // ),
-                        //     const SizedBox(height: 16),
-                        //     // SidebarIcon(
-                        //     //   icon: Icons.photo_library_rounded,
-                        //     //   assetName: 'assets/images/photo.png',
-                        //     //   onPressed: () async {
-                        //     //     await persistHistorySnapshot(
-                        //     //         captureThumbnail: true);
-                        //     //     if (context.mounted) {
-                        //     //       Navigator.pushNamed(
-                        //     //           context, AppRoutes.levels);
-                        //     //     }
-                        //     //   },
-                        //     // ),
-                        //   ],
-                        // ),
-
-                        // SidebarIcon(
-                        //   icon: Icons.edit_rounded,
-                        //   assetName: 'assets/images/pen.png',
-                        //   onPressed: () {
-                        //     // un-awaited: Yeh background mein chalta rahega
-                        //     // persistHistorySnapshot(captureThumbnail: true);
-
-                        //     // Fauran next screen par bhej dein
-                        //     if (context.mounted) {
-                        //       Navigator.pushNamed(context, AppRoutes.skins);
-                        //     }
-                        //   },
-                        // ),
-
-                        // SidebarIcon(
-                        //   icon: Icons.photo_library_rounded,
-                        //   assetName: 'assets/images/photo.png',
-                        //   onPressed: () async {
-                        //     // await persistHistorySnapshot(
-                        //     //     captureThumbnail: true);
-                        //     // if (context.mounted) {
-                        //     //   Navigator.pushNamed(context, AppRoutes.levels);
-                        //     // }
-                        //   },
-                        // ),
-
-                        // Item name title
-                        // Expanded(
-                        //   child: Container(
-                        //     padding: const EdgeInsets.symmetric(
-                        //       vertical: 7,
-                        //       horizontal: 12,
-                        //     ),
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       borderRadius: BorderRadius.circular(18),
-                        //       boxShadow: [
-                        //         BoxShadow(
-                        //           // color: AppColors.primaryPurple.withValues(
-                        //           //   alpha: 0.1,
-                        //           // ),
-                        //           blurRadius: 8,
-                        //           offset: const Offset(0, 3),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     child: Text(
-                        //       "Muqadas",
-                        //       // itemName,
-                        //       style: const TextStyle(
-                        //         fontSize: 20,
-                        //         fontWeight: FontWeight.w900,
-                        //         // color: AppColors.primaryPurple,
-                        //         letterSpacing: 0.4,
-                        //       ),
-                        //       textAlign: TextAlign.center,
-                        //     ),
-                        //   ),
-                        // ),
-                        // const SizedBox(width: 8),
-
-                        // // Gesture hint icon — tap to see tooltip
-                        // Tooltip(
-                        //   message: '1 finger to color · 2 fingers to zoom',
-                        //   triggerMode: TooltipTriggerMode.tap,
-                        //   preferBelow: true,
-                        //   child: Container(
-                        //     width: 40,
-                        //     height: 40,
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       shape: BoxShape.circle,
-                        //       boxShadow: [
-                        //         BoxShadow(
-                        //           // color: AppColors.primaryPurple.withValues(
-                        //           //   alpha: 0.12,
-                        //           // ),
-                        //           blurRadius: 6,
-                        //           offset: const Offset(0, 2),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     child: const Icon(
-                        //       Icons.touch_app_rounded,
-                        //       // color: AppColors.primaryPurple,
-                        //       size: 20,
-                        //     ),
-                        //   ),
-                        // ),
-                        // const SizedBox(width: 8),
-
-                        // Auto-zoom toggle — filled purple = ON, white = OFF
-
-                        // Tooltip(
-                        //   message: provider.autoZoomEnabled
-                        //       ? 'Auto-zoom ON'
-                        //       : 'Auto-zoom OFF',
-                        //   triggerMode: TooltipTriggerMode.tap,
-                        //   child: GestureDetector(
-                        //     onTap: () => provider.setAutoZoomEnabled(
-                        //       !provider.autoZoomEnabled,
-                        //     ),
-                        //     child: AnimatedContainer(
-                        //       duration: const Duration(milliseconds: 200),
-                        //       width: 40,
-                        //       height: 40,
-                        //       decoration: BoxDecoration(
-                        //         color: Colors.amber,
-                        //         // provider.autoZoomEnabled
-                        //         //     ? AppColors.primaryPurple
-                        //         //     : Colors.white,
-                        //         shape: BoxShape.circle,
-                        //         boxShadow: [
-                        //           BoxShadow(
-                        //             // color: AppColors.primaryPurple.withValues(
-                        //             //   alpha: 0.18,
-                        //             // ),
-                        //             blurRadius: 6,
-                        //             offset: const Offset(0, 2),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //       child: Icon(
-                        //         Icons.zoom_in_map_rounded,
-                        //         // color: provider.autoZoomEnabled
-                        //         //     ? Colors.white
-                        //         //     : AppColors.primaryPurple.withValues(
-                        //         //         alpha: 0.45,
-                        //         //       ),
-                        //         size: 20,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

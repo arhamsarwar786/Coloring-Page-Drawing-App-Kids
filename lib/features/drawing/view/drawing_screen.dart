@@ -405,13 +405,18 @@ class DrawingScreenState extends State<DrawingScreen>
                             top: 1,
                             child: Column(
                               children: [
-                                SidebarIcon(
-                                  icon: Icons.arrow_back_rounded,
-                                  assetName: 'assets/images/pop-button.png',
-                                  onPressed: () {
+                                GestureDetector(
+                                  onTap: () {
                                     // PopScope handles the final capture
                                     Navigator.pop(context);
                                   },
+                                  child: SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: Image.asset(
+                                        "assets/images/pop-button.png",
+                                        fit: BoxFit.contain,
+                                      )),
                                 ),
                                 const SizedBox(height: 16),
                                 // SidebarIcon(
@@ -873,8 +878,8 @@ class SidebarIcon extends StatelessWidget {
     return GestureDetector(
       onTap: tapActionCallback(context, onPressed),
       child: SizedBox(
-        width: 50,
-        height: 50,
+        width: 30,
+        height: 30,
         child: assetName != null
             ? Image.asset(
                 assetName!,
