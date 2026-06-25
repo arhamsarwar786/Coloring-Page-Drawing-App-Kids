@@ -384,7 +384,7 @@ class KidsSettingsDialog extends StatelessWidget {
               // Main Clay Styled Box Structure Container
               Container(
                 width: 320,
-                height: 350,
+                height: 370,
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
                 decoration: BoxDecoration(
                   color:
@@ -408,11 +408,11 @@ class KidsSettingsDialog extends StatelessWidget {
                     builder: (_, viewModel, __) {
                       return Column(
                         children: [
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 5),
                           // Heading Banner Header
                           DialogHeaderBanner(
                               text: AppStrings.settingsTitle.toUpperCase()),
-                          const SizedBox(height: 28),
+                          const SizedBox(height: 10),
 
                           // Core Utility Options Configuration Row (Logic + Image Assets Added!)
                           Row(
@@ -433,51 +433,42 @@ class KidsSettingsDialog extends StatelessWidget {
                                     : 'assets/images/sound-off.png',
                                 onTap: viewModel.toggleSound,
                               ),
-                              CustomVolumeDialIcon(
-                                assetName: "assets/images/deletes.png",
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (_) => DeleteAccountDialog(
-                                      screenContext: context,
-                                      onDelete: () async {
-                                        final user = Supabase
-                                            .instance.client.auth.currentUser;
-
-                                        if (user != null) {
-                                          await Supabase
-                                              .instance.client.functions
-                                              .invoke(
-                                            'delete_user',
-                                            body: {'user_id': user.id},
-                                          );
-
-                                          await Supabase.instance.client.auth
-                                              .signOut();
-
-                                          Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                    const LoginScreen()),
-                                            (route) => false,
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  );
-                                },
-                              )
-
                               // CustomVolumeDialIcon(
                               //   assetName: "assets/images/deletes.png",
-                              //   onTap: () {},
-                              //   // assetName: viewModel.soundEnabled
-                              //   //     ? 'assets/images/sound.png'
-                              //   //     : 'assets/images/sound-off.png',
-                              //   // onTap: viewModel.toggleSound,
-                              // ),
+                              //   onTap: () {
+                              // showDialog(
+                              //   context: context,
+                              //   barrierDismissible: false,
+                              //   builder: (_) => DeleteAccountDialog(
+                              //     screenContext: context,
+                              //     onDelete: () async {
+                              //       final user = Supabase
+                              //           .instance.client.auth.currentUser;
+
+                              //       if (user != null) {
+                              //         await Supabase
+                              //             .instance.client.functions
+                              //             .invoke(
+                              //           'delete_user',
+                              //           body: {'user_id': user.id},
+                              //         );
+
+                              //         await Supabase.instance.client.auth
+                              //             .signOut();
+
+                              //         Navigator.pushAndRemoveUntil(
+                              //           context,
+                              //           MaterialPageRoute(
+                              //               builder: (_) =>
+                              //                   const LoginScreen()),
+                              //           (route) => false,
+                              //         );
+                              //       }
+                              //     },
+                              //   ),
+                              // );
+                              //   },
+                              // )
                             ],
                           ),
                           // const Spacer(),
@@ -526,6 +517,45 @@ class KidsSettingsDialog extends StatelessWidget {
                               );
                             },
                             child: const GameMenuActionButton(label: "Log Out"),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (_) => DeleteAccountDialog(
+                                  screenContext: context,
+                                  onDelete: () async {
+                                    final user = Supabase
+                                        .instance.client.auth.currentUser;
+
+                                    if (user != null) {
+                                      await Supabase.instance.client.functions
+                                          .invoke(
+                                        'delete_user',
+                                        body: {'user_id': user.id},
+                                      );
+
+                                      await Supabase.instance.client.auth
+                                          .signOut();
+
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const LoginScreen()),
+                                        (route) => false,
+                                      );
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                            child: const GameMenuActionButton(
+                                label: "Account Delete"),
                           ),
                         ],
                       );

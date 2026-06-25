@@ -39,7 +39,8 @@
         <category android:name="android.intent.category.BROWSABLE" />
         <data
             android:scheme="com.devsinntechnologies.magic_kids_color"
-            android:host="login-callback" />
+            android:host="login-callback"
+             />
     </intent-filter>
 
         </activity>

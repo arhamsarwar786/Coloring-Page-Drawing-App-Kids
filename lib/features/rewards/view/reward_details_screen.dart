@@ -246,9 +246,12 @@ class RewardDetailScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(30)),
                         ),
                         onPressed: () {
+                          final String childName =
+                              item['child_name'] ?? "Child";
                           final certificateData = PlayCraftCertificateData(
-                            childName:
-                                "Fatima", // Yahan Supabase se fetch kiya hua naam dalen
+                            childName: childName,
+                            // childName:
+                            //     "Fatima", // Yahan Supabase se fetch kiya hua naam dalen
                             certificateId:
                                 "PC-${DateTime.now().millisecondsSinceEpoch}", // Unique ID
                             issuedAt: DateTime.now(),

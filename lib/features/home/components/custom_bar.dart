@@ -115,28 +115,13 @@ class _CustomBarState extends State<CustomBar> {
             ),
 
             AppBottomBar(
-              child: Image.asset("assets/images/setting.png"),
-              topColor: Colors.blueAccent,
+              child: Image.asset("assets/images/reward.png"),
+              topColor: const Color.fromARGB(255, 205, 211, 221),
               bottomColor: Colors.blue,
               isSelected: selectedIndex == 3,
               onTap: () {
                 handleTapAction(context, () {});
                 setState(() => selectedIndex = 3);
-                showDialog(
-                  context: context,
-                  builder: (_) => const Center(child: KidsSettingsDialog()),
-                );
-              },
-            ),
-
-            AppBottomBar(
-              child: Image.asset("assets/images/reward.png"),
-              topColor: const Color.fromARGB(255, 205, 211, 221),
-              bottomColor: Colors.blue,
-              isSelected: selectedIndex == 4,
-              onTap: () {
-                handleTapAction(context, () {});
-                setState(() => selectedIndex = 4);
 
                 Navigator.push(
                     context,
@@ -148,6 +133,21 @@ class _CustomBarState extends State<CustomBar> {
                 //   context: context,
                 //   builder: (_) => const Center(child: KidsSettingsDialog()),
                 // );
+              },
+            ),
+
+            AppBottomBar(
+              child: Image.asset("assets/images/setting.png"),
+              topColor: Colors.blueAccent,
+              bottomColor: Colors.blue,
+              isSelected: selectedIndex == 4,
+              onTap: () {
+                handleTapAction(context, () {});
+                setState(() => selectedIndex = 4);
+                showDialog(
+                  context: context,
+                  builder: (_) => const Center(child: KidsSettingsDialog()),
+                );
               },
             ),
           ],

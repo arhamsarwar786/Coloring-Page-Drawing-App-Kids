@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:audio_session/audio_session.dart';
+
 import '../../../shared/services/app_preferences_service.dart';
 import '../../../core/base/base_viewmodel.dart';
 import '../../sound/services/sound_service.dart';
@@ -28,6 +30,9 @@ class SettingsViewModel extends BaseViewModel {
   }
 
   Future<void> _load() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+
     final preferences = await _preferencesService.load();
     _musicEnabled = preferences.musicEnabled;
     _soundEnabled = preferences.soundEnabled;

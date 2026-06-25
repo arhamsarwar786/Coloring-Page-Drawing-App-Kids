@@ -59,6 +59,117 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: SizedBox(
+                            height: 90,
+                            // width: double.infinity,
+                            child: Stack(
+                              children: [
+                                ClipPath(
+                                  clipper: AppBarClipper(),
+                                  child: Container(
+                                    height: 120,
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    color: const Color(0xff3b9499),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: SidebarIcon(
+                                            icon: Icons.arrow_back_rounded,
+                                            assetName:
+                                                'assets/images/pop-button.png',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+
+                                        // Title
+                                        // Title
+                                        Expanded(
+                                          child: Center(
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  // Shadow Layer
+                                                  Transform.translate(
+                                                    offset: const Offset(6, 6),
+                                                    child: Text(
+                                                      "Reward Store",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontSize: 30,
+                                                        fontFamily: "Regular",
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors.black
+                                                            .withOpacity(0.35),
+                                                        letterSpacing: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  // Pink 3D Layer
+                                                  Transform.translate(
+                                                    offset: const Offset(3, 3),
+                                                    child: Text(
+                                                      "Reward Store",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontSize: 30,
+                                                        fontFamily: "Regular",
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color:
+                                                            Color(0xFFFF4FA3),
+                                                        letterSpacing: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  // Main White Text
+                                                  Text(
+                                                    "Reward Store",
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      fontSize: 30,
+                                                      fontFamily: "Regular",
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Colors.white,
+                                                      letterSpacing: 1,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 60),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
                   // Login section ko replacement
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -99,20 +210,6 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
 
     // 2. Agar login hai, toh GridView dikhao
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //           builder: (context) =>
-      //               const RewardTrackingHistory()), // Apni History class ka naam yahan likhein
-      //     );
-      //   },
-      //   // onPressed: () => Navigator.pop(context),
-      //   backgroundColor: const Color(0xff3b9499),
-      //   child: Image.asset("assets/images/photo.png"),
-      // ),
-
       backgroundColor: Colors.transparent,
       // appBar: AppBar(title: const Text("Reward Store")),
       body: Container(

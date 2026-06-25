@@ -37,6 +37,10 @@ class _SignupScreenState extends State<SignupScreen> {
       final res = await supabase.auth.signUp(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
+        emailRedirectTo:
+            'com.devsinntechnologies.magic_kids_color://login-callback',
+        // email: emailController.text.trim(),
+        // password: passwordController.text.trim(),
       );
 
       if (res.user != null) {
@@ -89,80 +93,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
     setState(() => loading = false);
   }
-//   Future<void> signup() async {
-//     if (!_formKey.currentState!.validate()) return;
-
-//     setState(() => loading = true);
-// // await Provider.of<HomeViewModel>(context, listen: false).addWelcomeBonus(res.user!.id);
-//     try {
-//       final res = await supabase.auth.signUp(
-//         email: emailController.text.trim(),
-//         password: passwordController.text.trim(),
-//       );
-
-//       if (res.user != null) {
-//         // Profile insert
-//         await supabase.from('profiles').insert({
-//           'id': res.user!.id,
-//           'name': nameController.text.trim(),
-//           'email': emailController.text.trim(),
-//         });
-
-//         // await Provider.of<HomeViewModel>(context, listen: false)
-//         //     .addWelcomeBonus(res.user!.id);
-
-//         // print("Bonus function call ho gaya!");
-
-//         try {
-//           await supabase.from('coin_history').insert({
-//             'user_id': res.user!.id,
-//             'amount': 50,
-//             'description': 'Welcome Bonus',
-//             'created_at': DateTime.now().toIso8601String(),
-//           });
-//           print("Welcome Bonus successfully added!");
-//         } catch (e) {
-//           print(
-//               "Bonus add karne mein issue aaya, lekin user create ho gaya: $e");
-//         }
-
-//         if (mounted) {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(content: Text("Signup Successful!")),
-//           );
-
-//           Navigator.pushAndRemoveUntil(
-//             context,
-//             MaterialPageRoute(
-//               builder: (_) => MainHomeScreen(),
-//             ),
-//             (route) => false,
-//           );
-//           // Navigator.pushReplacement(
-//           //   context,
-//           //   MaterialPageRoute(builder: (context) => MainHomeScreen()),
-//           // );
-//         }
-//       }
-//     } on AuthException catch (e) {
-//       // Ye Auth (Login/Signup) ke errors hain (e.g., Email already exists)
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text("Auth Error: ${e.message}")),
-//       );
-//     } on PostgrestException catch (e) {
-//       // Ye Database (profiles table) ke errors hain
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text("Data Error: ${e.message}")),
-//       );
-//     } catch (e) {
-//       // Network ya baki koi bhi random error
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text("Error: ${e.toString()}")),
-//       );
-//     }
-
-//     setState(() => loading = false);
-//   }
 
   @override
   Widget build(BuildContext context) {
@@ -309,8 +239,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment
+                    .center, // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Already have an account? ',
