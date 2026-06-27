@@ -35,72 +35,239 @@ class _ColoringBoardState extends State<ColoringBoard> {
   @override
   Widget build(BuildContext context) {
     final provider = widget.provider;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    if (isLandscape) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── Canvas ──────────────────────────────────────────────────────────
+          Expanded(
+            flex: 10,
+            child: Container(
+              margin: const EdgeInsets.only(right: 8, bottom: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32),
+                border: Border.all(
+                  // color: AppColors.primaryPurple.withValues(alpha: 0.3),
+                  width: 4,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    // color: AppColors.primaryPurple.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(28),
+                child: CanvasWidget(),
+              ),
+            ),
+          ),
+
+          // ── Controls Column (Undo, Clear, Palette) ──────────────────────────
+          SizedBox(
+            width: 80,
+            child: Column(
+              children: [
+                // Undo Button
+                // Tooltip(
+                //   message: "Undo",
+                //   triggerMode: TooltipTriggerMode.longPress,
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       borderRadius: BorderRadius.circular(16),
+                //       boxShadow: [
+                //         BoxShadow(
+                //           color: Colors.black.withValues(alpha: 0.05),
+                //           blurRadius: 8,
+                //           offset: const Offset(0, 3),
+                //         ),
+                //       ],
+                //     ),
+                //     child: InkWell(
+                //       onTap: provider.canUndo
+                //           ? () {
+                //               showDialog(
+                //                 context: context,
+                //                 barrierDismissible: false,
+                //                 builder: (context) => UndoDialog(
+                //                   onConfirm: () {
+                //                     provider.undo(); // Yahan undo trigger hoga
+                //                   },
+                //                 ),
+                //               );
+                //             }
+                //           : null,
+                //       child: Image.asset(
+                //         "assets/images/undo.webp",
+                //         width: 60,
+                //         height: 60,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 12),
+
+// Undo Button Fix
+                Tooltip(
+                  message: "Undo",
+                  // Tooltip ka triggerMode default hi 'longPress' hota hai
+                  child: InkWell(
+                    onTap: provider.canUndo
+                        ? () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => UndoDialog(
+                                onConfirm: () {
+                                  provider.undo();
+                                },
+                              ),
+                            );
+                          }
+                        : null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        "assets/images/undo.webp",
+                        width: 60,
+                        height: 60,
+                      ),
+                    ),
+                  ),
+                ),
+                // Clear Button
+                Tooltip(
+                  message: "Reset",
+                  triggerMode: TooltipTriggerMode.longPress,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => DeleteDialog(
+                            onConfirm: () {},
+                            ontap: () {
+                              provider.retry();
+                            },
+                          ),
+                        );
+                      },
+                      child: Image.asset(
+                        "assets/images/delete.webp",
+                        width: 60,
+                        height: 60,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // ── Color palette (Vertical) ──────────────────────────────────
+                Expanded(
+                  child: SafeArea(
+                    left: false,
+                    top: false,
+                    right: true,
+                    bottom: true,
+                    child: Container(
+                      width: 58,
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        itemCount: provider.palette.length,
+                        itemBuilder: (context, index) {
+                          final color = provider.palette[index];
+                          final isSelected = provider.activeColor == color;
+                          return Tooltip(
+                            message: "Color ${index + 1}",
+                            child: GestureDetector(
+                              onTap: () => provider.changeColor(color),
+                              child: Transform.scale(
+                                scale: isSelected ? 1.15 : 1.0,
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeOutBack,
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 6,
+                                    horizontal: 2,
+                                  ),
+                                  width: 46,
+                                  height: 46,
+                                  decoration: BoxDecoration(
+                                    color: color,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.white70,
+                                      width: isSelected ? 3 : 1.5,
+                                    ),
+                                    boxShadow: [
+                                      if (isSelected)
+                                        BoxShadow(
+                                          color: color.withValues(alpha: 0.4),
+                                          blurRadius: 10,
+                                          spreadRadius: 2,
+                                        )
+                                      else
+                                        BoxShadow(
+                                          color: Colors.black
+                                              .withValues(alpha: 0.1),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
 
     return Column(
       children: [
-        // ── Dynamic Child-Friendly Instruction Card ─────────────────────────
-        // Container(
-        //   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-        //   margin: const EdgeInsets.only(bottom: 6),
-        //   decoration: BoxDecoration(
-        //     // color: AppColors.smartGreen.withValues(alpha: 0.12),
-        //     borderRadius: BorderRadius.circular(24),
-        //     border: Border.all(
-        //       color: AppColors.rose,
-        //       width: 2,
-        //     ),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: AppColors.rose,
-        //         blurRadius: 10,
-        //         offset: const Offset(0, 4),
-        //       ),
-        //     ],
-        //   ),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: [
-        //       const Icon(
-        //         Icons.star_rounded,
-        //         color: Colors.white,
-        //         size: 20,
-        //       ),
-        //       const SizedBox(width: 8),
-        //       Flexible(
-        //         child: Text(
-        //           // "instructionText",
-        //           _instructionText,
-        //           textAlign: TextAlign.center,
-        //           style: const TextStyle(
-        //               fontSize: 16,
-        //               fontWeight: FontWeight.w900,
-        //               color: Colors.white),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // // if (provider.isLoaded && provider.totalParts > 0) ...[
-        //   Padding(
-        //     padding: const EdgeInsets.only(bottom: 10),
-        //     child: ClipRRect(
-        //       borderRadius: BorderRadius.circular(999),
-        //       child: LinearProgressIndicator(
-        //         value: provider.isPartByPartComplete
-        //             ? 1
-        //             : (provider.completedParts + provider.activePartProgress) /
-        //                 provider.totalParts,
-        //         minHeight: 8,
-        //         // backgroundColor: AppColors.smartGreen.withValues(alpha: 0.12),
-        //         // valueColor: const AlwaysStoppedAnimation<Color>(
-        //         //   // AppColors.smartGreen,
-        //         // ),
-        //       ),
-        //     ),
-        //   ),
-        // ],
-
         // ── Canvas ──────────────────────────────────────────────────────────
         Expanded(
           flex: 10,

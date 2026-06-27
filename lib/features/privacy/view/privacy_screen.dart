@@ -425,13 +425,16 @@ class PrivacyScreen extends StatelessWidget {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(20.0),
-                                      child: SidebarIcon(
-                                        icon: Icons.arrow_back_rounded,
-                                        assetName:
-                                            'assets/images/pop-button.png',
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
+                                      child: Tooltip(
+                                        message: "Back",
+                                        child: SidebarIcon(
+                                          icon: Icons.arrow_back_rounded,
+                                          assetName:
+                                              'assets/images/pop-button.png',
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
                                       ),
                                     ),
 

@@ -53,102 +53,117 @@ class _CustomBarState extends State<CustomBar> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // Aapke buttons wahi hain, bas ab ye Container ke andar hain
-            AppBottomBar(
-              child: Image.asset("assets/images/home.webp"),
-              topColor: Colors.orangeAccent,
-              bottomColor: Colors.orange,
-              isSelected: selectedIndex == 0,
-              onTap: () {
-                handleTapAction(context, () {});
-                setState(() => selectedIndex = 0);
-              },
+            Tooltip(
+              message: "Home",
+              child: AppBottomBar(
+                child: Image.asset("assets/images/home.webp"),
+                topColor: Colors.orangeAccent,
+                bottomColor: Colors.orange,
+                isSelected: selectedIndex == 0,
+                onTap: () {
+                  handleTapAction(context, () {});
+                  setState(() => selectedIndex = 0);
+                },
+              ),
             ),
-            AppBottomBar(
-                child: Image.asset("assets/images/photo.png"),
-                topColor: Colors.purpleAccent,
-                bottomColor: Colors.purple,
-                isSelected: selectedIndex == 1,
+            Tooltip(
+              message: "Gallery",
+              child: AppBottomBar(
+                  child: Image.asset("assets/images/photo.png"),
+                  topColor: Colors.purpleAccent,
+                  bottomColor: Colors.purple,
+                  isSelected: selectedIndex == 1,
+                  onTap: () async {
+                    setState(() => selectedIndex = 1);
+                    final viewModel = context.read<HistoryViewModel>();
+
+                    // 2. Apne function ko check karein
+                    // Agar function ka naam 'persistHistorySnapshot' hai, toh wahi use karein
+                    // Agar 'snapshot' argument required nahi hai, toh use hata dein
+                    try {
+                      viewModel.persistHistorySnapshot(captureThumbnail: true);
+                    } catch (e) {
+                      print("Function call mein masla hai: $e");
+                    }
+                    // context
+                    //     .read<HistoryViewModel>()
+                    //     .persistHistorySnapshot(captureThumbnail: true);
+                    if (context.mounted) {
+                      Navigator.pushNamed(context, AppRoutes.levels);
+                    }
+                  }),
+            ),
+
+            Tooltip(
+              message: "Coins",
+              child: AppBottomBar(
+                child: Text('🪙', style: TextStyle(fontSize: 30)),
+                // const SizedBox(width: 4),
+                topColor: const Color.fromARGB(255, 72, 228, 67),
+                bottomColor: const Color.fromARGB(255, 130, 219, 79),
+                isSelected: selectedIndex == 2,
                 onTap: () async {
-                  setState(() => selectedIndex = 1);
-                  final viewModel = context.read<HistoryViewModel>();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => CoinHistoryScreen()));
+                  // await context.read<HomeViewModel>().load();
+                  // final viewModel = context.read<HomeViewModel>();
+                  // final session = Supabase.instance.client.auth.currentSession;
+                  // final userId = session?.user?.id ?? '';
+                  // if (userId.isNotEmpty) {
+                  //   await viewModel.fetchCoinHistory(userId);
+                  // }
 
-                  // 2. Apne function ko check karein
-                  // Agar function ka naam 'persistHistorySnapshot' hai, toh wahi use karein
-                  // Agar 'snapshot' argument required nahi hai, toh use hata dein
-                  try {
-                    viewModel.persistHistorySnapshot(captureThumbnail: true);
-                  } catch (e) {
-                    print("Function call mein masla hai: $e");
-                  }
-                  // context
-                  //     .read<HistoryViewModel>()
-                  //     .persistHistorySnapshot(captureThumbnail: true);
-                  if (context.mounted) {
-                    Navigator.pushNamed(context, AppRoutes.levels);
-                  }
-                }),
-
-            AppBottomBar(
-              child: Text('🪙', style: TextStyle(fontSize: 30)),
-              // const SizedBox(width: 4),
-              topColor: const Color.fromARGB(255, 72, 228, 67),
-              bottomColor: const Color.fromARGB(255, 130, 219, 79),
-              isSelected: selectedIndex == 2,
-              onTap: () async {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => CoinHistoryScreen()));
-                // await context.read<HomeViewModel>().load();
-                // final viewModel = context.read<HomeViewModel>();
-                // final session = Supabase.instance.client.auth.currentSession;
-                // final userId = session?.user?.id ?? '';
-                // if (userId.isNotEmpty) {
-                //   await viewModel.fetchCoinHistory(userId);
-                // }
-
-                handleTapAction(context, () {});
-                setState(() => selectedIndex = 2);
-                // showDialog(
-                //   context: context,
-                //   builder: (_) => const Center(child: KidsSettingsDialog()),
-                // );
-              },
+                  handleTapAction(context, () {});
+                  setState(() => selectedIndex = 2);
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (_) => const Center(child: KidsSettingsDialog()),
+                  // );
+                },
+              ),
             ),
 
-            AppBottomBar(
-              child: Image.asset("assets/images/reward.png"),
-              topColor: const Color.fromARGB(255, 205, 211, 221),
-              bottomColor: Colors.blue,
-              isSelected: selectedIndex == 3,
-              onTap: () {
-                handleTapAction(context, () {});
-                setState(() => selectedIndex = 3);
+            Tooltip(
+              message: "Rewards",
+              child: AppBottomBar(
+                child: Image.asset("assets/images/reward.png"),
+                topColor: const Color.fromARGB(255, 205, 211, 221),
+                bottomColor: Colors.blue,
+                isSelected: selectedIndex == 3,
+                onTap: () {
+                  handleTapAction(context, () {});
+                  setState(() => selectedIndex = 3);
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const RewardStoreScreen()));
-                // Navigator.push(
-                //     context, MaterialPageRoute(builder: (_) => ));
-                // // showDialog(
-                //   context: context,
-                //   builder: (_) => const Center(child: KidsSettingsDialog()),
-                // );
-              },
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const RewardStoreScreen()));
+                  // Navigator.push(
+                  //     context, MaterialPageRoute(builder: (_) => ));
+                  // // showDialog(
+                  //   context: context,
+                  //   builder: (_) => const Center(child: KidsSettingsDialog()),
+                  // );
+                },
+              ),
             ),
 
-            AppBottomBar(
-              child: Image.asset("assets/images/setting.png"),
-              topColor: Colors.blueAccent,
-              bottomColor: Colors.blue,
-              isSelected: selectedIndex == 4,
-              onTap: () {
-                handleTapAction(context, () {});
-                setState(() => selectedIndex = 4);
-                showDialog(
-                  context: context,
-                  builder: (_) => const Center(child: KidsSettingsDialog()),
-                );
-              },
+            Tooltip(
+              message: "Settings",
+              child: AppBottomBar(
+                child: Image.asset("assets/images/setting.png"),
+                topColor: Colors.blueAccent,
+                bottomColor: Colors.blue,
+                isSelected: selectedIndex == 4,
+                onTap: () {
+                  handleTapAction(context, () {});
+                  setState(() => selectedIndex = 4);
+                  showDialog(
+                    context: context,
+                    builder: (_) => const Center(child: KidsSettingsDialog()),
+                  );
+                },
+              ),
             ),
           ],
         ),

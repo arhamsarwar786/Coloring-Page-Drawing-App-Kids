@@ -123,47 +123,41 @@ class _ColoringScreenState extends State<ColoringScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 8),
+                  // const SizedBox(height: 8),
 
                   // ── Compact Header ──────────────────────────────────────────
                   // Back button | Animal title | 👆 hint icon | 🔍 zoom toggle
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
+                      horizontal: 10,
+                    ),
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            // PopScope handles the final capture
-                            Navigator.pop(context);
-                          },
-                          child: SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: Image.asset(
-                                "assets/images/pop-button.png",
-                                fit: BoxFit.contain,
-                              )),
+                        Tooltip(
+                          message: "Back",
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => BackNavigationDialog(
+                                  screenContext: context,
+                                ),
+                              );
+                              // PopScope handles the final capture
+                              // Navigator.pop(context);
+                            },
+                            child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: Image.asset(
+                                  "assets/images/pop-button.png",
+                                  fit: BoxFit.contain,
+                                )),
+                          ),
                         ),
-                        // SidebarIcon(
-                        //   icon: Icons.arrow_back_rounded,
-                        //   assetName: 'assets/images/pop-button.png',
-                        //   // onPressed: () {
-                        //   onPressed: () {
-                        //     showDialog(
-                        //       context: context,
-                        //       builder: (context) =>
-                        //           BackNavigationDialog(screenContext: context),
-                        //     );
-                        //     // };
-                        //     // Pop back to home levels screen (not all the way to root)
-                        //     // Navigator.of(context).pop();
-                        //   },
-                        // ),
-
-                        // // ── Coin counter badge ─────────────────────────────────────────
 
                         // ── Coin counter badge ─────────────────────────────────────────
                         Consumer<HomeViewModel>(
@@ -241,59 +235,65 @@ class _ColoringScreenState extends State<ColoringScreen> {
                           },
                         ),
 
-                        AnimatedPreviewButton(
-                          onPressed: () {
-                            final coloredPath =
-                                getColoredImagePath(widget.imagePath ?? '');
-                            showGeneralDialog(
-                              context: context,
-                              barrierDismissible: true,
-                              barrierLabel: "Preview",
-                              barrierColor: Colors.black.withOpacity(0.55),
-                              transitionDuration:
-                                  const Duration(milliseconds: 400),
-                              pageBuilder: (dialogContext, animation,
-                                  secondaryAnimation) {
-                                return PreviewImageDialog(
-                                    imagePath: coloredPath);
-                              },
-                              transitionBuilder:
-                                  (ctx, animation, secondaryAnimation, child) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: ScaleTransition(
-                                    scale: CurvedAnimation(
-                                      parent: animation,
-                                      curve: Curves.elasticOut,
-                                    ),
-                                    child: child,
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            // PopScope handles the final capture
-                            showDialog(
+                        Tooltip(
+                          message: "Preview",
+                          child: AnimatedPreviewButton(
+                            onPressed: () {
+                              final coloredPath =
+                                  getColoredImagePath(widget.imagePath ?? '');
+                              showGeneralDialog(
                                 context: context,
-                                barrierColor: Colors.black.withOpacity(
-                                    0.45), // Piche ka area dark karne ke liye
-                                builder: (BuildContext context) {
-                                  return const Center(
-                                    child:
-                                        KidsSettingsDialog(), // Humara naya settings dialog widget
+                                barrierDismissible: true,
+                                barrierLabel: "Preview",
+                                barrierColor: Colors.black.withOpacity(0.55),
+                                transitionDuration:
+                                    const Duration(milliseconds: 400),
+                                pageBuilder: (dialogContext, animation,
+                                    secondaryAnimation) {
+                                  return PreviewImageDialog(
+                                      imagePath: coloredPath);
+                                },
+                                transitionBuilder: (ctx, animation,
+                                    secondaryAnimation, child) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: ScaleTransition(
+                                      scale: CurvedAnimation(
+                                        parent: animation,
+                                        curve: Curves.elasticOut,
+                                      ),
+                                      child: child,
+                                    ),
                                   );
-                                });
-                          },
-                          child: SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: Image.asset(
-                                "assets/images/setting.png",
-                                fit: BoxFit.contain,
-                              )),
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        Tooltip(
+                          message: "Settings",
+                          child: GestureDetector(
+                            onTap: () {
+                              // PopScope handles the final capture
+                              showDialog(
+                                  context: context,
+                                  barrierColor: Colors.black.withOpacity(
+                                      0.45), // Piche ka area dark karne ke liye
+                                  builder: (BuildContext context) {
+                                    return const Center(
+                                      child:
+                                          KidsSettingsDialog(), // Humara naya settings dialog widget
+                                    );
+                                  });
+                            },
+                            child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: Image.asset(
+                                  "assets/images/setting.png",
+                                  fit: BoxFit.contain,
+                                )),
+                          ),
                         ),
                       ],
                     ),

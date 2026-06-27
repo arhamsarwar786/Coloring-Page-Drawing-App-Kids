@@ -119,13 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(20.0),
-                                        child: SidebarIcon(
-                                          icon: Icons.arrow_back_rounded,
-                                          assetName:
-                                              'assets/images/pop-button.png',
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
+                                        child: Tooltip(
+                                          message: "Back",
+                                          child: SidebarIcon(
+                                            icon: Icons.arrow_back_rounded,
+                                            assetName:
+                                                'assets/images/pop-button.png',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
                                         ),
                                       ),
 
@@ -204,107 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-
-                        //  SizedBox(
-                        //   height: 140,
-                        //   width: double.infinity,
-                        //   child:
-                        //   Stack(
-                        //     children: [
-                        //       ClipPath(
-                        //         clipper: AppBarClipper(),
-                        //         child: Container(
-                        //           height: 140,
-                        //           color: const Color(0xff3b9499),
-                        //           child: Row(
-                        //             children: [
-                        //               Padding(
-                        //                 padding: const EdgeInsets.all(8.0),
-                        //                 child: SidebarIcon(
-                        //                   icon: Icons.arrow_back_rounded,
-                        //                   assetName:
-                        //                       'assets/images/pop-button.png',
-                        //                   onPressed: () {
-                        //                     Navigator.pop(context);
-                        //                   },
-                        //                 ),
-                        //               ),
-
-                        // // Title
-                        // Expanded(
-                        //   child: Center(
-                        //     child: FittedBox(
-                        //       fit: BoxFit.scaleDown,
-                        //       child: Stack(
-                        //         alignment: Alignment.center,
-                        //         children: [
-                        //           // Shadow Layer
-                        //           Transform.translate(
-                        //             offset: const Offset(6, 6),
-                        //             child: Text(
-                        //               viewModel.selectedCategory
-                        //                       ?.title ??
-                        //                   AppStrings.appTitle,
-                        //               textAlign: TextAlign.center,
-                        //               style: TextStyle(
-                        //                 fontSize: 50,
-                        //                 fontFamily: "Regular",
-                        //                 fontWeight:
-                        //                     FontWeight.w900,
-                        //                 color: Colors.black
-                        //                     .withOpacity(0.35),
-                        //                 letterSpacing: 1,
-                        //               ),
-                        //             ),
-                        //           ),
-
-                        //           // Pink 3D Layer
-                        //           Transform.translate(
-                        //             offset: const Offset(3, 3),
-                        //             child: Text(
-                        //               viewModel.selectedCategory
-                        //                       ?.title ??
-                        //                   AppStrings.appTitle,
-                        //               textAlign: TextAlign.center,
-                        //               style: const TextStyle(
-                        //                 fontSize: 50,
-                        //                 fontFamily: "Regular",
-                        //                 fontWeight:
-                        //                     FontWeight.w900,
-                        //                 color: Color(0xFFFF4FA3),
-                        //                 letterSpacing: 1,
-                        //               ),
-                        //             ),
-                        //           ),
-
-                        //           // Main White Text
-                        //           Text(
-                        //             viewModel.selectedCategory
-                        //                     ?.title ??
-                        //                 AppStrings.appTitle,
-                        //             textAlign: TextAlign.center,
-                        //             style: const TextStyle(
-                        //               fontSize: 50,
-                        //               fontFamily: "Regular",
-                        //               fontWeight: FontWeight.w900,
-                        //               color: Colors.white,
-                        //               letterSpacing: 1,
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-
-                        //               const SizedBox(width: 60),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                       ),
                       SliverPadding(
                         padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),

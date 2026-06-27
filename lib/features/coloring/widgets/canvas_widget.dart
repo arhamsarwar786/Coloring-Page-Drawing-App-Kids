@@ -217,16 +217,6 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
         return LayoutBuilder(
           builder: (context, constraints) {
-            final side = math.min(constraints.maxWidth, constraints.maxHeight);
-
-            // if (needsAutoZoom) {
-            //   _scheduleAutoZoom(
-            //     provider,
-            //     constraints.maxWidth,
-            //     constraints.maxHeight,
-            //   );
-            // }
-
             return ClipRect(
               child: InteractiveViewer(
                 transformationController: _controller,
@@ -265,8 +255,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
 
                   // ── Canvas & Bouncing Indicator Stack ─────────────────────
                   child: SizedBox(
-                    width: side,
-                    height: side,
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -276,7 +266,8 @@ class _CanvasWidgetState extends State<CanvasWidget>
                               animation: _glowAnim,
                               builder: (context, _) {
                                 return CustomPaint(
-                                  size: Size.square(side),
+                                  size: Size(constraints.maxWidth,
+                                      constraints.maxHeight),
                                   painter: ColoringPainter(
                                     coloredImage: provider.coloredImage,
                                     originalOutlineImage:
@@ -301,78 +292,71 @@ class _CanvasWidgetState extends State<CanvasWidget>
                         ),
                         // Modern guide rule: A beautiful bouncing hand cursor pointing to the active region.
                         // Vanishes instantly when drawing starts so it never gets in the child's artistic way!
-                        if (provider.activeRegionBoundsFraction != null &&
-                            !provider.isDragging &&
-                            !provider.isPartByPartComplete) ...[
-                          Positioned(
-                            left: provider.imageDisplayRect.left +
-                                (provider
-                                        .activeRegionCenterFraction!.dx *
-                                    provider.imageDisplayRect.width) -
-                                24,
-                            top: provider.imageDisplayRect.top +
-                                (provider
-                                        .activeRegionCenterFraction!.dy *
-                                    provider.imageDisplayRect.height) -
-                                24,
-                            // left:
-                            //     provider.activeRegionBoundsFraction!.center.dx *
-                            //             side -
-                            //         24,
-                            // top:
-                            //     provider.activeRegionBoundsFraction!.center.dy *
-                            //             side -
-                            //         24,
-                            child: AnimatedBuilder(
-                              animation: _glowAnim,
-                              builder: (context, _) {
-                                // Smooth organic sine-wave bounce
-                                final double bounce =
-                                    14.0 * math.sin(_glowAnim.value * math.pi);
-                                return Transform.translate(
-                                  offset: Offset(0, -bounce),
-                                  child: IgnorePointer(
-                                    child: Container(
-                                      width: 48,
-                                      height: 48,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: const ui.Color.fromARGB(
-                                                    255, 28, 45, 143)
-                                                .withValues(alpha: 0.3),
-                                            blurRadius: 12,
-                                            spreadRadius: 2,
-                                          ),
-                                          BoxShadow(
-                                            color: Colors.black.withValues(
-                                              alpha: 0.12,
-                                            ),
-                                            blurRadius: 6,
-                                            offset: const Offset(0, 4),
-                                          ),
-                                        ],
-                                        border: Border.all(
-                                          color: const Color(0xFF7B3FE4),
-                                          width: 3.5,
-                                        ),
-                                      ),
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.touch_app_rounded,
-                                          color: Color(0xFF7B3FE4),
-                                          size: 24,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
+                        // if (provider.activeRegionBoundsFraction != null &&
+                        //     !provider.isDragging &&
+                        //     !provider.isPartByPartComplete) ...[
+                        //   Positioned(
+                        //     left: provider.imageDisplayRect.left +
+                        //         (provider
+                        //                 .activeRegionCenterFraction!.dx *
+                        //             provider.imageDisplayRect.width) -
+                        //         24,
+                        //     top: provider.imageDisplayRect.top +
+                        //         (provider
+                        //                 .activeRegionCenterFraction!.dy *
+                        //             provider.imageDisplayRect.height) -
+                        //         24,
+
+                        //     child: AnimatedBuilder(
+                        //       animation: _glowAnim,
+                        //       builder: (context, _) {
+                        //         // Smooth organic sine-wave bounce
+                        //         final double bounce =
+                        //             14.0 * math.sin(_glowAnim.value * math.pi);
+                        //         return Transform.translate(
+                        //           offset: Offset(0, -bounce),
+                        //           child: IgnorePointer(
+                        //             child: Container(
+                        //               width: 48,
+                        //               height: 48,
+                        //               decoration: BoxDecoration(
+                        //                 color: Colors.white,
+                        //                 shape: BoxShape.circle,
+                        //                 boxShadow: [
+                        //                   BoxShadow(
+                        //                     color: const ui.Color.fromARGB(
+                        //                             255, 28, 45, 143)
+                        //                         .withValues(alpha: 0.3),
+                        //                     blurRadius: 12,
+                        //                     spreadRadius: 2,
+                        //                   ),
+                        //                   BoxShadow(
+                        //                     color: Colors.black.withValues(
+                        //                       alpha: 0.12,
+                        //                     ),
+                        //                     blurRadius: 6,
+                        //                     offset: const Offset(0, 4),
+                        //                   ),
+                        //                 ],
+                        //                 border: Border.all(
+                        //                   color: const Color(0xFF7B3FE4),
+                        //                   width: 3.5,
+                        //                 ),
+                        //               ),
+                        //               child: const Center(
+                        //                 child: Icon(
+                        //                   Icons.touch_app_rounded,
+                        //                   color: Color(0xFF7B3FE4),
+                        //                   size: 24,
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         );
+                        //       },
+                        //     ),
+                        //   ),
+                        // ],
                       ],
                     ),
                   ),

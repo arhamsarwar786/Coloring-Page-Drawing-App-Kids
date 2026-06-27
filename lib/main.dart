@@ -61,18 +61,26 @@ import 'app/app.dart'; // Ensure this points to where AsmrDrawingApp is defined
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
+  await WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
   ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  //   DeviceOrientation.landscapeLeft,
+  //   DeviceOrientation.landscapeRight,
+  // ]);
 
   await Supabase.initialize(
-    url: 'https://skywvbfwotpxlwiglxpl.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNreXd2YmZ3b3RweGx3aWdseHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDI3NDUsImV4cCI6MjA5NjU3ODc0NX0.8c70N43kzT9szn2zmXSn2lT15kRlxhEcoJ05rZqDkBs',
-  );
+      url: 'https://sayjckdxhzigfuplwhvv.supabase.co',
+      anonKey:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNheWpja2R4aHppZ2Z1cGx3aHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTA4ODMsImV4cCI6MjA5ODEyNjg4M30.QKlogPiXnDL7opX7ScZPQj5MqFM1Kw-SGE1OALsfY5E"
+      // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNreXd2YmZ3b3RweGx3aWdseHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDI3NDUsImV4cCI6MjA5NjU3ODc0NX0.8c70N43kzT9szn2zmXSn2lT15kRlxhEcoJ05rZqDkBs',
+      );
 
   final appLinks = AppLinks();
 

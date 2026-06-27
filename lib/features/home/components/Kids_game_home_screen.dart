@@ -406,158 +406,161 @@ class KidsSettingsDialog extends StatelessWidget {
                   ),
                   child: Consumer<SettingsViewModel>(
                     builder: (_, viewModel, __) {
-                      return Column(
-                        children: [
-                          const SizedBox(height: 5),
-                          // Heading Banner Header
-                          DialogHeaderBanner(
-                              text: AppStrings.settingsTitle.toUpperCase()),
-                          const SizedBox(height: 10),
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 5),
+                            // Heading Banner Header
+                            DialogHeaderBanner(
+                                text: AppStrings.settingsTitle.toUpperCase()),
+                            const SizedBox(height: 10),
 
-                          // Core Utility Options Configuration Row (Logic + Image Assets Added!)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              // Music Icon Tile Button
-                              CustomVolumeDialIcon(
-                                assetName: viewModel.musicEnabled
-                                    ? 'assets/images/music.png'
-                                    : 'assets/images/music-off.png',
-                                onTap: viewModel.toggleMusic,
-                              ),
-
-                              // Sound Effects Icon Tile Button
-                              CustomVolumeDialIcon(
-                                assetName: viewModel.soundEnabled
-                                    ? 'assets/images/sound.png'
-                                    : 'assets/images/sound-off.png',
-                                onTap: viewModel.toggleSound,
-                              ),
-                              // CustomVolumeDialIcon(
-                              //   assetName: "assets/images/deletes.png",
-                              //   onTap: () {
-                              // showDialog(
-                              //   context: context,
-                              //   barrierDismissible: false,
-                              //   builder: (_) => DeleteAccountDialog(
-                              //     screenContext: context,
-                              //     onDelete: () async {
-                              //       final user = Supabase
-                              //           .instance.client.auth.currentUser;
-
-                              //       if (user != null) {
-                              //         await Supabase
-                              //             .instance.client.functions
-                              //             .invoke(
-                              //           'delete_user',
-                              //           body: {'user_id': user.id},
-                              //         );
-
-                              //         await Supabase.instance.client.auth
-                              //             .signOut();
-
-                              //         Navigator.pushAndRemoveUntil(
-                              //           context,
-                              //           MaterialPageRoute(
-                              //               builder: (_) =>
-                              //                   const LoginScreen()),
-                              //           (route) => false,
-                              //         );
-                              //       }
-                              //     },
-                              //   ),
-                              // );
-                              //   },
-                              // )
-                            ],
-                          ),
-                          // const Spacer(),
-                          const SizedBox(height: 10),
-
-                          // Embedded Action Button Action Layer (Privacy Policy Logic Triggered)
-                          GestureDetector(
-                            onTap: tapActionCallback(context, () {
-                              return Navigator.pushNamed(
-                                context,
-                                AppRoutes.privacy,
-                              );
-                            }),
-                            child: const GameMenuActionButton(
-                                label: "PRIVACY POLICY"),
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (_) => LogoutDialog(
-                                  screenContext: context,
-                                  onLogout: () async {
-                                    try {
-                                      await Supabase.instance.client.auth
-                                          .signOut();
-
-                                      if (!context.mounted) return;
-
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const LoginScreen(),
-                                        ),
-                                        (route) => false,
-                                      );
-                                    } catch (e) {
-                                      print(e);
-                                    }
-                                  },
+                            // Core Utility Options Configuration Row (Logic + Image Assets Added!)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                // Music Icon Tile Button
+                                CustomVolumeDialIcon(
+                                  assetName: viewModel.musicEnabled
+                                      ? 'assets/images/music.png'
+                                      : 'assets/images/music-off.png',
+                                  onTap: viewModel.toggleMusic,
                                 ),
-                              );
-                            },
-                            child: const GameMenuActionButton(label: "Log Out"),
-                          ),
 
-                          const SizedBox(height: 10),
-
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (_) => DeleteAccountDialog(
-                                  screenContext: context,
-                                  onDelete: () async {
-                                    final user = Supabase
-                                        .instance.client.auth.currentUser;
-
-                                    if (user != null) {
-                                      await Supabase.instance.client.functions
-                                          .invoke(
-                                        'delete_user',
-                                        body: {'user_id': user.id},
-                                      );
-
-                                      await Supabase.instance.client.auth
-                                          .signOut();
-
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                const LoginScreen()),
-                                        (route) => false,
-                                      );
-                                    }
-                                  },
+                                // Sound Effects Icon Tile Button
+                                CustomVolumeDialIcon(
+                                  assetName: viewModel.soundEnabled
+                                      ? 'assets/images/sound.png'
+                                      : 'assets/images/sound-off.png',
+                                  onTap: viewModel.toggleSound,
                                 ),
-                              );
-                            },
-                            child: const GameMenuActionButton(
-                                label: "Account Delete"),
-                          ),
-                        ],
+                                // CustomVolumeDialIcon(
+                                //   assetName: "assets/images/deletes.png",
+                                //   onTap: () {
+                                // showDialog(
+                                //   context: context,
+                                //   barrierDismissible: false,
+                                //   builder: (_) => DeleteAccountDialog(
+                                //     screenContext: context,
+                                //     onDelete: () async {
+                                //       final user = Supabase
+                                //           .instance.client.auth.currentUser;
+
+                                //       if (user != null) {
+                                //         await Supabase
+                                //             .instance.client.functions
+                                //             .invoke(
+                                //           'delete_user',
+                                //           body: {'user_id': user.id},
+                                //         );
+
+                                //         await Supabase.instance.client.auth
+                                //             .signOut();
+
+                                //         Navigator.pushAndRemoveUntil(
+                                //           context,
+                                //           MaterialPageRoute(
+                                //               builder: (_) =>
+                                //                   const LoginScreen()),
+                                //           (route) => false,
+                                //         );
+                                //       }
+                                //     },
+                                //   ),
+                                // );
+                                //   },
+                                // )
+                              ],
+                            ),
+                            // const Spacer(),
+                            const SizedBox(height: 10),
+
+                            // Embedded Action Button Action Layer (Privacy Policy Logic Triggered)
+                            GestureDetector(
+                              onTap: tapActionCallback(context, () {
+                                return Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.privacy,
+                                );
+                              }),
+                              child: const GameMenuActionButton(
+                                  label: "PRIVACY POLICY"),
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (_) => LogoutDialog(
+                                    screenContext: context,
+                                    onLogout: () async {
+                                      try {
+                                        await Supabase.instance.client.auth
+                                            .signOut();
+
+                                        if (!context.mounted) return;
+
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => const LoginScreen(),
+                                          ),
+                                          (route) => false,
+                                        );
+                                      } catch (e) {
+                                        print(e);
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                              child:
+                                  const GameMenuActionButton(label: "Log Out"),
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (_) => DeleteAccountDialog(
+                                    screenContext: context,
+                                    onDelete: () async {
+                                      final user = Supabase
+                                          .instance.client.auth.currentUser;
+
+                                      if (user != null) {
+                                        await Supabase.instance.client.functions
+                                            .invoke(
+                                          'delete_user',
+                                          body: {'user_id': user.id},
+                                        );
+
+                                        await Supabase.instance.client.auth
+                                            .signOut();
+
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const LoginScreen()),
+                                          (route) => false,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                              child: const GameMenuActionButton(
+                                  label: "Account Delete"),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),
