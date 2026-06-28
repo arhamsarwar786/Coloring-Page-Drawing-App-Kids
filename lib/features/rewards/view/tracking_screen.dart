@@ -754,71 +754,91 @@ class _TrackingScreenState extends State<TrackingScreen> {
         body: Form(
           key: _formKey,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Header (Same as your provided code)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: SizedBox(
-                          height: 90,
-                          // width: double.infinity,
-                          child: Stack(
-                            children: [
-                              ClipPath(
-                                clipper: AppBarClipper(),
-                                child: Container(
-                                  height: 120,
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  color: const Color(0xff3b9499),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: SidebarIcon(
-                                          icon: Icons.arrow_back_rounded,
-                                          assetName:
-                                              'assets/images/pop-button.png',
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
+            child: SafeArea(
+              child: Column(
+                children: [
+                  // Header (Same as your provided code)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: SizedBox(
+                            height: 90,
+                            // width: double.infinity,
+                            child: Stack(
+                              children: [
+                                ClipPath(
+                                  clipper: AppBarClipper(),
+                                  child: Container(
+                                    height: 120,
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    color: const Color(0xff3b9499),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: SidebarIcon(
+                                            icon: Icons.arrow_back_rounded,
+                                            assetName:
+                                                'assets/images/pop-button.png',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
                                         ),
-                                      ),
 
-                                      // Title
-                                      // Title
-                                      Expanded(
-                                        child: Center(
-                                          child: FittedBox(
-                                            fit: BoxFit.scaleDown,
-                                            child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                // Shadow Layer
-                                                Transform.translate(
-                                                  offset: const Offset(6, 6),
-                                                  child: Text(
-                                                    "Tracking Screen",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 30,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Colors.black
-                                                          .withOpacity(0.35),
-                                                      letterSpacing: 1,
+                                        // Title
+                                        // Title
+                                        Expanded(
+                                          child: Center(
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  // Shadow Layer
+                                                  Transform.translate(
+                                                    offset: const Offset(6, 6),
+                                                    child: Text(
+                                                      "Tracking Screen",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontSize: 30,
+                                                        fontFamily: "Regular",
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors.black
+                                                            .withOpacity(0.35),
+                                                        letterSpacing: 1,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
 
-                                                // Pink 3D Layer
-                                                Transform.translate(
-                                                  offset: const Offset(3, 3),
-                                                  child: Text(
+                                                  // Pink 3D Layer
+                                                  Transform.translate(
+                                                    offset: const Offset(3, 3),
+                                                    child: Text(
+                                                      "Tracking Screen",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontSize: 30,
+                                                        fontFamily: "Regular",
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color:
+                                                            Color(0xFFFF4FA3),
+                                                        letterSpacing: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  // Main White Text
+                                                  Text(
                                                     "Tracking Screen",
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
@@ -826,93 +846,81 @@ class _TrackingScreenState extends State<TrackingScreen> {
                                                       fontFamily: "Regular",
                                                       fontWeight:
                                                           FontWeight.w900,
-                                                      color: Color(0xFFFF4FA3),
+                                                      color: Colors.white,
                                                       letterSpacing: 1,
                                                     ),
                                                   ),
-                                                ),
-
-                                                // Main White Text
-                                                Text(
-                                                  "Tracking Screen",
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    fontSize: 30,
-                                                    fontFamily: "Regular",
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.white,
-                                                    letterSpacing: 1,
-                                                  ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
 
-                                      const SizedBox(width: 60),
-                                    ],
+                                        const SizedBox(width: 60),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+
+                  const Text("ENTER DELIVERY DETAILS",
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff3b9499))),
+                  const SizedBox(height: 20),
+
+                  // _buildTextField(
+                  //     _parentNameController, "Enter Parent Name", "parent name"),
+
+                  _buildTextField(_parentNameController, "Enter Parent Name",
+                      "parent name"),
+                  _buildTextField(
+                      _childNameController, "Enter Child Name", "child name"),
+                  _buildTextField(_phoneController,
+                      "Enter Phone (e.g. 03001234567)", "phone number",
+                      isNumeric: true),
+                  _buildTextField(_emailController, "Enter Email",
+                      "email"), // Ye line form fields mein add kar dein
+                  _buildTextField(_cityController, "City: Lahore", "city"),
+                  _buildTextField(
+                      _addressController, "Enter address", "address"),
+
+                  const SizedBox(height: 20),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey),
+                        child: const Text("Cancel"),
+                      ),
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff3b9499)),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            bool? confirm = await _showConfirmationDialog();
+                            if (confirm == true) {
+                              _submitClaim();
+                            }
+                          }
+                        },
+                        child: const Text("Confirm"),
                       ),
                     ],
                   ),
-                ),
-
-                const Text("ENTER DELIVERY DETAILS",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff3b9499))),
-                const SizedBox(height: 20),
-
-                // _buildTextField(
-                //     _parentNameController, "Enter Parent Name", "parent name"),
-
-                _buildTextField(
-                    _parentNameController, "Enter Parent Name", "parent name"),
-                _buildTextField(
-                    _childNameController, "Enter Child Name", "child name"),
-                _buildTextField(_phoneController,
-                    "Enter Phone (e.g. 03001234567)", "phone number",
-                    isNumeric: true),
-                _buildTextField(_emailController, "Enter Email",
-                    "email"), // Ye line form fields mein add kar dein
-                _buildTextField(_cityController, "City: Lahore", "city"),
-                _buildTextField(_addressController, "Enter address", "address"),
-
-                const SizedBox(height: 20),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey),
-                      child: const Text("Cancel"),
-                    ),
-                    const SizedBox(width: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff3b9499)),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          bool? confirm = await _showConfirmationDialog();
-                          if (confirm == true) {
-                            _submitClaim();
-                          }
-                        }
-                      },
-                      child: const Text("Confirm"),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

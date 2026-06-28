@@ -7,7 +7,8 @@ import 'package:play_craft_kids/core/di/providers.dart';
 import 'package:provider/provider.dart';
 
 class AsmrDrawingApp extends StatelessWidget {
-  const AsmrDrawingApp({super.key});
+  final GlobalKey<NavigatorState>? navigatorKey;
+  const AsmrDrawingApp({super.key, this.navigatorKey});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class AsmrDrawingApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: AppConfig.appTitle,
         theme: AppTheme.light(),
+        navigatorKey: navigatorKey,
         initialRoute: AppRoutes.splash,
         onGenerateRoute: AppRoutes.onGenerateRoute,
       ),

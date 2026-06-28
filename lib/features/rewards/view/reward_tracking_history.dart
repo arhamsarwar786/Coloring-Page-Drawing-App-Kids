@@ -30,138 +30,142 @@ class RewardTrackingHistory extends StatelessWidget {
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: Column(
-            children: [
-              // 1. Aapka Custom Header (AppBar)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: SizedBox(
-                        height: 90,
-                        // width: double.infinity,
-                        child: Stack(
-                          children: [
-                            ClipPath(
-                              clipper: AppBarClipper(),
-                              child: Container(
-                                height: 120,
-                                margin: EdgeInsets.only(bottom: 10),
-                                color: const Color(0xff3b9499),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: SidebarIcon(
-                                        icon: Icons.arrow_back_rounded,
-                                        assetName:
-                                            'assets/images/pop-button.png',
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
+          body: SafeArea(
+            child: Column(
+              children: [
+                // 1. Aapka Custom Header (AppBar)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 90,
+                          // width: double.infinity,
+                          child: Stack(
+                            children: [
+                              ClipPath(
+                                clipper: AppBarClipper(),
+                                child: Container(
+                                  height: 120,
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  color: const Color(0xff3b9499),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: SidebarIcon(
+                                          icon: Icons.arrow_back_rounded,
+                                          assetName:
+                                              'assets/images/pop-button.png',
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
                                       ),
-                                    ),
 
-                                    // Title
-                                    Expanded(
-                                      child: Center(
-                                        child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              // Shadow Layer
-                                              Transform.translate(
-                                                offset: const Offset(6, 6),
-                                                child: Text(
-                                                  "Tracking History",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize: 30,
-                                                    fontFamily: "Regular",
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.black
-                                                        .withOpacity(0.35),
-                                                    letterSpacing: 1,
+                                      // Title
+                                      Expanded(
+                                        child: Center(
+                                          child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                // Shadow Layer
+                                                Transform.translate(
+                                                  offset: const Offset(6, 6),
+                                                  child: Text(
+                                                    "Tracking History",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 30,
+                                                      fontFamily: "Regular",
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Colors.black
+                                                          .withOpacity(0.35),
+                                                      letterSpacing: 1,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
 
-                                              // Pink 3D Layer
-                                              Transform.translate(
-                                                offset: const Offset(3, 3),
-                                                child: Text(
+                                                // Pink 3D Layer
+                                                Transform.translate(
+                                                  offset: const Offset(3, 3),
+                                                  child: Text(
+                                                    "Tracking History",
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      fontSize: 30,
+                                                      fontFamily: "Regular",
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Color(0xFFFF4FA3),
+                                                      letterSpacing: 1,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                // Main White Text
+                                                Text(
                                                   "Tracking History",
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                     fontSize: 30,
                                                     fontFamily: "Regular",
                                                     fontWeight: FontWeight.w900,
-                                                    color: Color(0xFFFF4FA3),
+                                                    color: Colors.white,
                                                     letterSpacing: 1,
                                                   ),
                                                 ),
-                                              ),
-
-                                              // Main White Text
-                                              Text(
-                                                "Tracking History",
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  fontSize: 30,
-                                                  fontFamily: "Regular",
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.white,
-                                                  letterSpacing: 1,
-                                                ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
 
-                                    const SizedBox(width: 60),
-                                  ],
+                                      const SizedBox(width: 60),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+                // 2. TabBar Yahan add karein (Header ke niche)
+                const TabBar(
+                  labelColor: Colors.black,
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontFamily: "Regular",
+                  ),
+                  unselectedLabelColor: Color(0xff3b9499),
+                  tabs: [
+                    Tab(text: "All"),
+                    Tab(text: "Pending"),
+                    Tab(text: "Completed"),
                   ],
                 ),
-              ),
-              // 2. TabBar Yahan add karein (Header ke niche)
-              const TabBar(
-                labelColor: Colors.black,
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  fontFamily: "Regular",
-                ),
-                unselectedLabelColor: Color(0xff3b9499),
-                tabs: [
-                  Tab(text: "All"),
-                  Tab(text: "Pending"),
-                  Tab(text: "Completed"),
-                ],
-              ),
 
-              // 3. TabBarView ko Expanded mein rakhein (Zaroori hai!)
-              const Expanded(
-                child: TabBarView(
-                  children: [
-                    RewardList(status: 'all'),
-                    RewardList(status: 'pending'),
-                    RewardList(status: 'delivered'),
-                  ],
+                // 3. TabBarView ko Expanded mein rakhein (Zaroori hai!)
+                const Expanded(
+                  child: TabBarView(
+                    children: [
+                      RewardList(status: 'all'),
+                      RewardList(status: 'pending'),
+                      RewardList(status: 'delivered'),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -217,14 +221,14 @@ class RewardList extends StatelessWidget {
             final item = data[index];
 
             String getImageUrl(String rewardId) {
-              if (rewardId == "e232839c-cb25-489c-b4c5-98314521eb3f")
-                return "https://skywvbfwotpxlwiglxpl.supabase.co/storage/v1/object/public/rewards_images/certificate.png";
-              if (rewardId == "f10aaf53-bdc0-43cd-a91b-cec5203d9d99")
-                return "https://skywvbfwotpxlwiglxpl.supabase.co/storage/v1/object/public/rewards_images/sticker.png";
-              if (rewardId == "4620fa4a-a9e1-48f1-a01d-97faecbe62c2")
-                return "https://skywvbfwotpxlwiglxpl.supabase.co/storage/v1/object/public/rewards_images/crayon.png";
-              if (rewardId == "8559ee27-5d03-46be-94bf-3ee2599d88df")
-                return "https://skywvbfwotpxlwiglxpl.supabase.co/storage/v1/object/public/rewards_images/bottle.png";
+              if (rewardId == "f03a90c8-27fd-45b0-9ea0-a0f55327f314")
+                return "https://sayjckdxhzigfuplwhvv.supabase.co/storage/v1/object/sign/rewards_images/certificate.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zZjZkNjhjNS00YWYwLTRhODktODkyNi00MjlmMzg1OGI3YWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJyZXdhcmRzX2ltYWdlcy9jZXJ0aWZpY2F0ZS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzgyNjMzOTYxLCJleHAiOjE4MTQxNjk5NjF9.hRumsDD2fht79GssNDWI9n8SmCYoJ5bCDPfPjecL8pM";
+              if (rewardId == "90e05586-04a3-418f-965d-f03eb83cd5af")
+                return "https://sayjckdxhzigfuplwhvv.supabase.co/storage/v1/object/sign/rewards_images/sticker.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zZjZkNjhjNS00YWYwLTRhODktODkyNi00MjlmMzg1OGI3YWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJyZXdhcmRzX2ltYWdlcy9zdGlja2VyLnBuZyIsInNjb3BlIjoiZG93bmxvYWQiLCJpYXQiOjE3ODI2MzQwMzksImV4cCI6MTgxNDE3MDAzOX0.V4dGfaArmZvi5w2W4i5jmeKbPAJtv8Le-7PGo2lmczc";
+              if (rewardId == "f006028f-6b53-473d-af0d-58e334d6bf16")
+                return "https://sayjckdxhzigfuplwhvv.supabase.co/storage/v1/object/sign/rewards_images/crayon.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zZjZkNjhjNS00YWYwLTRhODktODkyNi00MjlmMzg1OGI3YWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJyZXdhcmRzX2ltYWdlcy9jcmF5b24ucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4MjYzNDAwMiwiZXhwIjoxODE0MTcwMDAyfQ.pyLmfcu3lPx4PJ0vEQc7seOpAhlXH3GV3tjn3sEzOgA";
+              if (rewardId == "178a614b-feb0-4743-9984-ff5b6aed594b")
+                return "https://sayjckdxhzigfuplwhvv.supabase.co/storage/v1/object/sign/rewards_images/bottle.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zZjZkNjhjNS00YWYwLTRhODktODkyNi00MjlmMzg1OGI3YWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJyZXdhcmRzX2ltYWdlcy9ib3R0bGUucG5nIiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4MjYzMzY0MiwiZXhwIjoxODE0MTY5NjQyfQ.Z4ptrAIKAABd27nJQvQhM_dsQz_s6bKsnJqCWA8UAhQ";
               return "";
             }
 

@@ -1,53 +1,128 @@
-// import 'package:flutter/widgets.dart';
+// import 'package:app_links/app_links.dart';
+// import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:sizer/sizer.dart';
 // import 'package:supabase_flutter/supabase_flutter.dart';
-// import 'app/app.dart';
+// import 'app/app.dart'; // Ensure this points to where AsmrDrawingApp is defined
 
 // Future<void> main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
-//   await SystemChrome.setPreferredOrientations([
-//     DeviceOrientation.portraitUp,
-//     DeviceOrientation.portraitDown,
+
+//   await WidgetsFlutterBinding.ensureInitialized();
+//   SystemChrome.setPreferredOrientations([
 //     DeviceOrientation.landscapeLeft,
 //     DeviceOrientation.landscapeRight,
+//     DeviceOrientation.portraitUp,
+//     DeviceOrientation.portraitDown,
 //   ]);
 
-//   WidgetsFlutterBinding.ensureInitialized();
-
 //   await Supabase.initialize(
-//     url: 'https://skywvbfwotpxlwiglxpl.supabase.co',
-//     anonKey:
-//         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNreXd2YmZ3b3RweGx3aWdseHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDI3NDUsImV4cCI6MjA5NjU3ODc0NX0.8c70N43kzT9szn2zmXSn2lT15kRlxhEcoJ05rZqDkBs',
-//   );
+//       url: 'https://sayjckdxhzigfuplwhvv.supabase.co',
+//       anonKey:
+//           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNheWpja2R4aHppZ2Z1cGx3aHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTA4ODMsImV4cCI6MjA5ODEyNjg4M30.QKlogPiXnDL7opX7ScZPQj5MqFM1Kw-SGE1OALsfY5E"
+//       // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNreXd2YmZ3b3RweGx3aWdseHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDI3NDUsImV4cCI6MjA5NjU3ODc0NX0.8c70N43kzT9szn2zmXSn2lT15kRlxhEcoJ05rZqDkBs',
+//       );
 
-//   runApp(const MyApp());
+//   final appLinks = AppLinks();
+// //  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+//   // Yahan add karein:
+//   appLinks.uriLinkStream.listen((Uri uri) {
+//     debugPrint("DEEP LINK RECEIVED: $uri");
+
+//     // Ye line bahut zaroori hai, ye token extract karke verify karegi
+//     Supabase.instance.client.auth.getSessionFromUrl(uri);
+//   });
+//   // final appLinks = AppLinks();
+
+//   // appLinks.uriLinkStream.listen((Uri uri) {
+//   //   debugPrint("DEEP LINK RECEIVED: $uri");
+//   // });
+
+//   runApp( MyApp());
 // }
 
-// // class MyApp extends AsmrDrawingApp {
-// //   const MyApp({super.key});
-// // }
-
 // class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
+//   // const MyApp({super.key});
+//    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 //   @override
 //   Widget build(BuildContext context) {
-//     // ScreenUtilInit ko yahan wrap karein
 //     return ScreenUtilInit(
-//       designSize: const Size(360, 690), // Apne design ka standard size likhein
+//       designSize: const Size(360, 690),
 //       minTextAdapt: true,
 //       splitScreenMode: true,
 //       builder: (context, child) {
-//         return const AsmrDrawingApp();
-//         // return MaterialApp(
-//         //   debugShowCheckedModeBanner: false,
-//         //   home: child,
-//         // );
+//         return AsmrDrawingApp(navigatorKey: navigatorKey);
+//         // Yahan se hum AuthWrapper ko call karenge
+//         // return const AuthWrapper();
 //       },
-//       // child: const AsmrDrawingApp(),
 //     );
+//   }
+// }
+
+// class AuthWrapper extends StatefulWidget {
+//   const AuthWrapper({super.key});
+
+//   @override
+//   State<AuthWrapper> createState() => _AuthWrapperState();
+// }
+
+// class _AuthWrapperState extends State<AuthWrapper> {
+
+//   @override
+// void initState() {
+//   super.initState();
+
+//   // Verification link aur login change ko handle karne ke liye listener
+//   Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+//     final event = data.event;
+//     final session = data.session;
+
+//     if (event == AuthChangeEvent.signedIn && session != null) {
+//       WidgetsBinding.instance.addPostFrameCallback((_) {
+//         print("User successfully verified, redirecting to home...");
+
+//         // NOTE: Yahan '/home' ki jagah apni main screen ka route name dein
+//         // Agar aapke pass route name nahi hai, toh check karein AppRoutes mein kya hai
+//         navigatorKey.currentState?.pushNamedAndRemoveUntil('/home', (route) => false);
+//       });
+//     }
+//   });
+// }
+
+//   // @override
+//   // void initState() {
+//   //   super.initState();
+//   //   // Verification link handle karne ke liye listener
+//   //   Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+//   //     final event = data.event;
+//   //     final session = data.session;
+
+//   //     if (event == AuthChangeEvent.signedIn && session != null) {
+//   //       // Ye command ensure karti hai ke UI build hone ke baad navigate ho
+//   //       WidgetsBinding.instance.addPostFrameCallback((_) {
+//   //         print("User successfully verified, redirecting to home...");
+
+//   //         // '/home' ki jagah apni main screen ka sahi route name dein
+
+//   //         // Navigator.of(context)
+//   //         //     .pushNamedAndRemoveUntil('/home', (route) => false);
+//   //       });
+//   //     }
+//   //     // if (event == AuthChangeEvent.signedIn) {
+//   //     //   print("User successfully verified and signed in!");
+
+//   //     //   Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+//   //     //   // Yahan aap navigator laga sakti hain
+//   //     // }
+//   //   });
+
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Ye aapka original AsmrDrawingApp load karega
+//     return const AsmrDrawingApp();
 //   }
 // }
 
@@ -56,46 +131,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'app/app.dart'; // Ensure this points to where AsmrDrawingApp is defined
+import 'app/app.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  //   DeviceOrientation.portraitDown,
-  //   DeviceOrientation.landscapeLeft,
-  //   DeviceOrientation.landscapeRight,
-  // ]);
-
   await Supabase.initialize(
-      url: 'https://sayjckdxhzigfuplwhvv.supabase.co',
-      anonKey:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNheWpja2R4aHppZ2Z1cGx3aHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTA4ODMsImV4cCI6MjA5ODEyNjg4M30.QKlogPiXnDL7opX7ScZPQj5MqFM1Kw-SGE1OALsfY5E"
-      // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNreXd2YmZ3b3RweGx3aWdseHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDI3NDUsImV4cCI6MjA5NjU3ODc0NX0.8c70N43kzT9szn2zmXSn2lT15kRlxhEcoJ05rZqDkBs',
-      );
-
-  final appLinks = AppLinks();
-
-  // Yahan add karein:
-  appLinks.uriLinkStream.listen((Uri uri) {
-    debugPrint("DEEP LINK RECEIVED: $uri");
-
-    // Ye line bahut zaroori hai, ye token extract karke verify karegi
-    Supabase.instance.client.auth.getSessionFromUrl(uri);
-  });
-  // final appLinks = AppLinks();
-
-  // appLinks.uriLinkStream.listen((Uri uri) {
-  //   debugPrint("DEEP LINK RECEIVED: $uri");
-  // });
+    url: 'https://sayjckdxhzigfuplwhvv.supabase.co',
+    anonKey:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNheWpja2R4aHppZ2Z1cGx3aHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTA4ODMsImV4cCI6MjA5ODEyNjg4M30.QKlogPiXnDL7opX7ScZPQj5MqFM1Kw-SGE1OALsfY5E",
+  );
 
   runApp(const MyApp());
 }
@@ -107,12 +154,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        // Yahan se hum AuthWrapper ko call karenge
-        return const AuthWrapper();
-      },
+      builder: (context, child) => AsmrDrawingApp(navigatorKey: navigatorKey),
     );
   }
 }
@@ -125,40 +167,134 @@ class AuthWrapper extends StatefulWidget {
 }
 
 class _AuthWrapperState extends State<AuthWrapper> {
+  final _appLinks = AppLinks();
+
   @override
   void initState() {
     super.initState();
-    // Verification link handle karne ke liye listener
+    initDeepLinking();
+
+    // Auth Change Listener
     Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      final event = data.event;
-      final session = data.session;
-
-      if (event == AuthChangeEvent.signedIn && session != null) {
-        // Ye command ensure karti hai ke UI build hone ke baad navigate ho
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          print("User successfully verified, redirecting to home...");
-
-          // '/home' ki jagah apni main screen ka sahi route name dein
-
-          // Navigator.of(context)
-          //     .pushNamedAndRemoveUntil('/home', (route) => false);
-        });
+      if (data.event == AuthChangeEvent.signedIn) {
+        navigatorKey.currentState
+            ?.pushNamedAndRemoveUntil('/home', (route) => false);
       }
-      // if (event == AuthChangeEvent.signedIn) {
-      //   print("User successfully verified and signed in!");
+    });
+  }
 
-      //   Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-      //   // Yahan aap navigator laga sakti hain
-      // }
+  void initDeepLinking() {
+    _appLinks.uriLinkStream.listen((Uri? uri) async {
+      if (uri != null && uri.toString().contains('login-callback')) {
+        debugPrint("DEEP LINK RECEIVED: $uri");
+        // Yeh line Supabase session ko handle karegi
+        await Supabase.instance.client.auth.getSessionFromUrl(uri);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Ye aapka original AsmrDrawingApp load karega
-    return const AsmrDrawingApp();
+    // Yahan AsmrDrawingApp ko navigatorKey dena zaroori hai
+    return AsmrDrawingApp(navigatorKey: navigatorKey);
   }
 }
+
+
+
+
+
+// import 'package:app_links/app_links.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:supabase_flutter/supabase_flutter.dart';
+// import 'app/app.dart';
+
+// // --- YAHAN DEKHEIN: navigatorKey ko yahan Global banaya hai ---
+// final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+
+//   SystemChrome.setPreferredOrientations([
+//     DeviceOrientation.landscapeLeft,
+//     DeviceOrientation.landscapeRight,
+//     DeviceOrientation.portraitUp,
+//     DeviceOrientation.portraitDown,
+//   ]);
+
+//   await Supabase.initialize(
+//     url: 'https://sayjckdxhzigfuplwhvv.supabase.co',
+//     anonKey:
+//         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNheWpja2R4aHppZ2Z1cGx3aHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTA4ODMsImV4cCI6MjA5ODEyNjg4M30.QKlogPiXnDL7opX7ScZPQj5MqFM1Kw-SGE1OALsfY5E",
+//   );
+
+//   final appLinks = AppLinks();
+//   appLinks.uriLinkStream.listen((Uri uri) {
+//     debugPrint("DEEP LINK RECEIVED: $uri");
+//     Supabase.instance.client.auth.getSessionFromUrl(uri);
+//   });
+
+//   runApp(const MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ScreenUtilInit(
+//       designSize: const Size(360, 690),
+//       minTextAdapt: true,
+//       splitScreenMode: true,
+//       builder: (context, child) {
+//         // AsmrDrawingApp mein Global navigatorKey pass kar rahe hain
+//         return AsmrDrawingApp(navigatorKey: navigatorKey);
+//       },
+//     );
+//   }
+// }
+
+// class AuthWrapper extends StatefulWidget {
+//   const AuthWrapper({super.key});
+
+//   @override
+//   State<AuthWrapper> createState() => _AuthWrapperState();
+// }
+
+// class _AuthWrapperState extends State<AuthWrapper> {
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     // Global navigatorKey yahan direct access ho rahi hai
+//     Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+//       final event = data.event;
+//       final session = data.session;
+
+//       if (event == AuthChangeEvent.signedIn && session != null) {
+//         WidgetsBinding.instance.addPostFrameCallback((_) {
+//           print("User successfully verified, redirecting to home...");
+
+//           // '/home' ki jagah wo route name rakhein jo aapke AppRoutes mein hai
+//           navigatorKey.currentState
+//               ?.pushNamedAndRemoveUntil('/home', (route) => false);
+//         });
+//       }
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const AsmrDrawingApp();
+//   }
+// }
+
+
+
+
+
 
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});

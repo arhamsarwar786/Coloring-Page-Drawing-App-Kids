@@ -37,21 +37,25 @@ class _SignupScreenState extends State<SignupScreen> {
       final res = await supabase.auth.signUp(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
+        // Code mein ye line change karein:
         emailRedirectTo:
             'com.devsinntechnologies.magic_kids_color://login-callback',
+        // emailRedirectTo:
+        //     'com.devsinntechnologies.magic_kids_color://login-callback',
         // email: emailController.text.trim(),
         // password: passwordController.text.trim(),
       );
 
       if (res.user != null) {
         // 1. Profile insert
-        await supabase.from('profiles').insert({
-          'id': res.user!.id,
-          'name': nameController.text.trim(),
-          'email': emailController.text.trim(),
-        });
+        // await supabase.from('profiles').insert({
+        //   'id': res.user!.id,
+        //   'name': nameController.text.trim(),
+        //   'email': emailController.text.trim(),
+        // });
 
-        // 2. Welcome Bonus
+        // // 2. Welcome Bonus
+
         try {
           await supabase.from('coin_history').insert({
             'user_id': res.user!.id,
@@ -63,19 +67,38 @@ class _SignupScreenState extends State<SignupScreen> {
           print("Bonus add error: $e");
         }
 
+        // 3. Success Message aur Navigation
         if (mounted) {
-          // 3. SUCCESS MESSAGE - User ko app ke andar mat bhejein
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content:
-                  Text("Signup Successful! Please verify your email to login."),
-              duration: Duration(seconds: 5),
-            ),
+                content: Text("Signup Successful! Please verify your email.")),
           );
-
-          // 4. Wapas Login screen par bhej dein
-          Navigator.pop(context);
+          Navigator.pop(context); // Ye wapas wahan bhej dega jahan se aayi thi
         }
+        // try {
+        //   await supabase.from('coin_history').insert({
+        //     'user_id': res.user!.id,
+        //     'amount': 50,
+        //     'description': 'Welcome Bonus',
+        //     'created_at': DateTime.now().toIso8601String(),
+        //   });
+        // } catch (e) {
+        //   print("Bonus add error: $e");
+        // }
+
+        // if (mounted) {
+        //   // 3. SUCCESS MESSAGE - User ko app ke andar mat bhejein
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(
+        //       content:
+        //           Text("Signup Successful! Please verify your email to login."),
+        //       duration: Duration(seconds: 5),
+        //     ),
+        //   );
+
+        //   // 4. Wapas Login screen par bhej dein
+        //   Navigator.pop(context);
+        // }
       }
     } on AuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
