@@ -710,15 +710,25 @@ class ColoringProvider extends ChangeNotifier {
     const int maxMainColors = 6; // 4-6 main colors for child-friendly palette
     final List<Color> newPalette = [];
 
-    // Filter out colors that make up less than 1.5% of the total colored area, 
-    // to remove anti-aliasing and outline noise.
-    final int minThreshold = math.max(150, (totalValidPixels * 0.015).toInt());
+    // Vivid colors (red, green, brown, etc.) get a very low threshold (0.15%) to catch small details like a stem or leaf.
+    // Neutral colors (black, gray, white) get a higher threshold (2.5%) to filter out anti-aliasing and outline noise.
+    final int vividThreshold = math.max(30, (totalValidPixels * 0.0015).toInt());
+    final int noiseThreshold = math.max(200, (totalValidPixels * 0.025).toInt());
 
     for (final entry in sortedBuckets) {
-      if (entry.value < minThreshold) continue; // skip noise buckets
       if (newPalette.length >= maxMainColors) break;
 
       final bestBucketIndex = entry.key;
+      final count = entry.value;
+
+      int threshold = vividThreshold;
+      // 0: White, 1: Black, 2: Gray
+      if (bestBucketIndex == 0 || bestBucketIndex == 1 || bestBucketIndex == 2) {
+        threshold = noiseThreshold;
+      }
+
+      if (count < threshold) continue; // skip noise or extremely small areas
+
       final freqMap = bucketColorFrequencies[bestBucketIndex]!;
 
       // Find the most frequent exact RGB color in this bucket
