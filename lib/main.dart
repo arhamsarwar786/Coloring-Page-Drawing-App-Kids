@@ -126,12 +126,13 @@
 //   }
 // }
 
-import 'package:app_links/app_links.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app/app.dart';
+import 'app/routes/app_routes.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -140,15 +141,42 @@ Future<void> main() async {
 
   await Supabase.initialize(
     url: 'https://sayjckdxhzigfuplwhvv.supabase.co',
-    anonKey:
+   anonKey:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNheWpja2R4aHppZ2Z1cGx3aHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTA4ODMsImV4cCI6MjA5ODEyNjg4M30.QKlogPiXnDL7opX7ScZPQj5MqFM1Kw-SGE1OALsfY5E",
   );
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  StreamSubscription<AuthState>? _authSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _authSubscription =
+        Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      if (data.event == AuthChangeEvent.signedIn && data.session != null) {
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(
+          AppRoutes.mainHome,
+          (route) => false,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,51 +186,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-class AuthWrapper extends StatefulWidget {
-  const AuthWrapper({super.key});
-
-  @override
-  State<AuthWrapper> createState() => _AuthWrapperState();
-}
-
-class _AuthWrapperState extends State<AuthWrapper> {
-  final _appLinks = AppLinks();
-
-  @override
-  void initState() {
-    super.initState();
-    initDeepLinking();
-
-    // Auth Change Listener
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      if (data.event == AuthChangeEvent.signedIn) {
-        navigatorKey.currentState
-            ?.pushNamedAndRemoveUntil('/home', (route) => false);
-      }
-    });
-  }
-
-  void initDeepLinking() {
-    _appLinks.uriLinkStream.listen((Uri? uri) async {
-      if (uri != null && uri.toString().contains('login-callback')) {
-        debugPrint("DEEP LINK RECEIVED: $uri");
-        // Yeh line Supabase session ko handle karegi
-        await Supabase.instance.client.auth.getSessionFromUrl(uri);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Yahan AsmrDrawingApp ko navigatorKey dena zaroori hai
-    return AsmrDrawingApp(navigatorKey: navigatorKey);
-  }
-}
-
-
-
-
 
 // import 'package:app_links/app_links.dart';
 // import 'package:flutter/material.dart';
@@ -290,11 +273,6 @@ class _AuthWrapperState extends State<AuthWrapper> {
 //     return const AsmrDrawingApp();
 //   }
 // }
-
-
-
-
-
 
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});

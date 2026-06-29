@@ -117,6 +117,7 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => loading = false);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
