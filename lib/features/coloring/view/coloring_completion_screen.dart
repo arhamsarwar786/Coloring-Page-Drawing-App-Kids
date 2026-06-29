@@ -414,395 +414,420 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
 
                 // ── Main content ────────────────────────────────────────────
                 SafeArea(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
+                  child: OrientationBuilder(
+                    builder: (context, orientation) {
+                      final isLandscape = orientation == Orientation.landscape;
 
-                      // ── "Woohoo!" header ───────────────────────────────────
-                      Text(
-                        passed ? '🎉 WooHoo! 🎉' : 'Keep Trying!',
-                        style: TextStyle(
-                          fontSize: 34,
-                          fontFamily: "Regular",
-                          fontWeight: FontWeight.w700,
-                          color: passed
-                              ? const Color(0xFFFFD700)
-                              : const Color(0xFFFF5722),
-                          shadows: [
-                            const Shadow(
-                              color: Colors.black38,
-                              blurRadius: 8,
-                              offset: Offset(0, 4),
+                      final header = Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 16),
+                          // ── "Woohoo!" header ───────────────────────────────────
+                          Text(
+                            passed ? '🎉 WooHoo! 🎉' : 'Keep Trying!',
+                            style: TextStyle(
+                              fontSize: 34,
+                              fontFamily: "Regular",
+                              fontWeight: FontWeight.w700,
+                              color: passed
+                                  ? const Color(0xFFFFD700)
+                                  : const Color(0xFFFF5722),
+                              shadows: [
+                                const Shadow(
+                                  color: Colors.black38,
+                                  blurRadius: 8,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        passed ? 'Beautiful $word!' : 'You can do better!',
-                        style: TextStyle(
-                          fontFamily: "Regular",
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white.withValues(alpha: 0.9),
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          'Completeness: $matchText',
-                          style: const TextStyle(
-                            fontFamily: "Regular",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
                           ),
-                        ),
-                      ),
+                          const SizedBox(height: 4),
+                          Text(
+                            passed ? 'Beautiful $word!' : 'You can do better!',
+                            style: TextStyle(
+                              fontFamily: "Regular",
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white.withValues(alpha: 0.9),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              'Completeness: $matchText',
+                              style: const TextStyle(
+                                fontFamily: "Regular",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
 
-                      const SizedBox(height: 16),
-
-                      // ── Artwork card ─────────────────────────────────────
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: ScaleTransition(
-                            scale: _cardScale,
-                            child: FadeTransition(
-                              opacity: _cardOpacity,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(32),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(0xFF6B35CF)
-                                          .withValues(alpha: 0.5),
-                                      blurRadius: 40,
-                                      spreadRadius: 4,
-                                      offset: const Offset(0, 12),
+                      final artworkCard = Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: isLandscape ? 8 : 24,
+                            vertical: isLandscape ? 8 : 0),
+                        child: ScaleTransition(
+                          scale: _cardScale,
+                          child: FadeTransition(
+                            opacity: _cardOpacity,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(32),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF6B35CF)
+                                        .withValues(alpha: 0.5),
+                                    blurRadius: 40,
+                                    spreadRadius: 4,
+                                    offset: const Offset(0, 12),
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(32),
+                                child: Stack(
+                                  children: [
+                                    // Artwork
+                                    Positioned.fill(
+                                      child: widget.coloredImage != null
+                                          ? RawImage(
+                                              image: widget.coloredImage,
+                                              fit: BoxFit.contain,
+                                            )
+                                          : const Center(
+                                              child: Icon(
+                                                Icons.palette_rounded,
+                                                size: 80,
+                                                color: Color(0xFF6B35CF),
+                                              ),
+                                            ),
+                                    ),
+                                    // Top ribbon
+                                    Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 8,
+                                        decoration: const BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Color(0xFFFFD700),
+                                              Color(0xFFFF9100),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(32),
-                                  child: Stack(
-                                    children: [
-                                      // Artwork
-                                      Positioned.fill(
-                                        child: widget.coloredImage != null
-                                            ? RawImage(
-                                                image: widget.coloredImage,
-                                                fit: BoxFit.contain,
-                                              )
-                                            : const Center(
-                                                child: Icon(
-                                                  Icons.palette_rounded,
-                                                  size: 80,
-                                                  color: Color(0xFF6B35CF),
-                                                ),
-                                              ),
-                                      ),
-                                      // Top ribbon
-                                      Positioned(
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        child: Container(
-                                          height: 8,
-                                          decoration: const BoxDecoration(
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                Color(0xFFFFD700),
-                                                Color(0xFFFF9100),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                      );
 
-                      const SizedBox(height: 10),
+                      final starsRow = passed
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(3, (i) {
+                                final lit = i < _visibleStars;
+                                return AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.elasticOut,
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 6),
+                                  child: AnimatedScale(
+                                    scale: lit ? 1.0 : 0.6,
+                                    duration: const Duration(milliseconds: 350),
+                                    curve: Curves.elasticOut,
+                                    child: Icon(
+                                      Icons.star_rounded,
+                                      size: 52,
+                                      color: lit
+                                          ? const Color(0xFFFFD700)
+                                          : Colors.white.withValues(alpha: 0.2),
+                                      shadows: lit
+                                          ? [
+                                              const Shadow(
+                                                color: Color(0xFFFFD700),
+                                                blurRadius: 16,
+                                              ),
+                                            ]
+                                          : null,
+                                    ),
+                                  ),
+                                );
+                              }),
+                            )
+                          : const SizedBox.shrink();
 
-                      // ── Stars row ─────────────────────────────────────────
-                      if (passed)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(3, (i) {
-                            final lit = i < _visibleStars;
-                            return AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.elasticOut,
-                              margin: const EdgeInsets.symmetric(horizontal: 6),
-                              child: AnimatedScale(
-                                scale: lit ? 1.0 : 0.6,
-                                duration: const Duration(milliseconds: 350),
-                                curve: Curves.elasticOut,
-                                child: Icon(
-                                  Icons.star_rounded,
-                                  size: 52,
-                                  color: lit
-                                      ? const Color(0xFFFFD700)
-                                      : Colors.white.withValues(alpha: 0.2),
-                                  shadows: lit
-                                      ? [
-                                          const Shadow(
-                                            color: Color(0xFFFFD700),
-                                            blurRadius: 16,
-                                          ),
-                                        ]
-                                      : null,
-                                ),
-                              ),
-                            );
-                          }),
-                        ),
-
-                      if (passed) const SizedBox(height: 10),
-
-                      // ── Coins banner ──────────────────────────────────────
-
-                      if (passed)
-                        _isLoggedIn
-                            ? AnimatedBuilder(
-                                animation: _coinsController,
-                                builder: (context, child) =>
-                                    Transform.translate(
-                                  offset: Offset(0, _coinsSlide.value),
-                                  child: child,
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 28, vertical: 12),
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xFFFFD700),
-                                        Color(0xFFFF9100)
+                      final coinsBanner = passed
+                          ? _isLoggedIn
+                              ? AnimatedBuilder(
+                                  animation: _coinsController,
+                                  builder: (context, child) =>
+                                      Transform.translate(
+                                    offset: Offset(0, _coinsSlide.value),
+                                    child: child,
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 28, vertical: 12),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          Color(0xFFFFD700),
+                                          Color(0xFFFF9100)
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(40),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: const Color(0xFFFFD700)
+                                              .withValues(alpha: 0.45),
+                                          blurRadius: 16,
+                                          offset: const Offset(0, 6),
+                                        ),
                                       ],
                                     ),
-                                    borderRadius: BorderRadius.circular(40),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFFFFD700)
-                                            .withValues(alpha: 0.45),
-                                        blurRadius: 16,
-                                        offset: const Offset(0, 6),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text('🪙',
-                                          style: TextStyle(fontSize: 26)),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        '+$coins Coins Earned!',
-                                        style: const TextStyle(
-                                          fontSize: 22,
-                                          fontFamily: "Regular",
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text('🪙',
+                                            style: TextStyle(fontSize: 26)),
+                                        const SizedBox(width: 8),
+                                        Flexible(
+                                          child: Text(
+                                            '+$coins Coins Earned!',
+                                          style: const TextStyle(
+                                            fontSize: 22,
+                                            fontFamily: "Regular",
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                )
+                              : SizedBox(
+                                  width: 200,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xff3b9499),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                    ),
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const LoginScreen())),
+                                    child: const Text("Login Now",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: "Regular",
+                                            color: Colors.white)),
+                                  ),
+                                )
+                          : const SizedBox.shrink();
+
+                      final actionButtons = Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: isLandscape
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  passed
+                                      ? _ActionButton(
+                                          icon: Icons.arrow_forward_rounded,
+                                          label: 'Next Level',
+                                          color: const Color(0xFF00E676),
+                                          textColor: Colors.white,
+                                          onTap: () async {
+                                            final currentLevel = provider.currentLevel;
+                                            if (currentLevel != null) {
+                                              final drawingRepo = context.read<DrawingRepository>();
+                                              final nextLevelId = await drawingRepo.getNextLevelId(currentLevel.id);
+                                              LevelModel? nextLevel;
+                                              if (nextLevelId != null) {
+                                                nextLevel = await drawingRepo.getLevelById(nextLevelId);
+                                              }
+                                              if (nextLevel != null && mounted) {
+                                                final coloringProvider = context.read<ColoringProvider>();
+                                                final activity = ActivityItem(
+                                                  id: nextLevel.id,
+                                                  label: nextLevel.title,
+                                                  display: nextLevel.title,
+                                                  color: Colors.red,
+                                                  imagePath: nextLevel.activityItem?.imagePath ?? nextLevel.imagePath ?? 'assets/images/un_border_apple.webp',
+                                                );
+                                                coloringProvider.setItem(activity, provider.currentCategoryId, level: nextLevel);
+                                                Navigator.of(context).pushAndRemoveUntil(
+                                                  MaterialPageRoute(builder: (_) => ColoringScreen(imagePath: activity.imagePath)),
+                                                  (route) => route.isFirst,
+                                                );
+                                              } else if (mounted) {
+                                                Navigator.of(context).popUntil((route) => route.isFirst);
+                                              }
+                                            } else {
+                                              Navigator.of(context).popUntil((route) => route.isFirst);
+                                            }
+                                          },
+                                        )
+                                      : _ActionButton(
+                                          icon: Icons.replay_rounded,
+                                          label: 'Try Again!',
+                                          color: const Color(0xFFFF5722),
+                                          textColor: Colors.white,
+                                          onTap: () {
+                                            provider.retry();
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                  const SizedBox(height: 12),
+                                  _ActionButton(
+                                    icon: Icons.home_rounded,
+                                    label: 'Home',
+                                    color: Colors.white.withValues(alpha: 0.18),
+                                    textColor: Colors.white,
+                                    onTap: () async {
+                                      if (mounted) {
+                                        Navigator.of(context).popUntil((route) => route.isFirst);
+                                      }
+                                    },
+                                  ),
+                                ],
                               )
-                            : SizedBox(
-                                width: 200,
-                                height: 50,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xff3b9499),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30)),
+                            : Row(
+                                children: [
+                                  // Home button
+                                  _ActionButton(
+                                    icon: Icons.home_rounded,
+                                    label: 'Home',
+                                    color: Colors.white.withValues(alpha: 0.18),
+                                    textColor: Colors.white,
+                                    onTap: () async {
+                                      if (mounted) {
+                                        Navigator.of(context).popUntil((route) => route.isFirst);
+                                      }
+                                    },
                                   ),
-                                  onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => const LoginScreen())),
-                                  child: const Text("Login Now",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: "Regular",
-                                          color: Colors.white)),
+                                  const SizedBox(width: 12),
+                                  // Next level or Restart button
+                                  Expanded(
+                                    child: passed
+                                        ? _ActionButton(
+                                            icon: Icons.arrow_forward_rounded,
+                                            label: 'Next Level',
+                                            color: const Color(0xFF00E676),
+                                            textColor: Colors.white,
+                                            onTap: () async {
+                                              final currentLevel = provider.currentLevel;
+                                              if (currentLevel != null) {
+                                                final drawingRepo = context.read<DrawingRepository>();
+                                                final nextLevelId = await drawingRepo.getNextLevelId(currentLevel.id);
+                                                LevelModel? nextLevel;
+                                                if (nextLevelId != null) {
+                                                  nextLevel = await drawingRepo.getLevelById(nextLevelId);
+                                                }
+                                                if (nextLevel != null && mounted) {
+                                                  final coloringProvider = context.read<ColoringProvider>();
+                                                  final activity = ActivityItem(
+                                                    id: nextLevel.id,
+                                                    label: nextLevel.title,
+                                                    display: nextLevel.title,
+                                                    color: Colors.red,
+                                                    imagePath: nextLevel.activityItem?.imagePath ?? nextLevel.imagePath ?? 'assets/images/un_border_apple.webp',
+                                                  );
+                                                  coloringProvider.setItem(activity, provider.currentCategoryId, level: nextLevel);
+                                                  Navigator.of(context).pushAndRemoveUntil(
+                                                    MaterialPageRoute(builder: (_) => ColoringScreen(imagePath: activity.imagePath)),
+                                                    (route) => route.isFirst,
+                                                  );
+                                                } else if (mounted) {
+                                                  Navigator.of(context).popUntil((route) => route.isFirst);
+                                                }
+                                              } else {
+                                                Navigator.of(context).popUntil((route) => route.isFirst);
+                                              }
+                                            },
+                                          )
+                                        : _ActionButton(
+                                            icon: Icons.replay_rounded,
+                                            label: 'Try Again!',
+                                            color: const Color(0xFFFF5722),
+                                            textColor: Colors.white,
+                                            onTap: () {
+                                              provider.retry();
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                  ),
+                                ],
+                              ),
+                      );
+
+                      if (isLandscape) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    header,
+                                    if (passed) const SizedBox(height: 10),
+                                    starsRow,
+                                    if (passed) const SizedBox(height: 10),
+                                    coinsBanner,
+                                    const SizedBox(height: 20),
+                                    actionButtons,
+                                    const SizedBox(height: 20),
+                                  ],
                                 ),
                               ),
-
-                      // if (passed)
-                      //   AnimatedBuilder(
-                      //     animation: _coinsController,
-                      //     builder: (context, child) => Transform.translate(
-                      //       offset: Offset(0, _coinsSlide.value),
-                      //       child: Opacity(
-                      //         opacity: 1.0,
-                      //         // opacity: _coinsController.value,
-                      //         child: child,
-                      //       ),
-                      //     ),
-                      //     child: Container(
-                      //       padding: const EdgeInsets.symmetric(
-                      //           horizontal: 28, vertical: 12),
-                      //       decoration: BoxDecoration(
-                      //         gradient: const LinearGradient(
-                      //           colors: [Color(0xFFFFD700), Color(0xFFFF9100)],
-                      //           begin: Alignment.topLeft,
-                      //           end: Alignment.bottomRight,
-                      //         ),
-                      //         borderRadius: BorderRadius.circular(40),
-                      //         boxShadow: [
-                      //           BoxShadow(
-                      //             color: const Color(0xFFFFD700)
-                      //                 .withValues(alpha: 0.45),
-                      //             blurRadius: 16,
-                      //             offset: const Offset(0, 6),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //       child: Row(
-                      //         mainAxisSize: MainAxisSize.min,
-                      //         children: [
-                      //           const Text('🪙',
-                      //               style: TextStyle(fontSize: 26)),
-                      //           const SizedBox(width: 8),
-                      //           Text(
-                      //             '+$coins Coins Earned!',
-                      //             style: TextStyle(
-                      //               fontSize: 22,
-                      //               fontFamily: "Regular",
-                      //               fontWeight: FontWeight.w700,
-                      //               color: Colors.white,
-                      //               shadows: [
-                      //                 const Shadow(
-                      //                   color: Colors.black26,
-                      //                   blurRadius: 4,
-                      //                   offset: Offset(0, 2),
-                      //                 ),
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-
-                      const SizedBox(height: 80),
-
-                      // ── Action buttons ────────────────────────────────────
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Row(
-                          children: [
-                            // Home button
-                            _ActionButton(
-                              icon: Icons.home_rounded,
-                              label: 'Home',
-                              color: Colors.white.withValues(alpha: 0.18),
-                              textColor: Colors.white,
-                              onTap: () async {
-                                if (mounted) {
-                                  Navigator.of(context)
-                                      .popUntil((route) => route.isFirst);
-                                }
-                              },
                             ),
-                            const SizedBox(width: 12),
-                            // Next level or Restart button
                             Expanded(
-                              child: passed
-                                  ? _ActionButton(
-                                      icon: Icons.arrow_forward_rounded,
-                                      label: 'Next Level',
-                                      color: const Color(0xFF00E676),
-                                      textColor: Colors.white,
-                                      onTap: () async {
-                                        final currentLevel =
-                                            provider.currentLevel;
-                                        if (currentLevel != null) {
-                                          final drawingRepo =
-                                              context.read<DrawingRepository>();
-
-                                          // 3. Find next level
-                                          final nextLevelId = await drawingRepo
-                                              .getNextLevelId(currentLevel.id);
-                                          LevelModel? nextLevel;
-                                          if (nextLevelId != null) {
-                                            nextLevel = await drawingRepo
-                                                .getLevelById(nextLevelId);
-                                          }
-
-                                          if (nextLevel != null && mounted) {
-                                            // 4. Setup provider for next level
-                                            final coloringProvider = context
-                                                .read<ColoringProvider>();
-                                            final activity = ActivityItem(
-                                              id: nextLevel.id,
-                                              label: nextLevel.title,
-                                              display: nextLevel.title,
-                                              color: Colors.red,
-                                              imagePath: nextLevel.activityItem
-                                                      ?.imagePath ??
-                                                  nextLevel.imagePath ??
-                                                  'assets/images/un_border_apple.webp',
-                                            );
-                                            coloringProvider.setItem(activity,
-                                                provider.currentCategoryId,
-                                                level: nextLevel);
-
-                                            // 5. Navigate — keep Home as root
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                              MaterialPageRoute(
-                                                builder: (_) => ColoringScreen(
-                                                    imagePath:
-                                                        activity.imagePath),
-                                              ),
-                                              (route) => route.isFirst,
-                                            );
-                                          } else if (mounted) {
-                                            Navigator.of(context).popUntil(
-                                                (route) => route.isFirst);
-                                          }
-                                        } else {
-                                          Navigator.of(context).popUntil(
-                                              (route) => route.isFirst);
-                                        }
-                                      },
-                                    )
-                                  : _ActionButton(
-                                      icon: Icons.replay_rounded,
-                                      label: 'Try Again!',
-                                      color: const Color(0xFFFF5722),
-                                      textColor: Colors.white,
-                                      onTap: () {
-                                        provider.retry();
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
+                              flex: 1,
+                              child: artworkCard,
                             ),
                           ],
-                        ),
-                      ),
+                        );
+                      }
 
-                      const SizedBox(height: 28),
-                    ],
+                      return Column(
+                        children: [
+                          header,
+                          const SizedBox(height: 16),
+                          Expanded(child: artworkCard),
+                          const SizedBox(height: 10),
+                          starsRow,
+                          if (passed) const SizedBox(height: 10),
+                          coinsBanner,
+                          const SizedBox(height: 30),
+                          actionButtons,
+                          const SizedBox(height: 28),
+                        ],
+                      );
+                    },
                   ),
                 ),
 
@@ -945,7 +970,7 @@ class _ActionButtonState extends State<_ActionButton> {
             children: [
               Icon(widget.icon,
                   color: widget.textColor,
-                  size: SizeExtension(26).sp), // Updated with .sp
+                  size: SizeExtension(20).sp), // Updated with .sp
               SizedBox(width: SizeExtension(8).w), // Updated with .w
               Flexible(
                 fit: FlexFit.loose,

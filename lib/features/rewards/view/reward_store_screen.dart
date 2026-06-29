@@ -1,5 +1,6 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:play_craft_kids/core/utils/custom_app_bar.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
@@ -59,119 +60,121 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: SizedBox(
-                            height: 90,
-                            // width: double.infinity,
-                            child: Stack(
-                              children: [
-                                ClipPath(
-                                  clipper: AppBarClipper(),
-                                  child: Container(
-                                    height: 120,
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    color: const Color(0xff3b9499),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: Tooltip(
-                                            message: "Back",
-                                            child: SidebarIcon(
-                                              icon: Icons.arrow_back_rounded,
-                                              assetName:
-                                                  'assets/images/pop-button.png',
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ),
-                                        ),
+                  CustomAppBar(title: "Reward Store"),
 
-                                        // Title
-                                        // Title
-                                        Expanded(
-                                          child: Center(
-                                            child: FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  // Shadow Layer
-                                                  Transform.translate(
-                                                    offset: const Offset(6, 6),
-                                                    child: Text(
-                                                      "Reward Store",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontSize: 30,
-                                                        fontFamily: "Regular",
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color: Colors.black
-                                                            .withOpacity(0.35),
-                                                        letterSpacing: 1,
-                                                      ),
-                                                    ),
-                                                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                  //   child: Row(
+                  //     children: <Widget>[
+                  //       Expanded(
+                  //         child: SizedBox(
+                  //           height: 90,
+                  //           // width: double.infinity,
+                  //           child: Stack(
+                  //             children: [
+                  //               ClipPath(
+                  //                 clipper: AppBarClipper(),
+                  //                 child: Container(
+                  //                   height: 120,
+                  //                   margin: EdgeInsets.only(bottom: 10),
+                  //                   color: const Color(0xff3b9499),
+                  //                   child: Row(
+                  //                     mainAxisAlignment:
+                  //                         MainAxisAlignment.center,
+                  //                     children: [
+                  //                       Padding(
+                  //                         padding: const EdgeInsets.all(20.0),
+                  //                         child: Tooltip(
+                  //                           message: "Back",
+                  //                           child: SidebarIcon(
+                  //                             icon: Icons.arrow_back_rounded,
+                  //                             assetName:
+                  //                                 'assets/images/pop-button.png',
+                  //                             onPressed: () {
+                  //                               Navigator.pop(context);
+                  //                             },
+                  //                           ),
+                  //                         ),
+                  //                       ),
 
-                                                  // Pink 3D Layer
-                                                  Transform.translate(
-                                                    offset: const Offset(3, 3),
-                                                    child: Text(
-                                                      "Reward Store",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                        fontSize: 30,
-                                                        fontFamily: "Regular",
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color:
-                                                            Color(0xFFFF4FA3),
-                                                        letterSpacing: 1,
-                                                      ),
-                                                    ),
-                                                  ),
+                  //                       // Title
+                  //                       // Title
+                  //                       Expanded(
+                  //                         child: Center(
+                  //                           child: FittedBox(
+                  //                             fit: BoxFit.scaleDown,
+                  //                             child: Stack(
+                  //                               alignment: Alignment.center,
+                  //                               children: [
+                  //                                 // Shadow Layer
+                  //                                 Transform.translate(
+                  //                                   offset: const Offset(6, 6),
+                  //                                   child: Text(
+                  //                                     "Reward Store",
+                  //                                     textAlign:
+                  //                                         TextAlign.center,
+                  //                                     style: TextStyle(
+                  //                                       fontSize: 30,
+                  //                                       fontFamily: "Regular",
+                  //                                       fontWeight:
+                  //                                           FontWeight.w900,
+                  //                                       color: Colors.black
+                  //                                           .withOpacity(0.35),
+                  //                                       letterSpacing: 1,
+                  //                                     ),
+                  //                                   ),
+                  //                                 ),
 
-                                                  // Main White Text
-                                                  Text(
-                                                    "Reward Store",
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontSize: 30,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Colors.white,
-                                                      letterSpacing: 1,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                  //                                 // Pink 3D Layer
+                  //                                 Transform.translate(
+                  //                                   offset: const Offset(3, 3),
+                  //                                   child: Text(
+                  //                                     "Reward Store",
+                  //                                     textAlign:
+                  //                                         TextAlign.center,
+                  //                                     style: const TextStyle(
+                  //                                       fontSize: 30,
+                  //                                       fontFamily: "Regular",
+                  //                                       fontWeight:
+                  //                                           FontWeight.w900,
+                  //                                       color:
+                  //                                           Color(0xFFFF4FA3),
+                  //                                       letterSpacing: 1,
+                  //                                     ),
+                  //                                   ),
+                  //                                 ),
 
-                                        const SizedBox(width: 60),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  //                                 // Main White Text
+                  //                                 Text(
+                  //                                   "Reward Store",
+                  //                                   textAlign: TextAlign.center,
+                  //                                   style: const TextStyle(
+                  //                                     fontSize: 30,
+                  //                                     fontFamily: "Regular",
+                  //                                     fontWeight:
+                  //                                         FontWeight.w900,
+                  //                                     color: Colors.white,
+                  //                                     letterSpacing: 1,
+                  //                                   ),
+                  //                                 ),
+                  //                               ],
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                       ),
+
+                  //                       const SizedBox(width: 60),
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                   // Login section ko replacement
                   Column(
@@ -232,114 +235,116 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
           child: SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: SizedBox(
-                          height: 90,
-                          // width: double.infinity,
-                          child: Stack(
-                            children: [
-                              ClipPath(
-                                clipper: AppBarClipper(),
-                                child: Container(
-                                  height: 120,
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  color: const Color(0xff3b9499),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Tooltip(
-                                          message: "Back",
-                                          child: SidebarIcon(
-                                            icon: Icons.arrow_back_rounded,
-                                            assetName:
-                                                'assets/images/pop-button.png',
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-                                      ),
+                CustomAppBar(title: "Reward Store"),
 
-                                      // Title
-                                      // Title
-                                      Expanded(
-                                        child: Center(
-                                          child: FittedBox(
-                                            fit: BoxFit.scaleDown,
-                                            child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                // Shadow Layer
-                                                Transform.translate(
-                                                  offset: const Offset(6, 6),
-                                                  child: Text(
-                                                    "Reward Store",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 30,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Colors.black
-                                                          .withOpacity(0.35),
-                                                      letterSpacing: 1,
-                                                    ),
-                                                  ),
-                                                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                //   child: Row(
+                //     children: <Widget>[
+                //       Expanded(
+                //         child: SizedBox(
+                //           height: 90,
+                //           // width: double.infinity,
+                //           child: Stack(
+                //             children: [
+                //               ClipPath(
+                //                 clipper: AppBarClipper(),
+                //                 child: Container(
+                //                   height: 120,
+                //                   margin: EdgeInsets.only(bottom: 10),
+                //                   color: const Color(0xff3b9499),
+                //                   child: Row(
+                //                     mainAxisAlignment: MainAxisAlignment.center,
+                //                     children: [
+                //                       Padding(
+                //                         padding: const EdgeInsets.all(20.0),
+                //                         child: Tooltip(
+                //                           message: "Back",
+                //                           child: SidebarIcon(
+                //                             icon: Icons.arrow_back_rounded,
+                //                             assetName:
+                //                                 'assets/images/pop-button.png',
+                //                             onPressed: () {
+                //                               Navigator.pop(context);
+                //                             },
+                //                           ),
+                //                         ),
+                //                       ),
 
-                                                // Pink 3D Layer
-                                                Transform.translate(
-                                                  offset: const Offset(3, 3),
-                                                  child: Text(
-                                                    "Reward Store",
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontSize: 30,
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Color(0xFFFF4FA3),
-                                                      letterSpacing: 1,
-                                                    ),
-                                                  ),
-                                                ),
+                //                       // Title
+                //                       // Title
+                //                       Expanded(
+                //                         child: Center(
+                //                           child: FittedBox(
+                //                             fit: BoxFit.scaleDown,
+                //                             child: Stack(
+                //                               alignment: Alignment.center,
+                //                               children: [
+                //                                 // Shadow Layer
+                //                                 Transform.translate(
+                //                                   offset: const Offset(6, 6),
+                //                                   child: Text(
+                //                                     "Reward Store",
+                //                                     textAlign: TextAlign.center,
+                //                                     style: TextStyle(
+                //                                       fontSize: 30,
+                //                                       fontFamily: "Regular",
+                //                                       fontWeight:
+                //                                           FontWeight.w900,
+                //                                       color: Colors.black
+                //                                           .withOpacity(0.35),
+                //                                       letterSpacing: 1,
+                //                                     ),
+                //                                   ),
+                //                                 ),
 
-                                                // Main White Text
-                                                Text(
-                                                  "Reward Store",
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    fontSize: 30,
-                                                    fontFamily: "Regular",
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.white,
-                                                    letterSpacing: 1,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                //                                 // Pink 3D Layer
+                //                                 Transform.translate(
+                //                                   offset: const Offset(3, 3),
+                //                                   child: Text(
+                //                                     "Reward Store",
+                //                                     textAlign: TextAlign.center,
+                //                                     style: const TextStyle(
+                //                                       fontSize: 30,
+                //                                       fontFamily: "Regular",
+                //                                       fontWeight:
+                //                                           FontWeight.w900,
+                //                                       color: Color(0xFFFF4FA3),
+                //                                       letterSpacing: 1,
+                //                                     ),
+                //                                   ),
+                //                                 ),
 
-                                      const SizedBox(width: 60),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                //                                 // Main White Text
+                //                                 Text(
+                //                                   "Reward Store",
+                //                                   textAlign: TextAlign.center,
+                //                                   style: const TextStyle(
+                //                                     fontSize: 30,
+                //                                     fontFamily: "Regular",
+                //                                     fontWeight: FontWeight.w900,
+                //                                     color: Colors.white,
+                //                                     letterSpacing: 1,
+                //                                   ),
+                //                                 ),
+                //                               ],
+                //                             ),
+                //                           ),
+                //                         ),
+                //                       ),
+
+                //                       const SizedBox(width: 60),
+                //                     ],
+                //                   ),
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
 
                 Consumer<HomeViewModel>(
                   builder: (context, hm, _) => Container(
@@ -551,107 +556,113 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                       const Color(0xff3b9499),
                                                   width: 5),
                                             ),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                // 1. Reward Image (Yahan image show hogi)
-                                                if (reward.imageUrl != null &&
-                                                    reward.imageUrl.isNotEmpty)
-                                                  Container(
-                                                    height: 100,
-                                                    width: 100,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        image: NetworkImage(
-                                                          reward.imageUrl,
-                                                          // height: 100,
-                                                          // width: 100,
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  // 1. Reward Image (Yahan image show hogi)
+                                                  if (reward.imageUrl != null &&
+                                                      reward
+                                                          .imageUrl.isNotEmpty)
+                                                    Container(
+                                                      height: 100,
+                                                      width: 100,
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: NetworkImage(
+                                                            reward.imageUrl,
+                                                            // height: 100,
+                                                            // width: 100,
+                                                          ),
+                                                          fit: BoxFit.cover,
                                                         ),
-                                                        fit: BoxFit.cover,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                        border: Border.all(
+                                                            color: Color(
+                                                                0xff3b9499),
+                                                            width:
+                                                                2), // Agar border chahiye
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                      border: Border.all(
-                                                          color:
-                                                              Color(0xff3b9499),
-                                                          width:
-                                                              2), // Agar border chahiye
                                                     ),
+
+                                                  const SizedBox(height: 15),
+
+                                                  // 2. Reward Title
+                                                  Text(
+                                                    reward
+                                                        .title, // Yahan reward ka naam show hoga
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        fontFamily: "Regular",
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Color(0xff3b9499)
+                                                        //  Colors.white
+                                                        ),
                                                   ),
+                                                  const SizedBox(height: 5),
 
-                                                const SizedBox(height: 15),
-
-                                                // 2. Reward Title
-                                                Text(
-                                                  reward
-                                                      .title, // Yahan reward ka naam show hoga
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontFamily: "Regular",
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color(0xff3b9499)
-                                                      //  Colors.white
-                                                      ),
-                                                ),
-                                                const SizedBox(height: 5),
-
-                                                // 3. Confirmation Message
-                                                Text(
-                                                  "Are you sure you want to spend ${reward.requiredCoins} coins to purchase this? After seven days, you will receive this reward.",
-                                                  textAlign: TextAlign.justify,
-                                                  style: const TextStyle(
-                                                      fontFamily: "Regular",
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: Color(0xff3b9499),
-                                                      //  Colors.white,
-                                                      fontSize: 15),
-                                                ),
-                                                const SizedBox(height: 10),
-
-                                                // 4. Buttons
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    ElevatedButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(ctx),
-                                                      child:
-                                                          const Text("Cancel"),
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
+                                                  // 3. Confirmation Message
+                                                  Text(
+                                                    "Are you sure you want to spend ${reward.requiredCoins} coins to purchase this? After seven days, you will receive this reward.",
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    style: const TextStyle(
+                                                        fontFamily: "Regular",
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color:
                                                             Color(0xff3b9499),
+                                                        //  Colors.white,
+                                                        fontSize: 15),
+                                                  ),
+                                                  const SizedBox(height: 10),
+
+                                                  // 4. Buttons
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(ctx),
+                                                        child: const Text(
+                                                            "Cancel"),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Color(0xff3b9499),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            Colors.red,
+                                                      ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.pop(ctx);
+                                                          // Tracking screen ka push logic
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    TrackingScreen(
+                                                                        reward:
+                                                                            reward)),
+                                                          );
+                                                        },
+                                                        child:
+                                                            const Text("Yes"),
                                                       ),
-                                                      onPressed: () {
-                                                        Navigator.pop(ctx);
-                                                        // Tracking screen ka push logic
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  TrackingScreen(
-                                                                      reward:
-                                                                          reward)),
-                                                        );
-                                                      },
-                                                      child: const Text("Yes"),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -681,79 +692,88 @@ class _RewardStoreScreenState extends State<RewardStoreScreen> {
                                                           0xff3b9499),
                                                       width: 5),
                                                 ),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    const Text(
-                                                      "COINS KAM HAIN!",
-                                                      style: TextStyle(
-                                                          fontFamily: "Regular",
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 22,
-                                                          color: Colors.white),
-                                                    ),
-                                                    const SizedBox(height: 15),
-                                                    // Icon for visual appeal
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8),
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      20)),
-                                                      child: Image.network(
-                                                          reward.imageUrl,
-                                                          height: 120,
-                                                          width: 120,
-                                                          fit: BoxFit.contain),
-                                                    ),
-
-                                                    // const Icon(
-                                                    //     Icons
-                                                    //         .sentiment_dissatisfied,
-                                                    //     size: 60,
-                                                    //     color: Colors.white),
-                                                    const SizedBox(height: 15),
-                                                    Text(
-                                                      "Aapke paas $currentCoins coins hain.\nIske liye $requiredCoins chahiye.",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          fontFamily: "Regular",
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white,
-                                                          fontSize: 16),
-                                                    ),
-                                                    const SizedBox(height: 20),
-                                                    ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                              backgroundColor:
-                                                                  Color(
-                                                                      0xff3b9499),
-                                                              foregroundColor:
-                                                                  Color(
-                                                                      0xff3b9499)),
-                                                      onPressed: () =>
-                                                          Navigator.pop(ctx),
-                                                      child: const Text(
-                                                        "OK",
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      const Text(
+                                                        "COINS KAM HAIN!",
                                                         style: TextStyle(
-                                                          fontFamily: "Regular",
-                                                          fontSize: 12,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                            fontFamily:
+                                                                "Regular",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 22,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 15),
+                                                      // Icon for visual appeal
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                        child: Image.network(
+                                                            reward.imageUrl,
+                                                            height: 120,
+                                                            width: 120,
+                                                            fit:
+                                                                BoxFit.contain),
+                                                      ),
+
+                                                      // const Icon(
+                                                      //     Icons
+                                                      //         .sentiment_dissatisfied,
+                                                      //     size: 60,
+                                                      //     color: Colors.white),
+                                                      const SizedBox(
+                                                          height: 15),
+                                                      Text(
+                                                        "Aapke paas $currentCoins coins hain.\nIske liye $requiredCoins chahiye.",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                "Regular",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.white,
+                                                            fontSize: 16),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 20),
+                                                      ElevatedButton(
+                                                        style: ElevatedButton.styleFrom(
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xff3b9499),
+                                                            foregroundColor:
+                                                                Color(
+                                                                    0xff3b9499)),
+                                                        onPressed: () =>
+                                                            Navigator.pop(ctx),
+                                                        child: const Text(
+                                                          "OK",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                "Regular",
+                                                            fontSize: 12,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                               // Close button (StickerIconButton)
