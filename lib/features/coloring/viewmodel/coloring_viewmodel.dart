@@ -674,6 +674,7 @@ class ColoringProvider extends ChangeNotifier {
 
     final Map<int, int> bucketCounts = {};
     final Map<int, Map<int, int>> bucketColorFrequencies = {};
+    int totalValidPixels = 0;
 
     for (int i = 0; i < insideMask.length; i++) {
       if (insideMask[i] != 1) continue;
@@ -694,6 +695,7 @@ class ColoringProvider extends ChangeNotifier {
       final bestBucket = _classifyChildColor(hue, sat, lit);
 
       bucketCounts[bestBucket] = (bucketCounts[bestBucket] ?? 0) + 1;
+      totalValidPixels++;
 
       // Track exact color frequencies within this bucket
       bucketColorFrequencies[bestBucket] ??= {};
@@ -708,8 +710,12 @@ class ColoringProvider extends ChangeNotifier {
     const int maxMainColors = 6; // 4-6 main colors for child-friendly palette
     final List<Color> newPalette = [];
 
+    // Filter out colors that make up less than 1.5% of the total colored area, 
+    // to remove anti-aliasing and outline noise.
+    final int minThreshold = math.max(150, (totalValidPixels * 0.015).toInt());
+
     for (final entry in sortedBuckets) {
-      if (entry.value < 15) continue; // skip extremely rare buckets (noise)
+      if (entry.value < minThreshold) continue; // skip noise buckets
       if (newPalette.length >= maxMainColors) break;
 
       final bestBucketIndex = entry.key;
@@ -746,7 +752,7 @@ class ColoringProvider extends ChangeNotifier {
       }
     }
 
-    // Always include white for highlights/corrections.
+    // Always include white for highlights/corrections as requested by the user.
     if (!newPalette.contains(Colors.white)) {
       newPalette.add(Colors.white);
     }
