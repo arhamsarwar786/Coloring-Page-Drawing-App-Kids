@@ -35,12 +35,13 @@ class _SignupScreenState extends State<SignupScreen> {
       final res = await supabase.auth.signUp(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
-        emailRedirectTo: kIsWeb
-            ? Uri.base.origin
-            : AppConfig.emailVerificationRedirectUrl,
+        emailRedirectTo:
+            kIsWeb ? Uri.base.origin : AppConfig.emailVerificationRedirectUrl,
       );
 
       if (res.user != null) {
+        await _addSignupCoins(res.user!.id);
+
         if (mounted) {
           showDialog(
             context: context,
@@ -111,6 +112,38 @@ class _SignupScreenState extends State<SignupScreen> {
 
     if (mounted) {
       setState(() => loading = false);
+    }
+  }
+
+  Future<void> _addSignupCoins(String userId) async {
+    const signupCoins = 50;
+    final createdAt = DateTime.now().toIso8601String();
+
+    try {
+      final existingCoins = await supabase
+          .from('user_coins')
+          .select('coins')
+          .eq('user_id', userId)
+          .maybeSingle();
+
+      if (existingCoins != null) return;
+
+      await Future.wait([
+        supabase.from('coin_history').insert({
+          'user_id': userId,
+          'amount': signupCoins,
+          'description': 'Signup Bonus',
+          'type': 'bonus',
+          'created_at': createdAt,
+        }),
+        supabase.from('user_coins').insert({
+          'user_id': userId,
+          'coins': signupCoins,
+          'updated_at': createdAt,
+        }),
+      ]);
+    } catch (e) {
+      debugPrint("Signup coins error: $e");
     }
   }
 

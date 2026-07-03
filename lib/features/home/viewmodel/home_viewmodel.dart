@@ -157,7 +157,7 @@ class HomeViewModel extends BaseViewModel {
       }
 
       setLoading(false);
-      unawaited(refreshCoinsInBackground(applyDailyBonus: true));
+      unawaited(refreshCoinsInBackground(applyDailyBonus: false));
     } catch (_) {
       setError(AppStrings.loadError);
       setLoading(false);
@@ -222,14 +222,8 @@ class HomeViewModel extends BaseViewModel {
           .eq('user_id', userId)
           .maybeSingle();
 
-      if (data == null) {
-        // This is a new user! Let's award the welcome bonus!
-        print("New user detected. Adding welcome bonus...");
-        await addWelcomeBonus(userId);
-      } else {
-        _databaseCoins = (data['coins'] as int?) ?? 0;
-        print("Fetched balance from user_coins: $_databaseCoins");
-      }
+      _databaseCoins = (data?['coins'] as int?) ?? 0;
+      print("Fetched balance from user_coins: $_databaseCoins");
       if (notify) notifyListeners();
     } catch (e) {
       print("fetchDatabaseCoins error: $e");
