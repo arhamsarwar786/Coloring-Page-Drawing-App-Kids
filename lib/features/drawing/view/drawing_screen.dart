@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
 import 'package:play_craft_kids/features/settings/view/settings_screen.dart';

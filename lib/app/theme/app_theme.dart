@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/constants/app_colors.dart';
 
@@ -80,67 +79,80 @@ abstract final class AppTheme {
       ),
     );
 
-    // Bold, rounded, playful typography — BalooBhai2 matches the logo's style
-    final textTheme = GoogleFonts.balooBhai2TextTheme(base.textTheme).copyWith(
-      displayLarge: GoogleFonts.balooBhai2(
+    const fontFamily = 'Poppins';
+
+    final textTheme = base.textTheme.copyWith(
+      displayLarge: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 48,
         fontWeight: FontWeight.w900,
         color: AppColors.ink,
-        letterSpacing: -1.0,
+        letterSpacing: 0,
       ),
-      displayMedium: GoogleFonts.balooBhai2(
+      displayMedium: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 40,
         fontWeight: FontWeight.w900,
         color: AppColors.ink,
       ),
-      headlineLarge: GoogleFonts.balooBhai2(
+      headlineLarge: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 32,
         fontWeight: FontWeight.w800,
         color: AppColors.ink,
-        letterSpacing: -0.5,
+        letterSpacing: 0,
       ),
-      headlineMedium: GoogleFonts.balooBhai2(
+      headlineMedium: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 26,
         fontWeight: FontWeight.w800,
         color: AppColors.ink,
       ),
-      headlineSmall: GoogleFonts.balooBhai2(
+      headlineSmall: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 22,
         fontWeight: FontWeight.w700,
         color: AppColors.ink,
       ),
-      titleLarge: GoogleFonts.balooBhai2(
+      titleLarge: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w700,
         color: AppColors.ink,
       ),
-      titleMedium: GoogleFonts.balooBhai2(
+      titleMedium: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 17,
         fontWeight: FontWeight.w700,
         color: AppColors.ink,
       ),
-      titleSmall: GoogleFonts.balooBhai2(
+      titleSmall: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: AppColors.ink,
       ),
-      bodyLarge: GoogleFonts.balooBhai2(
+      bodyLarge: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w500,
         color: AppColors.ink,
       ),
-      bodyMedium: GoogleFonts.balooBhai2(
+      bodyMedium: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: AppColors.warmGrey,
         height: 1.5,
       ),
-      bodySmall: GoogleFonts.balooBhai2(
+      bodySmall: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: AppColors.warmGrey,
       ),
-      labelLarge: GoogleFonts.balooBhai2(
+      labelLarge: const TextStyle(
+        fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w800,
         color: Colors.white,

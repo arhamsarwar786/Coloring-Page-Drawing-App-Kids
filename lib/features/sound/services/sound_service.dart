@@ -7,6 +7,8 @@ class SoundService with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
   }
 
+  static const double _backgroundMusicVolume = 0.1;
+
   final AudioPlayer _player = AudioPlayer();
   final AudioPlayer _sfxPlayer = AudioPlayer();
   bool _musicEnabled = true;
@@ -44,10 +46,11 @@ class SoundService with WidgetsBindingObserver {
     if (_disposed || !_musicEnabled || !_appInForeground) return;
     try {
       if (_backgroundStarted) {
+        await _player.setVolume(_backgroundMusicVolume);
         await _player.resume();
       } else {
         await _player.setReleaseMode(ReleaseMode.loop);
-        await _player.setVolume(0.55);
+        await _player.setVolume(_backgroundMusicVolume);
         await _player.play(AssetSource('audio/piano_bg.mp3'));
         _backgroundStarted = true;
       }

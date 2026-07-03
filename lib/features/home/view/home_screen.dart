@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/coloring/view/coloring_screen.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
@@ -732,7 +731,6 @@ class CardPalette {
 // import 'dart:developer';
 
 // import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
 // import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 // import 'package:play_craft_kids/features/home/components/app_bar_clipper.dart';
 // import 'package:play_craft_kids/features/settings/view/settings_screen.dart';

@@ -127,10 +127,10 @@
 // }
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'app/config/app_config.dart';
 import 'app/app.dart';
 import 'app/routes/app_routes.dart';
 
@@ -140,9 +140,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
-    url: 'https://sayjckdxhzigfuplwhvv.supabase.co',
-   anonKey:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNheWpja2R4aHppZ2Z1cGx3aHZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTA4ODMsImV4cCI6MjA5ODEyNjg4M30.QKlogPiXnDL7opX7ScZPQj5MqFM1Kw-SGE1OALsfY5E",
+    url: AppConfig.supabaseUrl,
+    publishableKey: AppConfig.supabaseAnonKey,
   );
 
   runApp(const MyApp());
@@ -164,10 +163,12 @@ class _MyAppState extends State<MyApp> {
     _authSubscription =
         Supabase.instance.client.auth.onAuthStateChange.listen((data) {
       if (data.event == AuthChangeEvent.signedIn && data.session != null) {
-        navigatorKey.currentState?.pushNamedAndRemoveUntil(
-          AppRoutes.mainHome,
-          (route) => false,
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          navigatorKey.currentState?.pushNamedAndRemoveUntil(
+            AppRoutes.mainHome,
+            (route) => false,
+          );
+        });
       }
     });
   }

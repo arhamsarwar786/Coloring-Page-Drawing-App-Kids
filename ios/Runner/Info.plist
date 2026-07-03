@@ -24,10 +24,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.devsinntechnologies.magic_kids_color</string>
+			<string>playcraftkids</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.devsinntechnologies.magic_kids_color</string>
+				<string>playcraftkids</string>
 			</array>
 		</dict>
 	</array>

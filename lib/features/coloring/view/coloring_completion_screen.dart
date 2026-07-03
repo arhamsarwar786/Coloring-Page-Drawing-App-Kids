@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image/image.dart' as img;
-import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/coloring/view/coloring_screen.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
@@ -247,7 +246,6 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
 
         if (mounted) {
           homeVM.refreshProgress();
-          homeVM.load();
         }
       }
     }

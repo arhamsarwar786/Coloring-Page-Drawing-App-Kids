@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/auth/components/custom_textfield.dart';
 import 'package:play_craft_kids/features/auth/view/sign_up_screen.dart';
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';

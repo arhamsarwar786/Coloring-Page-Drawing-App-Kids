@@ -40,7 +40,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="com.devsinntechnologies.magic_kids_color"
+                    android:scheme="playcraftkids"
                     android:host="login-callback" />
             </intent-filter>
 

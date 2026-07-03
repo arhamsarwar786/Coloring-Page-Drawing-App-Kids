@@ -471,7 +471,7 @@ class LogoutDialog extends StatelessWidget {
               children: [
                 Container(
                   width: 300,
-                  height: 220,
+                  height: 300,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: const Color(0xff6EC6D0),

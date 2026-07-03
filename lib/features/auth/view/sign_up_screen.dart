@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/foundation.dart';
+import 'package:play_craft_kids/app/config/app_config.dart';
 import 'package:play_craft_kids/features/auth/components/custom_textfield.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
-import 'package:play_craft_kids/features/home/view/main_home_screen.dart';
-import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
-import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -37,86 +35,84 @@ class _SignupScreenState extends State<SignupScreen> {
       final res = await supabase.auth.signUp(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
-        // Code mein ye line change karein:
-        emailRedirectTo:
-            'com.devsinntechnologies.magic_kids_color://login-callback',
-        // emailRedirectTo:
-        //     'com.devsinntechnologies.magic_kids_color://login-callback',
-        // email: emailController.text.trim(),
-        // password: passwordController.text.trim(),
+        emailRedirectTo: kIsWeb
+            ? Uri.base.origin
+            : AppConfig.emailVerificationRedirectUrl,
       );
 
       if (res.user != null) {
-        // 1. Profile insert
-        // await supabase.from('profiles').insert({
-        //   'id': res.user!.id,
-        //   'name': nameController.text.trim(),
-        //   'email': emailController.text.trim(),
-        // });
-
-        // // 2. Welcome Bonus
-
-        try {
-          await supabase.from('coin_history').insert({
-            'user_id': res.user!.id,
-            'amount': 50,
-            'description': 'Welcome Bonus',
-            'created_at': DateTime.now().toIso8601String(),
-          });
-        } catch (e) {
-          print("Bonus add error: $e");
-        }
-
-        // 3. Success Message aur Navigation
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text("Signup Successful! Please verify your email.")),
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: const Text(
+                "VERIFY YOUR EMAIL",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "Regular",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.brown,
+                ),
+              ),
+              content: const Text(
+                "We have sent a verification link to your email. Please check your inbox and verify your email to activate your account.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "Regular",
+                  color: Colors.black87,
+                ),
+              ),
+              actionsAlignment: MainAxisAlignment.center,
+              actions: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1EA7C7),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context); // Close dialog
+                    Navigator.pop(context); // Go back to login screen
+                  },
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(
+                      fontFamily: "Regular",
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
-          Navigator.pop(context); // Ye wapas wahan bhej dega jahan se aayi thi
         }
-        // try {
-        //   await supabase.from('coin_history').insert({
-        //     'user_id': res.user!.id,
-        //     'amount': 50,
-        //     'description': 'Welcome Bonus',
-        //     'created_at': DateTime.now().toIso8601String(),
-        //   });
-        // } catch (e) {
-        //   print("Bonus add error: $e");
-        // }
-
-        // if (mounted) {
-        //   // 3. SUCCESS MESSAGE - User ko app ke andar mat bhejein
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(
-        //       content:
-        //           Text("Signup Successful! Please verify your email to login."),
-        //       duration: Duration(seconds: 5),
-        //     ),
-        //   );
-
-        //   // 4. Wapas Login screen par bhej dein
-        //   Navigator.pop(context);
-        // }
       }
     } on AuthException catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Auth Error: ${e.message}")),
       );
     } on PostgrestException catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Data Error: ${e.message}")),
       );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: ${e.toString()}")),
       );
     }
 
-    setState(() => loading = false);
+    if (mounted) {
+      setState(() => loading = false);
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -17,7 +17,6 @@ dependencies:
   audioplayers: ^5.2.1
   flutter_svg: ^2.0.9
   path_drawing: ^1.0.1
-  google_fonts: ^8.0.2
   lottie: ^3.3.0
   confetti: ^0.8.0
   supabase_flutter: ^2.0.0
@@ -55,7 +54,10 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
+        - asset: fonts/poppins-regular.ttf
+          weight: 400
         - asset: fonts/poppins_bold.ttf
+          weight: 700
     - family: Regular
       fonts:
         - asset: fonts/poppins-regular.ttf

@@ -1,8 +1,6 @@
-import 'dart:developer';
+import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:play_craft_kids/features/home/components/coins_history.dart';
-import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/base/base_viewmodel.dart';
@@ -53,14 +51,26 @@ class HomeViewModel extends BaseViewModel {
   }
 
   bool _isLoading = false;
+  bool _isCoinsLoading = false;
+  bool _isHistoryLoading = false;
+  Future<void>? _coinRefreshFuture;
 
   int _databaseCoins = 0;
   int get databaseCoins => _databaseCoins;
+  @override
   bool get isLoading => _isLoading;
+  bool get isCoinsLoading => _isCoinsLoading;
 // ViewModel mein ye line add karein
   int get userCoins => _databaseCoins;
+  @override
   void setLoading(bool value) {
     _isLoading = value;
+    notifyListeners();
+  }
+
+  void _setCoinsLoading(bool value) {
+    if (_isCoinsLoading == value) return;
+    _isCoinsLoading = value;
     notifyListeners();
   }
 
@@ -132,31 +142,76 @@ class HomeViewModel extends BaseViewModel {
 
   Future<void> load() async {
     setLoading(true);
+    clearError();
     try {
       _content = await _repository.loadHomeContent();
       _lastPlayedLevelId = await _repository.getLastPlayedLevelId();
       _levelProgress = await _loadLevelProgress();
 
-      // Yahan database se real coins fetch karein
-      await fetchDatabaseCoins();
+      if (_content!.categories.isNotEmpty) {
+        final hasCurrentSelection = _content!.categories
+            .any((category) => category.id == _selectedCategoryId);
+        _selectedCategoryId = hasCurrentSelection
+            ? _selectedCategoryId
+            : _content!.categories.first.id;
+      }
 
-      // ... baki ka code waisa hi rahe
-
-      await checkAndApplyDailyBonus();
-
-      // setLoading(false);
+      setLoading(false);
+      unawaited(refreshCoinsInBackground(applyDailyBonus: true));
     } catch (_) {
       setError(AppStrings.loadError);
+      setLoading(false);
     }
-    setLoading(false);
   }
 
-  Future<void> fetchDatabaseCoins() async {
+  Future<void> refreshCoinsInBackground({
+    bool applyDailyBonus = false,
+    bool fetchHistory = false,
+  }) {
+    if (_coinRefreshFuture != null) return _coinRefreshFuture!;
+
+    _coinRefreshFuture = _refreshCoinsInBackground(
+      applyDailyBonus: applyDailyBonus,
+      fetchHistory: fetchHistory,
+    ).whenComplete(() {
+      _coinRefreshFuture = null;
+    });
+
+    return _coinRefreshFuture!;
+  }
+
+  Future<void> _refreshCoinsInBackground({
+    required bool applyDailyBonus,
+    required bool fetchHistory,
+  }) async {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (userId == null) {
+      _databaseCoins = 0;
+      notifyListeners();
+      return;
+    }
+
+    _setCoinsLoading(true);
+    try {
+      await fetchDatabaseCoins(notify: false);
+      if (applyDailyBonus) {
+        await checkAndApplyDailyBonus(notify: false);
+      }
+      if (fetchHistory) {
+        await fetchCoinHistory(isInternal: true);
+      }
+      notifyListeners();
+    } finally {
+      _setCoinsLoading(false);
+    }
+  }
+
+  Future<void> fetchDatabaseCoins({bool notify = true}) async {
     try {
       final userId = Supabase.instance.client.auth.currentUser?.id;
       if (userId == null) {
         _databaseCoins = 0;
-        notifyListeners();
+        if (notify) notifyListeners();
         return;
       }
 
@@ -167,9 +222,15 @@ class HomeViewModel extends BaseViewModel {
           .eq('user_id', userId)
           .maybeSingle();
 
-      _databaseCoins = (data?['coins'] as int?) ?? 0;
-      print("Fetched balance from user_coins: $_databaseCoins");
-      notifyListeners();
+      if (data == null) {
+        // This is a new user! Let's award the welcome bonus!
+        print("New user detected. Adding welcome bonus...");
+        await addWelcomeBonus(userId);
+      } else {
+        _databaseCoins = (data['coins'] as int?) ?? 0;
+        print("Fetched balance from user_coins: $_databaseCoins");
+      }
+      if (notify) notifyListeners();
     } catch (e) {
       print("fetchDatabaseCoins error: $e");
     }
@@ -277,29 +338,39 @@ class HomeViewModel extends BaseViewModel {
   Future<void> addCompletionPoints(int points) async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
+    if (points <= 0) return;
 
-    try {
-      // 1. coin_history mein sirf EARNED coins (20) insert karo
-      await Supabase.instance.client.from('coin_history').insert({
-        'user_id': userId,
-        'amount': points, // Sirf earned amount (20 coins)
-        'description': 'Level Completion',
-        'created_at': DateTime.now().toIso8601String(),
-      });
+    final createdAt = DateTime.now();
+    final newBalance = _databaseCoins + points;
 
-      // 2. user_coins balance update (sum karke)
-      _databaseCoins += points;
-      await Supabase.instance.client.from('user_coins').upsert({
-        'user_id': userId,
-        'coins': _databaseCoins,
-        'updated_at': DateTime.now().toIso8601String(),
-      }, onConflict: 'user_id');
+    _databaseCoins = newBalance;
+    _historyList = [
+      CoinHistory(
+        description: 'Level Completion',
+        amount: points,
+        type: 'game',
+        date: createdAt,
+      ),
+      ..._historyList,
+    ];
+    notifyListeners();
 
-      notifyListeners();
-      print("Level completion: +$points coins. New total: $_databaseCoins");
-    } catch (e) {
-      print("addCompletionPoints error: $e");
-    }
+    unawaited(() async {
+      try {
+        await _saveCoinChange(
+          userId: userId,
+          amount: points,
+          newBalance: newBalance,
+          description: 'Level Completion',
+          type: 'game',
+          createdAt: createdAt,
+        );
+        print("Level completion: +$points coins. New total: $newBalance");
+      } catch (e) {
+        print("addCompletionPoints error: $e");
+        unawaited(fetchDatabaseCoins());
+      }
+    }());
   }
 
   Future<void> addColorMatchPoints() async {
@@ -361,25 +432,21 @@ class HomeViewModel extends BaseViewModel {
     return pointsToAdd;
   }
 
-  Future<void> addWelcomeBonus(String userId) async {
+  Future<void> addWelcomeBonus(String userId, {bool notify = true}) async {
     try {
-      await Supabase.instance.client.from('coin_history').insert({
-        'user_id': userId,
-        'amount': 50,
-        'description': 'Welcome Bonus',
-        'created_at': DateTime.now().toIso8601String(),
-      });
+      final createdAt = DateTime.now();
+      await _saveCoinChange(
+        userId: userId,
+        amount: 50,
+        newBalance: 50,
+        description: 'Welcome Bonus',
+        type: 'bonus',
+        createdAt: createdAt,
+      );
       print("Welcome bonus added to coin_history!");
 
-      // Update user_coins as well
-      await Supabase.instance.client.from('user_coins').upsert({
-        'user_id': userId,
-        'coins': 50,
-        'updated_at': DateTime.now().toIso8601String(),
-      }, onConflict: 'user_id');
-
       _databaseCoins = 50;
-      notifyListeners();
+      if (notify) notifyListeners();
     } catch (e) {
       print("Welcome bonus error: $e");
     }
@@ -392,10 +459,16 @@ class HomeViewModel extends BaseViewModel {
 
   // ── Level-unlock refresh ──────────
 
-  Future<void> fetchCoinHistory() async {
+  Future<void> fetchCoinHistory({bool isInternal = false}) async {
+    if (_isHistoryLoading && !isInternal) {
+      print("fetchCoinHistory: Skipped concurrent call during load.");
+      return;
+    }
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
 
+    _isHistoryLoading = true;
+    if (!isInternal) _setCoinsLoading(true);
     try {
       // 1. coin_history se transactions list fetch karo
       final response = await Supabase.instance.client
@@ -420,12 +493,15 @@ class HomeViewModel extends BaseViewModel {
       }
 
       // 3. Local aur DB balance ko theek karein
+      final previousBalance = _databaseCoins;
       _databaseCoins = calculatedTotal;
-      await Supabase.instance.client.from('user_coins').upsert({
-        'user_id': userId,
-        'coins': calculatedTotal,
-        'updated_at': DateTime.now().toIso8601String(),
-      }, onConflict: 'user_id');
+      if (calculatedTotal != previousBalance) {
+        await Supabase.instance.client.from('user_coins').upsert({
+          'user_id': userId,
+          'coins': calculatedTotal,
+          'updated_at': DateTime.now().toIso8601String(),
+        }, onConflict: 'user_id');
+      }
 
       notifyListeners();
 
@@ -433,6 +509,9 @@ class HomeViewModel extends BaseViewModel {
           "History fetch: ${historyObjects.length} transactions. Corrected Total: $calculatedTotal");
     } catch (e) {
       print("fetchCoinHistory error: $e");
+    } finally {
+      _isHistoryLoading = false;
+      if (!isInternal) _setCoinsLoading(false);
     }
   }
 
@@ -456,7 +535,7 @@ class HomeViewModel extends BaseViewModel {
 
 // ── Automatic Daily Bonus (Single Function) ──────────────────────────────
 
-  Future<void> checkAndApplyDailyBonus() async {
+  Future<void> checkAndApplyDailyBonus({bool notify = true}) async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return; // Logged out hoga to bonus nahi
 
@@ -480,29 +559,62 @@ class HomeViewModel extends BaseViewModel {
     const int bonus = 10; // Daily bonus hamesha 10 coins
 
     try {
-      // 1. coin_history mein sirf EARNED bonus (10) insert karo
-      await Supabase.instance.client.from('coin_history').insert({
-        'user_id': userId,
-        'amount': bonus, // Sirf 10 coins
-        'description': 'Daily Bonus',
-        'created_at': DateTime.now().toIso8601String(),
-      });
-
-      // 2. user_coins balance update
+      final createdAt = DateTime.now();
       _databaseCoins += bonus;
-      await Supabase.instance.client.from('user_coins').upsert({
-        'user_id': userId,
-        'coins': _databaseCoins,
-        'updated_at': DateTime.now().toIso8601String(),
-      }, onConflict: 'user_id');
+      _historyList = [
+        CoinHistory(
+          description: 'Daily Bonus',
+          amount: bonus,
+          type: 'bonus',
+          date: createdAt,
+        ),
+        ..._historyList,
+      ];
+      if (notify) notifyListeners();
+
+      await _saveCoinChange(
+        userId: userId,
+        amount: bonus,
+        newBalance: _databaseCoins,
+        description: 'Daily Bonus',
+        type: 'bonus',
+        createdAt: createdAt,
+      );
 
       // 3. Daily bonus log update karein
       await _repository.saveDailyBonus(today, streak + 1);
 
-      notifyListeners();
+      if (notify) notifyListeners();
       print("Daily bonus successfully diya gaya! +$bonus coins");
     } catch (e) {
       print("Daily bonus error: $e");
+      unawaited(fetchDatabaseCoins());
     }
+  }
+
+  Future<void> _saveCoinChange({
+    required String userId,
+    required int amount,
+    required int newBalance,
+    required String description,
+    required String type,
+    required DateTime createdAt,
+  }) async {
+    final timestamp = createdAt.toIso8601String();
+
+    await Future.wait([
+      Supabase.instance.client.from('coin_history').insert({
+        'user_id': userId,
+        'amount': amount,
+        'description': description,
+        'type': type,
+        'created_at': timestamp,
+      }),
+      Supabase.instance.client.from('user_coins').upsert({
+        'user_id': userId,
+        'coins': newBalance,
+        'updated_at': timestamp,
+      }, onConflict: 'user_id'),
+    ]);
   }
 }

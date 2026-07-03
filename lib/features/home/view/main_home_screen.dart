@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:play_craft_kids/app/routes/app_routes.dart';
-import 'package:play_craft_kids/core/constants/app_strings.dart';
-import 'package:play_craft_kids/core/utils/app_bottom_bar.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
-import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
-import 'package:play_craft_kids/features/home/components/Kids_game_home_screen.dart';
 import 'package:play_craft_kids/features/home/components/category_card.dart';
 import 'package:play_craft_kids/features/home/components/custom_bar.dart';
-import 'package:play_craft_kids/features/home/view/home_screen.dart';
-import 'package:play_craft_kids/features/settings/view/settings_screen.dart';
 import 'package:play_craft_kids/shared/utils/interaction_feedback.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dart:math';
 
 // Apne actual project paths ke mutabik in imports ko adjust kar lena:
 import '../viewmodel/home_viewmodel.dart';
@@ -26,10 +19,14 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   int selectedIndex = 0;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Jab bhi user wapas is screen par aayega, ye data refresh karega
-    Provider.of<HomeViewModel>(context, listen: false).fetchCoinHistory();
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<HomeViewModel>().refreshCoinsInBackground(
+            applyDailyBonus: true,
+          );
+    });
   }
 //   @override
 //   void initState() {
@@ -372,7 +369,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         children: [
           // 1. Aapki Main Screen (Body)
           Positioned.fill(
-            child: viewModel.isLoading
+            child: viewModel.isLoading && viewModel.content == null
                 ? const Center(
                     child: CircularProgressIndicator(
                         valueColor:
@@ -412,7 +409,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
                                             // Yahan hum check kar rahe hain ke kya loading chal rahi hai
                                             final bool isLoading =
-                                                homeVM.isLoading;
+                                                homeVM.isCoinsLoading;
                                             final coins = homeVM.databaseCoins;
 
                                             return GestureDetector(

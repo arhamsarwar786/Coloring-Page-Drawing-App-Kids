@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/coloring/view/coloring_completion_screen.dart';
 import 'package:play_craft_kids/features/coloring/viewmodel/coloring_viewmodel.dart';
