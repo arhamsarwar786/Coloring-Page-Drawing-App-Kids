@@ -3,6 +3,8 @@ import 'package:play_craft_kids/app/routes/app_routes.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/home/components/category_card.dart';
 import 'package:play_craft_kids/features/home/components/custom_bar.dart';
+import 'package:play_craft_kids/features/planner/view/planner_home_bootstrap.dart';
+import 'package:play_craft_kids/features/planner/view/planner_progress_card.dart';
 import 'package:play_craft_kids/shared/utils/interaction_feedback.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -362,7 +364,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     final viewModel = context.watch<HomeViewModel>();
     final allCategories = viewModel.categories;
 
-    return Scaffold(
+    return PlannerHomeBootstrap(
+      child: Scaffold(
       // backgroundColor: const Color(0xffFAF8F5),
       // Scaffold ka bottomNavigationBar ab empty rahega ya remove kar dein
       body: Stack(
@@ -489,6 +492,9 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                                       child: Image.asset(
                                           "assets/images/logo.png",
                                           height: 200),
+                                    ),
+                                    const SliverToBoxAdapter(
+                                      child: PlannerProgressCard(),
                                     ),
                                     SliverPadding(
                                       padding: const EdgeInsets.only(
@@ -660,6 +666,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               ),
         ],
       ),
+    ),
     );
   }
 }

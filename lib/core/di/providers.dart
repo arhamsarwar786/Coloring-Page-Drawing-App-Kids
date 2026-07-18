@@ -12,6 +12,9 @@ import '../../features/history/viewmodel/history_viewmodel.dart';
 import '../../features/home/repository/home_repository.dart';
 import '../../features/home/viewmodel/home_viewmodel.dart';
 import '../../features/levels/repository/level_repository.dart';
+import '../../features/planner/repository/planner_progress_repository.dart';
+import '../../features/planner/services/planner_download_service.dart';
+import '../../features/planner/viewmodel/planner_reward_viewmodel.dart';
 import '../../features/rewards/viewmodel/reward_viewmodel.dart';
 import '../../features/settings/viewmodel/settings_viewmodel.dart';
 import '../../features/skins/viewmodel/skins_viewmodel.dart';
@@ -43,6 +46,12 @@ List<SingleChildWidget> buildAppProviders() {
       },
     ),
     Provider<AdMobService>(create: (_) => const AdMobService()),
+    Provider<PlannerDownloadService>(create: (_) => PlannerDownloadService()),
+    Provider<PlannerProgressRepository>(
+      create: (context) => PlannerProgressRepository(
+        storage: context.read<LocalStorageService>(),
+      ),
+    ),
     Provider<HomeRepository>(
       create: (context) => HomeRepositoryImpl(
         contentService: context.read<LocalContentService>(),
@@ -104,5 +113,11 @@ List<SingleChildWidget> buildAppProviders() {
     ),
     ChangeNotifierProvider(create: (_) => SkinsViewModel()),
     ChangeNotifierProvider(create: (_) => ColoringProvider()),
-];
+    ChangeNotifierProvider(
+      create: (context) => PlannerRewardViewModel(
+        repository: context.read<PlannerProgressRepository>(),
+        downloadService: context.read<PlannerDownloadService>(),
+      ),
+    ),
+  ];
 }

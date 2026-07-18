@@ -14,6 +14,7 @@ import 'package:play_craft_kids/features/drawing/repository/drawing_repository.d
 import 'package:play_craft_kids/features/drawing/view/drawing_screen.dart';
 import 'package:play_craft_kids/features/home/viewmodel/home_viewmodel.dart';
 import 'package:play_craft_kids/features/levels/model/level_model.dart';
+import 'package:play_craft_kids/features/planner/view/planner_home_bootstrap.dart';
 import 'package:play_craft_kids/features/tracing/viewmodel/activity_item.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -245,7 +246,7 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
         }
 
         if (mounted) {
-          homeVM.refreshProgress();
+          await homeVM.refreshProgress();
         }
       }
     }
@@ -274,6 +275,11 @@ class _ColoringCompletionScreenState extends State<ColoringCompletionScreen>
         if (mounted) {
           _coinsController.forward();
         }
+      }
+
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (mounted) {
+        await syncPlannerAfterLevelComplete(context);
       }
     }
   }

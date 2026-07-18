@@ -6,6 +6,8 @@ import '../../../core/constants/app_strings.dart';
 import '../../../shared/components/doodle_text.dart';
 import '../../../shared/components/sticker_icon_button.dart';
 import '../../../shared/utils/interaction_feedback.dart';
+import '../../planner/view/planner_feature_dialog.dart';
+import '../../planner/viewmodel/planner_reward_viewmodel.dart';
 import '../viewmodel/settings_viewmodel.dart';
 
 class SettingsDialog extends StatelessWidget {
@@ -29,7 +31,7 @@ class SettingsDialog extends StatelessWidget {
                 Consumer<SettingsViewModel>(
                   builder: (_, viewModel, __) {
                     return Container(
-                      height: 210,
+                      height: 280,
                       width: size.width * 0.858, // Card size as per screenshot
                       padding: const EdgeInsets.fromLTRB(20, 15, 20, 5),
                       decoration: BoxDecoration(
@@ -54,7 +56,7 @@ class SettingsDialog extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fillColor: Color(0xFF3c8fde),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 12),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -75,9 +77,66 @@ class SettingsDialog extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
-                          // Privacy Policy Button (Same as screenshot style)
-                          // Privacy Policy Button (Replaced with Asset Image)
+                          const SizedBox(height: 8),
+                          Consumer<PlannerRewardViewModel>(
+                            builder: (context, planner, _) {
+                              final unlocked = planner.isUnlocked;
+                              return GestureDetector(
+                                onTap: () {
+                                  PlannerFeatureDialog.show(
+                                    context,
+                                    mode: unlocked
+                                        ? PlannerDialogMode.download
+                                        : PlannerDialogMode.locked,
+                                  );
+                                },
+                                child: Container(
+                                  width: 230,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: unlocked
+                                        ? const Color(0xFFE8F5E9)
+                                        : const Color(0xFFE3F2FD),
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: unlocked
+                                          ? const Color(0xFF66BB6A)
+                                          : const Color(0xFF64B5F6),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        unlocked
+                                            ? Icons.download_rounded
+                                            : Icons.menu_book_rounded,
+                                        color: unlocked
+                                            ? const Color(0xFF2E7D32)
+                                            : const Color(0xFF1565C0),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          unlocked
+                                              ? 'Download Kids Planner'
+                                              : 'Kids Planner (${planner.completedLevels}/${planner.unlockThreshold})',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 13,
+                                            color: Color(0xFF1A237E),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 6),
                           GestureDetector(
                             onTap: tapActionCallback(context, () {
                               return Navigator.pushNamed(
@@ -88,7 +147,6 @@ class SettingsDialog extends StatelessWidget {
                             child: Image.asset(
                               'assets/images/privacy plicy botton.png',
                               width: 230,
-                              // height: 48,
                               fit: BoxFit.contain,
                             ),
                           ),

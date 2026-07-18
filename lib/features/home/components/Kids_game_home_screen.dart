@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:play_craft_kids/features/auth/view/login_screen.dart';
 import 'package:play_craft_kids/features/coloring/widgets/delete_dialog.dart';
+import 'package:play_craft_kids/features/planner/view/planner_feature_dialog.dart';
+import 'package:play_craft_kids/features/planner/viewmodel/planner_reward_viewmodel.dart';
 import 'package:play_craft_kids/features/settings/viewmodel/settings_viewmodel.dart';
 import 'package:play_craft_kids/shared/components/sticker_icon_button.dart';
 import 'package:provider/provider.dart';
@@ -383,7 +385,7 @@ class KidsSettingsDialog extends StatelessWidget {
               // Main Clay Styled Box Structure Container
               Container(
                 width: 320,
-                height: 370,
+                height: 430,
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
                 decoration: BoxDecoration(
                   color:
@@ -472,6 +474,29 @@ class KidsSettingsDialog extends StatelessWidget {
                               ],
                             ),
                             // const Spacer(),
+                            const SizedBox(height: 10),
+
+                            Consumer<PlannerRewardViewModel>(
+                              builder: (context, planner, _) {
+                                final unlocked = planner.isUnlocked;
+                                return GestureDetector(
+                                  onTap: () {
+                                    PlannerFeatureDialog.show(
+                                      context,
+                                      mode: unlocked
+                                          ? PlannerDialogMode.download
+                                          : PlannerDialogMode.locked,
+                                    );
+                                  },
+                                  child: GameMenuActionButton(
+                                    label: unlocked
+                                        ? 'DOWNLOAD PLANNER'
+                                        : 'PLANNER ${planner.completedLevels}/${planner.unlockThreshold}',
+                                  ),
+                                );
+                              },
+                            ),
+
                             const SizedBox(height: 10),
 
                             // Embedded Action Button Action Layer (Privacy Policy Logic Triggered)

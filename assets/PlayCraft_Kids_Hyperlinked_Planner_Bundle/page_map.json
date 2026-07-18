@@ -1,0 +1,227 @@
+{
+  "title": "PlayCraft Kids Hyperlinked Planner",
+  "pages": 36,
+  "sizes": [
+    "A4",
+    "US Letter"
+  ],
+  "internal_navigation": true,
+  "page_map": [
+    {
+      "page": 1,
+      "id": "cover",
+      "title": "PlayCraft Kids Planner",
+      "section": "START"
+    },
+    {
+      "page": 2,
+      "id": "how_to",
+      "title": "How to Use Your Planner",
+      "section": "START"
+    },
+    {
+      "page": 3,
+      "id": "home",
+      "title": "Planner Home",
+      "section": "START"
+    },
+    {
+      "page": 4,
+      "id": "profile",
+      "title": "All About Me",
+      "section": "PLAN"
+    },
+    {
+      "page": 5,
+      "id": "month",
+      "title": "Monthly Adventure Calendar",
+      "section": "PLAN"
+    },
+    {
+      "page": 6,
+      "id": "dates",
+      "title": "Important Dates",
+      "section": "PLAN"
+    },
+    {
+      "page": 7,
+      "id": "daily",
+      "title": "My Daily Adventure",
+      "section": "PLAN"
+    },
+    {
+      "page": 8,
+      "id": "daily_quest",
+      "title": "Daily Coloring Quest",
+      "section": "PLAN"
+    },
+    {
+      "page": 9,
+      "id": "morning",
+      "title": "Morning Routine",
+      "section": "ROUTINES"
+    },
+    {
+      "page": 10,
+      "id": "after_school",
+      "title": "After-School Routine",
+      "section": "ROUTINES"
+    },
+    {
+      "page": 11,
+      "id": "evening",
+      "title": "Evening Routine",
+      "section": "ROUTINES"
+    },
+    {
+      "page": 12,
+      "id": "bedtime",
+      "title": "Bedtime Routine",
+      "section": "ROUTINES"
+    },
+    {
+      "page": 13,
+      "id": "weekly",
+      "title": "Weekly Planner",
+      "section": "WEEK"
+    },
+    {
+      "page": 14,
+      "id": "weekly_goals",
+      "title": "Weekly Goals",
+      "section": "WEEK"
+    },
+    {
+      "page": 15,
+      "id": "chores",
+      "title": "Chore Chart",
+      "section": "WEEK"
+    },
+    {
+      "page": 16,
+      "id": "rewards",
+      "title": "Stars & Coin Rewards",
+      "section": "WEEK"
+    },
+    {
+      "page": 17,
+      "id": "timetable",
+      "title": "School Timetable",
+      "section": "SCHOOL"
+    },
+    {
+      "page": 18,
+      "id": "homework",
+      "title": "Homework Planner",
+      "section": "SCHOOL"
+    },
+    {
+      "page": 19,
+      "id": "assignments",
+      "title": "Assignment Tracker",
+      "section": "SCHOOL"
+    },
+    {
+      "page": 20,
+      "id": "reading",
+      "title": "Reading Log",
+      "section": "SCHOOL"
+    },
+    {
+      "page": 21,
+      "id": "alphabet",
+      "title": "Alphabet Practice",
+      "section": "SCHOOL"
+    },
+    {
+      "page": 22,
+      "id": "numbers",
+      "title": "Number Practice",
+      "section": "SCHOOL"
+    },
+    {
+      "page": 23,
+      "id": "drawing",
+      "title": "Creative Drawing Prompts",
+      "section": "CREATE"
+    },
+    {
+      "page": 24,
+      "id": "colors",
+      "title": "Color Discovery",
+      "section": "CREATE"
+    },
+    {
+      "page": 25,
+      "id": "streak",
+      "title": "Coloring Streak Tracker",
+      "section": "CREATE"
+    },
+    {
+      "page": 26,
+      "id": "habits",
+      "title": "Healthy Habit Tracker",
+      "section": "HEALTH"
+    },
+    {
+      "page": 27,
+      "id": "mood",
+      "title": "Mood Tracker",
+      "section": "HEALTH"
+    },
+    {
+      "page": 28,
+      "id": "water",
+      "title": "Water Tracker",
+      "section": "HEALTH"
+    },
+    {
+      "page": 29,
+      "id": "sleep",
+      "title": "Sleep Tracker",
+      "section": "HEALTH"
+    },
+    {
+      "page": 30,
+      "id": "exercise",
+      "title": "Move & Play Tracker",
+      "section": "HEALTH"
+    },
+    {
+      "page": 31,
+      "id": "meals",
+      "title": "My Healthy Plate",
+      "section": "HEALTH"
+    },
+    {
+      "page": 32,
+      "id": "gratitude",
+      "title": "Gratitude Garden",
+      "section": "GROW"
+    },
+    {
+      "page": 33,
+      "id": "savings",
+      "title": "My Savings Goal",
+      "section": "GROW"
+    },
+    {
+      "page": 34,
+      "id": "gallery",
+      "title": "My Art Gallery",
+      "section": "CREATE"
+    },
+    {
+      "page": 35,
+      "id": "notes",
+      "title": "Notes & Big Ideas",
+      "section": "GROW"
+    },
+    {
+      "page": 36,
+      "id": "certificate",
+      "title": "Achievement Certificate",
+      "section": "GROW"
+    }
+  ]
+}
